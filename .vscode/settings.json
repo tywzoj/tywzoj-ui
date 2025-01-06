@@ -1,0 +1,35 @@
+{
+  "git.ignoreLimitWarning": true,
+  "typescript.suggest.autoImports": true,
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "importSorter.importStringConfiguration.maximumNumberOfImportExpressionsPerLine.count": 120,
+  "importSorter.importStringConfiguration.quoteMark": "double",
+  "importSorter.importStringConfiguration.trailingComma": "multiLine",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.detectIndentation": true,
+  "cSpell.words": [
+    "tywzoj",
+    "interactor",
+    "ranklist",
+    "testcase",
+    "testcases",
+    "testdata"
+  ],
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "eslint.nodePath": ".yarn/sdks",
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "npm.packageManager": "yarn",
+  "files.exclude": {
+    "**/.pnp.*": true
+  }
+}
