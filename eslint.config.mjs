@@ -9,29 +9,28 @@ import tseslint from "typescript-eslint";
 
 const IGNORED_FILES = ["node_modules/**", "dist/**", ".yarn/*", ".pnp.*", ".github/*"];
 
-const JS_FILE_EXTS = ["js", "cjs", "mjs", "jsx"];
-const TS_FILE_EXTS = ["ts", "cts", "mts", "tsx"];
+const JS_FILE_EXTS = ["js", "cjs", "mjs"];
+const TS_FILE_EXTS = ["ts", "cts", "mts"];
+const JSX_FILE_EXTS = ["jsx", "tsx"];
 
-const JS_FILES = createExtFiles("**/*", JS_FILE_EXTS);
-const TS_FILES = createExtFiles("**/*", TS_FILE_EXTS);
+const SRC_FILES = createExtFiles("src/**/*", [...JS_FILE_EXTS, ...TS_FILE_EXTS, ...JSX_FILE_EXTS]);
+const NODE_FILES = [
+    ...createExtFiles("scripts/**/*", [...JS_FILE_EXTS, ...TS_FILE_EXTS]),
+    ...createExtFiles("eslint.config", JS_FILE_EXTS),
+    ...createExtFiles("vite.config", JS_FILE_EXTS),
+];
 
 export default tseslint.config(
     { ignores: IGNORED_FILES },
     js.configs.recommended,
     tseslint.configs.recommended,
     prettierRecommended,
-    react.configs.flat.recommended,
-    react.configs.flat["jsx-runtime"],
     {
-        files: [...JS_FILES, ...TS_FILES],
+        files: [...SRC_FILES, ...NODE_FILES],
         plugins: {
             "simple-import-sort": simpleImportSort,
-            "react-hooks": reactHooks,
-            "react-refresh": reactRefresh,
         },
         rules: {
-            ...reactHooks.configs.recommended.rules,
-
             "arrow-parens": ["error", "always"],
             curly: ["error", "multi-line"],
             "import/no-cycle": "off",
@@ -50,23 +49,6 @@ export default tseslint.config(
                 },
             ],
 
-            "react-refresh/only-export-components": ["error", { allowConstantExport: true }],
-        },
-    },
-    {
-        files: TS_FILES,
-        languageOptions: {
-            globals: {
-                ...globals.browser,
-            },
-            ecmaVersion: 2020,
-            parserOptions: {
-                project: "tsconfig.json",
-                projectService: true,
-                tsconfigRootDir: import.meta.dirname,
-            },
-        },
-        rules: {
             "@typescript-eslint/consistent-type-imports": "error",
             "@typescript-eslint/explicit-member-accessibility": [
                 "error",
@@ -78,7 +60,29 @@ export default tseslint.config(
                 },
             ],
             "@typescript-eslint/explicit-module-boundary-types": "off",
-            "@typescript-eslint/naming-convention": ["error"],
+            "@typescript-eslint/naming-convention": [
+                "error",
+                {
+                    selector: "interface",
+                    format: ["PascalCase"],
+                    prefix: ["I"],
+                },
+                {
+                    selector: "enum",
+                    format: ["PascalCase"],
+                    prefix: ["CE_", "E_"],
+                },
+                {
+                    selector: "enumMember",
+                    format: ["PascalCase", "UPPER_CASE", "snake_case"],
+                },
+                {
+                    selector: ["function", "classMethod"],
+                    modifiers: ["async"],
+                    format: ["camelCase", "PascalCase"],
+                    suffix: ["Async"],
+                },
+            ],
             "@typescript-eslint/no-empty-interface": "off",
             "@typescript-eslint/no-explicit-any": "error",
             "@typescript-eslint/no-duplicate-enum-values": "error",
@@ -97,29 +101,54 @@ export default tseslint.config(
             "@typescript-eslint/prefer-as-const": "error",
         },
     },
-    createNameConventionFileRules(
-        TS_FILES,
-        {
-            selector: "interface",
-            format: ["PascalCase"],
-            prefix: ["I"],
+    {
+        files: SRC_FILES,
+        extends: [react.configs.flat.recommended, react.configs.flat["jsx-runtime"]],
+        plugins: {
+            "react-hooks": reactHooks,
+            "react-refresh": reactRefresh,
         },
-        {
-            selector: "enum",
-            format: ["PascalCase"],
-            prefix: ["CE_", "E_"],
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.serviceworker,
+            },
+            ecmaVersion: 2020,
+            parserOptions: {
+                project: "tsconfig.app.json",
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+                ecmaFeatures: {
+                    jsx: true,
+                },
+            },
         },
-        {
-            selector: "enumMember",
-            format: ["PascalCase", "UPPER_CASE", "snake_case"],
+        settings: {
+            react: {
+                version: "detect",
+            },
         },
-        {
-            selector: ["function", "classMethod"],
-            modifiers: ["async"],
-            format: ["camelCase", "PascalCase"],
-            suffix: ["Async"],
+        rules: {
+            ...reactHooks.configs.recommended.rules,
+            "react-refresh/only-export-components": [
+                "error",
+                {
+                    allowConstantExport: true,
+                },
+            ],
         },
-    ),
+    },
+    {
+        files: NODE_FILES,
+        languageOptions: {
+            globals: globals.node,
+            parserOptions: {
+                project: "tsconfig.node.json",
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
+    },
 );
 
 /**
@@ -129,16 +158,4 @@ export default tseslint.config(
  */
 function createExtFiles(pattern, exts) {
     return exts.map((ext) => `${pattern}.${ext}`);
-}
-
-/**
- * @param {string[]} files
- * @param  {...any} rules
- * @returns {{files: string[], rules: { "@typescript-eslint/naming-convention": ["error", ...any[]] }}}
- */
-function createNameConventionFileRules(files, ...rules) {
-    return {
-        files,
-        rules: { "@typescript-eslint/naming-convention": ["error", ...rules] },
-    };
 }
