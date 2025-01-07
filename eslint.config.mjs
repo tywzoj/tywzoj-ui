@@ -7,7 +7,7 @@ import simpleImportSort from "eslint-plugin-simple-import-sort";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
-const IGNORED_FILES = ["node_modules/**", "dist/**", ".yarn/*", ".pnp.*", ".github/*"];
+const IGNORED_FILES = ["node_modules/**", "dist/**", ".yarn/*", ".pnp.*", ".github/*", "vite.config.*.timestamp*"];
 
 const JS_FILE_EXTS = ["js", "cjs", "mjs"];
 const TS_FILE_EXTS = ["ts", "cts", "mts"];
@@ -23,12 +23,11 @@ const NODE_TS_FILES = [...createExtFiles("scripts/**/*", TS_FILE_EXTS), ...creat
 const NODE_FILES = [...NODE_JS_FILES, ...NODE_TS_FILES];
 
 export default tseslint.config(
-    { ignores: IGNORED_FILES },
+    { files: [...SRC_FILES, ...NODE_FILES] },
     js.configs.recommended,
     tseslint.configs.recommended,
     prettierRecommended,
     {
-        files: [...SRC_FILES, ...NODE_FILES],
         plugins: {
             "simple-import-sort": simpleImportSort,
         },
@@ -160,6 +159,7 @@ export default tseslint.config(
             },
         },
     },
+    { ignores: IGNORED_FILES },
 );
 
 /**
