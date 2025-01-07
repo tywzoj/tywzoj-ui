@@ -43,6 +43,6 @@ You need to do:
 - [ ] PR title is short and descriptive.
 - [ ] _Description_ section filled out.
 - [ ] Put an `x` in any boxes of _Types of changes_ section.
-- [ ] Insert images into _Before and after screenshot (if applicable)_ sections.
+- [ ] Insert images into or skip _Before and after screenshot (if applicable)_ section.
 - [ ] Put an `x` in a box of _Accessibility_ section.
 - [ ] Put an `x` in all boxes of _Checklist_ section.
