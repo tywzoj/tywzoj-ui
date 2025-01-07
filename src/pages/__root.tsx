@@ -1,6 +1,8 @@
-import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import type { QueryClient } from "@tanstack/react-query";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import type React from "react";
+
+import type { IAppStore } from "@/store/type";
 
 const Layout: React.FC = () => {
     return (
@@ -9,11 +11,13 @@ const Layout: React.FC = () => {
             <div>
                 <Outlet />
             </div>
-            <TanStackRouterDevtools />
         </div>
     );
 };
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{
+    queryClient: QueryClient;
+    store: IAppStore;
+}>()({
     component: Layout,
 });
