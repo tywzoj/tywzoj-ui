@@ -14,11 +14,13 @@ const TS_FILE_EXTS = ["ts", "cts", "mts"];
 const JSX_FILE_EXTS = ["jsx", "tsx"];
 
 const SRC_FILES = createExtFiles("src/**/*", [...JS_FILE_EXTS, ...TS_FILE_EXTS, ...JSX_FILE_EXTS]);
-const NODE_FILES = [
-    ...createExtFiles("scripts/**/*", [...JS_FILE_EXTS, ...TS_FILE_EXTS]),
+
+const NODE_JS_FILES = [
+    ...createExtFiles("scripts/**/*", JS_FILE_EXTS),
     ...createExtFiles("eslint.config", JS_FILE_EXTS),
-    ...createExtFiles("vite.config", JS_FILE_EXTS),
 ];
+const NODE_TS_FILES = [...createExtFiles("scripts/**/*", TS_FILE_EXTS), ...createExtFiles("vite.config", TS_FILE_EXTS)];
+const NODE_FILES = [...NODE_JS_FILES, ...NODE_TS_FILES];
 
 export default tseslint.config(
     { ignores: IGNORED_FILES },
@@ -139,13 +141,22 @@ export default tseslint.config(
         },
     },
     {
-        files: NODE_FILES,
+        files: NODE_TS_FILES,
         languageOptions: {
             globals: globals.node,
             parserOptions: {
                 project: "tsconfig.node.json",
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,
+            },
+        },
+    },
+    {
+        files: NODE_JS_FILES,
+        languageOptions: {
+            globals: globals.node,
+            parserOptions: {
+                ecmaVersion: 2020,
             },
         },
     },
