@@ -42,3 +42,6 @@ vite.config.*.timestamp*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Auto generated files
+src/routeTree.gen.ts

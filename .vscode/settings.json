@@ -13,14 +13,7 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": true,
-  "cSpell.words": [
-    "tywzoj",
-    "interactor",
-    "ranklist",
-    "testcase",
-    "testcases",
-    "testdata"
-  ],
+  "cSpell.words": ["tywzoj", "interactor", "ranklist", "testcase", "testcases", "testdata"],
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
@@ -31,5 +24,8 @@
   "npm.packageManager": "yarn",
   "files.exclude": {
     "**/.pnp.*": true
+  },
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true
   }
 }

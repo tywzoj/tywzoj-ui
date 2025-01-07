@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import router from "@tanstack/eslint-plugin-router";
 import prettierRecommended from "eslint-plugin-prettier/recommended";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -7,7 +8,15 @@ import simpleImportSort from "eslint-plugin-simple-import-sort";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
-const IGNORED_FILES = ["node_modules/**", "dist/**", ".yarn/*", ".pnp.*", ".github/*", "vite.config.*.timestamp*"];
+const IGNORED_FILES = [
+    "node_modules/**",
+    "dist/**",
+    ".yarn/*",
+    ".pnp.*",
+    ".github/*",
+    "vite.config.*.timestamp*",
+    "**/routeTree.gen.ts",
+];
 
 const JS_FILE_EXTS = ["js", "cjs", "mjs"];
 const TS_FILE_EXTS = ["ts", "cts", "mts"];
@@ -104,7 +113,11 @@ export default tseslint.config(
     },
     {
         files: SRC_FILES,
-        extends: [react.configs.flat.recommended, react.configs.flat["jsx-runtime"]],
+        extends: [
+            react.configs.flat.recommended,
+            react.configs.flat["jsx-runtime"],
+            ...router.configs["flat/recommended"],
+        ],
         plugins: {
             "react-hooks": reactHooks,
             "react-refresh": reactRefresh,
