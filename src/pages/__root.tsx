@@ -2,7 +2,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import type React from "react";
 
-import type { IAppStore } from "@/store/type";
+import type { IAppStore } from "@/store/types";
 
 const Layout: React.FC = () => {
     return (

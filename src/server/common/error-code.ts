@@ -1,0 +1,41 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
+// Attention!
+// Do NOT modify the existing code.
+export const enum CE_ErrorCode {
+    // Global
+    OK = 0,
+    Unknown = 1000,
+    SignInRequired = 1001,
+    PermissionDenied = 1002,
+    ServerError = 1003,
+    RecaptchaError = 1004,
+    ValidationError = 1005,
+    TakeTooMany = 1006,
+    RateLimitExceeded = 1007,
+
+    // Auth (20xx)
+    Auth_NoSuchUser = 2000,
+    Auth_WrongPassword = 2001,
+    Auth_DuplicateUsername = 2002,
+    Auth_DuplicateEmail = 2003,
+    Auth_InvalidEmailVerificationCode = 2004,
+    Auth_FailedToSendEmailVerificationCode = 2005,
+    Auth_EmailVerificationCodeRateLimited = 2006,
+
+    // User (21xx)
+    User_NoSuchUser = 2100,
+
+    // Problem (22xx)
+    Problem_NoSuchProblem = 2200,
+    Problem_InvalidFileUploadToken = 2201,
+    Problem_TooManyFileUploadRequest = 2203,
+    Problem_TooLargeUploadFile = 2204,
+    Problem_FileLimitExceeded = 2205,
+    Problem_NoSuchProblemFile = 2206,
+
+    // File (23xx)
+    File_DuplicateUUID = 2300,
+    File_NotUploaded = 2301,
+    File_InvalidToken = 2302,
+}

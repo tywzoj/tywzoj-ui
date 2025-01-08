@@ -90,7 +90,7 @@ export default tseslint.config(
                     selector: ["function", "classMethod"],
                     modifiers: ["async"],
                     format: ["camelCase", "PascalCase"],
-                    suffix: ["Async"],
+                    suffix: ["Async", "AsyncAction"],
                 },
             ],
             "@typescript-eslint/no-empty-interface": "off",
