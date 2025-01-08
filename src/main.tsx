@@ -28,16 +28,17 @@ declare module "@tanstack/react-router" {
 
 function launch() {
     store.dispatch(initAction());
-    store.dispatch(initSessionInfoAsyncAction());
-    createRoot(document.getElementById("root")!).render(
-        <React.StrictMode>
-            <Provider store={store}>
-                <QueryClientProvider client={queryClient}>
-                    <RouterProvider router={router} />
-                </QueryClientProvider>
-            </Provider>
-        </React.StrictMode>,
-    );
+    store.dispatch(initSessionInfoAsyncAction()).then(() => {
+        createRoot(document.getElementById("root")!).render(
+            <React.StrictMode>
+                <Provider store={store}>
+                    <QueryClientProvider client={queryClient}>
+                        <RouterProvider router={router} />
+                    </QueryClientProvider>
+                </Provider>
+            </React.StrictMode>,
+        );
+    });
 }
 
 launch();
