@@ -1,10 +1,100 @@
+<!--
+                                                             .lI.
+                                   '^,::::,^'              "tkMY'
+                            ^![fY0paM&8888&Map0Yf[!^      !Q0/l  `:,.
+                        `_xZ#@$$$$$$$$$$$$$$$$$$$$@#Zx_`  '`  ^fZaoZ:
+                      >co$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$oc>    >j}>;"
+                    ~QB$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$BQ~    `rZw_
+                  :YB$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$BY:  '!!l'
+                 [*$$$$$$8Q|-]xmW$$$$$$$$$$$$$$Wmx]-|Q8$$$$$$*[
+                t@$$$$$$qi      ,[C@$$$$$$$$@C[,      iq$$$$$$@t
+               j$$$$$$$#:          c$$$$$$$$c          :#$$$$$$$j
+              [@$$$$$$$0           _$$$$$$$$_           0$$$$$$$@[
+             "o$$$$$$$$#:          j$$$$$$$$j          :#$$$$$$$$o"
+             t$$$$$$$$$$wl       .(8$$$$$$$$8(.       lw$$$$$$$$$$t
+        '"!?)k$$$$$$$$$$$&U{>Il+/p$$$$$$$$$$$$p/+lI>{U&$$$$$$$$$$$k)?!"'
+    I)cJwWB#dB$$$$$$$$$$$$$$@%B$$$$$$$$$$$$$$$$$$B%@$$$$$$$$$$$$$$Bd#BWwJc)I
+  <ZWC1[8$|`"W$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$W"`|$8[1CWZ<
+  )BMl  ~rn\)W$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$W)\nr~  lMB)
+   I/Yc/?!:;I!_}\nYCmdo#W8B@$$$$$$$$$$$$$$$$$$$$$$$$@B8W#odmCYn\}_!I;:!?/cY/I
+      "!-{(/|1{?~!lI,",::;l!>+-?][}{1))(())1{}[]?-+>!l;::,",Il!~?{1|/({-!"
+            .`,I!>_??]]}))}[[]????]]]??????]]]????][[}))}]]??_>!I,`.
+                          .''`^"":;IIIllllIII;:""^`''.
+-->
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TYWZOJ</title>
+    <style>
+      html,
+      body,
+      #root {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
+      #error-box {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #f0f0f0;
+        z-index: 1000;
+        gap: 30px;
+      }
+      #error-box h2 {
+        margin: 2px;
+      }
+      #error-box-title {
+        color: red;
+      }
+      #error-box-stack {
+        color: #666;
+        max-width: 100%;
+        overflow-y: auto;
+      }
+      #error-box-title,
+      #error-box-description {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
   </head>
   <body>
+    <div id="error-box" style="display: none">
+      <div id="error-box-title">
+        <h2 lang="en">ERROR</h2>
+        <h2 lang="fr">ERREUR</h2>
+        <h2 lang="de">FEHLER</h2>
+        <h2 lang="es">ERROR</h2>
+        <h2 lang="zh-cn">错误</h2>
+        <h2 lang="zh-tw">錯誤</h2>
+        <h2 lang="ja">エラー</h2>
+        <h2 lang="ko">오류</h2>
+      </div>
+      <div id="error-box-description">
+        <div lang="en">Something went wrong. Please check your network connection.</div>
+        <div lang="fr">Un problème est survenu. Veuillez vérifier votre connexion réseau.</div>
+        <div lang="de">Es ist ein Problem aufgetreten. Bitte überprüfen Sie Ihre Netzwerkverbindung.</div>
+        <div lang="es">Ocurrió un problema. Por favor, verifica tu conexión de red.</div>
+        <div lang="zh-cn">出现了一些问题。请检查您的网络。</div>
+        <div lang="zh-tw">發生了一些問題。請檢查您的網路。</div>
+        <div lang="ja">問題が発生しました。ネットワーク接続を確認してください</div>
+        <div lang="ko">문제가 발생했습니다. 네트워크 연결을 확인하세요.</div>
+      </div>
+      <pre id="error-box-stack"></pre>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

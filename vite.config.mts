@@ -1,3 +1,4 @@
+import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
@@ -32,6 +33,10 @@ export default defineConfig(({ mode }) => {
                 config: {
                     maxLogNumber: 1000,
                 },
+            }),
+            TanStackRouterVite({
+                routesDirectory: path.resolve("src/pages"),
+                quoteStyle: "double",
             }),
         ],
         server: {
