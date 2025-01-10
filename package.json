@@ -13,7 +13,7 @@
     "format": "prettier --write src",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "i18n": "ts-node scripts/i18n-string.ts && prettier --write src/localized-string && eslint src/localized-string --fix"
+    "i18n": "ts-node scripts/i18n-string.ts && prettier --write src/locales && eslint src/locales --fix"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",

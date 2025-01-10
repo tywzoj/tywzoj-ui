@@ -1,3 +1,4 @@
-**/routeTree.gen.ts
-**/.yarn
-**/.pnp.*
+.yarn
+.pnp.*
+src/routeTree.gen.ts
+src/assets/locales

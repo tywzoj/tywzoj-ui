@@ -15,7 +15,8 @@ const IGNORED_FILES = [
     ".pnp.*",
     ".github/*",
     "vite.config.*.timestamp*",
-    "**/routeTree.gen.ts",
+    "src/routeTree.gen.ts",
+    "src/assets/locales",
 ];
 
 const JS_FILE_EXTS = ["js", "cjs", "mjs"];

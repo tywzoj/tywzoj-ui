@@ -8,7 +8,7 @@ const defaultLanguage = "en";
 
 const localeDir = pathResolve(__dirname, "..", "i18n");
 const staticDir = pathResolve(__dirname, "..", "src", "assets", "locales");
-const featureDir = pathResolve(__dirname, "..", "src", "localized-string");
+const featureDir = pathResolve(__dirname, "..", "src", "locales");
 
 interface ILocalizedString {
     name: string;
