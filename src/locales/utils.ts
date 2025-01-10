@@ -1,6 +1,8 @@
-import { defaultLanguage, rtlLanguages, supportedLanguages } from "./locales";
+import type { CE_ErrorCode } from "@/server/common/error-code";
+
+import { defaultLanguage, errorToStringIdMap, rtlLanguages, supportedLanguages } from "./locale";
 import type { CE_Locale } from "./types";
-import type { CE_Strings } from "./types";
+import { CE_Strings } from "./types";
 
 export function checkIsRtl(locale: CE_Locale) {
     return rtlLanguages.findIndex((l) => locale.startsWith(l)) >= 0;
@@ -51,5 +53,13 @@ export function getLocalizedStringWithFallback(strings: ILocalizedStrings, id: C
         return strings[id] ?? fallback;
     } else {
         return fallback;
+    }
+}
+
+export function getStringIdFromErrorCode(errorCode: CE_ErrorCode): CE_Strings {
+    if (errorCode in errorToStringIdMap) {
+        return errorToStringIdMap[errorCode];
+    } else {
+        return CE_Strings.ERROR_1000_UNKNOWN_ERROR;
     }
 }

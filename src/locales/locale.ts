@@ -18,7 +18,8 @@ export const rtlLanguages = [
     "ur", // Urdu
 ];
 
-export const recaptchaLanguageMap: { [k in CE_Locale]: string } = {
+export const stringIdToRecaptchaLanguageMap: { [k in CE_Locale]: string } = {
     [CE_Locale.en]: "en",
     [CE_Locale.zh_cn]: "zh-CN",
 };
+export { errorIdMap as errorToStringIdMap } from "./error-map.gen";

@@ -34,9 +34,14 @@
   raw: Dismiss
 
 - name: COMMON_OK_BUTTON
-  value: 确定
+  value: 好的
   description: A string for the label of OK button.
   raw: OK
+
+- name: COMMON_CONFIRM_BUTTON
+  value: null
+  description: A string for the label of confirm button.
+  raw: Confirm
 
 - name: ERROR_1000_UNKNOWN_ERROR
   value: 发生了一个未知错误。

@@ -130,11 +130,11 @@ function getRawStrings(): ILocalizedString[] {
 
 function writeFeature(typeContent: string, enumContent: string, errorMapContent: string) {
     fs.mkdirSync(featureDir, { recursive: true });
-    const typePath = pathResolve(featureDir, "locale.d.ts");
+    const typePath = pathResolve(featureDir, "locale.gen.d.ts");
     fs.writeFileSync(typePath, typeContent);
-    const enumPath = pathResolve(featureDir, "locale.strings.ts");
+    const enumPath = pathResolve(featureDir, "locale.strings.gen.ts");
     fs.writeFileSync(enumPath, enumContent);
-    const errorIdMapPath = pathResolve(featureDir, "error-map.ts");
+    const errorIdMapPath = pathResolve(featureDir, "error-map.gen.ts");
     fs.writeFileSync(errorIdMapPath, errorMapContent);
 }
 

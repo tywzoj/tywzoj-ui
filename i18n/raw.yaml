@@ -30,6 +30,10 @@
   value: OK
   description: A string for the label of OK button.
 
+- name: COMMON_CONFIRM_BUTTON
+  value: Confirm
+  description: A string for the label of confirm button.
+
 - name: ERROR_1000_UNKNOWN_ERROR
   value: An unknown error occurred.
   description: A string for the error message when an error occurred.

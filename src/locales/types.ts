@@ -1,4 +1,4 @@
-export { default as CE_Strings } from "./locale.strings";
+export { default as CE_Strings } from "./locale.strings.gen";
 
 export const enum CE_Locale {
     en = "en",
