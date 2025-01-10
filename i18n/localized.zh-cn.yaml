@@ -1,0 +1,79 @@
+- name: COMMON_CLOSE_BUTTON
+  value: 关闭
+  description: A string for the label of close button.
+  raw: Close
+
+- name: COMMON_BACK_BUTTON
+  value: 返回
+  description: A string for the label of back button.
+  raw: Back
+
+- name: COMMON_DELETE_BUTTON
+  value: 删除
+  description: A string for the label of delete button.
+  raw: Delete
+
+- name: COMMON_CANCEL_BUTTON
+  value: 取消
+  description: A string for the label of cancel button.
+  raw: Cancel
+
+- name: COMMON_SAVE_BUTTON
+  value: 保存
+  description: A string for the label of save button.
+  raw: Save
+
+- name: COMMON_EDIT_BUTTON
+  value: 编辑
+  description: A string for the label of edit button.
+  raw: Edit
+
+- name: COMMON_DISMISS_BUTTON
+  value: 关闭
+  description: A string for the label of dismiss button.
+  raw: Dismiss
+
+- name: COMMON_OK_BUTTON
+  value: 确定
+  description: A string for the label of OK button.
+  raw: OK
+
+- name: ERROR_1000_UNKNOWN_ERROR
+  value: 发生了一个未知错误。
+  description: A string for the error message when an error occurred.
+  raw: An unknown error occurred.
+
+- name: ERROR_1001_SIGN_IN_REQUIRED
+  value: 请登录以继续。
+  description: A string for the error message when sign in is required.
+  raw: Please sign in to continue.
+
+- name: ERROR_1002_PERMISSION_DENIED
+  value: 您没有权限访问此资源。
+  description: A string for the error message when permission is denied.
+  raw: You do not have permission to access this resource.
+
+- name: ERROR_1003_SERVER_ERROR
+  value: 服务器发生了一个错误。
+  description: A string for the error message when an error occurred on the server.
+  raw: An error occurred on the server.
+
+- name: ERROR_1004_RECAPTCHA_ERROR
+  value: Google reCAPTCHA 人机验证失败。
+  description: A string for the error message when reCAPTCHA verification failed.
+  raw: Google reCAPTCHA verification failed.
+
+- name: ERROR_1005_VALIDATION_ERROR
+  value: 数据验证错误。请检查输入数据格式。
+  description: A string for the error message when validation error occurred.
+  raw: Data validation error occurred. Please check the input data format.
+
+- name: ERROR_1006_TAKE_TOO_MANY
+  value: null
+  description: A string for the error message when too many resources are queried.
+  raw: You queried too many resources at once. Please try.
+
+- name: ERROR_1007_RATE_LIMIT_EXCEEDED
+  value: 您已超过访问速率限制。请稍后再试。
+  description: A string for the error message when the rate limit is exceeded.
+  raw: You have exceeded the rate limit. Please try again later.

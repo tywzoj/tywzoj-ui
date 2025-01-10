@@ -1,0 +1,63 @@
+- name: COMMON_CLOSE_BUTTON
+  value: Close
+  description: A string for the label of close button.
+
+- name: COMMON_BACK_BUTTON
+  value: Back
+  description: A string for the label of back button.
+
+- name: COMMON_DELETE_BUTTON
+  value: Delete
+  description: A string for the label of delete button.
+
+- name: COMMON_CANCEL_BUTTON
+  value: Cancel
+  description: A string for the label of cancel button.
+
+- name: COMMON_SAVE_BUTTON
+  value: Save
+  description: A string for the label of save button.
+
+- name: COMMON_EDIT_BUTTON
+  value: Edit
+  description: A string for the label of edit button.
+
+- name: COMMON_DISMISS_BUTTON
+  value: Dismiss
+  description: A string for the label of dismiss button.
+
+- name: COMMON_OK_BUTTON
+  value: OK
+  description: A string for the label of OK button.
+
+- name: ERROR_1000_UNKNOWN_ERROR
+  value: An unknown error occurred.
+  description: A string for the error message when an error occurred.
+
+- name: ERROR_1001_SIGN_IN_REQUIRED
+  value: Please sign in to continue.
+  description: A string for the error message when sign in is required.
+
+- name: ERROR_1002_PERMISSION_DENIED
+  value: You do not have permission to access this resource.
+  description: A string for the error message when permission is denied.
+
+- name: ERROR_1003_SERVER_ERROR
+  value: An error occurred on the server.
+  description: A string for the error message when an error occurred on the server.
+
+- name: ERROR_1004_RECAPTCHA_ERROR
+  value: Google reCAPTCHA verification failed.
+  description: A string for the error message when reCAPTCHA verification failed.
+
+- name: ERROR_1005_VALIDATION_ERROR
+  value: Data validation error occurred. Please check the input data format.
+  description: A string for the error message when validation error occurred.
+
+- name: ERROR_1006_TAKE_TOO_MANY
+  value: You queried too many resources at once. Please try.
+  description: A string for the error message when too many resources are queried.
+
+- name: ERROR_1007_RATE_LIMIT_EXCEEDED
+  value: You have exceeded the rate limit. Please try again later.
+  description: A string for the error message when the rate limit is exceeded.

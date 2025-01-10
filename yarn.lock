@@ -1245,6 +1245,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/js-yaml@npm:^4":
+  version: 4.0.9
+  resolution: "@types/js-yaml@npm:4.0.9"
+  checksum: 10c0/24de857aa8d61526bbfbbaa383aa538283ad17363fcd5bb5148e2c7f604547db36646440e739d78241ed008702a8920665d1add5618687b6743858fae00da211
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.15":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
@@ -5256,6 +5263,7 @@ __metadata:
     "@tanstack/react-router": "npm:^1.95.1"
     "@tanstack/router-devtools": "npm:^1.95.1"
     "@tanstack/router-plugin": "npm:^1.95.1"
+    "@types/js-yaml": "npm:^4"
     "@types/node": "npm:^22.10.5"
     "@types/react": "npm:^19.0.3"
     "@types/react-dom": "npm:^19.0.2"
@@ -5268,6 +5276,7 @@ __metadata:
     eslint-plugin-react-refresh: "npm:^0.4.16"
     eslint-plugin-simple-import-sort: "npm:^12.1.1"
     globals: "npm:^15.14.0"
+    js-yaml: "npm:^4.1.0"
     prettier: "npm:^3.4.2"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"

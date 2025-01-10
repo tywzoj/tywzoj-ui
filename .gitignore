@@ -45,3 +45,6 @@ vite.config.*.timestamp*
 
 # Auto generated files
 src/routeTree.gen.ts
+src/localized-string/locale.d.ts
+src/localized-string/error-map.ts
+src/localized-string/locale.strings.ts
