@@ -1,6 +1,7 @@
 import type { Reducer } from "@reduxjs/toolkit";
 import { createReducer } from "@reduxjs/toolkit";
 
+import { setLocaleAction } from "@/locales/actions";
 import { setThemeAction } from "@/theme/actions";
 
 import { setEnvAction, setPaginationAction, setPermissionAction } from "./actions";
@@ -22,6 +23,15 @@ export const reducer: Reducer<IRootState> = createReducer<IRootState>(initialSta
             return {
                 ...state,
                 theme: action.payload,
+            };
+        })
+        .addCase(setLocaleAction, (state, action) => {
+            return {
+                ...state,
+                locale: {
+                    ...state.locale,
+                    ...action.payload,
+                },
             };
         })
         .addCase(setPermissionAction, (state, action) => {

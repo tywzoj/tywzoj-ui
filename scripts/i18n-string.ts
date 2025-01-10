@@ -140,7 +140,7 @@ function writeFeature(typeContent: string, enumContent: string, errorMapContent:
 
 function writeLocale(lang: string, strings: ILocalizedString[], idMap: IStringIdMap) {
     fs.mkdirSync(staticDir, { recursive: true });
-    const filePath = pathResolve(staticDir, `localized.strings.${lang}.json`);
+    const filePath = pathResolve(staticDir, `strings.${lang}.json`);
 
     const json = JSON.stringify(
         Object.fromEntries(strings.map((item) => [idMap[item.name], item.value ?? item.raw ?? "BAD STRING"])),

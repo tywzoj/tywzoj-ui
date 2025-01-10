@@ -1,3 +1,4 @@
+import { updateLocaleAsyncAction } from "./locales/actions";
 import { AuthModule } from "./server/api";
 import { CE_ErrorCode } from "./server/common/error-code";
 import { setEnvAction, setPermissionAction } from "./store/actions";
@@ -21,9 +22,8 @@ export const initAsyncAction = createAppAction(() => async (dispatch: IAppDispat
     const { code, message, data } = await AuthModule.getSessionInfoAsync();
     if (code === CE_ErrorCode.OK) {
         dispatch(setPermissionAction(data.permission));
-        if (data.userPreferenceDetail) {
-            dispatch(updateThemeAction(data.userPreferenceDetail.preferTheme));
-        }
+        dispatch(updateThemeAction(data.userPreferenceDetail?.preferTheme || null));
+        await dispatch(updateLocaleAsyncAction(data.userPreferenceDetail?.preferLanguage || null));
     } else {
         throw new Error(message);
     }

@@ -1,3 +1,4 @@
+import { CE_Locale } from "@/locales/types";
 import { CE_Theme } from "@/theme/types";
 import { getApiToken } from "@/utils/token";
 import { isAndroid, isChrome, isEdge, isFireFox, isIOS, isMobile, isSafari } from "@/utils/user-agent";
@@ -27,4 +28,9 @@ export const initialState: IRootState = {
     },
     permission: {} as IPermissionState, // Will be initialized after called the API
     pagination: {} as IPaginationState, // Will be initialized after called the API
+    locale: {
+        lang: CE_Locale.en,
+        isRtl: false,
+        strings: {} as ILocalizedStrings, // Will be initialized later
+    },
 };
