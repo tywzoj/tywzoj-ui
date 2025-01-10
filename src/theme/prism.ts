@@ -7,7 +7,7 @@ const cssLinkTag = document.createElement("link");
 cssLinkTag.rel = "stylesheet";
 document.head.appendChild(cssLinkTag);
 
-export function setPrismTheme(theme: CE_Theme) {
+export function injectPrismTheme(theme: CE_Theme) {
     switch (theme) {
         case CE_Theme.Light:
             cssLinkTag.href = cssUrlTomorrowHref;

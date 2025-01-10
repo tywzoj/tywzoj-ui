@@ -1,4 +1,4 @@
-import type { PermissionTypes } from "@/server/types";
+import type { ConfigTypes, PermissionTypes } from "@/server/types";
 import type { CE_Theme } from "@/theme/types";
 
 import type { store } from "./store";
@@ -11,16 +11,13 @@ export interface IEnvState {
     isEdge: boolean;
     isFirefox: boolean;
     isSafari: boolean;
-
     isAndroid: boolean;
     isIOS: boolean;
+    isMobile: boolean;
 
     isMiddleScreen: boolean;
     isSmallScreen: boolean;
     isMiniScreen: boolean;
-
-    isMobile: boolean;
-    isMobileView: boolean;
 }
 
 export interface IAuthState {
@@ -30,10 +27,12 @@ export interface IAuthState {
 }
 
 export type IPermissionState = PermissionTypes.IPermission;
+export type IPaginationState = ConfigTypes.IPagination;
 
 export interface IRootState {
     env: IEnvState;
     theme: CE_Theme;
     auth: IAuthState;
     permission: IPermissionState;
+    pagination: IPaginationState;
 }
