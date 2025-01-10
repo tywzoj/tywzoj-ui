@@ -46,3 +46,4 @@ vite.config.*.timestamp*
 # Auto generated files
 src/**/*.gen.ts
 src/**/*.gen.d.ts
+src/assets/locales/*

@@ -28,7 +28,7 @@ export function getBrowserPreferLanguage(): CE_Locale {
 }
 
 export async function loadLocaleStringsAsync(locale: CE_Locale): Promise<ILocalizedStrings> {
-    const modules = await import(`../assets/locales/strings.${locale}.json`);
+    const modules = await import(`../assets/locales/strings.${locale}.js`);
     return modules.default;
 }
 
