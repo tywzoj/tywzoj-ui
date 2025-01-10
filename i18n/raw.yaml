@@ -55,7 +55,7 @@
   description: A string for the error message when validation error occurred.
 
 - name: ERROR_1006_TAKE_TOO_MANY
-  value: You queried too many resources at once. Please try.
+  value: You queried too many resources at once. Please retry.
   description: A string for the error message when too many resources are queried.
 
 - name: ERROR_1007_RATE_LIMIT_EXCEEDED

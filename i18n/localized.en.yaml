@@ -69,9 +69,9 @@
   raw: Data validation error occurred. Please check the input data format.
 
 - name: ERROR_1006_TAKE_TOO_MANY
-  value: You queried too many resources at once. Please try.
+  value: You queried too many resources at once. Please retry.
   description: A string for the error message when too many resources are queried.
-  raw: You queried too many resources at once. Please try.
+  raw: You queried too many resources at once. Please retry.
 
 - name: ERROR_1007_RATE_LIMIT_EXCEEDED
   value: You have exceeded the rate limit. Please try again later.
