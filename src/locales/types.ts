@@ -1,9 +1,12 @@
-export enum CE_Locale {
-    ar = "ar",
+export { default as CE_Strings } from "./locale.strings.gen";
+
+export const enum CE_Locale {
     en = "en",
-    fr = "fr",
-    ja = "ja",
-    ko = "ko",
     zh_cn = "zh-cn",
-    zh_hk = "zh-hk",
+}
+
+export interface ILocaleState {
+    lang: CE_Locale;
+    isRtl: boolean;
+    strings: ILocalizedStrings;
 }

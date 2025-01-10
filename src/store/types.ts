@@ -1,3 +1,4 @@
+import type { ILocaleState } from "@/locales/types";
 import type { ConfigTypes, PermissionTypes } from "@/server/types";
 import type { CE_Theme } from "@/theme/types";
 
@@ -32,6 +33,7 @@ export type IPaginationState = ConfigTypes.IPagination;
 export interface IRootState {
     env: IEnvState;
     theme: CE_Theme;
+    locale: ILocaleState;
     auth: IAuthState;
     permission: IPermissionState;
     pagination: IPaginationState;

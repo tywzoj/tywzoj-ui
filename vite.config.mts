@@ -2,6 +2,7 @@ import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
+import circleDependency from "vite-plugin-circular-dependency";
 import { createHtmlPlugin } from "vite-plugin-html";
 import { viteVConsole } from "vite-plugin-vconsole";
 import tsconfigPaths from "vite-tsconfig-paths";
@@ -9,12 +10,14 @@ import tsconfigPaths from "vite-tsconfig-paths";
 const ENV_PREFIX = "TYWZOJ_";
 
 // https://vite.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command }) => {
     return {
         envPrefix: ENV_PREFIX,
         plugins: [
             react(),
-            tsconfigPaths(),
+            tsconfigPaths({
+                projects: [path.resolve("tsconfig.app.json")],
+            }),
             createHtmlPlugin({
                 minify: {
                     collapseWhitespace: true,
@@ -28,7 +31,7 @@ export default defineConfig(({ mode }) => {
                 },
             }),
             viteVConsole({
-                enabled: mode !== "production",
+                enabled: command === "serve",
                 entry: path.resolve("src/main.tsx"),
                 config: {
                     maxLogNumber: 1000,
@@ -37,6 +40,9 @@ export default defineConfig(({ mode }) => {
             TanStackRouterVite({
                 routesDirectory: path.resolve("src/pages"),
                 quoteStyle: "double",
+            }),
+            circleDependency({
+                exclude: [/node_modules/, /\.yarn/, /\.pnp/],
             }),
         ],
         server: {

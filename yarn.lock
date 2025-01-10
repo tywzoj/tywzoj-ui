@@ -889,6 +889,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/pluginutils@npm:^5.1.0":
+  version: 5.1.4
+  resolution: "@rollup/pluginutils@npm:5.1.4"
+  dependencies:
+    "@types/estree": "npm:^1.0.0"
+    estree-walker: "npm:^2.0.2"
+    picomatch: "npm:^4.0.2"
+  peerDependencies:
+    rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+  checksum: 10c0/6d58fbc6f1024eb4b087bc9bf59a1d655a8056a60c0b4021d3beaeec3f0743503f52467fd89d2cf0e7eccf2831feb40a05ad541a17637ea21ba10b21c2004deb
+  languageName: node
+  linkType: hard
+
 "@rollup/rollup-android-arm-eabi@npm:4.30.0":
   version: 4.30.0
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.30.0"
@@ -1238,10 +1254,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/estree@npm:1.0.6, @types/estree@npm:^1.0.6":
+"@types/estree@npm:1.0.6, @types/estree@npm:^1.0.0, @types/estree@npm:^1.0.6":
   version: 1.0.6
   resolution: "@types/estree@npm:1.0.6"
   checksum: 10c0/cdfd751f6f9065442cd40957c07fd80361c962869aa853c1c2fd03e101af8b9389d8ff4955a43a6fcfa223dd387a089937f95be0f3eec21ca527039fd2d9859a
+  languageName: node
+  linkType: hard
+
+"@types/js-yaml@npm:^4":
+  version: 4.0.9
+  resolution: "@types/js-yaml@npm:4.0.9"
+  checksum: 10c0/24de857aa8d61526bbfbbaa383aa538283ad17363fcd5bb5148e2c7f604547db36646440e739d78241ed008702a8920665d1add5618687b6743858fae00da211
   languageName: node
   linkType: hard
 
@@ -1844,7 +1867,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0.0, chalk@npm:^4.0.2":
+"chalk@npm:^4.0.0, chalk@npm:^4.0.2, chalk@npm:^4.1.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -2768,7 +2791,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"estree-walker@npm:^2.0.1":
+"estree-walker@npm:^2.0.1, estree-walker@npm:^2.0.2":
   version: 2.0.2
   resolution: "estree-walker@npm:2.0.2"
   checksum: 10c0/53a6c54e2019b8c914dc395890153ffdc2322781acf4bd7d1a32d7aedc1710807bdcd866ac133903d5629ec601fbb50abe8c2e5553c7f5a0afdd9b6af6c945af
@@ -4251,6 +4274,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"picomatch@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "picomatch@npm:4.0.2"
+  checksum: 10c0/7c51f3ad2bb42c776f49ebf964c644958158be30d0a510efd5a395e8d49cb5acfed5b82c0c5b365523ce18e6ab85013c9ebe574f60305892ec3fa8eee8304ccc
+  languageName: node
+  linkType: hard
+
 "possible-typed-array-names@npm:^1.0.0":
   version: 1.0.0
   resolution: "possible-typed-array-names@npm:1.0.0"
@@ -5256,6 +5286,7 @@ __metadata:
     "@tanstack/react-router": "npm:^1.95.1"
     "@tanstack/router-devtools": "npm:^1.95.1"
     "@tanstack/router-plugin": "npm:^1.95.1"
+    "@types/js-yaml": "npm:^4"
     "@types/node": "npm:^22.10.5"
     "@types/react": "npm:^19.0.3"
     "@types/react-dom": "npm:^19.0.2"
@@ -5268,6 +5299,7 @@ __metadata:
     eslint-plugin-react-refresh: "npm:^0.4.16"
     eslint-plugin-simple-import-sort: "npm:^12.1.1"
     globals: "npm:^15.14.0"
+    js-yaml: "npm:^4.1.0"
     prettier: "npm:^3.4.2"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -5278,6 +5310,7 @@ __metadata:
     typescript-eslint: "npm:^8.19.0"
     vconsole: "npm:^3.15.1"
     vite: "npm:^6.0.5"
+    vite-plugin-circular-dependency: "npm:^0.5.0"
     vite-plugin-html: "npm:^3.2.2"
     vite-plugin-vconsole: "npm:^2.1.1"
     vite-tsconfig-paths: "npm:^5.1.4"
@@ -5386,6 +5419,16 @@ __metadata:
     core-js: "npm:^3.11.0"
     mutation-observer: "npm:^1.0.3"
   checksum: 10c0/1e62132b719e324eb7d533c94f38e9db288a9d0c9e85c8752ba742adee4e5925df10d4b43d05ba0cd264d99c32817f9f9c8f24fe391a7d8837469bd318d1b2ac
+  languageName: node
+  linkType: hard
+
+"vite-plugin-circular-dependency@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "vite-plugin-circular-dependency@npm:0.5.0"
+  dependencies:
+    "@rollup/pluginutils": "npm:^5.1.0"
+    chalk: "npm:^4.1.2"
+  checksum: 10c0/506cb0008d94562deff8bcc1db386c8ae623f2608da1e9ac8206efa3c8b050ad2e2fd74dc61e72169dfb0f483241dda22e272fe67afa139710b51352b0f2a615
   languageName: node
   linkType: hard
 

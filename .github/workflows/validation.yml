@@ -23,6 +23,9 @@ jobs:
           corepack enable
           yarn install
 
+      - name: Generate i18n files
+        run: yarn i18n
+
       - name: Lint
         run: yarn lint
 
