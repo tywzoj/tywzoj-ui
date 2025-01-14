@@ -65,3 +65,23 @@
 - name: ERROR_1007_RATE_LIMIT_EXCEEDED
   value: You have exceeded the rate limit. Please try again later.
   description: A string for the error message when the rate limit is exceeded.
+
+- name: NAVIGATION_LABEL
+  value: Navigation
+  description: A string for the label of navigation.
+
+- name: NAVIGATION_HOME
+  value: Home
+  description: A string for the label of home navigation.
+
+- name: NAVIGATION_SIGN_IN
+  value: Sign In
+  description: A string for the label of sign in navigation.
+
+- name: NAVIGATION_SIGN_OUT
+  value: Sign Out
+  description: A string for the label of sign out navigation.
+
+- name: NAVIGATION_SIGN_UP
+  value: Sign Up
+  description: A string for the label of sign up navigation.

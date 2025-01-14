@@ -29,7 +29,11 @@ export const App: React.FC = () => {
 
     return (
         <QueryClientProvider client={queryClient}>
-            <FluentProvider theme={getFluentTheme(theme)} dir={isRtl ? "rtl" : "ltr"}>
+            <FluentProvider
+                theme={getFluentTheme(theme)}
+                dir={isRtl ? "rtl" : "ltr"}
+                style={{ height: "100%", width: "100%" }}
+            >
                 <RouterProvider router={router} />
             </FluentProvider>
         </QueryClientProvider>

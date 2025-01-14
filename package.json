@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "@fluentui/react-components": "^9.57.0",
+    "@fluentui/react-icons": "^2.0.270",
+    "@fluentui/react-nav-preview": "^0.10.7",
     "@reduxjs/toolkit": "^2.5.0",
     "@tanstack/react-query": "^5.62.16",
     "@tanstack/react-router": "^1.95.1",
