@@ -9,31 +9,38 @@ import React from "react";
 import { NavItemWithRouter } from "@/components/NavItemWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
-import { useIsMiddleScreen, useIsSmallScreen } from "@/store/hooks";
+import { useIsSmallScreen } from "@/store/hooks";
 import type { IAppStore } from "@/store/types";
 import { flex } from "@/utils/flex";
 
 const ACTIVE_ITEM_TAG = "active";
 
 const Layout: React.FC = () => {
-    const styles = useStyles();
     const isSmallScreen = useIsSmallScreen();
-    const isMiddleScreen = useIsMiddleScreen();
-    const [isNavDrawerOpen, setIsNavDrawerOpen] = React.useState(!isMiddleScreen);
-    const userPreferOpen = React.useRef(true);
 
     const ls = useLocalizedStrings({
         navigationTitle: CE_Strings.NAVIGATION_LABEL,
         homePage: CE_Strings.NAVIGATION_HOME,
     });
 
+    const styles = useStyles();
+
+    const [isNavDrawerOpen, setIsNavDrawerOpen] = React.useState(!isSmallScreen);
+    const [isOverlay, setIsOverlay] = React.useState(isSmallScreen);
+    const userPreferOpen = React.useRef(true);
+
     React.useEffect(() => {
-        if (isMiddleScreen) {
+        if (isSmallScreen) {
+            // Auto close the drawer when the screen size is small.
             setIsNavDrawerOpen(false);
-        } else if (userPreferOpen.current) {
-            setIsNavDrawerOpen(true);
+        } else {
+            setIsNavDrawerOpen(userPreferOpen.current);
         }
-    }, [isMiddleScreen]);
+
+        // Directly use isSmallScreen for overlay will trigger an error about aria-hidden when drawer is open.
+        // So we need close the drawer first, and then we can set the isOverlay state.
+        setIsOverlay(isSmallScreen);
+    }, [isSmallScreen]);
 
     const hamburger = React.useMemo(
         () => (
@@ -53,11 +60,7 @@ const Layout: React.FC = () => {
 
     return (
         <div className={styles.root}>
-            <NavDrawer
-                open={isNavDrawerOpen}
-                type={isSmallScreen ? "overlay" : "inline"}
-                selectedValue={ACTIVE_ITEM_TAG}
-            >
+            <NavDrawer open={isNavDrawerOpen} type={isOverlay ? "overlay" : "inline"} selectedValue={ACTIVE_ITEM_TAG}>
                 <NavDrawerHeader>{hamburger}</NavDrawerHeader>
                 <NavDrawerBody>
                     {createNavItem("/", ls.homePage, <Home20Filled />)}
@@ -126,7 +129,7 @@ const useStyles = makeStyles({
 
 function createNavItem(to: string, text: string, icon: JSX.Element) {
     return (
-        <NavItemWithRouter to={to} icon={icon} activeProps={{ value: ACTIVE_ITEM_TAG }}>
+        <NavItemWithRouter to={to} icon={icon} activeProps={{ value: ACTIVE_ITEM_TAG }} inactiveProps={{ value: to }}>
             {text}
         </NavItemWithRouter>
     );

@@ -1,10 +1,10 @@
-const MAX_MINI_SCREEN_WIDTH = 425;
-const MAX_SMALL_SCREEN_WIDTH = 480;
+const MAX_MINI_SCREEN_WIDTH = 480;
+const MAX_SMALL_SCREEN_WIDTH = 720;
 const MAX_MIDDLE_SCREEN_WIDTH = 960;
 
-export const miniScreenMediaQuery = window.matchMedia(`(max-width: ${MAX_MINI_SCREEN_WIDTH}px)`);
-export const smallScreenMediaQuery = window.matchMedia(`(max-width: ${MAX_SMALL_SCREEN_WIDTH}px)`);
-export const middleScreenMediaQuery = window.matchMedia(`(max-width: ${MAX_MIDDLE_SCREEN_WIDTH}px)`);
+export const miniScreenMediaQuery = window.matchMedia(`(max-width: ${MAX_MINI_SCREEN_WIDTH - 1}px)`);
+export const smallScreenMediaQuery = window.matchMedia(`(max-width: ${MAX_SMALL_SCREEN_WIDTH - 1}px)`);
+export const middleScreenMediaQuery = window.matchMedia(`(max-width: ${MAX_MIDDLE_SCREEN_WIDTH - 1}px)`);
 
 export function registerMiniScreenListener(listener: (isMiniScreen: boolean) => void): void {
     miniScreenMediaQuery.addEventListener("change", (e) => listener(e.matches));
