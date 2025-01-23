@@ -19,7 +19,10 @@ export function useLocalizedStrings(first?: Record<string, CE_Strings> | CE_Stri
                 Object.entries(first).map(([key, value]) => [key, getLocalizedStringWithFallback(strings, value)]),
             );
         } else {
-            return [first, ...args.map((key) => getLocalizedStringWithFallback(strings, key))];
+            return [
+                first && getLocalizedStringWithFallback(strings, first),
+                ...args.map((key) => getLocalizedStringWithFallback(strings, key)),
+            ];
         }
     }, [first, strings, args]);
 }

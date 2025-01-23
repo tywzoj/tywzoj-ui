@@ -6,6 +6,7 @@ import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import type { JSX } from "react";
 import React from "react";
 
+import { ErrorPage } from "@/components/ErrorPage";
 import { NavItemWithRouter } from "@/components/NavItemWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
@@ -67,19 +68,26 @@ const Layout: React.FC = () => {
                     {createNavItem("/about", "About", <BookQuestionMark20Filled />)} {/* TODO: will remove this line */}
                 </NavDrawerBody>
             </NavDrawer>
-            <div className={styles.content}>
+            <div className={styles.container}>
                 <div className={styles.header}>
                     <div className={styles.headerNavButton}>{!isNavDrawerOpen && hamburger}</div>
                     <div className={styles.headerInfo}></div>
                     <div className={styles.headerRightMenu}></div>
                 </div>
                 <div className={styles.body}>
-                    <Outlet />
+                    <div className={styles.content}>
+                        <Outlet />
+                    </div>
+                    <div className={styles.footer}>Test</div>
                 </div>
-                <div className={styles.footer}></div>
             </div>
         </div>
     );
+};
+
+const NotFound: React.FC = () => {
+    const [message] = useLocalizedStrings(CE_Strings.CUSTOM_ERROR_PAGE_NOT_FOUND);
+    return <ErrorPage message={message} showBackButton={false} />;
 };
 
 export const Route = createRootRouteWithContext<{
@@ -87,6 +95,7 @@ export const Route = createRootRouteWithContext<{
     store: IAppStore;
 }>()({
     component: Layout,
+    notFoundComponent: NotFound,
 });
 
 const useStyles = makeStyles({
@@ -95,9 +104,15 @@ const useStyles = makeStyles({
         width: "100%",
         height: "100%",
     },
+    container: {
+        ...flex({ flexDirection: "column" }),
+        width: "100%",
+        height: "100%",
+        boxSizing: "border-box",
+    },
     header: {
         ...flex({ flexDirection: "row", justifyContent: "space-between" }),
-        height: "40px",
+        minHeight: "40px",
         padding: "5px 24px 5px 14px",
         boxSizing: "border-box",
         boxShadow: tokens.shadow4,
@@ -108,15 +123,28 @@ const useStyles = makeStyles({
     headerInfoLogo: {},
     headerRightMenu: {},
     body: {
-        ...flex({}),
-        flexGrow: 1,
+        ...flex({
+            flexDirection: "column",
+            alignItems: "center",
+        }),
+        width: "100%",
+        boxSizing: "border-box",
+        overflow: "auto",
     },
     content: {
-        ...flex({ flexDirection: "column" }),
-        overflow: "auto",
-        width: "100%",
-        height: "100%",
+        ...flex({
+            flexDirection: "column",
+            alignItems: "center",
+        }),
+        flexGrow: 1,
+        padding: "20px",
         boxSizing: "border-box",
+        width: "100%",
+        maxWidth: "1200px",
+        ">div": {
+            width: "100%",
+            height: "3000px",
+        },
     },
     footer: {
         ...flex({

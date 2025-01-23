@@ -6,7 +6,7 @@
 - name: COMMON_BACK_BUTTON
   value: 返回
   description: A string for the label of back button.
-  raw: Back
+  raw: Go Back
 
 - name: COMMON_DELETE_BUTTON
   value: 删除
@@ -42,6 +42,11 @@
   value: 确认
   description: A string for the label of confirm button.
   raw: Confirm
+
+- name: COMMON_ERROR_TITLE
+  value: 错误
+  description: A string for the title of error message.
+  raw: Error
 
 - name: ERROR_1000_UNKNOWN_ERROR
   value: 发生了一个未知错误。
@@ -82,6 +87,11 @@
   value: 您已超过访问速率限制。请稍后再试。
   description: A string for the error message when the rate limit is exceeded.
   raw: You have exceeded the rate limit. Please try again later.
+
+- name: CUSTOM_ERROR_PAGE_NOT_FOUND
+  value: 页面未找到。
+  description: A string for the error message when the page is not found.
+  raw: Page not found.
 
 - name: NAVIGATION_LABEL
   value: 导航

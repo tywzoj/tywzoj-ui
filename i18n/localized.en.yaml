@@ -4,9 +4,9 @@
   raw: Close
 
 - name: COMMON_BACK_BUTTON
-  value: Back
+  value: Go Back
   description: A string for the label of back button.
-  raw: Back
+  raw: Go Back
 
 - name: COMMON_DELETE_BUTTON
   value: Delete
@@ -42,6 +42,11 @@
   value: Confirm
   description: A string for the label of confirm button.
   raw: Confirm
+
+- name: COMMON_ERROR_TITLE
+  value: Error
+  description: A string for the title of error message.
+  raw: Error
 
 - name: ERROR_1000_UNKNOWN_ERROR
   value: An unknown error occurred.
@@ -82,6 +87,11 @@
   value: You have exceeded the rate limit. Please try again later.
   description: A string for the error message when the rate limit is exceeded.
   raw: You have exceeded the rate limit. Please try again later.
+
+- name: CUSTOM_ERROR_PAGE_NOT_FOUND
+  value: Page not found.
+  description: A string for the error message when the page is not found.
+  raw: Page not found.
 
 - name: NAVIGATION_LABEL
   value: Navigation
