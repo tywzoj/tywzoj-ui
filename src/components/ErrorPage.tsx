@@ -1,18 +1,25 @@
 import { Link, makeStyles, MessageBar, MessageBarBody, MessageBarTitle, tokens } from "@fluentui/react-components";
 import { ErrorCircle48Filled } from "@fluentui/react-icons";
+import type { LinkComponentProps } from "@tanstack/react-router";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
 import type * as React from "react";
 
+import type { IUrlString } from "@/common/types";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { flex } from "@/utils/flex";
 
 import { LinkWithRouter } from "./LinkWithRouter";
 
-export interface IErrorPageLink {
-    title: string;
-    href: string | URL;
-}
+export type IErrorPageLink =
+    | {
+          title: string;
+          to: Exclude<LinkComponentProps<typeof LinkWithRouter>["to"], undefined>;
+      }
+    | {
+          title: string;
+          href: IUrlString;
+      };
 
 export interface IErrorPageProps {
     message: string;
@@ -47,7 +54,7 @@ const useStyles = makeStyles({
         gap: "6px",
     },
     linkDivider: {
-        minWidth: "2px",
+        minWidth: "1.5px",
         minHeight: "14px",
         backgroundColor: tokens.colorNeutralForegroundDisabled,
     },
@@ -76,22 +83,30 @@ export const ErrorPage: React.FC<IErrorPageProps> = (props) => {
                 <MessageBarBody>
                     <MessageBarTitle className={styles.title}>{titleString}</MessageBarTitle>
                     {<div className={styles.message}>{message}</div>}
-                    {links.map((link, index) => (
-                        <>
-                            {index > 0 && <div className={styles.linkDivider} />}
-                            <LinkWithRouter key={"link" + index} to={link.href.toString()}>
-                                {link.title}
-                            </LinkWithRouter>
-                        </>
-                    ))}
-                    {showBackButton && canGoBack && (
-                        <>
-                            {links.length > 0 && <div className={styles.linkDivider} />}
-                            <Link as="button" onClick={() => router.history.back()}>
-                                {backButtonString}
-                            </Link>
-                        </>
-                    )}
+                    <div className={styles.linkContainer}>
+                        {links.map((link, index) => (
+                            <>
+                                {index > 0 && <div className={styles.linkDivider} />}
+                                {"to" in link ? (
+                                    <LinkWithRouter key={link.to + index} to={link.to}>
+                                        {link.title}
+                                    </LinkWithRouter>
+                                ) : (
+                                    <Link key={link.href + index} href={link.href} target="_blank">
+                                        {link.title}
+                                    </Link>
+                                )}
+                            </>
+                        ))}
+                        {showBackButton && canGoBack && (
+                            <>
+                                {links.length > 0 && <div className={styles.linkDivider} />}
+                                <Link as="button" onClick={() => router.history.back()}>
+                                    {backButtonString}
+                                </Link>
+                            </>
+                        )}
+                    </div>
                 </MessageBarBody>
             </MessageBar>
         </div>
