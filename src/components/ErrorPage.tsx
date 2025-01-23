@@ -32,7 +32,7 @@ export interface IErrorPageProps {
      * Whether to show a back button to navigate to the previous page.
      * @default false
      */
-    showBackButton?: boolean;
+    showGoBack?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -61,7 +61,7 @@ const useStyles = makeStyles({
 });
 
 export const ErrorPage: React.FC<IErrorPageProps> = (props) => {
-    const { message, links = [], showBackButton = false } = props;
+    const { message, links = [], showGoBack = false } = props;
 
     const router = useRouter();
     const canGoBack = useCanGoBack();
@@ -98,7 +98,7 @@ export const ErrorPage: React.FC<IErrorPageProps> = (props) => {
                                 )}
                             </>
                         ))}
-                        {showBackButton && canGoBack && (
+                        {showGoBack && canGoBack && (
                             <>
                                 {links.length > 0 && <div className={styles.linkDivider} />}
                                 <Link as="button" onClick={() => router.history.back()}>
