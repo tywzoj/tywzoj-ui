@@ -87,7 +87,7 @@ const Layout: React.FC = () => {
 
 const NotFound: React.FC = () => {
     const [message] = useLocalizedStrings(CE_Strings.CUSTOM_ERROR_PAGE_NOT_FOUND);
-    return <ErrorPage message={message} showBackButton={false} />;
+    return <ErrorPage message={message} />;
 };
 
 export const Route = createRootRouteWithContext<{
