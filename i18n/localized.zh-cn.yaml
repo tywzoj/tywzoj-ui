@@ -117,3 +117,13 @@
   value: 注册
   description: A string for the label of sign up navigation.
   raw: Sign Up
+
+- name: SITE_ICON_IMAGE_ALT
+  value: TYWZOJ 的图标。
+  description: A string for the alt text of site icon image.
+  raw: TYWZOJ's icon.
+
+- name: SITE_TITLE_IMAGE_ALT
+  value: 站点是 TYWZOJ。
+  description: A string for the title of the site.
+  raw: The site is TYWZOJ.

@@ -1,3 +1,8 @@
+import {
+    registerMiddleScreenListener,
+    registerMiniScreenListener,
+    registerSmallScreenListener,
+} from "./common/utils/window-width";
 import { updateLocaleAsyncAction } from "./locales/actions";
 import { AuthModule } from "./server/api";
 import { CE_ErrorCode } from "./server/common/error-code";
@@ -5,11 +10,6 @@ import { setEnvAction, setPermissionAction } from "./store/actions";
 import type { IAppDispatch } from "./store/types";
 import { createAppAction } from "./store/utils";
 import { updateThemeAction } from "./theme/actions";
-import {
-    registerMiddleScreenListener,
-    registerMiniScreenListener,
-    registerSmallScreenListener,
-} from "./utils/window-width";
 
 export const initWindowSizeListenerAction = createAppAction(() => (dispatch) => {
     registerMiniScreenListener((isMiniScreen) => dispatch(setEnvAction({ isMiniScreen })));

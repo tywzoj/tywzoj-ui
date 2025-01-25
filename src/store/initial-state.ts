@@ -1,8 +1,8 @@
+import { getApiToken } from "@/common/utils/token";
+import { isAndroid, isChrome, isEdge, isFireFox, isIOS, isMobile, isSafari } from "@/common/utils/user-agent";
+import { isMiddleScreen, isMiniScreen, isSmallScreen } from "@/common/utils/window-width";
 import { CE_Locale } from "@/locales/types";
 import { CE_Theme } from "@/theme/types";
-import { getApiToken } from "@/utils/token";
-import { isAndroid, isChrome, isEdge, isFireFox, isIOS, isMobile, isSafari } from "@/utils/user-agent";
-import { isMiddleScreen, isMiniScreen, isSmallScreen } from "@/utils/window-width";
 
 import type { IPaginationState, IPermissionState, IRootState } from "./types";
 
