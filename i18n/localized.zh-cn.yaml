@@ -6,7 +6,7 @@
 - name: COMMON_BACK_BUTTON
   value: 返回
   description: A string for the label of back button.
-  raw: Back
+  raw: Go Back
 
 - name: COMMON_DELETE_BUTTON
   value: 删除
@@ -39,9 +39,14 @@
   raw: OK
 
 - name: COMMON_CONFIRM_BUTTON
-  value: null
+  value: 确认
   description: A string for the label of confirm button.
   raw: Confirm
+
+- name: COMMON_ERROR_TITLE
+  value: 错误
+  description: A string for the title of error message.
+  raw: Error
 
 - name: ERROR_1000_UNKNOWN_ERROR
   value: 发生了一个未知错误。
@@ -82,3 +87,33 @@
   value: 您已超过访问速率限制。请稍后再试。
   description: A string for the error message when the rate limit is exceeded.
   raw: You have exceeded the rate limit. Please try again later.
+
+- name: CUSTOM_ERROR_PAGE_NOT_FOUND
+  value: 页面未找到。
+  description: A string for the error message when the page is not found.
+  raw: Page not found.
+
+- name: NAVIGATION_LABEL
+  value: 导航
+  description: A string for the label of navigation.
+  raw: Navigation
+
+- name: NAVIGATION_HOME
+  value: 首页
+  description: A string for the label of home navigation.
+  raw: Home
+
+- name: NAVIGATION_SIGN_IN
+  value: 登录
+  description: A string for the label of sign in navigation.
+  raw: Sign In
+
+- name: NAVIGATION_SIGN_OUT
+  value: 登出
+  description: A string for the label of sign out navigation.
+  raw: Sign Out
+
+- name: NAVIGATION_SIGN_UP
+  value: 注册
+  description: A string for the label of sign up navigation.
+  raw: Sign Up

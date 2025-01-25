@@ -2,7 +2,7 @@ import React from "react";
 
 import { useAppSelector } from "@/store/hooks";
 
-import { getStrings } from "./selectors";
+import { getIsRtl, getStrings } from "./selectors";
 import type { CE_Strings } from "./types";
 import { getLocalizedStringWithFallback } from "./utils";
 
@@ -15,12 +15,16 @@ export function useLocalizedStrings(first?: Record<string, CE_Strings> | CE_Stri
 
     return React.useMemo(() => {
         if (typeof first === "object") {
-            return Object.entries(first).reduce(
-                (acc, [key, value]) => ({ ...acc, [key]: getLocalizedStringWithFallback(strings, value) }),
-                {},
+            return Object.fromEntries(
+                Object.entries(first).map(([key, value]) => [key, getLocalizedStringWithFallback(strings, value)]),
             );
         } else {
-            return [first, ...args.map((key) => getLocalizedStringWithFallback(strings, key))];
+            return [
+                first && getLocalizedStringWithFallback(strings, first),
+                ...args.map((key) => getLocalizedStringWithFallback(strings, key)),
+            ];
         }
     }, [first, strings, args]);
 }
+
+export const useIsRtl = () => useAppSelector(getIsRtl);
