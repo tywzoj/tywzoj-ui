@@ -94,6 +94,10 @@
   value: Sign Up
   description: A string for the label of sign up navigation.
 
+- name: NAVIGATION_FORGOT_PASSWORD
+  value: Forgot Password
+  description: A string for the label of forgot password navigation.
+
 - name: SITE_ICON_IMAGE_ALT
   value: "TYWZOJ's icon."
   description: A string for the alt text of site icon image.
@@ -101,3 +105,31 @@
 - name: SITE_TITLE_IMAGE_ALT
   value: The site is TYWZOJ.
   description: A string for the title of the site.
+
+- name: SHOW_PASSWORD_LABEL
+  value: Show password
+  description: A string for the label of show password button.
+
+- name: HIDE_PASSWORD_LABEL
+  value: Hide password
+  description: A string for the label of hide password button.
+
+- name: USERNAME_OR_EMAIL_LABEL
+  value: Username or Email
+  description: A string for the label of username or email input.
+
+- name: PASSWORD_LABEL
+  value: Password
+  description: A string for the label of password input.
+
+- name: USERNAME_LABEL
+  value: Username
+  description: A string for the label of username input.
+
+- name: EMAIL_LABEL
+  value: Email
+  description: A string for the label of email input.
+
+- name: PASSWORD_CONFIRM_LABEL
+  value: Confirm Password
+  description: A string for the label of password confirm input.

@@ -118,6 +118,11 @@
   description: A string for the label of sign up navigation.
   raw: Sign Up
 
+- name: NAVIGATION_FORGOT_PASSWORD
+  value: 忘记密码
+  description: A string for the label of forgot password navigation.
+  raw: Forgot Password
+
 - name: SITE_ICON_IMAGE_ALT
   value: TYWZOJ 的图标。
   description: A string for the alt text of site icon image.
@@ -127,3 +132,38 @@
   value: 站点是 TYWZOJ。
   description: A string for the title of the site.
   raw: The site is TYWZOJ.
+
+- name: SHOW_PASSWORD_LABEL
+  value: 显示密码
+  description: A string for the label of show password button.
+  raw: Show password
+
+- name: HIDE_PASSWORD_LABEL
+  value: 隐藏密码
+  description: A string for the label of hide password button.
+  raw: Hide password
+
+- name: USERNAME_OR_EMAIL_LABEL
+  value: 用户名或邮箱
+  description: A string for the label of username or email input.
+  raw: Username or Email
+
+- name: PASSWORD_LABEL
+  value: 密码
+  description: A string for the label of password input.
+  raw: Password
+
+- name: USERNAME_LABEL
+  value: 用户名
+  description: A string for the label of username input.
+  raw: Username
+
+- name: EMAIL_LABEL
+  value: 邮箱
+  description: A string for the label of email input.
+  raw: Email
+
+- name: PASSWORD_CONFIRM_LABEL
+  value: 确认密码
+  description: A string for the label of password confirm input.
+  raw: Confirm Password

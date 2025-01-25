@@ -118,6 +118,11 @@
   description: A string for the label of sign up navigation.
   raw: Sign Up
 
+- name: NAVIGATION_FORGOT_PASSWORD
+  value: Forgot Password
+  description: A string for the label of forgot password navigation.
+  raw: Forgot Password
+
 - name: SITE_ICON_IMAGE_ALT
   value: TYWZOJ's icon.
   description: A string for the alt text of site icon image.
@@ -127,3 +132,38 @@
   value: The site is TYWZOJ.
   description: A string for the title of the site.
   raw: The site is TYWZOJ.
+
+- name: SHOW_PASSWORD_LABEL
+  value: Show password
+  description: A string for the label of show password button.
+  raw: Show password
+
+- name: HIDE_PASSWORD_LABEL
+  value: Hide password
+  description: A string for the label of hide password button.
+  raw: Hide password
+
+- name: USERNAME_OR_EMAIL_LABEL
+  value: Username or Email
+  description: A string for the label of username or email input.
+  raw: Username or Email
+
+- name: PASSWORD_LABEL
+  value: Password
+  description: A string for the label of password input.
+  raw: Password
+
+- name: USERNAME_LABEL
+  value: Username
+  description: A string for the label of username input.
+  raw: Username
+
+- name: EMAIL_LABEL
+  value: Email
+  description: A string for the label of email input.
+  raw: Email
+
+- name: PASSWORD_CONFIRM_LABEL
+  value: Confirm Password
+  description: A string for the label of password confirm input.
+  raw: Confirm Password
