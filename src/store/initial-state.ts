@@ -24,8 +24,8 @@ export const initialState: IRootState = {
     auth: {
         user: null, // Will be initialized after called the API
         token: getApiToken(),
-        apiEndPoint: import.meta.env.TYWZOJ_API_END_POINT,
     },
+    apiEndPoint: import.meta.env.TYWZOJ_API_END_POINT,
     permission: {} as IPermissionState, // Will be initialized after called the API
     pagination: {} as IPaginationState, // Will be initialized after called the API
     locale: {

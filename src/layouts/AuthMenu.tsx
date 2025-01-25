@@ -23,7 +23,7 @@ export const AuthMenu: React.FC = () => {
                 {ls.signIn}
             </ButtonWithRouter>
             {!isMiniScreen && (
-                <ButtonWithRouter className={styles.button} to="/sign-up">
+                <ButtonWithRouter className={styles.button} to="/sign-up" preload={false}>
                     {ls.signUp}
                 </ButtonWithRouter>
             )}

@@ -24,7 +24,6 @@ export interface IEnvState {
 export interface IAuthState {
     user: unknown | null;
     token: string | null;
-    apiEndPoint: string;
 }
 
 export type IPermissionState = PermissionTypes.IPermission;
@@ -35,6 +34,7 @@ export interface IRootState {
     theme: CE_Theme;
     locale: ILocaleState;
     auth: IAuthState;
+    apiEndPoint: string;
     permission: IPermissionState;
     pagination: IPaginationState;
 }

@@ -17,8 +17,10 @@ export interface IResponseBody<T> {
 }
 
 export async function requestAsync<T>(options: IRequestOptions): Promise<IResponseBody<T>> {
-    const appState = store.getState();
-    const { token, apiEndPoint } = appState.auth;
+    const {
+        auth: { token },
+        apiEndPoint,
+    } = store.getState();
 
     const headers = new Headers();
     headers.append("Content-Type", "application/json");

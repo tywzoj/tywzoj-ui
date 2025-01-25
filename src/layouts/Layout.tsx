@@ -177,9 +177,6 @@ const useStyles = makeStyles({
         boxSizing: "border-box",
         width: "100%",
         maxWidth: "1200px",
-        ">div": {
-            width: "100%",
-        },
     },
     footer: {
         ...flex({
