@@ -114,15 +114,14 @@ const useStyles = makeStyles({
         ...flex({ flexDirection: "row" }),
         width: "100%",
         height: "100%",
+        minWidth: "360px",
+        overflowY: "auto",
     },
     container: {
         ...flex({ flexDirection: "column" }),
         width: "100%",
         height: "100%",
         boxSizing: "border-box",
-        minWidth: "350px",
-        overflowX: "hidden",
-        overflowY: "auto",
     },
     header: {
         ...flex({ flexDirection: "row", justifyContent: "space-between" }),
@@ -155,7 +154,6 @@ const useStyles = makeStyles({
             justifyContent: "flex-end",
         }),
         height: "30px",
-        minWidth: "200px",
     },
     body: {
         ...flex({

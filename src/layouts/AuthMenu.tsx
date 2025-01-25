@@ -19,7 +19,7 @@ export const AuthMenu: React.FC = () => {
 
     return (
         <div className={styles.root}>
-            <ButtonWithRouter className={styles.button} to="/sign-in" appearance="primary">
+            <ButtonWithRouter className={styles.button} to="/sign-in" appearance="primary" preload="viewport">
                 {ls.signIn}
             </ButtonWithRouter>
             {!isMiniScreen && (

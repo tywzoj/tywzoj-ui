@@ -1,4 +1,5 @@
 import type { ILocaleState } from "@/locales/types";
+import type { IUserDetail } from "@/server/modules/user.types";
 import type { ConfigTypes, PermissionTypes } from "@/server/types";
 import type { CE_Theme } from "@/theme/types";
 
@@ -22,7 +23,7 @@ export interface IEnvState {
 }
 
 export interface IAuthState {
-    user: unknown | null;
+    user: IUserDetail | null;
     token: string | null;
 }
 
