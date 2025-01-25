@@ -11,8 +11,8 @@ import iconLight from "@/assets/icon.light.png";
 import titleDark from "@/assets/tywzoj.dark.svg";
 import titleLight from "@/assets/tywzoj.light.svg";
 import { flex } from "@/common/styles/flex";
-import { ErrorPage } from "@/components/ErrorPage";
 import { NavItemWithRouter } from "@/components/NavItemWithRouter";
+import { NotFoundErrorLazy } from "@/error/components/NotFoundError.lazy";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { useIsSmallScreen } from "@/store/hooks";
@@ -104,17 +104,12 @@ const Layout: React.FC = () => {
     );
 };
 
-const NotFound: React.FC = () => {
-    const [message] = useLocalizedStrings(CE_Strings.CUSTOM_ERROR_PAGE_NOT_FOUND);
-    return <ErrorPage message={message} />;
-};
-
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient;
     store: IAppStore;
 }>()({
     component: Layout,
-    notFoundComponent: NotFound,
+    notFoundComponent: NotFoundErrorLazy,
 });
 
 const useStyles = makeStyles({
