@@ -1,7 +1,7 @@
 import { CE_Theme } from "./types";
 
-const cssUrlTomorrowHref = new URL("@/assets/themes/prism-tomorrow.css", import.meta.url).href;
-const cssUrlTomorrowNightHref = new URL("@/assets/themes/prism-tomorrow-night.css", import.meta.url).href;
+const cssUrlTomorrowHref = new URL("../assets/themes/prism-tomorrow.css", import.meta.url).href;
+const cssUrlTomorrowNightHref = new URL("../assets/themes/prism-tomorrow-night.css", import.meta.url).href;
 
 const cssLinkTag = document.createElement("link");
 cssLinkTag.rel = "stylesheet";
