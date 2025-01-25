@@ -19,20 +19,30 @@ const SignInPage: React.FC = () => {
         forgotPwd: CE_Strings.NAVIGATION_FORGOT_PASSWORD,
     });
 
-    const [showPassword, setShowPassword] = React.useState(false);
     const styles = useStyles();
+
+    const [username, setUsername] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [showPassword, setShowPassword] = React.useState(false);
 
     return (
         <div className={styles.root}>
             <h2>{ls.title}</h2>
             <form className={styles.formContainer}>
                 <Field label={ls.username}>
-                    <Input type="text" placeholder={ls.username} />
+                    <Input
+                        type="text"
+                        placeholder={ls.username}
+                        value={username}
+                        onChange={(_, { value }) => setUsername(value)}
+                    />
                 </Field>
                 <Field label={ls.password}>
                     <Input
                         type={showPassword ? "text" : "password"}
                         placeholder={ls.password}
+                        value={password}
+                        onChange={(_, { value }) => setPassword(value)}
                         contentAfter={
                             <Tooltip content={showPassword ? ls.hidePwd : ls.showPwd} relationship="label">
                                 <Button
