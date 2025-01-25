@@ -1,4 +1,4 @@
 .yarn
 .pnp.*
-src/routeTree.gen.ts
+src/router/routeTree.gen.ts
 src/assets/locales

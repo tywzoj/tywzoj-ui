@@ -39,6 +39,7 @@ export default defineConfig(({ command }) => {
             }),
             TanStackRouterVite({
                 routesDirectory: path.resolve("src/pages"),
+                generatedRouteTree: path.resolve("src/router/routeTree.gen.ts"),
                 quoteStyle: "double",
             }),
             circleDependency({

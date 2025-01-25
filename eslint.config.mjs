@@ -15,7 +15,7 @@ const IGNORED_FILES = [
     ".pnp.*",
     ".github/*",
     "vite.config.*.timestamp*",
-    "src/routeTree.gen.ts",
+    "src/router/routeTree.gen.ts",
     "src/assets/locales/*",
 ];
 
