@@ -16,8 +16,8 @@ import { CE_Strings } from "@/locales/types";
 import { useCurrentUser, useIsSmallScreen } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
-import { AuthMenuLazy } from "./auth-menu.lazy";
-import { UserMenuLazy } from "./user-menu.lazy";
+import { AuthMenuLazy } from "./AuthMenu.lazy";
+import { UserMenuLazy } from "./UserMenu.lazy";
 
 const ACTIVE_ITEM_TAG = "active-nav-item";
 
