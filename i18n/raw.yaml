@@ -93,3 +93,11 @@
 - name: NAVIGATION_SIGN_UP
   value: Sign Up
   description: A string for the label of sign up navigation.
+
+- name: SITE_ICON_IMAGE_ALT
+  value: "TYWZOJ's icon."
+  description: A string for the alt text of site icon image.
+
+- name: SITE_TITLE_IMAGE_ALT
+  value: The site is TYWZOJ.
+  description: A string for the title of the site.

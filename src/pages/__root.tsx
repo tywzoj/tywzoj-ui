@@ -6,22 +6,30 @@ import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import type { JSX } from "react";
 import React from "react";
 
+import iconDark from "@/assets/icon.dark.png";
+import iconLight from "@/assets/icon.light.png";
+import titleDark from "@/assets/tywzoj.dark.svg";
+import titleLight from "@/assets/tywzoj.light.svg";
+import { flex } from "@/common/styles/flex";
 import { ErrorPage } from "@/components/ErrorPage";
 import { NavItemWithRouter } from "@/components/NavItemWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { useIsSmallScreen } from "@/store/hooks";
 import type { IAppStore } from "@/store/types";
-import { flex } from "@/utils/flex";
+import { useIsLightTheme } from "@/theme/hooks";
 
-const ACTIVE_ITEM_TAG = "active";
+const ACTIVE_ITEM_TAG = "active-nav-item";
 
 const Layout: React.FC = () => {
     const isSmallScreen = useIsSmallScreen();
+    const isLightTheme = useIsLightTheme();
 
     const ls = useLocalizedStrings({
         navigationTitle: CE_Strings.NAVIGATION_LABEL,
         homePage: CE_Strings.NAVIGATION_HOME,
+        siteTitleAlt: CE_Strings.SITE_TITLE_IMAGE_ALT,
+        siteIconAlt: CE_Strings.SITE_ICON_IMAGE_ALT,
     });
 
     const styles = useStyles();
@@ -71,7 +79,18 @@ const Layout: React.FC = () => {
             <div className={styles.container}>
                 <div className={styles.header}>
                     <div className={styles.headerNavButton}>{!isNavDrawerOpen && hamburger}</div>
-                    <div className={styles.headerInfo}></div>
+                    <div className={styles.headerInfo}>
+                        <img
+                            className={styles.headerInfoIcon}
+                            src={isLightTheme ? iconLight : iconDark}
+                            alt={ls.siteIconAlt}
+                        />
+                        <img
+                            className={styles.headerInfoTitle}
+                            src={isLightTheme ? titleLight : titleDark}
+                            alt={ls.siteTitleAlt}
+                        />
+                    </div>
                     <div className={styles.headerRightMenu}></div>
                 </div>
                 <div className={styles.body}>
@@ -113,14 +132,29 @@ const useStyles = makeStyles({
     header: {
         ...flex({ flexDirection: "row", justifyContent: "space-between" }),
         minHeight: "40px",
-        padding: "5px 24px 5px 14px",
+        padding: "5px 14px",
         boxSizing: "border-box",
         boxShadow: tokens.shadow4,
     },
-    headerNavButton: {},
-    headerInfo: {},
-    headerInfoTitle: {},
-    headerInfoLogo: {},
+    headerNavButton: {
+        minHeight: "30px",
+        minWidth: "30px",
+    },
+    headerInfo: {
+        ...flex({
+            flexDirection: "row",
+            alignItems: "center",
+        }),
+        gap: "14px",
+        height: "30px",
+        overflow: "hidden",
+    },
+    headerInfoTitle: {
+        height: "28px",
+    },
+    headerInfoIcon: {
+        height: "40px",
+    },
     headerRightMenu: {},
     body: {
         ...flex({
@@ -128,6 +162,7 @@ const useStyles = makeStyles({
             alignItems: "center",
         }),
         width: "100%",
+        height: "100%",
         boxSizing: "border-box",
         overflow: "auto",
     },
@@ -143,7 +178,6 @@ const useStyles = makeStyles({
         maxWidth: "1200px",
         ">div": {
             width: "100%",
-            height: "3000px",
         },
     },
     footer: {

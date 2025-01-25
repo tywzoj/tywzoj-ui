@@ -4,10 +4,10 @@ import type { LinkComponentProps } from "@tanstack/react-router";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
 import type * as React from "react";
 
-import type { IUrlString } from "@/common/types";
+import { flex } from "@/common/styles/flex";
+import type { IUrlString } from "@/common/types/url";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
-import { flex } from "@/utils/flex";
 
 import { LinkWithRouter } from "./LinkWithRouter";
 
