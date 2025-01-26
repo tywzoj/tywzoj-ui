@@ -28,9 +28,8 @@ export const Layout: React.FC = () => {
     const isSmallScreen = useIsSmallScreen();
     const isLightTheme = useIsLightTheme();
     const currentUser = useCurrentUser();
-    const { domainIcpRecordInformation } = useFeature();
+    const { recaptchaEnabled, domainIcpRecordInformation } = useFeature();
     const locale = useAppSelector(getLocale);
-    const recaptchaEnabled = true;
 
     const ls = useLocalizedStrings({
         navigationTitle: CE_Strings.NAVIGATION_LABEL,
