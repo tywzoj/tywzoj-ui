@@ -10,7 +10,7 @@ export interface ISessionInfoGetResponse {
 }
 
 export interface ISignInPostRequestBody {
-    readonly username: string;
+    readonly usernameOrEmail: string;
     readonly password: string;
 }
 

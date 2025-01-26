@@ -1,10 +1,11 @@
 import React from "react";
 
+import type { CE_ErrorCode } from "@/server/common/error-code";
 import { useAppSelector } from "@/store/hooks";
 
 import { getIsRtl, getStrings } from "./selectors";
 import type { CE_Strings } from "./types";
-import { getLocalizedStringWithFallback } from "./utils";
+import { getLocalizedStringWithFallback, getStringIdFromErrorCode } from "./utils";
 
 export function useLocalizedStrings<T extends Record<string, CE_Strings>>(
     customKeyStringMapObject: T,
@@ -28,3 +29,12 @@ export function useLocalizedStrings(first?: Record<string, CE_Strings> | CE_Stri
 }
 
 export const useIsRtl = () => useAppSelector(getIsRtl);
+
+export const useErrorCodeToString = () => {
+    const strings = useAppSelector(getStrings);
+
+    return React.useCallback(
+        (code: CE_ErrorCode) => getLocalizedStringWithFallback(strings, getStringIdFromErrorCode(code)),
+        [strings],
+    );
+};

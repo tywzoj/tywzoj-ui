@@ -1,18 +1,20 @@
 import { Button, Field, Input, makeStyles, Spinner, tokens, Tooltip } from "@fluentui/react-components";
 import { EyeFilled, EyeOffFilled } from "@fluentui/react-icons";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import React from "react";
 
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
+import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
+import { setApiToken } from "@/common/utils/token";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { LinkWithRouter } from "@/components/LinkWithRouter";
-import { useLocalizedStrings } from "@/locales/hooks";
+import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import { setAuthAction } from "@/store/actions";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useCurrentUser } from "@/store/hooks";
 
 export interface ISignInPageSearch {
     redirect?: string;
@@ -22,8 +24,8 @@ const SignInPage: React.FC = () => {
     const recaptchaAsync = useRecaptchaAsync();
     const dispatch = useAppDispatch();
     const { redirect = "/" } = Route.useSearch();
-    const navigate = Route.useNavigate();
-
+    const errorCodeToString = useErrorCodeToString();
+    const currentUser = useCurrentUser();
     const ls = useLocalizedStrings({
         showPwd: CE_Strings.SHOW_PASSWORD_LABEL,
         hidePwd: CE_Strings.HIDE_PASSWORD_LABEL,
@@ -35,6 +37,8 @@ const SignInPage: React.FC = () => {
         uEmpty: CE_Strings.VALIDATION_ERROR_USERNAME_EMAIL_EMPTY,
         pEmpty: CE_Strings.VALIDATION_ERROR_PASSWORD_EMPTY,
     });
+
+    useSetPageTitle(ls.title);
 
     const styles = useStyles();
 
@@ -61,6 +65,19 @@ const SignInPage: React.FC = () => {
         return isValid;
     };
 
+    const handleError = (code: CE_ErrorCode) => {
+        switch (code) {
+            case CE_ErrorCode.Auth_NoSuchUser:
+                setUsernameError(errorCodeToString(code));
+                break;
+            case CE_ErrorCode.Auth_WrongPassword:
+                setPasswordError(errorCodeToString(code));
+                break;
+            default:
+                alert(errorCodeToString(code));
+        }
+    };
+
     const handleSubmit = () => {
         if (!validate()) {
             return;
@@ -70,7 +87,7 @@ const SignInPage: React.FC = () => {
 
         AuthModule.postSignInAsync(
             {
-                username,
+                usernameOrEmail: username,
                 password,
             },
             recaptchaAsync,
@@ -83,10 +100,9 @@ const SignInPage: React.FC = () => {
                             user: resp.data.userDetail,
                         }),
                     );
-                    navigate({
-                        to: redirect,
-                    });
+                    setApiToken(resp.data.token);
                 } else {
+                    handleError(resp.code);
                 }
             })
             .finally(() => {
@@ -94,7 +110,9 @@ const SignInPage: React.FC = () => {
             });
     };
 
-    return (
+    return currentUser ? (
+        <Navigate to={redirect} />
+    ) : (
         <div className={styles.root}>
             <h2>{ls.title}</h2>
             <form className={styles.formContainer}>

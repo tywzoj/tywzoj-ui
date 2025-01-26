@@ -70,6 +70,34 @@
   value: You have exceeded the rate limit. Please try again later.
   description: A string for the error message when the rate limit is exceeded.
 
+- name: ERROR_2000_NO_SUCH_USER
+  value: No such user.
+  description: A string for the error message when no such user.
+
+- name: ERROR_2001_WRONG_PASSWORD
+  value: Wrong password.
+  description: A string for the error message when wrong password.
+
+- name: ERROR_2002_DUPLICATE_USERNAME
+  value: The username is already used.
+  description: A string for the error message when the username is already used.
+
+- name: ERROR_2003_DUPLICATE_EMAIL
+  value: The email is already used.
+  description: A string for the error message when the email is already used.
+
+- name: ERROR_2004_INVALID_EMAIL_VERIFICATION_CODE
+  value: Invalid email verification code.
+  description: A string for the error message when the email verification code is invalid.
+
+- name: ERROR_2005_FAILED_TO_SEND_EMAIL_VERIFICATION_CODE
+  value: Failed to send email verification code.
+  description: A string for the error message when failed to send email verification code.
+
+- name: ERROR_2006_EMAIL_VERIFICATION_CODE_RATE_LIMITED
+  value: You send email verification code too frequently. Please try again later.
+  description: A string for the error message when email verification code is rate limited.
+
 - name: CUSTOM_ERROR_PAGE_NOT_FOUND
   value: Page not found.
   description: A string for the error message when the page is not found.
