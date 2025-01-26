@@ -8,3 +8,15 @@ export interface ISessionInfoGetResponse {
     readonly clientConfig: IClientConfig;
     readonly permission: IPermission;
 }
+
+export interface ISignInPostRequestBody {
+    readonly usernameOrEmail: string;
+    readonly password: string;
+}
+
+export interface ISignInPostResponse {
+    readonly token: string;
+    readonly userDetail: IUserDetail;
+    readonly userPreferenceDetail: IUserPreferenceDetail;
+    readonly permission: IPermission;
+}

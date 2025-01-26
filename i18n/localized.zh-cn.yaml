@@ -88,6 +88,41 @@
   description: A string for the error message when the rate limit is exceeded.
   raw: You have exceeded the rate limit. Please try again later.
 
+- name: ERROR_2000_NO_SUCH_USER
+  value: 无此用户。
+  description: A string for the error message when no such user.
+  raw: No such user.
+
+- name: ERROR_2001_WRONG_PASSWORD
+  value: 密码错误。
+  description: A string for the error message when wrong password.
+  raw: Wrong password.
+
+- name: ERROR_2002_DUPLICATE_USERNAME
+  value: 用户名已被使用。
+  description: A string for the error message when the username is already used.
+  raw: The username is already used.
+
+- name: ERROR_2003_DUPLICATE_EMAIL
+  value: 电子邮件已被使用。
+  description: A string for the error message when the email is already used.
+  raw: The email is already used.
+
+- name: ERROR_2004_INVALID_EMAIL_VERIFICATION_CODE
+  value: 无效的电子邮件验证代码。
+  description: A string for the error message when the email verification code is invalid.
+  raw: Invalid email verification code.
+
+- name: ERROR_2005_FAILED_TO_SEND_EMAIL_VERIFICATION_CODE
+  value: 无法发送电子邮件验证代码。
+  description: A string for the error message when failed to send email verification code.
+  raw: Failed to send email verification code.
+
+- name: ERROR_2006_EMAIL_VERIFICATION_CODE_RATE_LIMITED
+  value: 您发送电子邮件验证代码的频率太快了。请稍后再试。
+  description: A string for the error message when email verification code is rate limited.
+  raw: You send email verification code too frequently. Please try again later.
+
 - name: CUSTOM_ERROR_PAGE_NOT_FOUND
   value: 页面未找到。
   description: A string for the error message when the page is not found.
@@ -118,6 +153,11 @@
   description: A string for the label of sign up navigation.
   raw: Sign Up
 
+- name: NAVIGATION_FORGOT_PASSWORD
+  value: 忘记密码
+  description: A string for the label of forgot password navigation.
+  raw: Forgot Password
+
 - name: SITE_ICON_IMAGE_ALT
   value: TYWZOJ 的图标。
   description: A string for the alt text of site icon image.
@@ -127,3 +167,88 @@
   value: 站点是 TYWZOJ。
   description: A string for the title of the site.
   raw: The site is TYWZOJ.
+
+- name: COPYRIGHT_NOTICE
+  value: © {0} TYWZOJ。保留所有权利。
+  description: A string for the copyright notice. {0} is the current year.
+  raw: © {0} TYWZOJ. All rights reserved.
+
+- name: GOOGLE_RECAPTCHA_NOTICE
+  value: >-
+    本站受 reCAPTCHA 保护，适用 Google 的<a href="https://policies.google.com/privacy"
+    target="_blank" rel="noreferrer noopener">隐私政策</a>和<a
+    href="https://policies.google.com/terms" target="_blank" rel="noreferrer
+    noopener">服务条款</a>。
+  description: A string for the notice of reCAPTCHA.
+  raw: >-
+    This site is protected by reCAPTCHA and the Google <a
+    href="https://policies.google.com/privacy" target="_blank" rel="noreferrer
+    noopener">Privacy Policy</a> and <a href="https://policies.google.com/terms"
+    target="_blank" rel="noreferrer noopener">Terms of Service</a> apply.
+
+- name: SHOW_PASSWORD_LABEL
+  value: 显示密码
+  description: A string for the label of show password button.
+  raw: Show password
+
+- name: HIDE_PASSWORD_LABEL
+  value: 隐藏密码
+  description: A string for the label of hide password button.
+  raw: Hide password
+
+- name: USERNAME_OR_EMAIL_LABEL
+  value: 用户名或邮箱
+  description: A string for the label of username or email input.
+  raw: Username or Email
+
+- name: PASSWORD_LABEL
+  value: 密码
+  description: A string for the label of password input.
+  raw: Password
+
+- name: USERNAME_LABEL
+  value: 用户名
+  description: A string for the label of username input.
+  raw: Username
+
+- name: EMAIL_LABEL
+  value: 邮箱
+  description: A string for the label of email input.
+  raw: Email
+
+- name: PASSWORD_CONFIRM_LABEL
+  value: 确认密码
+  description: A string for the label of password confirm input.
+  raw: Confirm Password
+
+- name: VALIDATION_ERROR_USERNAME_EMAIL_EMPTY
+  value: 用户名或邮箱不能为空。
+  description: A string for the error message when username or email is empty.
+  raw: Username or email cannot be empty.
+
+- name: VALIDATION_ERROR_PASSWORD_EMPTY
+  value: 密码不能为空。
+  description: A string for the error message when password is empty.
+  raw: Password cannot be empty.
+
+- name: VALIDATION_ERROR_USERNAME_EMPTY
+  value: 用户名不能为空。
+  description: A string for the error message when username is empty.
+  raw: Username cannot be empty.
+
+- name: VALIDATION_ERROR_EMAIL_EMPTY
+  value: 邮箱不能为空。
+  description: A string for the error message when email is empty.
+  raw: Email cannot be empty.
+
+- name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
+  value: 确认密码不能为空。
+  description: A string for the error message when password confirm is empty.
+  raw: Password confirm cannot be empty.
+
+- name: VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH
+  value: 确认密码与密码不匹配。
+  description: >-
+    A string for the error message when password confirm does not match the
+    password.
+  raw: Password confirm does not match the password.

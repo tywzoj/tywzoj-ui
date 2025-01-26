@@ -4,10 +4,12 @@ import { isMiddleScreen, isMiniScreen, isSmallScreen } from "@/common/utils/wind
 import { CE_Locale } from "@/locales/types";
 import { CE_Theme } from "@/theme/types";
 
-import type { IPaginationState, IPermissionState, IRootState } from "./types";
+import type { IFeatureState, IPaginationState, IPermissionState, IRootState } from "./types";
 
 export const initialState: IRootState = {
     theme: CE_Theme.Light,
+    pageTitle: "",
+    apiEndPoint: import.meta.env.TYWZOJ_API_END_POINT,
     env: {
         isChrome: isChrome(),
         isEdge: isEdge(),
@@ -21,16 +23,16 @@ export const initialState: IRootState = {
         isSmallScreen: isSmallScreen(),
         isMiniScreen: isMiniScreen(),
     },
-    auth: {
-        user: null, // Will be initialized after called the API
-        token: getApiToken(),
-        apiEndPoint: import.meta.env.TYWZOJ_API_END_POINT,
-    },
-    permission: {} as IPermissionState, // Will be initialized after called the API
-    pagination: {} as IPaginationState, // Will be initialized after called the API
     locale: {
         lang: CE_Locale.en,
         isRtl: false,
         strings: {} as ILocalizedStrings, // Will be initialized later
     },
+    auth: {
+        user: null, // Will be initialized after called the API
+        token: getApiToken(),
+    },
+    permission: {} as IPermissionState, // Will be initialized after called the API
+    pagination: {} as IPaginationState, // Will be initialized after called the API
+    feature: {} as IFeatureState, // Will be initialized after called the API
 };

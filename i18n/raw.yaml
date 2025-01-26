@@ -70,6 +70,34 @@
   value: You have exceeded the rate limit. Please try again later.
   description: A string for the error message when the rate limit is exceeded.
 
+- name: ERROR_2000_NO_SUCH_USER
+  value: No such user.
+  description: A string for the error message when no such user.
+
+- name: ERROR_2001_WRONG_PASSWORD
+  value: Wrong password.
+  description: A string for the error message when wrong password.
+
+- name: ERROR_2002_DUPLICATE_USERNAME
+  value: The username is already used.
+  description: A string for the error message when the username is already used.
+
+- name: ERROR_2003_DUPLICATE_EMAIL
+  value: The email is already used.
+  description: A string for the error message when the email is already used.
+
+- name: ERROR_2004_INVALID_EMAIL_VERIFICATION_CODE
+  value: Invalid email verification code.
+  description: A string for the error message when the email verification code is invalid.
+
+- name: ERROR_2005_FAILED_TO_SEND_EMAIL_VERIFICATION_CODE
+  value: Failed to send email verification code.
+  description: A string for the error message when failed to send email verification code.
+
+- name: ERROR_2006_EMAIL_VERIFICATION_CODE_RATE_LIMITED
+  value: You send email verification code too frequently. Please try again later.
+  description: A string for the error message when email verification code is rate limited.
+
 - name: CUSTOM_ERROR_PAGE_NOT_FOUND
   value: Page not found.
   description: A string for the error message when the page is not found.
@@ -94,6 +122,10 @@
   value: Sign Up
   description: A string for the label of sign up navigation.
 
+- name: NAVIGATION_FORGOT_PASSWORD
+  value: Forgot Password
+  description: A string for the label of forgot password navigation.
+
 - name: SITE_ICON_IMAGE_ALT
   value: "TYWZOJ's icon."
   description: A string for the alt text of site icon image.
@@ -101,3 +133,66 @@
 - name: SITE_TITLE_IMAGE_ALT
   value: The site is TYWZOJ.
   description: A string for the title of the site.
+
+- name: COPYRIGHT_NOTICE
+  value: "© {0} TYWZOJ. All rights reserved."
+  description: A string for the copyright notice. {0} is the current year.
+
+- name: GOOGLE_RECAPTCHA_NOTICE
+  value: >-
+    This site is protected by reCAPTCHA and the Google
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer noopener">Privacy Policy</a> and
+    <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer noopener">Terms of Service</a> apply.
+  description: A string for the notice of reCAPTCHA.
+
+- name: SHOW_PASSWORD_LABEL
+  value: Show password
+  description: A string for the label of show password button.
+
+- name: HIDE_PASSWORD_LABEL
+  value: Hide password
+  description: A string for the label of hide password button.
+
+- name: USERNAME_OR_EMAIL_LABEL
+  value: Username or Email
+  description: A string for the label of username or email input.
+
+- name: PASSWORD_LABEL
+  value: Password
+  description: A string for the label of password input.
+
+- name: USERNAME_LABEL
+  value: Username
+  description: A string for the label of username input.
+
+- name: EMAIL_LABEL
+  value: Email
+  description: A string for the label of email input.
+
+- name: PASSWORD_CONFIRM_LABEL
+  value: Confirm Password
+  description: A string for the label of password confirm input.
+
+- name: VALIDATION_ERROR_USERNAME_EMAIL_EMPTY
+  value: Username or email cannot be empty.
+  description: A string for the error message when username or email is empty.
+
+- name: VALIDATION_ERROR_PASSWORD_EMPTY
+  value: Password cannot be empty.
+  description: A string for the error message when password is empty.
+
+- name: VALIDATION_ERROR_USERNAME_EMPTY
+  value: Username cannot be empty.
+  description: A string for the error message when username is empty.
+
+- name: VALIDATION_ERROR_EMAIL_EMPTY
+  value: Email cannot be empty.
+  description: A string for the error message when email is empty.
+
+- name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
+  value: Password confirm cannot be empty.
+  description: A string for the error message when password confirm is empty.
+
+- name: VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH
+  value: Password confirm does not match the password.
+  description: A string for the error message when password confirm does not match the password.

@@ -1,5 +1,8 @@
 export interface IFeature {
-    readonly recaptcha: boolean;
+    readonly recaptchaEnabled: boolean;
+    readonly recaptchaSiteKey?: string | null;
+    readonly useRecaptchaNet?: boolean | null;
+    readonly domainIcpRecordInformation?: string | null;
     readonly emailVerification: boolean;
     readonly renderMarkdownInUserListBio: boolean;
     readonly renderMarkdownInUserBio: boolean;
@@ -19,10 +22,6 @@ export interface IPagination {
 }
 
 export interface IClientConfig {
-    readonly siteName: string;
-    readonly domainIcpRecordInformation?: string | null;
-    readonly recaptchaSiteKey?: string | null;
-    readonly useRecaptchaNet?: boolean | null;
     readonly feature: IFeature;
     readonly pagination: IPagination;
 }

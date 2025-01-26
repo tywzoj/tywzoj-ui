@@ -6,7 +6,13 @@ import {
 import { updateLocaleAsyncAction } from "./locales/actions";
 import { AuthModule } from "./server/api";
 import { CE_ErrorCode } from "./server/common/error-code";
-import { setEnvAction, setPermissionAction } from "./store/actions";
+import {
+    setAuthAction,
+    setEnvAction,
+    setFeatureAction,
+    setPaginationAction,
+    setPermissionAction,
+} from "./store/actions";
 import type { IAppDispatch } from "./store/types";
 import { createAppAction } from "./store/utils";
 import { updateThemeAction } from "./theme/actions";
@@ -19,12 +25,19 @@ export const initWindowSizeListenerAction = createAppAction(() => (dispatch) => 
 
 export const initAsyncAction = createAppAction(() => async (dispatch: IAppDispatch) => {
     dispatch(initWindowSizeListenerAction());
-    const { code, message, data } = await AuthModule.getSessionInfoAsync();
-    if (code === CE_ErrorCode.OK) {
-        dispatch(setPermissionAction(data.permission));
-        dispatch(updateThemeAction(data.userPreferenceDetail?.preferTheme || null));
-        await dispatch(updateLocaleAsyncAction(data.userPreferenceDetail?.preferLanguage || null));
+    const resp = await AuthModule.getSessionInfoAsync();
+    if (resp.code === CE_ErrorCode.OK) {
+        dispatch(setFeatureAction(resp.data.clientConfig.feature));
+        dispatch(setPaginationAction(resp.data.clientConfig.pagination));
+        dispatch(setPermissionAction(resp.data.permission));
+        dispatch(setAuthAction({ user: resp.data.userDetail }));
+        dispatch(updateThemeAction(resp.data.userPreferenceDetail?.preferTheme || null));
+        await dispatch(updateLocaleAsyncAction(resp.data.userPreferenceDetail?.preferLanguage || null));
     } else {
-        throw new Error(message);
+        if (resp.data instanceof Error) {
+            throw resp.data;
+        } else {
+            throw new Error(resp.message);
+        }
     }
 });

@@ -1,4 +1,5 @@
 import type { ILocaleState } from "@/locales/types";
+import type { IUserDetail } from "@/server/modules/user.types";
 import type { ConfigTypes, PermissionTypes } from "@/server/types";
 import type { CE_Theme } from "@/theme/types";
 
@@ -22,19 +23,24 @@ export interface IEnvState {
 }
 
 export interface IAuthState {
-    user: unknown | null;
+    user: IUserDetail | null;
     token: string | null;
-    apiEndPoint: string;
 }
 
 export type IPermissionState = PermissionTypes.IPermission;
 export type IPaginationState = ConfigTypes.IPagination;
+export type IFeatureState = ConfigTypes.IFeature;
 
 export interface IRootState {
-    env: IEnvState;
     theme: CE_Theme;
+    apiEndPoint: string;
+    pageTitle: string;
+
+    env: IEnvState;
     locale: ILocaleState;
+
     auth: IAuthState;
     permission: IPermissionState;
     pagination: IPaginationState;
+    feature: IFeatureState;
 }

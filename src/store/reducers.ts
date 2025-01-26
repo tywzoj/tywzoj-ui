@@ -4,7 +4,14 @@ import { createReducer } from "@reduxjs/toolkit";
 import { setLocaleAction } from "@/locales/actions";
 import { setThemeAction } from "@/theme/actions";
 
-import { setEnvAction, setPaginationAction, setPermissionAction } from "./actions";
+import {
+    setAuthAction,
+    setEnvAction,
+    setFeatureAction,
+    setPageTitleAction,
+    setPaginationAction,
+    setPermissionAction,
+} from "./actions";
 import { initialState } from "./initial-state";
 import type { IRootState } from "./types";
 
@@ -44,6 +51,27 @@ export const reducer: Reducer<IRootState> = createReducer<IRootState>(initialSta
             return {
                 ...state,
                 pagination: action.payload,
+            };
+        })
+        .addCase(setFeatureAction, (state, action) => {
+            return {
+                ...state,
+                feature: action.payload,
+            };
+        })
+        .addCase(setAuthAction, (state, action) => {
+            return {
+                ...state,
+                auth: {
+                    ...state.auth,
+                    ...action.payload,
+                },
+            };
+        })
+        .addCase(setPageTitleAction, (state, action) => {
+            return {
+                ...state,
+                pageTitle: action.payload,
             };
         });
 });
