@@ -23,6 +23,7 @@ import { AuthMenuLazy } from "./AuthMenu.lazy";
 import { UserMenuLazy } from "./UserMenu.lazy";
 
 const ACTIVE_ITEM_TAG = "active-nav-item";
+const INACTIVE_ITEM_TAG = "inactive-nav-item";
 
 export const Layout: React.FC = () => {
     const isSmallScreen = useIsSmallScreen();
@@ -74,6 +75,25 @@ export const Layout: React.FC = () => {
         ),
         [ls.navigationTitle],
     );
+
+    const createNavItem = (to: string, text: string, icon: JSX.Element) => {
+        return (
+            <NavItemWithRouter
+                key={to}
+                to={to}
+                icon={icon}
+                activeProps={{ value: ACTIVE_ITEM_TAG }}
+                inactiveProps={{ value: INACTIVE_ITEM_TAG + to }}
+                onClick={() => {
+                    if (isOverlay) {
+                        setIsNavDrawerOpen(false);
+                    }
+                }}
+            >
+                {text}
+            </NavItemWithRouter>
+        );
+    };
 
     return (
         <div className={styles.root}>
@@ -212,13 +232,5 @@ const useStyles = makeStyles({
         },
     },
 });
-
-function createNavItem(to: string, text: string, icon: JSX.Element) {
-    return (
-        <NavItemWithRouter to={to} icon={icon} activeProps={{ value: ACTIVE_ITEM_TAG }} inactiveProps={{ value: to }}>
-            {text}
-        </NavItemWithRouter>
-    );
-}
 
 export default Layout;
