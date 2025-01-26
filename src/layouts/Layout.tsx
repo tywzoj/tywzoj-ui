@@ -10,10 +10,13 @@ import iconLight from "@/assets/icon.light.png";
 import titleDark from "@/assets/tywzoj.dark.svg";
 import titleLight from "@/assets/tywzoj.light.svg";
 import { flex } from "@/common/styles/flex";
+import { commonLinkStyles } from "@/common/styles/link";
+import { format } from "@/common/utils/format";
 import { NavItemWithRouter } from "@/components/NavItemWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
-import { useCurrentUser, useIsSmallScreen } from "@/store/hooks";
+import { getLocale } from "@/locales/selectors";
+import { CE_Locale, CE_Strings } from "@/locales/types";
+import { useAppSelector, useCurrentUser, useFeature, useIsSmallScreen } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
 import { AuthMenuLazy } from "./AuthMenu.lazy";
@@ -25,12 +28,17 @@ export const Layout: React.FC = () => {
     const isSmallScreen = useIsSmallScreen();
     const isLightTheme = useIsLightTheme();
     const currentUser = useCurrentUser();
+    const { domainIcpRecordInformation } = useFeature();
+    const locale = useAppSelector(getLocale);
+    const recaptchaEnabled = true;
 
     const ls = useLocalizedStrings({
         navigationTitle: CE_Strings.NAVIGATION_LABEL,
         homePage: CE_Strings.NAVIGATION_HOME,
         siteTitleAlt: CE_Strings.SITE_TITLE_IMAGE_ALT,
         siteIconAlt: CE_Strings.SITE_ICON_IMAGE_ALT,
+        copyright: CE_Strings.COPYRIGHT_NOTICE,
+        recaptcha: CE_Strings.GOOGLE_RECAPTCHA_NOTICE,
     });
 
     const styles = useStyles();
@@ -102,7 +110,18 @@ export const Layout: React.FC = () => {
                     <div className={styles.content}>
                         <Outlet />
                     </div>
-                    <div className={styles.footer}>Test</div>
+                    <div className={styles.footer}>
+                        <div>{format(ls.copyright, new Date().getFullYear())}</div>
+                        {recaptchaEnabled && <div dangerouslySetInnerHTML={{ __html: ls.recaptcha }} />}
+                        {domainIcpRecordInformation && locale === CE_Locale.zh_cn && (
+                            // for Chinese users, display the ICP record information
+                            <div>
+                                <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
+                                    {domainIcpRecordInformation}
+                                </a>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
@@ -181,7 +200,17 @@ const useStyles = makeStyles({
             flexDirection: "column",
             alignItems: "center",
         }),
-        height: "40px",
+        gap: "8px",
+        padding: "0 20px 20px",
+        ">div": {
+            textAlign: "center",
+            color: tokens.colorNeutralForeground3,
+            fontSize: tokens.fontSizeBase200,
+            lineHeight: tokens.lineHeightBase200,
+        },
+        "& a": {
+            ...commonLinkStyles,
+        },
     },
 });
 

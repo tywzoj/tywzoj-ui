@@ -106,6 +106,17 @@
   value: The site is TYWZOJ.
   description: A string for the title of the site.
 
+- name: COPYRIGHT_NOTICE
+  value: "© {0} TYWZOJ. All rights reserved."
+  description: A string for the copyright notice. {0} is the current year.
+
+- name: GOOGLE_RECAPTCHA_NOTICE
+  value: >-
+    This site is protected by reCAPTCHA and the Google
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer noopener">Privacy Policy</a> and
+    <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer noopener">Terms of Service</a> apply.
+  description: A string for the notice of reCAPTCHA.
+
 - name: SHOW_PASSWORD_LABEL
   value: Show password
   description: A string for the label of show password button.

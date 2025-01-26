@@ -10,11 +10,17 @@ export interface IRequestOptions {
     recaptchaToken?: string;
 }
 
-export interface IResponseBody<T> {
-    code: CE_ErrorCode;
-    message: string;
-    data: T;
-}
+export type IResponseBody<T> =
+    | {
+          code: Exclude<CE_ErrorCode, CE_ErrorCode.OK>;
+          message: string;
+          data: unknown;
+      }
+    | {
+          code: CE_ErrorCode.OK;
+          message: string;
+          data: T;
+      };
 
 export async function requestAsync<T>(options: IRequestOptions): Promise<IResponseBody<T>> {
     const {
@@ -59,7 +65,7 @@ export async function requestAsync<T>(options: IRequestOptions): Promise<IRespon
         return {
             code: CE_ErrorCode.Unknown,
             message: "Network error.",
-            data: error as unknown as T,
+            data: error,
         };
     }
 }

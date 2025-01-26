@@ -29,6 +29,7 @@ export interface IAuthState {
 
 export type IPermissionState = PermissionTypes.IPermission;
 export type IPaginationState = ConfigTypes.IPagination;
+export type IFeatureState = ConfigTypes.IFeature;
 
 export interface IRootState {
     env: IEnvState;
@@ -38,4 +39,5 @@ export interface IRootState {
     apiEndPoint: string;
     permission: IPermissionState;
     pagination: IPaginationState;
+    feature: IFeatureState;
 }

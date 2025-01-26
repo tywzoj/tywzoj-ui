@@ -21,7 +21,9 @@ export const getIsMobileView = createSelector(
 
 export const getCurrentUser = createAppSelector((state) => state.auth.user);
 export const getToken = createAppSelector((state) => state.auth.token);
-export const getApiEndPoint = createAppSelector((state) => state.auth.apiEndPoint);
+
+export const getApiEndPoint = createAppSelector((state) => state.apiEndPoint);
 
 export const getPermission = createAppSelector((state) => state.permission);
 export const getPagination = createAppSelector((state) => state.pagination);
+export const getFeature = createAppSelector((state) => state.feature);

@@ -133,6 +133,24 @@
   description: A string for the title of the site.
   raw: The site is TYWZOJ.
 
+- name: COPYRIGHT_NOTICE
+  value: © {0} TYWZOJ。保留所有权利。
+  description: A string for the copyright notice. {0} is the current year.
+  raw: © {0} TYWZOJ. All rights reserved.
+
+- name: GOOGLE_RECAPTCHA_NOTICE
+  value: >-
+    本站受 reCAPTCHA 保护，适用 Google 的<a href="https://policies.google.com/privacy"
+    target="_blank" rel="noreferrer noopener">隐私政策</a>和<a
+    href="https://policies.google.com/terms" target="_blank" rel="noreferrer
+    noopener">服务条款</a>。
+  description: A string for the notice of reCAPTCHA.
+  raw: >-
+    This site is protected by reCAPTCHA and the Google <a
+    href="https://policies.google.com/privacy" target="_blank" rel="noreferrer
+    noopener">Privacy Policy</a> and <a href="https://policies.google.com/terms"
+    target="_blank" rel="noreferrer noopener">Terms of Service</a> apply.
+
 - name: SHOW_PASSWORD_LABEL
   value: 显示密码
   description: A string for the label of show password button.
