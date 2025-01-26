@@ -5,6 +5,7 @@ import React from "react";
 
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
+import { useDispatchToastError } from "@/common/hooks/toast";
 import { flex } from "@/common/styles/flex";
 import { setApiToken } from "@/common/utils/token";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
@@ -26,6 +27,8 @@ const SignInPage: React.FC = () => {
     const { redirect = "/" } = Route.useSearch();
     const errorCodeToString = useErrorCodeToString();
     const currentUser = useCurrentUser();
+    const dispatchToastError = useDispatchToastError();
+
     const ls = useLocalizedStrings({
         showPwd: CE_Strings.SHOW_PASSWORD_LABEL,
         hidePwd: CE_Strings.HIDE_PASSWORD_LABEL,
@@ -74,7 +77,8 @@ const SignInPage: React.FC = () => {
                 setPasswordError(errorCodeToString(code));
                 break;
             default:
-                alert(errorCodeToString(code));
+                dispatchToastError(errorCodeToString(code));
+                break;
         }
     };
 
@@ -104,6 +108,9 @@ const SignInPage: React.FC = () => {
                 } else {
                     handleError(resp.code);
                 }
+            })
+            .catch((err) => {
+                dispatchToastError(err.message);
             })
             .finally(() => {
                 setLoading(false);
