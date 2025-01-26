@@ -10,6 +10,7 @@ import { useTheme } from "@/theme/hooks";
 
 import { IconProvider } from "./common/providers/IconProvider";
 import { PageTitleProvider } from "./common/providers/PageTitleProvider";
+import { ToastProvider } from "./common/providers/ToastProvider";
 
 export const App: React.FC = () => {
     const theme = useTheme();
@@ -25,7 +26,9 @@ export const App: React.FC = () => {
                 >
                     <PageTitleProvider />
                     <IconProvider />
-                    <AppRouterProvider />
+                    <ToastProvider>
+                        <AppRouterProvider />
+                    </ToastProvider>
                 </FluentProvider>
             </QueryClientProvider>
         </RecaptchaProvider>

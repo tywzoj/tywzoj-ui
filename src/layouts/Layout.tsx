@@ -1,6 +1,7 @@
 import { makeStyles, tokens, Tooltip } from "@fluentui/react-components";
 import { BookQuestionMark20Filled, Home20Filled } from "@fluentui/react-icons";
 import { Hamburger, NavDrawer, NavDrawerBody, NavDrawerHeader } from "@fluentui/react-nav-preview";
+import { Outlet } from "@tanstack/react-router";
 import type { JSX } from "react";
 import React from "react";
 
@@ -25,9 +26,7 @@ import UserMenu from "./UserMenu";
 const ACTIVE_ITEM_TAG = "active-nav-item";
 const INACTIVE_ITEM_TAG = "inactive-nav-item";
 
-export const Layout: React.FC<React.PropsWithChildren> = (props) => {
-    const { children } = props;
-
+export const Layout: React.FC = () => {
     const isSmallScreen = useIsSmallScreen();
     const isLightTheme = useIsLightTheme();
     const currentUser = useCurrentUser();
@@ -124,7 +123,9 @@ export const Layout: React.FC<React.PropsWithChildren> = (props) => {
                     <div className={styles.headerRightMenu}>{currentUser ? <UserMenu /> : <AuthMenu />}</div>
                 </div>
                 <div className={styles.body}>
-                    <div className={styles.content}>{children}</div>
+                    <div className={styles.content}>
+                        <Outlet />
+                    </div>
                     <div className={styles.footer}>
                         <div>{format(ls.copyright, new Date().getFullYear())}</div>
                         {recaptchaEnabled && <div dangerouslySetInnerHTML={{ __html: ls.recaptcha }} />}

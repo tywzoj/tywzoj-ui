@@ -1,16 +1,12 @@
-import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext } from "@tanstack/react-router";
 
 import { NotFoundPageLazy } from "@/components/NotFoundPage.lazy";
 import { RootErrorPageLazy } from "@/components/RootErrorPage.lazy";
-import Layout from "@/layouts/Layout";
+import { LayoutLazy } from "@/layouts/Layout.lazy";
 import type { IRouterContext } from "@/router/types";
 
 export const Route = createRootRouteWithContext<IRouterContext>()({
-    component: () => (
-        <Layout>
-            <Outlet />
-        </Layout>
-    ),
+    component: LayoutLazy,
     errorComponent: RootErrorPageLazy,
     notFoundComponent: NotFoundPageLazy,
 });
