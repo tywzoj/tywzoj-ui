@@ -1,10 +1,10 @@
 import { Link, makeStyles, MessageBar, MessageBarBody, MessageBarTitle, tokens } from "@fluentui/react-components";
 import { ErrorCircle48Filled } from "@fluentui/react-icons";
-import type { LinkComponentProps } from "@tanstack/react-router";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
 import type * as React from "react";
 
 import { flex } from "@/common/styles/flex";
+import type { NavTo } from "@/common/types/nav-to";
 import type { IUrlString } from "@/common/types/url";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
@@ -14,7 +14,7 @@ import { LinkWithRouter } from "./LinkWithRouter";
 export type IErrorPageLink =
     | {
           title: string;
-          to: Exclude<LinkComponentProps<typeof LinkWithRouter>["to"], undefined>;
+          to: NavTo<typeof LinkWithRouter>;
       }
     | {
           title: string;

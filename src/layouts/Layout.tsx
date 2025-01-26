@@ -11,6 +11,7 @@ import titleDark from "@/assets/tywzoj.dark.svg";
 import titleLight from "@/assets/tywzoj.light.svg";
 import { flex } from "@/common/styles/flex";
 import { commonLinkStyles } from "@/common/styles/link";
+import type { NavTo } from "@/common/types/nav-to";
 import { format } from "@/common/utils/format";
 import { NavItemWithRouter } from "@/components/NavItemWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
@@ -76,7 +77,7 @@ export const Layout: React.FC = () => {
         [ls.navigationTitle],
     );
 
-    const createNavItem = (to: string, text: string, icon: JSX.Element) => {
+    const createNavItem = (to: NavTo<typeof NavItemWithRouter>, text: string, icon: JSX.Element) => {
         return (
             <NavItemWithRouter
                 key={to}
