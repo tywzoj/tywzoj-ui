@@ -6,6 +6,7 @@ import React from "react";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { flex } from "@/common/styles/flex";
 import { LinkWithRouter } from "@/components/LinkWithRouter";
+import { ErrorBox } from "@/error/components/ErrorBox";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { AuthModule } from "@/server/api";
@@ -156,6 +157,7 @@ const SignInPage: React.FC = () => {
 export const Route = createFileRoute("/sign-in")({
     component: SignInPage,
     validateSearch: (search): ISignInPageSearch => search,
+    errorComponent: ErrorBox,
 });
 
 const useStyles = makeStyles({

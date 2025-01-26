@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { ErrorBox } from "@/error/components/ErrorBox";
+
 const AboutPage: React.FC = () => {
     return (
         <div>
@@ -10,4 +12,5 @@ const AboutPage: React.FC = () => {
 
 export const Route = createFileRoute("/about")({
     component: AboutPage,
+    errorComponent: ErrorBox,
 });

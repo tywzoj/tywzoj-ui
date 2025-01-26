@@ -34,31 +34,6 @@ export interface IErrorPageProps {
     showGoBack?: boolean;
 }
 
-const useStyles = makeStyles({
-    title: {
-        fontSize: "16px",
-        fontWeight: "bold",
-    },
-    message: {
-        fontSize: "14px",
-    },
-    linkContainer: {
-        ...flex({
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            flexWrap: "wrap",
-        }),
-        marginTop: "4px",
-        gap: "6px",
-    },
-    linkDivider: {
-        minWidth: "1.5px",
-        minHeight: "14px",
-        backgroundColor: tokens.colorNeutralForegroundDisabled,
-    },
-});
-
 export const ErrorPage: React.FC<IErrorPageProps> = (props) => {
     const { message, links = [], showGoBack = false } = props;
 
@@ -71,7 +46,7 @@ export const ErrorPage: React.FC<IErrorPageProps> = (props) => {
     );
 
     return (
-        <div>
+        <div className={styles.root}>
             <MessageBar
                 layout="multiline"
                 intent="error"
@@ -111,3 +86,31 @@ export const ErrorPage: React.FC<IErrorPageProps> = (props) => {
         </div>
     );
 };
+
+const useStyles = makeStyles({
+    root: {
+        width: "100%",
+    },
+    title: {
+        fontSize: "16px",
+        fontWeight: "bold",
+    },
+    message: {
+        fontSize: "14px",
+    },
+    linkContainer: {
+        ...flex({
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            flexWrap: "wrap",
+        }),
+        marginTop: "4px",
+        gap: "6px",
+    },
+    linkDivider: {
+        minWidth: "1.5px",
+        minHeight: "14px",
+        backgroundColor: tokens.colorNeutralForegroundDisabled,
+    },
+});

@@ -1,9 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute } from "@tanstack/react-router";
+
+import { ErrorBox } from "@/error/components/ErrorBox";
 
 const SignUpPage: React.FC = () => {
-  return <div></div>
-}
+    return <div></div>;
+};
 
 export const Route = createFileRoute("/sign-up")({
-  component: SignUpPage,
-})
+    component: SignUpPage,
+    errorComponent: ErrorBox,
+});
