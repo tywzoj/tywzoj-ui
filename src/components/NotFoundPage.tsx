@@ -1,10 +1,10 @@
-import { ErrorPage } from "@/components/ErrorPage";
+import { ErrorBox } from "@/components/ErrorBox";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 
-export const NotFoundError: React.FC = () => {
+export const NotFoundPage: React.FC = () => {
     const [message] = useLocalizedStrings(CE_Strings.CUSTOM_ERROR_PAGE_NOT_FOUND);
-    return <ErrorPage message={message} />;
+    return <ErrorBox message={message} />;
 };
 
-export default NotFoundError;
+export default NotFoundPage;

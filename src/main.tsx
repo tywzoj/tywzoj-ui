@@ -3,8 +3,8 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { Provider } from "react-redux";
 
+import { showErrorPage } from "@/common/utils/error";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { showErrorPage } from "@/error/utils";
 import { store } from "@/store/store";
 
 import { AppLazy } from "./App.lazy";

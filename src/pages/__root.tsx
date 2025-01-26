@@ -1,7 +1,7 @@
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 
-import { ErrorBox } from "@/error/components/ErrorBox";
-import NotFoundError from "@/error/components/NotFoundError";
+import { NotFoundPageLazy } from "@/components/NotFoundPage.lazy";
+import { RootErrorPageLazy } from "@/components/RootErrorPage.lazy";
 import Layout from "@/layouts/Layout";
 import type { IRouterContext } from "@/router/types";
 
@@ -11,10 +11,6 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
             <Outlet />
         </Layout>
     ),
-    errorComponent: ({ error }) => (
-        <div style={{ padding: 20 }}>
-            <ErrorBox error={error} />
-        </div>
-    ),
-    notFoundComponent: NotFoundError,
+    errorComponent: RootErrorPageLazy,
+    notFoundComponent: NotFoundPageLazy,
 });

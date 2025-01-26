@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ErrorBox } from "@/error/components/ErrorBox";
+import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 
 const SignUpPage: React.FC = () => {
     return <div></div>;
@@ -8,5 +8,5 @@ const SignUpPage: React.FC = () => {
 
 export const Route = createFileRoute("/sign-up")({
     component: SignUpPage,
-    errorComponent: ErrorBox,
+    errorComponent: ErrorPageLazy,
 });
