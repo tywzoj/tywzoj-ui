@@ -1,26 +1,34 @@
 import { FluentProvider } from "@fluentui/react-components";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { RouterProvider } from "@tanstack/react-router";
 
-import { useIsRtl } from "./locales/hooks";
-import { queryClient, router } from "./router/router";
-import { getFluentTheme } from "./theme/fluent";
-import { useTheme } from "./theme/hooks";
+import { RecaptchaProvider } from "@/common/providers/RecaptchaProvider";
+import { queryClient } from "@/common/utils/query-client";
+import { useIsRtl } from "@/locales/hooks";
+import { AppRouterProvider } from "@/router/AppRouterProvider";
+import { getFluentTheme } from "@/theme/fluent";
+import { useTheme } from "@/theme/hooks";
+
+import { IconProvider } from "./common/providers/IconProvider";
+import { PageTitleProvider } from "./common/providers/PageTitleProvider";
 
 export const App: React.FC = () => {
     const theme = useTheme();
     const isRtl = useIsRtl();
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <FluentProvider
-                theme={getFluentTheme(theme)}
-                dir={isRtl ? "rtl" : "ltr"}
-                style={{ height: "100%", width: "100%" }}
-            >
-                <RouterProvider router={router} />
-            </FluentProvider>
-        </QueryClientProvider>
+        <RecaptchaProvider>
+            <QueryClientProvider client={queryClient}>
+                <FluentProvider
+                    theme={getFluentTheme(theme)}
+                    dir={isRtl ? "rtl" : "ltr"}
+                    style={{ height: "100%", width: "100%" }}
+                >
+                    <PageTitleProvider />
+                    <IconProvider />
+                    <AppRouterProvider />
+                </FluentProvider>
+            </QueryClientProvider>
+        </RecaptchaProvider>
     );
 };
 

@@ -32,11 +32,14 @@ export type IPaginationState = ConfigTypes.IPagination;
 export type IFeatureState = ConfigTypes.IFeature;
 
 export interface IRootState {
-    env: IEnvState;
     theme: CE_Theme;
-    locale: ILocaleState;
-    auth: IAuthState;
     apiEndPoint: string;
+    pageTitle: string;
+
+    env: IEnvState;
+    locale: ILocaleState;
+
+    auth: IAuthState;
     permission: IPermissionState;
     pagination: IPaginationState;
     feature: IFeatureState;

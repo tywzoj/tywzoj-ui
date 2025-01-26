@@ -1,6 +1,6 @@
-import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 
+import { queryClient } from "@/common/utils/query-client";
 import { store } from "@/store/store";
 
 import { routeTree } from "./routeTree.gen"; // generated route tree
@@ -12,10 +12,12 @@ declare module "@tanstack/react-router" {
     }
 }
 
-export const queryClient = new QueryClient();
-
 export const router = createRouter({
     routeTree,
     defaultPreload: "intent",
-    context: { queryClient, store },
+    context: {
+        queryClient,
+        store,
+        recaptchaAsync: async () => "", // will be replaced by the actual recaptcha hook
+    },
 });

@@ -23,7 +23,9 @@ export const useIsMobileView = () => useAppSelector(Selectors.getIsMobileView);
 
 export const useCurrentUser = () => useAppSelector(Selectors.getCurrentUser);
 export const useToken = () => useAppSelector(Selectors.getToken);
+
 export const useApiEndPoint = () => useAppSelector(Selectors.getApiEndPoint);
+export const usePageTitle = () => useAppSelector(Selectors.getPageTitle);
 
 export const usePermission = () => useAppSelector(Selectors.getPermission);
 export const usePagination = () => useAppSelector(Selectors.getPagination);
