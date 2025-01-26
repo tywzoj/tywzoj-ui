@@ -1,14 +1,28 @@
-import { Button, Field, Input, makeStyles, tokens, Tooltip } from "@fluentui/react-components";
+import { Button, Field, Input, makeStyles, Spinner, tokens, Tooltip } from "@fluentui/react-components";
 import { EyeFilled, EyeOffFilled } from "@fluentui/react-icons";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 
+import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { flex } from "@/common/styles/flex";
 import { LinkWithRouter } from "@/components/LinkWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
+import { AuthModule } from "@/server/api";
+import { CE_ErrorCode } from "@/server/common/error-code";
+import { setAuthAction } from "@/store/actions";
+import { useAppDispatch } from "@/store/hooks";
+
+export interface ISignInPageSearch {
+    redirect?: string;
+}
 
 const SignInPage: React.FC = () => {
+    const recaptchaAsync = useRecaptchaAsync();
+    const dispatch = useAppDispatch();
+    const { redirect = "/" } = Route.useSearch();
+    const navigate = Route.useNavigate();
+
     const ls = useLocalizedStrings({
         showPwd: CE_Strings.SHOW_PASSWORD_LABEL,
         hidePwd: CE_Strings.HIDE_PASSWORD_LABEL,
@@ -17,6 +31,8 @@ const SignInPage: React.FC = () => {
         title: CE_Strings.NAVIGATION_SIGN_IN,
         signUp: CE_Strings.NAVIGATION_SIGN_UP,
         forgotPwd: CE_Strings.NAVIGATION_FORGOT_PASSWORD,
+        uEmpty: CE_Strings.VALIDATION_ERROR_USERNAME_EMAIL_EMPTY,
+        pEmpty: CE_Strings.VALIDATION_ERROR_PASSWORD_EMPTY,
     });
 
     const styles = useStyles();
@@ -24,25 +40,85 @@ const SignInPage: React.FC = () => {
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [showPassword, setShowPassword] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
+    const [usernameError, setUsernameError] = React.useState("");
+    const [passwordError, setPasswordError] = React.useState("");
+
+    const validate = () => {
+        let isValid = true;
+
+        if (!username) {
+            setUsernameError(ls.uEmpty);
+            isValid = false;
+        }
+
+        if (!password) {
+            setPasswordError(ls.pEmpty);
+            isValid = false;
+        }
+
+        return isValid;
+    };
+
+    const handleSubmit = () => {
+        if (!validate()) {
+            return;
+        }
+
+        setLoading(true);
+
+        AuthModule.postSignInAsync(
+            {
+                username,
+                password,
+            },
+            recaptchaAsync,
+        )
+            .then((resp) => {
+                if (resp.code === CE_ErrorCode.OK) {
+                    dispatch(
+                        setAuthAction({
+                            token: resp.data.token,
+                            user: resp.data.userDetail,
+                        }),
+                    );
+                    navigate({
+                        to: redirect,
+                    });
+                } else {
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
 
     return (
         <div className={styles.root}>
             <h2>{ls.title}</h2>
             <form className={styles.formContainer}>
-                <Field label={ls.username}>
+                <Field label={ls.username} validationMessage={usernameError}>
                     <Input
                         type="text"
                         placeholder={ls.username}
                         value={username}
-                        onChange={(_, { value }) => setUsername(value)}
+                        disabled={loading}
+                        onChange={(_, { value }) => {
+                            setUsername(value);
+                            setUsernameError("");
+                        }}
                     />
                 </Field>
-                <Field label={ls.password}>
+                <Field label={ls.password} validationMessage={passwordError}>
                     <Input
                         type={showPassword ? "text" : "password"}
                         placeholder={ls.password}
                         value={password}
-                        onChange={(_, { value }) => setPassword(value)}
+                        onChange={(_, { value }) => {
+                            setPassword(value);
+                            setPasswordError("");
+                        }}
+                        disabled={loading}
                         contentAfter={
                             <Tooltip content={showPassword ? ls.hidePwd : ls.showPwd} relationship="label">
                                 <Button
@@ -55,7 +131,14 @@ const SignInPage: React.FC = () => {
                     />
                 </Field>
                 <div className={styles.signInButton}>
-                    <Button appearance="primary">{ls.title}</Button>
+                    <Button
+                        appearance="primary"
+                        disabledFocusable={loading}
+                        icon={loading ? <Spinner size="tiny" /> : null}
+                        onClick={handleSubmit}
+                    >
+                        {ls.title}
+                    </Button>
                 </div>
             </form>
             <div className={styles.links}>
@@ -70,8 +153,9 @@ const SignInPage: React.FC = () => {
     );
 };
 
-export const Route = createLazyFileRoute("/sign-in")({
+export const Route = createFileRoute("/sign-in")({
     component: SignInPage,
+    validateSearch: (search): ISignInPageSearch => search,
 });
 
 const useStyles = makeStyles({

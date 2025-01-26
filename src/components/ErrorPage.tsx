@@ -4,18 +4,17 @@ import { useCanGoBack, useRouter } from "@tanstack/react-router";
 import type * as React from "react";
 
 import { flex } from "@/common/styles/flex";
-import type { NavTo } from "@/common/types/nav-to";
 import type { IUrlString } from "@/common/types/url";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 
+import type { ILinkWithRouterProps } from "./LinkWithRouter";
 import { LinkWithRouter } from "./LinkWithRouter";
 
 export type IErrorPageLink =
-    | {
+    | ({
           title: string;
-          to: NavTo<typeof LinkWithRouter>;
-      }
+      } & Omit<ILinkWithRouterProps, "href">)
     | {
           title: string;
           href: IUrlString;
@@ -87,14 +86,14 @@ export const ErrorPage: React.FC<IErrorPageProps> = (props) => {
                         {links.map((link, index) => (
                             <>
                                 {index > 0 && <div className={styles.linkDivider} />}
-                                {"to" in link ? (
-                                    <LinkWithRouter key={link.to + index} to={link.to}>
-                                        {link.title}
-                                    </LinkWithRouter>
-                                ) : (
+                                {"href" in link ? (
                                     <Link key={link.href + index} href={link.href} target="_blank">
                                         {link.title}
                                     </Link>
+                                ) : (
+                                    <LinkWithRouter key={link.to + index} to={link.to} {...link}>
+                                        {link.title}
+                                    </LinkWithRouter>
                                 )}
                             </>
                         ))}

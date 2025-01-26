@@ -1,3 +1,6 @@
+import { CE_RecaptchaAction } from "@/common/enums/recaptcha-action";
+import type { IRecaptchaAsync } from "@/common/hooks/recaptcha";
+
 import { requestAsync } from "../request";
 import type { ISessionInfoGetResponse, ISignInPostRequestBody, ISignInPostResponse } from "./auth.types";
 
@@ -8,11 +11,11 @@ export async function getSessionInfoAsync() {
     });
 }
 
-export async function postSignInAsync(body: ISignInPostRequestBody, recaptchaToken: string) {
+export async function postSignInAsync(body: ISignInPostRequestBody, recaptchaAsync: IRecaptchaAsync) {
     return await requestAsync<ISignInPostResponse>({
         path: "auth/sign-in",
         method: "POST",
         body,
-        recaptchaToken,
+        recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.SignIn),
     });
 }

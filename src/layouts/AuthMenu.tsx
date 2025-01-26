@@ -1,4 +1,5 @@
 import { makeStyles } from "@fluentui/react-components";
+import { useRouterState } from "@tanstack/react-router";
 import type React from "react";
 
 import { flex } from "@/common/styles/flex";
@@ -8,6 +9,10 @@ import { CE_Strings } from "@/locales/types";
 import { useIsMiniScreen } from "@/store/hooks";
 
 export const AuthMenu: React.FC = () => {
+    const currentHref = useRouterState({
+        select: (state) => state.location.href,
+    });
+
     const isMiniScreen = useIsMiniScreen();
 
     const ls = useLocalizedStrings({
@@ -19,7 +24,13 @@ export const AuthMenu: React.FC = () => {
 
     return (
         <div className={styles.root}>
-            <ButtonWithRouter className={styles.button} to="/sign-in" appearance="primary" preload="viewport">
+            <ButtonWithRouter
+                className={styles.button}
+                to="/sign-in"
+                search={{ redirect: currentHref }}
+                appearance="primary"
+                preload="viewport"
+            >
                 {ls.signIn}
             </ButtonWithRouter>
             {!isMiniScreen && (

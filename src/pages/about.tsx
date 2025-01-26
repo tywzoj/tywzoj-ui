@@ -1,4 +1,4 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 const AboutPage: React.FC = () => {
     return (
@@ -8,6 +8,6 @@ const AboutPage: React.FC = () => {
     );
 };
 
-export const Route = createLazyFileRoute("/about")({
+export const Route = createFileRoute("/about")({
     component: AboutPage,
 });

@@ -144,3 +144,27 @@
 - name: PASSWORD_CONFIRM_LABEL
   value: Confirm Password
   description: A string for the label of password confirm input.
+
+- name: VALIDATION_ERROR_USERNAME_EMAIL_EMPTY
+  value: Username or email cannot be empty.
+  description: A string for the error message when username or email is empty.
+
+- name: VALIDATION_ERROR_PASSWORD_EMPTY
+  value: Password cannot be empty.
+  description: A string for the error message when password is empty.
+
+- name: VALIDATION_ERROR_USERNAME_EMPTY
+  value: Username cannot be empty.
+  description: A string for the error message when username is empty.
+
+- name: VALIDATION_ERROR_EMAIL_EMPTY
+  value: Email cannot be empty.
+  description: A string for the error message when email is empty.
+
+- name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
+  value: Password confirm cannot be empty.
+  description: A string for the error message when password confirm is empty.
+
+- name: VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH
+  value: Password confirm does not match the password.
+  description: A string for the error message when password confirm does not match the password.

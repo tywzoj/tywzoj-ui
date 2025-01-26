@@ -185,3 +185,35 @@
   value: 确认密码
   description: A string for the label of password confirm input.
   raw: Confirm Password
+
+- name: VALIDATION_ERROR_USERNAME_EMAIL_EMPTY
+  value: null
+  description: A string for the error message when username or email is empty.
+  raw: Username or email cannot be empty.
+
+- name: VALIDATION_ERROR_PASSWORD_EMPTY
+  value: null
+  description: A string for the error message when password is empty.
+  raw: Password cannot be empty.
+
+- name: VALIDATION_ERROR_USERNAME_EMPTY
+  value: null
+  description: A string for the error message when username is empty.
+  raw: Username cannot be empty.
+
+- name: VALIDATION_ERROR_EMAIL_EMPTY
+  value: null
+  description: A string for the error message when email is empty.
+  raw: Email cannot be empty.
+
+- name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
+  value: null
+  description: A string for the error message when password confirm is empty.
+  raw: Password confirm cannot be empty.
+
+- name: VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH
+  value: null
+  description: >-
+    A string for the error message when password confirm does not match the
+    password.
+  raw: Password confirm does not match the password.

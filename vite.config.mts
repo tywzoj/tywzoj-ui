@@ -14,10 +14,6 @@ export default defineConfig(({ command }) => {
     return {
         envPrefix: ENV_PREFIX,
         plugins: [
-            react(),
-            tsconfigPaths({
-                projects: [path.resolve("tsconfig.app.json")],
-            }),
             createHtmlPlugin({
                 minify: {
                     collapseWhitespace: true,
@@ -30,17 +26,22 @@ export default defineConfig(({ command }) => {
                     minifyCSS: true,
                 },
             }),
+            tsconfigPaths({
+                projects: [path.resolve("tsconfig.app.json")],
+            }),
+            TanStackRouterVite({
+                routesDirectory: path.resolve("src/pages"),
+                generatedRouteTree: path.resolve("src/router/routeTree.gen.ts"),
+                quoteStyle: "double",
+                autoCodeSplitting: true,
+            }),
+            react(),
             viteVConsole({
                 enabled: command === "serve",
                 entry: path.resolve("src/main.tsx"),
                 config: {
                     maxLogNumber: 1000,
                 },
-            }),
-            TanStackRouterVite({
-                routesDirectory: path.resolve("src/pages"),
-                generatedRouteTree: path.resolve("src/router/routeTree.gen.ts"),
-                quoteStyle: "double",
             }),
             circleDependency({
                 exclude: [/node_modules/, /\.yarn/, /\.pnp/],
