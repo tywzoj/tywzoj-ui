@@ -216,3 +216,19 @@
 - name: VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH
   value: Password confirm does not match the password.
   description: A string for the error message when password confirm does not match the password.
+
+- name: VISIBILITY_LABEL_PUBLIC
+  value: Public
+  description: A string for the visibility of public.
+
+- name: VISIBILITY_LABEL_PAID
+  value: Paid
+  description: A string for the visibility of paid.
+
+- name: VISIBILITY_LABEL_INTERNAL
+  value: Internal
+  description: A string for the visibility of internal.
+
+- name: VISIBILITY_LABEL_PRIVATE
+  value: Private
+  description: A string for the visibility of private.

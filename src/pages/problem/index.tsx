@@ -18,6 +18,7 @@ import { calcCount } from "@/common/utils/pagination";
 import { percent } from "@/common/utils/percent";
 import { Z_ORDER, Z_PROBLEM_SORT_BY } from "@/common/validators/zod";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
+import { VisibilityLabel } from "@/components/VisibilityLable";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { CE_QueryId } from "@/query/id";
@@ -81,7 +82,9 @@ const ProblemListPage: React.FC = () => {
                         >
                             <TableHeaderCell>{problem.displayId}</TableHeaderCell>
                             <TableHeaderCell>{problem.title}</TableHeaderCell>
-                            <TableHeaderCell>{problem.visibility}</TableHeaderCell>
+                            <TableHeaderCell>
+                                <VisibilityLabel visibility={problem.visibility} />
+                            </TableHeaderCell>
                             {!isMiddleScreen && (
                                 <>
                                     <TableHeaderCell>{problem.submissionCount}</TableHeaderCell>
