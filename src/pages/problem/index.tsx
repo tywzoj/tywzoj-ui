@@ -1,6 +1,8 @@
 import {
     makeStyles,
     Table,
+    TableBody,
+    TableCell,
     TableHeader,
     TableHeaderCell,
     TableRow,
@@ -58,43 +60,47 @@ const ProblemListPage: React.FC = () => {
             <div className={styles.body}>
                 <Table onKeyDown={onTableKeyDown} {...tableTabsterAttribute}>
                     <TableHeader>
-                        <TableHeaderCell className={styles.tableIdCol}>ID</TableHeaderCell>
-                        <TableHeaderCell>Title</TableHeaderCell>
-                        <TableHeaderCell className={styles.tableVisibleCol}>Visible</TableHeaderCell>
-                        {!isMiddleScreen && (
-                            <>
-                                <TableHeaderCell className={styles.tableSubmissionCol}>Submission</TableHeaderCell>
-                                <TableHeaderCell className={styles.tableAcceptanceCol}>Acceptance</TableHeaderCell>
-                            </>
-                        )}
-                    </TableHeader>
-                    {problemBasicDetails.map((problem) => (
-                        <TableRow
-                            key={problem.id}
-                            tabIndex={0}
-                            role="row"
-                            onClick={() => navigateToProblem(problem.displayId)}
-                            onKeyDown={(e: KeyboardEvent) => {
-                                if (e.key === "Enter" || e.key === " ") {
-                                    navigateToProblem(problem.displayId);
-                                }
-                            }}
-                        >
-                            <TableHeaderCell>{problem.displayId}</TableHeaderCell>
-                            <TableHeaderCell>{problem.title}</TableHeaderCell>
-                            <TableHeaderCell>
-                                <VisibilityLabel visibility={problem.visibility} />
-                            </TableHeaderCell>
+                        <TableRow>
+                            <TableHeaderCell className={styles.tableIdCol}>ID</TableHeaderCell>
+                            <TableHeaderCell>Title</TableHeaderCell>
+                            <TableHeaderCell className={styles.tableVisibleCol}>Visible</TableHeaderCell>
                             {!isMiddleScreen && (
                                 <>
-                                    <TableHeaderCell>{problem.submissionCount}</TableHeaderCell>
-                                    <TableHeaderCell>
-                                        {percent(problem.acceptedSubmissionCount, problem.submissionCount)}
-                                    </TableHeaderCell>
+                                    <TableHeaderCell className={styles.tableSubmissionCol}>Submission</TableHeaderCell>
+                                    <TableHeaderCell className={styles.tableAcceptanceCol}>Acceptance</TableHeaderCell>
                                 </>
                             )}
                         </TableRow>
-                    ))}
+                    </TableHeader>
+                    <TableBody>
+                        {problemBasicDetails.map((problem) => (
+                            <TableRow
+                                key={problem.id}
+                                tabIndex={0}
+                                role="row"
+                                onClick={() => navigateToProblem(problem.displayId)}
+                                onKeyDown={(e: KeyboardEvent) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        navigateToProblem(problem.displayId);
+                                    }
+                                }}
+                            >
+                                <TableCell>{problem.displayId}</TableCell>
+                                <TableCell>{problem.title}</TableCell>
+                                <TableCell>
+                                    <VisibilityLabel visibility={problem.visibility} />
+                                </TableCell>
+                                {!isMiddleScreen && (
+                                    <>
+                                        <TableCell>{problem.submissionCount}</TableCell>
+                                        <TableCell>
+                                            {percent(problem.acceptedSubmissionCount, problem.submissionCount)}
+                                        </TableCell>
+                                    </>
+                                )}
+                            </TableRow>
+                        ))}
+                    </TableBody>
                 </Table>
             </div>
             <div className={styles.footer}></div>
@@ -119,7 +125,7 @@ const useStyles = makeStyles({
         width: "60px",
     },
     tableVisibleCol: {
-        width: "100px",
+        width: "80px",
     },
     tableSubmissionCol: {
         width: "100px",
