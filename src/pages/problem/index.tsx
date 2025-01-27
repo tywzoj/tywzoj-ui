@@ -163,11 +163,10 @@ export const Route = createFileRoute("/problem/")({
         deps: { page, order, sortBy, queryTags, keyword, keywordMatchesId },
     }) => {
         const { problem: paginationCount } = getPagination(store.getState());
-        const { skipCount, takeCount } = calcCount(page, paginationCount);
+
         const { data } = await queryClient.ensureQueryData(
             queryOptions({
-                skipCount,
-                takeCount,
+                ...calcCount(page, paginationCount),
                 sortBy,
                 order,
                 queryTags,
