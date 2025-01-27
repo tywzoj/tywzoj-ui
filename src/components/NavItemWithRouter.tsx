@@ -13,5 +13,5 @@ FluentNavLinkItemComponent.displayName = "FluentNavLinkItemComponent";
 const FluentNavLinkItemComponentWithRouter = createLink(FluentNavLinkItemComponent);
 
 export const NavItemWithRouter: LinkComponent<typeof FluentNavLinkItemComponentWithRouter> = (props) => {
-    return <FluentNavLinkItemComponentWithRouter preload={false} {...props} />;
+    return <FluentNavLinkItemComponentWithRouter preload="intent" {...props} />;
 };

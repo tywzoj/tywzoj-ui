@@ -4,7 +4,7 @@ import { setAuthAction, setPermissionAction } from "@/store/actions";
 import { createAppAction } from "@/store/utils";
 import { updateThemeAction } from "@/theme/actions";
 
-import { queryClient } from "../utils/query";
+import { queryClient } from "../../query/client";
 import { setApiToken } from "../utils/token";
 
 export const signInAsyncAction = createAppAction((respData: AuthTypes.ISignInPostResponse) => async (dispatch) => {

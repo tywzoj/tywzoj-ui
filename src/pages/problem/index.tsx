@@ -9,6 +9,8 @@ import { Z_ORDER, Z_PROBLEM_SORT_BY } from "@/common/validators/zod";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
+import { CE_QueryId } from "@/query/id";
+import { createQueryOptions } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
 import { CE_Order } from "@/server/common/types";
 import { CE_ProblemSortBy } from "@/server/modules/problem.types";
@@ -34,24 +36,42 @@ const searchParams = z.object({
     p: fallback(z.number(), 1).default(1), // page
     o: fallback(Z_ORDER, CE_Order.ASC).default(CE_Order.ASC), // order
     s: fallback(Z_PROBLEM_SORT_BY, CE_ProblemSortBy.DisplayId).default(CE_ProblemSortBy.DisplayId), // sortBy
+    t: fallback(z.boolean(), false).default(false).optional(), // showTags
+    k: z.string().optional(), // keyword
+    km: z.boolean().optional(), // keywordMatchesId
 });
 
-const getQueryOptions = withThrowErrors(ProblemModule.getProblemListAsync);
+const queryOptions = createQueryOptions(CE_QueryId.ProblemList, withThrowErrors(ProblemModule.getProblemListAsync));
 
 export const Route = createFileRoute("/problem/")({
     component: ProblemListPage,
     errorComponent: ErrorPageLazy,
     validateSearch: zodValidator(searchParams),
-    loaderDeps: ({ search: { p, o, s } }) => ({ page: p, order: o, sortBy: s }),
-    loader: async ({ context: { store }, deps: { page, order, sortBy } }) => {
+    loaderDeps: ({ search: { p, o, s, t, k, km } }) => ({
+        page: p,
+        order: o,
+        sortBy: s,
+        queryTags: t,
+        keyword: k,
+        keywordMatchesId: km,
+    }),
+    loader: async ({
+        context: { queryClient, store },
+        deps: { page, order, sortBy, queryTags, keyword, keywordMatchesId },
+    }) => {
         const { problem: paginationCount } = getPagination(store.getState());
         const { skipCount, takeCount } = calcCount(page, paginationCount);
-        const { data } = await getQueryOptions({
-            skipCount,
-            takeCount,
-            sortBy,
-            order,
-        });
+        const { data } = await queryClient.ensureQueryData(
+            queryOptions({
+                skipCount,
+                takeCount,
+                sortBy,
+                order,
+                queryTags,
+                keyword,
+                keywordMatchesId,
+            }),
+        );
 
         return data;
     },

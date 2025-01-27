@@ -17,7 +17,7 @@ import { NavItemWithRouter } from "@/components/NavItemWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { getLocale } from "@/locales/selectors";
 import { CE_Locale, CE_Strings } from "@/locales/types";
-import { useAppSelector, useCurrentUser, useFeature, useIsSmallScreen } from "@/store/hooks";
+import { useAppSelector, useCurrentUser, useFeature, useIsSmallScreen, usePermission } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
 import AuthMenu from "./AuthMenu";
@@ -32,6 +32,7 @@ export const Layout: React.FC = () => {
     const currentUser = useCurrentUser();
     const { recaptchaEnabled, domainIcpRecordInformation } = useFeature();
     const locale = useAppSelector(getLocale);
+    const { accessProblem } = usePermission();
 
     const ls = useLocalizedStrings({
         navigationTitle: CE_Strings.NAVIGATION_LABEL,
@@ -106,8 +107,8 @@ export const Layout: React.FC = () => {
                 <NavDrawerHeader>{hamburger}</NavDrawerHeader>
                 <NavDrawerBody>
                     {createNavItem("/", ls.homePage, <Home20Filled />)}
-                    {createNavItem("/problem", ls.problemsPage, <Book20Filled />)}
-                    {createNavItem("/set", ls.problemSetsPage, <GroupList20Filled />)}
+                    {accessProblem && createNavItem("/problem", ls.problemsPage, <Book20Filled />)}
+                    {accessProblem && createNavItem("/set", ls.problemSetsPage, <GroupList20Filled />)}
                 </NavDrawerBody>
             </NavDrawer>
             <div className={styles.container}>

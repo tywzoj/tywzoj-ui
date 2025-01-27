@@ -13,5 +13,5 @@ FluentButtonComponent.displayName = "FluentButtonComponent";
 const FluentButtonComponentWithRouter = createLink(FluentButtonComponent);
 
 export const ButtonWithRouter: LinkComponent<typeof FluentButtonComponentWithRouter> = (props) => {
-    return <FluentButtonComponentWithRouter preload={false} {...props} />;
+    return <FluentButtonComponentWithRouter preload="intent" {...props} />;
 };
