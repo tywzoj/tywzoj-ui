@@ -1,12 +1,24 @@
+import {
+    makeStyles,
+    Table,
+    TableHeader,
+    TableHeaderCell,
+    TableRow,
+    tokens,
+    useTableCompositeNavigation,
+} from "@fluentui/react-components";
 import { createFileRoute } from "@tanstack/react-router";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import type React from "react";
 import { z } from "zod";
 
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
+import { flex } from "@/common/styles/flex";
 import { calcCount } from "@/common/utils/pagination";
+import { percent } from "@/common/utils/percent";
 import { Z_ORDER, Z_PROBLEM_SORT_BY } from "@/common/validators/zod";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
+import { LinkWithRouter } from "@/components/LinkWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { CE_QueryId } from "@/query/id";
@@ -15,10 +27,13 @@ import { ProblemModule } from "@/server/api";
 import { CE_Order } from "@/server/common/types";
 import { CE_ProblemSortBy } from "@/server/modules/problem.types";
 import { withThrowErrors } from "@/server/utils";
+import { useIsMiddleScreen } from "@/store/hooks";
 import { getPagination } from "@/store/selectors";
 
 const ProblemListPage: React.FC = () => {
-    const { problemBasicDetails, count } = Route.useLoaderData();
+    const { problemBasicDetails } = Route.useLoaderData();
+    const isMiddleScreen = useIsMiddleScreen();
+    const navigate = Route.useNavigate();
 
     const ls = useLocalizedStrings({
         title: CE_Strings.NAVIGATION_PROBLEMS,
@@ -26,11 +41,91 @@ const ProblemListPage: React.FC = () => {
 
     useSetPageTitle(ls.title);
 
-    console.log(problemBasicDetails, count);
-    // TODO: render problem list
+    const styles = useStyles();
 
-    return null;
+    const navigateToProblem = (displayId: number) => {
+        navigate({
+            to: "/problem/$displayId",
+            params: { displayId: `${displayId}` },
+        });
+    };
+
+    const { tableTabsterAttribute, onTableKeyDown } = useTableCompositeNavigation();
+
+    return (
+        <div className={styles.root}>
+            <div className={styles.header}></div>
+            <div className={styles.body}>
+                <Table onKeyDown={onTableKeyDown} {...tableTabsterAttribute}>
+                    <TableHeader>
+                        <TableHeaderCell className={styles.tableIdCol}>ID</TableHeaderCell>
+                        <TableHeaderCell>Title</TableHeaderCell>
+                        <TableHeaderCell className={styles.tableVisibleCol}>Visible</TableHeaderCell>
+                        {!isMiddleScreen && (
+                            <>
+                                <TableHeaderCell className={styles.tableSubmissionCol}>Submission</TableHeaderCell>
+                                <TableHeaderCell className={styles.tableAcceptanceCol}>Acceptance</TableHeaderCell>
+                            </>
+                        )}
+                    </TableHeader>
+                    {problemBasicDetails.map((problem) => (
+                        <TableRow
+                            key={problem.id}
+                            tabIndex={0}
+                            role="row"
+                            onClick={() => navigateToProblem(problem.displayId)}
+                            onKeyDown={(e: KeyboardEvent) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                    navigateToProblem(problem.displayId);
+                                }
+                            }}
+                        >
+                            <TableHeaderCell>{problem.displayId}</TableHeaderCell>
+                            <TableHeaderCell>{problem.title}</TableHeaderCell>
+                            <TableHeaderCell>{problem.visibility}</TableHeaderCell>
+                            {!isMiddleScreen && (
+                                <>
+                                    <TableHeaderCell>{problem.submissionCount}</TableHeaderCell>
+                                    <TableHeaderCell>
+                                        {percent(problem.acceptedSubmissionCount, problem.submissionCount)}
+                                    </TableHeaderCell>
+                                </>
+                            )}
+                        </TableRow>
+                    ))}
+                </Table>
+            </div>
+            <div className={styles.footer}></div>
+        </div>
+    );
 };
+
+const useStyles = makeStyles({
+    root: {
+        ...flex(),
+        width: "100%",
+        boxSizing: "border-box",
+    },
+    header: {},
+    body: {
+        padding: "20px",
+        boxShadow: tokens.shadow2Brand,
+        borderRadius: tokens.borderRadiusSmall,
+    },
+    footer: {},
+    tableIdCol: {
+        width: "60px",
+    },
+    tableVisibleCol: {
+        width: "100px",
+    },
+    tableSubmissionCol: {
+        width: "100px",
+    },
+    tableAcceptanceCol: {
+        width: "100px",
+    },
+});
 
 const searchParams = z.object({
     p: fallback(z.number(), 1).default(1), // page
