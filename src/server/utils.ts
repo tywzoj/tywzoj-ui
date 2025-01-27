@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { ArrayValues } from "type-fest";
 
 import { ERROR_LINKS_MAP } from "@/common/constants/error-links-map";
@@ -8,12 +9,12 @@ import type { IResponseBody } from "./request";
 
 type IError = Exclude<CE_ErrorCode, CE_ErrorCode.OK>;
 type IResponseBodyAfterThrow<T, E extends IError[]> = IResponseBody<T, ArrayValues<E>>;
-type IRequestAsyncFn<T, P extends []> = (...args: P) => Promise<IResponseBody<T>>;
-type IRequestAsyncFnWithThrow<T, P extends [], E extends IError[]> = (
+type IRequestAsyncFn<T, P extends any[]> = (...args: P) => Promise<IResponseBody<T>>;
+type IRequestAsyncFnWithThrow<T, P extends any[], E extends IError[]> = (
     ...args: P
 ) => Promise<IResponseBodyAfterThrow<T, E>>;
 
-export function withThrowErrorsExcept<T, P extends [], E extends IError[]>(
+export function withThrowErrorsExcept<T, P extends any[], E extends IError[]>(
     fn: IRequestAsyncFn<T, P>,
     ...except: E
 ): IRequestAsyncFnWithThrow<T, P, E> {
@@ -27,6 +28,6 @@ export function withThrowErrorsExcept<T, P extends [], E extends IError[]>(
     };
 }
 
-export function withThrowErrors<T, P extends []>(fn: IRequestAsyncFn<T, P>) {
+export function withThrowErrors<T, P extends any[]>(fn: IRequestAsyncFn<T, P>) {
     return withThrowErrorsExcept(fn);
 }

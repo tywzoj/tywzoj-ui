@@ -15,5 +15,5 @@ const FluentLinkComponentWithRouter = createLink(FluentLinkComponent);
 export type ILinkWithRouterProps = LinkComponentProps<typeof LinkWithRouter>;
 
 export const LinkWithRouter: LinkComponent<typeof FluentLinkComponentWithRouter> = (props) => {
-    return <FluentLinkComponentWithRouter preload="intent" {...props} />;
+    return <FluentLinkComponentWithRouter preload={false} {...props} />;
 };
