@@ -51,15 +51,9 @@ export const ErrorBox: React.FC<IErrorBoxProps> = (props) => {
                         {links.map((link, index) => (
                             <>
                                 {index > 0 && <div className={styles.linkDivider} />}
-                                {"href" in link ? (
-                                    <Link key={link.href + index} href={link.href} target="_blank">
-                                        {link.title}
-                                    </Link>
-                                ) : (
-                                    <LinkWithRouter key={link.to + index} to={link.to} {...link}>
-                                        {link.title}
-                                    </LinkWithRouter>
-                                )}
+                                <LinkWithRouter key={(link.to || link.href || link.title) + index} {...link}>
+                                    {link.title}
+                                </LinkWithRouter>
                             </>
                         ))}
                         {showGoBack && canGoBack && (

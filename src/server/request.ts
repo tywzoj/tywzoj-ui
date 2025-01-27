@@ -10,17 +10,22 @@ export interface IRequestOptions {
     recaptchaToken?: string;
 }
 
-export type IResponseBody<T> =
-    | {
-          code: Exclude<CE_ErrorCode, CE_ErrorCode.OK>;
+type IError = Exclude<CE_ErrorCode, CE_ErrorCode.OK>;
+type ISuccessResponseBody<T> = {
+    code: CE_ErrorCode.OK;
+    message: string;
+    data: T;
+};
+type IErrorResponseBody<E extends IError> = E extends never
+    ? never
+    : {
+          code: E;
           message: string;
           data: unknown;
-      }
-    | {
-          code: CE_ErrorCode.OK;
-          message: string;
-          data: T;
       };
+export type IResponseBody<T, E extends IError = IError> =
+    | (E extends never ? never : IErrorResponseBody<E>)
+    | ISuccessResponseBody<T>;
 
 export async function requestAsync<T>(options: IRequestOptions): Promise<IResponseBody<T>> {
     const {
