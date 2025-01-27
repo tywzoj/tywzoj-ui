@@ -13,7 +13,17 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": true,
-  "cSpell.words": ["fluentui", "interactor", "ranklist", "reCAPTCHA", "testcase", "testcases", "testdata", "tywzoj"],
+  "cSpell.words": [
+    "fluentui",
+    "interactor",
+    "ranklist",
+    "reCAPTCHA",
+    "tabster",
+    "testcase",
+    "testcases",
+    "testdata",
+    "tywzoj"
+  ],
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
