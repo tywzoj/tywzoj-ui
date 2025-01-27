@@ -136,12 +136,12 @@ const useStyles = makeStyles({
 });
 
 const searchParams = z.object({
-    p: fallback(z.number(), 1).default(1), // page
+    p: fallback(z.number().positive(), 1).default(1), // page
     o: fallback(Z_ORDER, CE_Order.ASC).default(CE_Order.ASC), // order
     s: fallback(Z_PROBLEM_SORT_BY, CE_ProblemSortBy.DisplayId).default(CE_ProblemSortBy.DisplayId), // sortBy
-    t: fallback(z.boolean(), false).default(false).optional(), // showTags
-    k: z.string().optional(), // keyword
-    km: z.boolean().optional(), // keywordMatchesId
+    t: fallback(z.boolean(), false).optional(), // showTags
+    k: z.any().optional(), // keyword
+    km: fallback(z.boolean(), false).optional(), // keywordMatchesId
 });
 
 const queryOptions = createQueryOptions(CE_QueryId.ProblemList, withThrowErrors(ProblemModule.getProblemListAsync));
