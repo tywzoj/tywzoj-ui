@@ -110,6 +110,14 @@
   value: Home
   description: A string for the label of home navigation.
 
+- name: NAVIGATION_PROBLEMS
+  value: Problems
+  description: A string for the label of problems navigation.
+
+- name: NAVIGATION_PROBLEM_SETS
+  value: Problem Sets
+  description: A string for the label of problem sets navigation.
+
 - name: NAVIGATION_SIGN_IN
   value: Sign In
   description: A string for the label of sign in navigation.

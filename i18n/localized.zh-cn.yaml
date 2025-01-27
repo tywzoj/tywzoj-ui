@@ -138,6 +138,16 @@
   description: A string for the label of home navigation.
   raw: Home
 
+- name: NAVIGATION_PROBLEMS
+  value: 题目
+  description: A string for the label of problems navigation.
+  raw: Problems
+
+- name: NAVIGATION_PROBLEM_SETS
+  value: 题集
+  description: A string for the label of problem sets navigation.
+  raw: Problem Sets
+
 - name: NAVIGATION_SIGN_IN
   value: 登录
   description: A string for the label of sign in navigation.

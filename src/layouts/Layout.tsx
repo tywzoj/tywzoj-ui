@@ -1,5 +1,5 @@
 import { makeStyles, tokens, Tooltip } from "@fluentui/react-components";
-import { BookQuestionMark20Filled, Home20Filled } from "@fluentui/react-icons";
+import { Book20Filled, GroupList20Filled, Home20Filled } from "@fluentui/react-icons";
 import { Hamburger, NavDrawer, NavDrawerBody, NavDrawerHeader } from "@fluentui/react-nav-preview";
 import { Outlet } from "@tanstack/react-router";
 import type { JSX } from "react";
@@ -36,6 +36,8 @@ export const Layout: React.FC = () => {
     const ls = useLocalizedStrings({
         navigationTitle: CE_Strings.NAVIGATION_LABEL,
         homePage: CE_Strings.NAVIGATION_HOME,
+        problemsPage: CE_Strings.NAVIGATION_PROBLEMS,
+        problemSetsPage: CE_Strings.NAVIGATION_PROBLEM_SETS,
         siteTitleAlt: CE_Strings.SITE_TITLE_IMAGE_ALT,
         siteIconAlt: CE_Strings.SITE_ICON_IMAGE_ALT,
         copyright: CE_Strings.COPYRIGHT_NOTICE,
@@ -67,14 +69,16 @@ export const Layout: React.FC = () => {
                 <Hamburger
                     onClick={() => {
                         setIsNavDrawerOpen((prev) => {
-                            userPreferOpen.current = !prev;
+                            if (!isOverlay) {
+                                userPreferOpen.current = !prev;
+                            }
                             return !prev;
                         });
                     }}
                 />
             </Tooltip>
         ),
-        [ls.navigationTitle],
+        [isOverlay, ls.navigationTitle],
     );
 
     const createNavItem = (to: NavTo<typeof NavItemWithRouter>, text: string, icon: JSX.Element) => {
@@ -102,7 +106,8 @@ export const Layout: React.FC = () => {
                 <NavDrawerHeader>{hamburger}</NavDrawerHeader>
                 <NavDrawerBody>
                     {createNavItem("/", ls.homePage, <Home20Filled />)}
-                    {createNavItem("/about", "About", <BookQuestionMark20Filled />)} {/* TODO: will remove this line */}
+                    {createNavItem("/problem", ls.problemsPage, <Book20Filled />)}
+                    {createNavItem("/set", ls.problemSetsPage, <GroupList20Filled />)}
                 </NavDrawerBody>
             </NavDrawer>
             <div className={styles.container}>

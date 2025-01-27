@@ -1,14 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type React from "react";
 
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
-import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 
-const ProblemListPage: React.FC = () => {
+const ProblemSetListPage: React.FC = () => {
     const ls = useLocalizedStrings({
-        title: CE_Strings.NAVIGATION_PROBLEMS,
+        title: CE_Strings.NAVIGATION_PROBLEM_SETS,
     });
 
     useSetPageTitle(ls.title);
@@ -16,7 +14,6 @@ const ProblemListPage: React.FC = () => {
     return null;
 };
 
-export const Route = createFileRoute("/problem/")({
-    component: ProblemListPage,
-    errorComponent: ErrorPageLazy,
+export const Route = createFileRoute("/set/")({
+    component: ProblemSetListPage,
 });
