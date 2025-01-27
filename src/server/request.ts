@@ -5,7 +5,7 @@ import { CE_ErrorCode } from "./common/error-code";
 export interface IRequestOptions {
     path: string;
     method: "GET" | "POST" | "PATCH" | "DELETE";
-    query?: Record<string, string>;
+    query?: Record<string, string | number | boolean | undefined>;
     body?: object | string;
     recaptchaToken?: string;
 }
@@ -43,9 +43,10 @@ export async function requestAsync<T>(options: IRequestOptions): Promise<IRespon
     const url = new URL(`/api/${options.path}`, apiEndPoint);
 
     if (options.query) {
-        for (const key in options.query) {
-            if (Object.prototype.hasOwnProperty.call(options.query, key)) {
-                url.searchParams.append(key, options.query[key]);
+        const query = options.query as Record<string, unknown>;
+        for (const key in query) {
+            if (Object.prototype.hasOwnProperty.call(query, key) && query[key] !== undefined) {
+                url.searchParams.append(key, String(query[key]));
             }
         }
     }
