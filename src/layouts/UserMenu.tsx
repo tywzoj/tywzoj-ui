@@ -31,6 +31,9 @@ export const UserMenu: React.FC = () => {
     const navigate = useNavigate();
 
     const ls = useLocalizedStrings({
+        label: CE_Strings.USER_MENU_LABEL,
+        profile: CE_Strings.USER_MENU_PROFILE,
+        settings: CE_Strings.USER_MENU_SETTINGS,
         signOut: CE_Strings.NAVIGATION_SIGN_OUT,
     });
 
@@ -70,7 +73,7 @@ export const UserMenu: React.FC = () => {
     return (
         <Menu positioning={{ autoSize: true, position: "below", align: "end" }}>
             <MenuTrigger>
-                <Tooltip content={"User Menu"} relationship="label">
+                <Tooltip content={ls.label} relationship="label">
                     <Button className={styles.button} appearance="transparent">
                         {isMiniScreen ? (
                             <Avatar />
@@ -85,8 +88,8 @@ export const UserMenu: React.FC = () => {
             </MenuTrigger>
             <MenuPopover>
                 <MenuList>
-                    <MenuItem>Profile</MenuItem>
-                    <MenuItem>Settings</MenuItem>
+                    <MenuItem>{ls.profile}</MenuItem>
+                    <MenuItem>{ls.settings}</MenuItem>
                     <MenuDivider />
                     <MenuItem onClick={signOut}>{ls.signOut}</MenuItem>
                 </MenuList>
