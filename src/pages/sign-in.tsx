@@ -3,18 +3,17 @@ import { EyeFilled, EyeOffFilled } from "@fluentui/react-icons";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import React from "react";
 
+import { signInAsyncAction } from "@/common/actions/sign-in";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { useDispatchToastError } from "@/common/hooks/toast";
 import { flex } from "@/common/styles/flex";
-import { setApiToken } from "@/common/utils/token";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { LinkWithRouter } from "@/components/LinkWithRouter";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
-import { setAuthAction } from "@/store/actions";
 import { useAppDispatch, useCurrentUser } from "@/store/hooks";
 
 export interface ISignInPageSearch {
@@ -28,6 +27,7 @@ const SignInPage: React.FC = () => {
     const errorCodeToString = useErrorCodeToString();
     const currentUser = useCurrentUser();
     const dispatchToastError = useDispatchToastError();
+    const [loginSucceed, setLoginSucceed] = React.useState(!!currentUser);
 
     const ls = useLocalizedStrings({
         showPwd: CE_Strings.SHOW_PASSWORD_LABEL,
@@ -68,19 +68,37 @@ const SignInPage: React.FC = () => {
         return isValid;
     };
 
-    const handleError = (code: CE_ErrorCode) => {
-        switch (code) {
-            case CE_ErrorCode.Auth_NoSuchUser:
-                setUsernameError(errorCodeToString(code));
-                break;
-            case CE_ErrorCode.Auth_WrongPassword:
-                setPasswordError(errorCodeToString(code));
-                break;
-            default:
-                dispatchToastError(errorCodeToString(code));
-                break;
-        }
-    };
+    const handleError = React.useCallback(
+        (code: CE_ErrorCode) => {
+            switch (code) {
+                case CE_ErrorCode.Auth_NoSuchUser:
+                    setUsernameError(errorCodeToString(code));
+                    break;
+                case CE_ErrorCode.Auth_WrongPassword:
+                    setPasswordError(errorCodeToString(code));
+                    break;
+                default:
+                    dispatchToastError(errorCodeToString(code));
+                    break;
+            }
+        },
+        [dispatchToastError, errorCodeToString],
+    );
+
+    const handleSignInAsync = React.useCallback(
+        async (usernameOrEmail: string, password: string) => {
+            const resp = await AuthModule.postSignInAsync({ usernameOrEmail, password }, recaptchaAsync);
+
+            if (resp.code !== CE_ErrorCode.OK) {
+                handleError(resp.code);
+                return;
+            }
+
+            await dispatch(signInAsyncAction(resp.data));
+            setLoginSucceed(true);
+        },
+        [dispatch, handleError, recaptchaAsync],
+    );
 
     const handleSubmit = () => {
         if (!validate()) {
@@ -88,27 +106,7 @@ const SignInPage: React.FC = () => {
         }
 
         setLoading(true);
-
-        AuthModule.postSignInAsync(
-            {
-                usernameOrEmail: username,
-                password,
-            },
-            recaptchaAsync,
-        )
-            .then((resp) => {
-                if (resp.code === CE_ErrorCode.OK) {
-                    dispatch(
-                        setAuthAction({
-                            token: resp.data.token,
-                            user: resp.data.userDetail,
-                        }),
-                    );
-                    setApiToken(resp.data.token);
-                } else {
-                    handleError(resp.code);
-                }
-            })
+        handleSignInAsync(username, password)
             .catch((err) => {
                 dispatchToastError(err.message);
             })
@@ -117,7 +115,7 @@ const SignInPage: React.FC = () => {
             });
     };
 
-    return currentUser ? (
+    return loginSucceed ? (
         <Navigate to={redirect} />
     ) : (
         <div className={styles.root}>
