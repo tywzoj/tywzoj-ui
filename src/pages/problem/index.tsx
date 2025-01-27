@@ -18,7 +18,6 @@ import { calcCount } from "@/common/utils/pagination";
 import { percent } from "@/common/utils/percent";
 import { Z_ORDER, Z_PROBLEM_SORT_BY } from "@/common/validators/zod";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
-import { LinkWithRouter } from "@/components/LinkWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { CE_QueryId } from "@/query/id";
