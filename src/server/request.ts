@@ -16,16 +16,14 @@ type ISuccessResponseBody<T> = {
     message: string;
     data: T;
 };
-type IErrorResponseBody<E extends IError> = E extends never
-    ? never
-    : {
-          code: E;
-          message: string;
-          data: unknown;
-      };
+type IErrorResponseBody<E extends IError> = {
+    code: E;
+    message: string;
+    data: unknown;
+};
 export type IResponseBody<T, E extends IError = IError> =
     | (E extends never ? never : IErrorResponseBody<E>)
-    | ISuccessResponseBody<T>;
+    | (T extends never ? never : ISuccessResponseBody<T>);
 
 export async function requestAsync<T>(options: IRequestOptions): Promise<IResponseBody<T>> {
     const {
