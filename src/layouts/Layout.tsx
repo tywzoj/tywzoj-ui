@@ -161,11 +161,12 @@ const useStyles = makeStyles({
     header: {
         ...flex({ flexDirection: "row", justifyContent: "space-between" }),
         minHeight: "40px",
-        padding: "5px 14px",
+        padding: "0px 14px",
         boxSizing: "border-box",
         boxShadow: tokens.shadow4,
     },
     headerNavButton: {
+        padding: "5px 0",
         minHeight: "30px",
         minWidth: "30px",
     },
@@ -174,6 +175,7 @@ const useStyles = makeStyles({
             flexDirection: "row",
             alignItems: "center",
         }),
+        padding: "5px 0",
         gap: "14px",
         height: "30px",
         overflow: "hidden",
@@ -187,8 +189,9 @@ const useStyles = makeStyles({
     headerRightMenu: {
         ...flex({
             justifyContent: "flex-end",
+            alignItems: "center",
         }),
-        height: "30px",
+        height: "40px",
     },
     body: {
         ...flex({

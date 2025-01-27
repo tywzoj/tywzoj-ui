@@ -20,3 +20,7 @@ export interface ISignInPostResponse {
     readonly userPreferenceDetail: IUserPreferenceDetail;
     readonly permission: IPermission;
 }
+
+export interface ISignOutPostResponse {
+    readonly permission: IPermission;
+}

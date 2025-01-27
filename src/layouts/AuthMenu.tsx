@@ -9,11 +9,12 @@ import { CE_Strings } from "@/locales/types";
 import { useIsMiniScreen } from "@/store/hooks";
 
 export const AuthMenu: React.FC = () => {
-    const currentHref = useRouterState({
-        select: (state) => state.location.href,
-    });
-
     const isMiniScreen = useIsMiniScreen();
+
+    const currentHref = useRouterState({ select: (state) => state.location.href });
+    const currentRedirect = useRouterState({ select: (state) => state.location.search?.redirect });
+    const currentPath = useRouterState({ select: (state) => state.location.pathname });
+    const shouldNotRedirect = currentPath === "/sign-in" || currentPath === "/sign-up";
 
     const ls = useLocalizedStrings({
         signIn: CE_Strings.NAVIGATION_SIGN_IN,
@@ -27,7 +28,7 @@ export const AuthMenu: React.FC = () => {
             <ButtonWithRouter
                 className={styles.button}
                 to="/sign-in"
-                search={{ redirect: currentHref }}
+                search={{ redirect: shouldNotRedirect ? currentRedirect : currentHref }}
                 appearance="primary"
                 preload="viewport"
             >

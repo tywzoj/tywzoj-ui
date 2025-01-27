@@ -1,0 +1,23 @@
+import { updateLocaleAsyncAction } from "@/locales/actions";
+import type { AuthTypes } from "@/server/types";
+import { setAuthAction, setPermissionAction } from "@/store/actions";
+import { createAppAction } from "@/store/utils";
+import { updateThemeAction } from "@/theme/actions";
+
+import { setApiToken } from "../utils/token";
+
+export const signInAsyncAction = createAppAction((respData: AuthTypes.ISignInPostResponse) => async (dispatch) => {
+    setApiToken(respData.token);
+    dispatch(setAuthAction({ token: respData.token, user: respData.userDetail }));
+    dispatch(setPermissionAction(respData.permission));
+    dispatch(updateThemeAction(respData?.userPreferenceDetail?.preferTheme));
+    await dispatch(updateLocaleAsyncAction(respData?.userPreferenceDetail?.preferLanguage));
+});
+
+export const signOutAsyncAction = createAppAction((respData: AuthTypes.ISignOutPostResponse) => async (dispatch) => {
+    setApiToken("");
+    dispatch(setAuthAction({ token: null, user: null }));
+    dispatch(setPermissionAction(respData.permission));
+    dispatch(updateThemeAction(null));
+    await dispatch(updateLocaleAsyncAction(null));
+});

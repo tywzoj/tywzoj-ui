@@ -146,6 +146,7 @@ export default tseslint.config(
         rules: {
             ...reactHooks.configs.recommended.rules,
             "react/prop-types": "off",
+            "react-hooks/exhaustive-deps": "error",
             "react-refresh/only-export-components": [
                 "error",
                 {

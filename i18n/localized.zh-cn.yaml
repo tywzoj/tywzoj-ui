@@ -168,6 +168,21 @@
   description: A string for the title of the site.
   raw: The site is TYWZOJ.
 
+- name: USER_MENU_LABEL
+  value: 用户菜单
+  description: A string for the label of user menu button.
+  raw: User Menu
+
+- name: USER_MENU_PROFILE
+  value: 个人资料
+  description: A string for the label of profile menu item.
+  raw: Profile
+
+- name: USER_MENU_SETTINGS
+  value: 设置
+  description: A string for the label of settings menu item.
+  raw: Settings
+
 - name: COPYRIGHT_NOTICE
   value: © {0} TYWZOJ。保留所有权利。
   description: A string for the copyright notice. {0} is the current year.
