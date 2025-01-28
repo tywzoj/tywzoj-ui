@@ -1,5 +1,5 @@
 import { makeStyles, tokens, Tooltip } from "@fluentui/react-components";
-import { BookQuestionMark20Filled, Home20Filled } from "@fluentui/react-icons";
+import { Book20Filled, GroupList20Filled, Home20Filled } from "@fluentui/react-icons";
 import { Hamburger, NavDrawer, NavDrawerBody, NavDrawerHeader } from "@fluentui/react-nav-preview";
 import { Outlet } from "@tanstack/react-router";
 import type { JSX } from "react";
@@ -17,7 +17,7 @@ import { NavItemWithRouter } from "@/components/NavItemWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { getLocale } from "@/locales/selectors";
 import { CE_Locale, CE_Strings } from "@/locales/types";
-import { useAppSelector, useCurrentUser, useFeature, useIsSmallScreen } from "@/store/hooks";
+import { useAppSelector, useCurrentUser, useFeature, useIsSmallScreen, usePermission } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
 import AuthMenu from "./AuthMenu";
@@ -32,10 +32,13 @@ export const Layout: React.FC = () => {
     const currentUser = useCurrentUser();
     const { recaptchaEnabled, domainIcpRecordInformation } = useFeature();
     const locale = useAppSelector(getLocale);
+    const { accessProblem } = usePermission();
 
     const ls = useLocalizedStrings({
         navigationTitle: CE_Strings.NAVIGATION_LABEL,
         homePage: CE_Strings.NAVIGATION_HOME,
+        problemsPage: CE_Strings.NAVIGATION_PROBLEMS,
+        problemSetsPage: CE_Strings.NAVIGATION_PROBLEM_SETS,
         siteTitleAlt: CE_Strings.SITE_TITLE_IMAGE_ALT,
         siteIconAlt: CE_Strings.SITE_ICON_IMAGE_ALT,
         copyright: CE_Strings.COPYRIGHT_NOTICE,
@@ -67,14 +70,16 @@ export const Layout: React.FC = () => {
                 <Hamburger
                     onClick={() => {
                         setIsNavDrawerOpen((prev) => {
-                            userPreferOpen.current = !prev;
+                            if (!isOverlay) {
+                                userPreferOpen.current = !prev;
+                            }
                             return !prev;
                         });
                     }}
                 />
             </Tooltip>
         ),
-        [ls.navigationTitle],
+        [isOverlay, ls.navigationTitle],
     );
 
     const createNavItem = (to: NavTo<typeof NavItemWithRouter>, text: string, icon: JSX.Element) => {
@@ -102,7 +107,8 @@ export const Layout: React.FC = () => {
                 <NavDrawerHeader>{hamburger}</NavDrawerHeader>
                 <NavDrawerBody>
                     {createNavItem("/", ls.homePage, <Home20Filled />)}
-                    {createNavItem("/about", "About", <BookQuestionMark20Filled />)} {/* TODO: will remove this line */}
+                    {accessProblem && createNavItem("/problem", ls.problemsPage, <Book20Filled />)}
+                    {accessProblem && createNavItem("/set", ls.problemSetsPage, <GroupList20Filled />)}
                 </NavDrawerBody>
             </NavDrawer>
             <div className={styles.container}>

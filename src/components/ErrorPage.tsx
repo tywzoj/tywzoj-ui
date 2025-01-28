@@ -1,3 +1,6 @@
+import React from "react";
+
+import type { IErrorLink, IStringCodeErrorLink } from "@/common/types/error-link";
 import { ErrorBox } from "@/components/ErrorBox";
 import { useLocalizedStrings } from "@/locales/hooks";
 
@@ -18,7 +21,27 @@ export const ErrorPage: React.FC<IErrorPageProps> = ({ error }) => {
 const AppErrorBox: React.FC<{ error: AppError }> = ({ error }) => {
     const [msg] = useLocalizedStrings(error.getStringId());
 
-    return <ErrorBox message={msg} links={error.links} showGoBack={error.showGoBack} />;
+    return (
+        <WithLinks links={error.links}>
+            {(links) => <ErrorBox message={msg} links={links} showGoBack={error.showGoBack} />}
+        </WithLinks>
+    );
 };
+
+// Memoize the component because of useLocalizedStrings(...props.links.map((link) => link.string))
+// which may cause re-rendering of the component
+const WithLinks: React.FC<{
+    links: IStringCodeErrorLink[];
+    children: (links: IErrorLink[]) => React.ReactNode;
+}> = React.memo((props) => {
+    const linksString = useLocalizedStrings(...props.links.map((link) => link.string));
+    const links = props.links.map((link, i) => ({
+        ...link,
+        title: linksString[i],
+    }));
+
+    return props.children(links);
+});
+WithLinks.displayName = "WithLinks";
 
 export default ErrorPage;

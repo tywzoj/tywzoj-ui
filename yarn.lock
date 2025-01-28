@@ -2716,6 +2716,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/zod-adapter@npm:^1.97.23":
+  version: 1.97.23
+  resolution: "@tanstack/zod-adapter@npm:1.97.23"
+  peerDependencies:
+    "@tanstack/react-router": ">=1.43.2"
+    zod: ^3.23.8
+  checksum: 10c0/19c210c98629d73c0f564dba336124b673e703fbf4c66713518a83103b1000ee5ff9494522d2490f215ef31155e7832a31c28c636001a2813b6d4b2dbafe51a3
+  languageName: node
+  linkType: hard
+
 "@tsconfig/node10@npm:^1.0.7":
   version: 1.0.11
   resolution: "@tsconfig/node10@npm:1.0.11"
@@ -6848,10 +6858,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^4.31.0":
-  version: 4.31.0
-  resolution: "type-fest@npm:4.31.0"
-  checksum: 10c0/a5bb69e3b0f82e068af8c645ac3d50b1fa5c588ebc83735a6add4ef6dacf277bb3605801f66c72c069af20120ee7387a3ae6dd84e12c152f5982784c710b4051
+"type-fest@npm:^4.33.0":
+  version: 4.33.0
+  resolution: "type-fest@npm:4.33.0"
+  checksum: 10c0/20015eea353605e08e3f4b967291b225fa4e7c43361de44f39b88131715e41877458af80da59c8f17e40c0e3842298996f0651219dc9823e35c7e46ecbc8a44f
   languageName: node
   linkType: hard
 
@@ -6956,6 +6966,7 @@ __metadata:
     "@tanstack/react-router": "npm:^1.95.1"
     "@tanstack/router-devtools": "npm:^1.95.1"
     "@tanstack/router-plugin": "npm:^1.95.1"
+    "@tanstack/zod-adapter": "npm:^1.97.23"
     "@types/js-yaml": "npm:^4"
     "@types/node": "npm:^22.10.5"
     "@types/react": "npm:^19.0.3"
@@ -6979,7 +6990,7 @@ __metadata:
     react-redux: "npm:^9.2.0"
     scheduler: "npm:^0.25.0"
     ts-node: "npm:^10.9.2"
-    type-fest: "npm:^4.31.0"
+    type-fest: "npm:^4.33.0"
     typescript: "npm:^5.7.2"
     typescript-eslint: "npm:^8.19.0"
     vconsole: "npm:^3.15.1"
@@ -6988,6 +6999,7 @@ __metadata:
     vite-plugin-html: "npm:^3.2.2"
     vite-plugin-vconsole: "npm:^2.1.1"
     vite-tsconfig-paths: "npm:^5.1.4"
+    zod: "npm:^3.24.1"
   languageName: unknown
   linkType: soft
 
@@ -7368,7 +7380,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.23.8":
+"zod@npm:^3.23.8, zod@npm:^3.24.1":
   version: 3.24.1
   resolution: "zod@npm:3.24.1"
   checksum: 10c0/0223d21dbaa15d8928fe0da3b54696391d8e3e1e2d0283a1a070b5980a1dbba945ce631c2d1eccc088fdbad0f2dfa40155590bf83732d3ac4fcca2cc9237591b
