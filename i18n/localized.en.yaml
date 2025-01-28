@@ -123,6 +123,41 @@
   description: A string for the error message when email verification code is rate limited.
   raw: You send email verification code too frequently. Please try again later.
 
+- name: ERROR_2100_NO_SUCH_USER
+  value: No such user.
+  description: A string for the error message when no such user.
+  raw: No such user.
+
+- name: ERROR_2200_NO_SUCH_PROBLEM
+  value: No such problem.
+  description: A string for the error message when no such problem.
+  raw: No such problem.
+
+- name: ERROR_2201_INVALID_FILE_UPLOAD_TOKEN
+  value: Invalid file upload token.
+  description: A string for the error message when the file upload token is invalid.
+  raw: Invalid file upload token.
+
+- name: ERROR_2203_TOO_MANY_FILE_UPLOAD_REQUEST
+  value: You requested too many file uploads. Please try again later.
+  description: A string for the error message when too many file upload requests.
+  raw: You requested too many file uploads. Please try again later.
+
+- name: ERROR_2204_TOO_LARGE_UPLOAD_FILE
+  value: The file is too large. Please upload a smaller file.
+  description: A string for the error message when the file is too large.
+  raw: The file is too large. Please upload a smaller file.
+
+- name: ERROR_2205_FILE_LIMIT_EXCEEDED
+  value: You uploaded too many files. Please delete some files and try again.
+  description: A string for the error message when the file limit is exceeded.
+  raw: You uploaded too many files. Please delete some files and try again.
+
+- name: ERROR_2206_NO_SUCH_PROBLEM_FILE
+  value: No such problem file.
+  description: A string for the error message when no such problem file.
+  raw: No such problem file.
+
 - name: CUSTOM_ERROR_PAGE_NOT_FOUND
   value: Page not found.
   description: A string for the error message when the page is not found.
