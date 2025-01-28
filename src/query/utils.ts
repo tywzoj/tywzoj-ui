@@ -10,3 +10,7 @@ export function createQueryOptions<R, P extends any[]>(id: CE_QueryId, fn: (...a
             queryFn: (): Promise<R> => fn(...args),
         });
 }
+
+export function createQueryKeys<F extends (...args: any[]) => Promise<any>>(id: CE_QueryId) {
+    return (...args: Parameters<F>) => [id, ...args];
+}
