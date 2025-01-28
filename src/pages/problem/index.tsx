@@ -116,6 +116,7 @@ const ProblemListPage: React.FC = () => {
                                         tabIndex={0}
                                         to="/problem/$displayId"
                                         params={{ displayId: `${problem.displayId}` }}
+                                        preload={false}
                                     >
                                         {problem.title}
                                     </LinkWithRouter>
