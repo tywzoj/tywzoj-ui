@@ -1,0 +1,173 @@
+import { Button, makeStyles, mergeClasses, tokens, useArrowNavigationGroup } from "@fluentui/react-components";
+import { ChevronLeftFilled, ChevronRightFilled, MoreHorizontalFilled } from "@fluentui/react-icons";
+import React from "react";
+
+import { flex } from "@/common/styles/flex";
+import { range } from "@/common/utils/range";
+import { useIsMiddleScreen, useIsMiniScreen, useIsSmallScreen } from "@/store/hooks";
+
+export interface IPaginationButtonsProps {
+    className?: string;
+    page: number;
+    pageCount: number;
+    tiny?: boolean;
+    onPageChange: (page: number) => void;
+}
+
+export const PaginationButtons: React.FC<IPaginationButtonsProps> = (props) => {
+    const { className, page, pageCount, tiny = false, onPageChange } = props;
+
+    const isMiniScreen = useIsMiniScreen();
+    const isSmallScreen = useIsSmallScreen();
+    const isMiddleScreen = useIsMiddleScreen();
+
+    const showPage = pageCount > 1;
+    const isFirstPage = page == 1;
+    const isLastPage = page == pageCount;
+
+    const styles = useStyles();
+    const arrowNavigationAttributes = useArrowNavigationGroup({ axis: "horizontal" });
+
+    const buttonCount = React.useMemo(() => {
+        if (isMiniScreen) {
+            return 3;
+        } else if (isSmallScreen) {
+            return 6;
+        } else if (isMiddleScreen) {
+            return 7;
+        } else {
+            return 13;
+        }
+    }, [isMiddleScreen, isMiniScreen, isSmallScreen]);
+
+    const { leftCount, rightCount, omitLeft, omitRight } = React.useMemo(() => {
+        let omitLeft = false;
+        let omitRight = false;
+        let leftCount = page - 2;
+        let rightCount = pageCount - page;
+
+        if (leftCount + rightCount > buttonCount + 1) {
+            if (leftCount <= Math.floor(buttonCount / 2)) {
+                rightCount = buttonCount - leftCount + 1;
+                omitRight = true;
+            } else if (rightCount <= Math.ceil(buttonCount / 2)) {
+                leftCount = buttonCount - rightCount + 1;
+                omitLeft = true;
+            } else {
+                rightCount = Math.floor(buttonCount / 2) + 1;
+                leftCount = buttonCount - rightCount;
+                omitLeft = omitRight = true;
+            }
+        }
+
+        return {
+            leftCount,
+            rightCount,
+            omitLeft,
+            omitRight,
+        };
+    }, [buttonCount, page, pageCount]);
+
+    if (!showPage) {
+        return null;
+    }
+
+    return (
+        <div className={mergeClasses(styles.root, className)}>
+            <div className={styles.container} {...arrowNavigationAttributes}>
+                <Button
+                    icon={<ChevronLeftFilled />}
+                    shape="square"
+                    appearance="transparent"
+                    disabled={isFirstPage}
+                    onClick={() => onPageChange(page - 1)}
+                />
+
+                {!tiny && (
+                    <>
+                        <PageButton page={1} active={isFirstPage} onClick={() => onPageChange(1)} />
+
+                        {omitLeft && (
+                            <Button
+                                className={styles.omitButton}
+                                icon={<MoreHorizontalFilled />}
+                                disabled
+                                appearance="transparent"
+                            />
+                        )}
+
+                        {range(page - leftCount, page + rightCount, 1).map((p) => (
+                            <PageButton key={p} page={p} active={p == page} onClick={() => onPageChange(p)} />
+                        ))}
+
+                        {omitRight && (
+                            <Button
+                                className={styles.omitButton}
+                                icon={<MoreHorizontalFilled />}
+                                disabled
+                                appearance="transparent"
+                            />
+                        )}
+
+                        <PageButton page={pageCount} active={isLastPage} onClick={() => onPageChange(pageCount)} />
+                    </>
+                )}
+
+                <Button
+                    icon={<ChevronRightFilled />}
+                    shape="square"
+                    appearance="transparent"
+                    disabled={isLastPage}
+                    onClick={() => onPageChange(page + 1)}
+                />
+            </div>
+        </div>
+    );
+};
+
+interface IPageButtonProps {
+    page: number;
+    active: boolean;
+    onClick: () => void;
+}
+
+const PageButton: React.FC<IPageButtonProps> = (props) => {
+    const { page, active, onClick } = props;
+
+    const styles = useStyles();
+
+    return (
+        <Button
+            className={styles.pageButton}
+            appearance={active ? "primary" : "transparent"}
+            onClick={() => !active && onClick()}
+            shape="square"
+        >
+            {page}
+        </Button>
+    );
+};
+
+const useStyles = makeStyles({
+    root: {
+        width: "100%",
+    },
+    container: {
+        ...flex({
+            flexDirection: "row",
+            justifyContent: "center",
+            flexWrap: "nowrap",
+        }),
+        width: "100%",
+        overflow: "visible",
+    },
+    omitButton: {
+        "& svg": {
+            color: tokens.colorNeutralForeground1,
+        },
+    },
+    pageButton: {
+        minWidth: "unset",
+        maxWidth: "38px",
+    },
+});

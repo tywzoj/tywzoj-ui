@@ -18,11 +18,12 @@ import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { useTableSortAttributes } from "@/common/hooks/table-sort";
 import { flex } from "@/common/styles/flex";
 import { noUnderlineLinkStyles } from "@/common/styles/link";
-import { calcCount } from "@/common/utils/pagination";
+import { calcCount, calcPageCount } from "@/common/utils/pagination";
 import { percent } from "@/common/utils/percent";
 import { Z_ORDER, Z_PROBLEM_SORT_BY } from "@/common/validators/zod";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { LinkWithRouter } from "@/components/LinkWithRouter";
+import { PaginationButtons } from "@/components/PaginationButtons";
 import { VisibilityLabel } from "@/components/VisibilityLable";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
@@ -36,10 +37,11 @@ import { useIsMiddleScreen } from "@/store/hooks";
 import { getPagination } from "@/store/selectors";
 
 const ProblemListPage: React.FC = () => {
-    const { problemBasicDetails } = Route.useLoaderData();
-    const { sortBy, order } = Route.useLoaderDeps();
+    const { problemList, pageCount } = Route.useLoaderData();
+    const { sortBy, order, page } = Route.useLoaderDeps();
     const isMiddleScreen = useIsMiddleScreen();
     const navigate = Route.useNavigate();
+    const search = Route.useSearch();
 
     const ls = useLocalizedStrings({
         title: CE_Strings.NAVIGATION_PROBLEMS,
@@ -54,12 +56,22 @@ const ProblemListPage: React.FC = () => {
     const { tableTabsterAttribute, onTableKeyDown } = useTableCompositeNavigation();
 
     const tableSortAttributes = useTableSortAttributes(order, sortBy, (order, sortBy) =>
-        navigate({ search: { o: order, s: sortBy } }),
+        navigate({ search: { ...search, o: order, s: sortBy } }),
     );
+
+    const onPageChange = (page: number) => {
+        navigate({ search: { ...search, p: page } });
+    };
 
     return (
         <div className={styles.root}>
             <div className={styles.header}></div>
+            <PaginationButtons
+                className={styles.headerPagination}
+                page={page}
+                pageCount={pageCount}
+                onPageChange={onPageChange}
+            />
             <div className={styles.body}>
                 <Table onKeyDown={onTableKeyDown} {...tableTabsterAttribute}>
                     <TableHeader>
@@ -91,7 +103,7 @@ const ProblemListPage: React.FC = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {problemBasicDetails.map((problem) => (
+                        {problemList.map((problem) => (
                             <TableRow key={problem.id}>
                                 <TableCell>{problem.displayId}</TableCell>
                                 <TableCell>
@@ -120,24 +132,44 @@ const ProblemListPage: React.FC = () => {
                     </TableBody>
                 </Table>
             </div>
-            <div className={styles.footer}></div>
+            <PaginationButtons
+                className={styles.footerPagination}
+                page={page}
+                pageCount={pageCount}
+                onPageChange={onPageChange}
+            />
         </div>
     );
 };
 
 const useStyles = makeStyles({
     root: {
-        ...flex(),
+        ...flex({
+            flexDirection: "column",
+        }),
         width: "100%",
         boxSizing: "border-box",
     },
     header: {},
+    headerPagination: {
+        ...flex({
+            flexDirection: "column",
+            alignItems: "center",
+        }),
+        marginBottom: "20px",
+    },
     body: {
         padding: "20px",
         boxShadow: tokens.shadow2Brand,
         borderRadius: tokens.borderRadiusSmall,
     },
-    footer: {},
+    footerPagination: {
+        ...flex({
+            flexDirection: "column",
+            alignItems: "center",
+        }),
+        marginTop: "20px",
+    },
     tableIdCol: {
         width: "60px",
     },
@@ -183,11 +215,11 @@ export const Route = createFileRoute("/problem/")({
         context: { queryClient, store },
         deps: { page, order, sortBy, queryTags, keyword, keywordMatchesId },
     }) => {
-        const { problem: paginationCount } = getPagination(store.getState());
+        const { problem: takeCount } = getPagination(store.getState());
 
         const { data } = await queryClient.ensureQueryData(
             queryOptions({
-                ...calcCount(page, paginationCount),
+                ...calcCount(page, takeCount),
                 sortBy,
                 order,
                 queryTags,
@@ -196,6 +228,9 @@ export const Route = createFileRoute("/problem/")({
             }),
         );
 
-        return data;
+        return {
+            problemList: data.problemBasicDetails,
+            pageCount: calcPageCount(data.count, takeCount),
+        };
     },
 });

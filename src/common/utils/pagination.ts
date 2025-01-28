@@ -1,7 +1,7 @@
-export function calcCount(page: number, paginationCount: number) {
+export function calcCount(page: number, takeCount: number) {
     return {
-        skipCount: (page - 1) * paginationCount,
-        takeCount: paginationCount,
+        skipCount: (page - 1) * takeCount,
+        takeCount,
     };
 }
 
