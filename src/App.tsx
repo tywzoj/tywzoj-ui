@@ -2,8 +2,8 @@ import { FluentProvider } from "@fluentui/react-components";
 import { QueryClientProvider } from "@tanstack/react-query";
 
 import { RecaptchaProvider } from "@/common/providers/RecaptchaProvider";
-import { queryClient } from "@/query/client";
 import { useIsRtl } from "@/locales/hooks";
+import { queryClient } from "@/query/client";
 import { AppRouterProvider } from "@/router/AppRouterProvider";
 import { getFluentTheme } from "@/theme/fluent";
 import { useTheme } from "@/theme/hooks";
