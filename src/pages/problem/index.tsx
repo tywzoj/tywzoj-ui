@@ -65,7 +65,11 @@ const ProblemListPage: React.FC = () => {
 
     return (
         <div className={styles.root}>
-            <div className={styles.header}></div>
+            <div className={styles.header}>
+                {/* TODO: Search box */}
+                {/* TODO: Show tag switch */}
+                {/* TODO: Tag filter */}
+            </div>
             <PaginationButtons
                 className={styles.headerPagination}
                 page={page}
