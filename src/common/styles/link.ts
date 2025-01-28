@@ -11,3 +11,15 @@ export const commonLinkStyles = {
         color: tokens.colorBrandForegroundLinkPressed,
     },
 };
+
+export const noUnderlineLinkStyles = {
+    color: tokens.colorBrandForegroundLink,
+    textDecoration: "none",
+    ":hover": {
+        color: tokens.colorBrandForegroundLinkHover,
+        textDecoration: "none",
+    },
+    ":active": {
+        color: tokens.colorBrandForegroundLinkPressed,
+    },
+};

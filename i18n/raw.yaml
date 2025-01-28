@@ -134,6 +134,10 @@
   value: Forgot Password
   description: A string for the label of forgot password navigation.
 
+- name: NAVIGATION_SUBMISSIONS
+  value: Submissions
+  description: A string for the label of submissions navigation.
+
 - name: SITE_ICON_IMAGE_ALT
   value: "TYWZOJ's icon."
   description: A string for the alt text of site icon image.
@@ -192,6 +196,26 @@
 - name: PASSWORD_CONFIRM_LABEL
   value: Confirm Password
   description: A string for the label of password confirm input.
+
+- name: TITLE_LABEL
+  value: Title
+  description: A string for the label of title input.
+
+- name: ID_LABEL
+  value: ID
+  description: A string for the label of ID input.
+
+- name: VISIBILITY_LABEL
+  value: Visibility
+  description: A string for the label of visibility input.
+
+- name: DESCRIPTION_LABEL
+  value: Description
+  description: A string for the label of description input.
+
+- name: TAGS_LABEL
+  value: Tags
+  description: A string for the label of tags input.
 
 - name: VALIDATION_ERROR_USERNAME_EMAIL_EMPTY
   value: Username or email cannot be empty.

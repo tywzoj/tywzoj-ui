@@ -168,6 +168,11 @@
   description: A string for the label of forgot password navigation.
   raw: Forgot Password
 
+- name: NAVIGATION_SUBMISSIONS
+  value: Submissions
+  description: A string for the label of submissions navigation.
+  raw: Submissions
+
 - name: SITE_ICON_IMAGE_ALT
   value: TYWZOJ's icon.
   description: A string for the alt text of site icon image.
@@ -245,6 +250,31 @@
   value: Confirm Password
   description: A string for the label of password confirm input.
   raw: Confirm Password
+
+- name: TITLE_LABEL
+  value: Title
+  description: A string for the label of title input.
+  raw: Title
+
+- name: ID_LABEL
+  value: ID
+  description: A string for the label of ID input.
+  raw: ID
+
+- name: VISIBILITY_LABEL
+  value: Visibility
+  description: A string for the label of visibility input.
+  raw: Visibility
+
+- name: DESCRIPTION_LABEL
+  value: Description
+  description: A string for the label of description input.
+  raw: Description
+
+- name: TAGS_LABEL
+  value: Tags
+  description: A string for the label of tags input.
+  raw: Tags
 
 - name: VALIDATION_ERROR_USERNAME_EMAIL_EMPTY
   value: Username or email cannot be empty.

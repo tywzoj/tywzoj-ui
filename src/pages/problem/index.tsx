@@ -15,11 +15,14 @@ import type React from "react";
 import { z } from "zod";
 
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
+import { useTableSortAttributes } from "@/common/hooks/table-sort";
 import { flex } from "@/common/styles/flex";
+import { noUnderlineLinkStyles } from "@/common/styles/link";
 import { calcCount } from "@/common/utils/pagination";
 import { percent } from "@/common/utils/percent";
 import { Z_ORDER, Z_PROBLEM_SORT_BY } from "@/common/validators/zod";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
+import { LinkWithRouter } from "@/components/LinkWithRouter";
 import { VisibilityLabel } from "@/components/VisibilityLable";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
@@ -34,25 +37,25 @@ import { getPagination } from "@/store/selectors";
 
 const ProblemListPage: React.FC = () => {
     const { problemBasicDetails } = Route.useLoaderData();
+    const { sortBy, order } = Route.useLoaderDeps();
     const isMiddleScreen = useIsMiddleScreen();
     const navigate = Route.useNavigate();
 
     const ls = useLocalizedStrings({
         title: CE_Strings.NAVIGATION_PROBLEMS,
+        colTitle: CE_Strings.TITLE_LABEL,
+        colVisibility: CE_Strings.VISIBILITY_LABEL,
+        colSubmission: CE_Strings.NAVIGATION_SUBMISSIONS,
+        colId: CE_Strings.ID_LABEL,
     });
 
     useSetPageTitle(ls.title);
-
     const styles = useStyles();
-
-    const navigateToProblem = (displayId: number) => {
-        navigate({
-            to: "/problem/$displayId",
-            params: { displayId: `${displayId}` },
-        });
-    };
-
     const { tableTabsterAttribute, onTableKeyDown } = useTableCompositeNavigation();
+
+    const tableSortAttributes = useTableSortAttributes(order, sortBy, (order, sortBy) =>
+        navigate({ search: { o: order, s: sortBy } }),
+    );
 
     return (
         <div className={styles.root}>
@@ -61,12 +64,27 @@ const ProblemListPage: React.FC = () => {
                 <Table onKeyDown={onTableKeyDown} {...tableTabsterAttribute}>
                     <TableHeader>
                         <TableRow>
-                            <TableHeaderCell className={styles.tableIdCol}>ID</TableHeaderCell>
-                            <TableHeaderCell>Title</TableHeaderCell>
-                            <TableHeaderCell className={styles.tableVisibleCol}>Visible</TableHeaderCell>
+                            <TableHeaderCell
+                                className={styles.tableIdCol}
+                                {...tableSortAttributes(CE_ProblemSortBy.DisplayId)}
+                            >
+                                {ls.colId}
+                            </TableHeaderCell>
+                            <TableHeaderCell
+                                className={styles.tableTitleCol}
+                                {...tableSortAttributes(CE_ProblemSortBy.Title)}
+                            >
+                                {ls.colTitle}
+                            </TableHeaderCell>
+                            <TableHeaderCell className={styles.tableVisibilityCol}>{ls.colVisibility}</TableHeaderCell>
                             {!isMiddleScreen && (
                                 <>
-                                    <TableHeaderCell className={styles.tableSubmissionCol}>Submission</TableHeaderCell>
+                                    <TableHeaderCell
+                                        className={styles.tableSubmissionCol}
+                                        {...tableSortAttributes(CE_ProblemSortBy.SubmissionCount)}
+                                    >
+                                        {ls.colSubmission}
+                                    </TableHeaderCell>
                                     <TableHeaderCell className={styles.tableAcceptanceCol}>Acceptance</TableHeaderCell>
                                 </>
                             )}
@@ -74,19 +92,18 @@ const ProblemListPage: React.FC = () => {
                     </TableHeader>
                     <TableBody>
                         {problemBasicDetails.map((problem) => (
-                            <TableRow
-                                key={problem.id}
-                                tabIndex={0}
-                                role="row"
-                                onClick={() => navigateToProblem(problem.displayId)}
-                                onKeyDown={(e: KeyboardEvent) => {
-                                    if (e.key === "Enter" || e.key === " ") {
-                                        navigateToProblem(problem.displayId);
-                                    }
-                                }}
-                            >
+                            <TableRow key={problem.id}>
                                 <TableCell>{problem.displayId}</TableCell>
-                                <TableCell>{problem.title}</TableCell>
+                                <TableCell>
+                                    <LinkWithRouter
+                                        className={styles.problemLink}
+                                        tabIndex={0}
+                                        to="/problem/$displayId"
+                                        params={{ displayId: `${problem.displayId}` }}
+                                    >
+                                        {problem.title}
+                                    </LinkWithRouter>
+                                </TableCell>
                                 <TableCell>
                                     <VisibilityLabel visibility={problem.visibility} />
                                 </TableCell>
@@ -124,7 +141,8 @@ const useStyles = makeStyles({
     tableIdCol: {
         width: "60px",
     },
-    tableVisibleCol: {
+    tableTitleCol: {},
+    tableVisibilityCol: {
         width: "80px",
     },
     tableSubmissionCol: {
@@ -132,6 +150,9 @@ const useStyles = makeStyles({
     },
     tableAcceptanceCol: {
         width: "100px",
+    },
+    problemLink: {
+        ...noUnderlineLinkStyles,
     },
 });
 
