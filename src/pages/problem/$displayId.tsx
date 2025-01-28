@@ -22,7 +22,7 @@ export const Route = createFileRoute("/problem/$displayId")({
     component: ProblemDetailPage,
     errorComponent: ErrorPageLazy,
     loader: async ({ context: { queryClient }, params: { displayId } }) => {
-        const { data } = await queryClient.fetchQuery(
+        const { data } = await queryClient.ensureQueryData(
             queryOptions(displayId, {
                 queryTags: false,
             }),
