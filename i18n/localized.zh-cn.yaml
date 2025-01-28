@@ -397,3 +397,43 @@
   value: 私有
   description: A string for the visibility of private.
   raw: Private
+
+- name: USER_LEVEL_LABEL
+  value: 用户等级
+  description: A string for the label of user level.
+  raw: Level
+
+- name: USER_LEVEL_LABEL_ADMIN
+  value: 高级管理
+  description: A string for the label of admin user level.
+  raw: Admin
+
+- name: USER_LEVEL_LABEL_MANAGER
+  value: 管理
+  description: A string for the label of manager user level.
+  raw: Manager
+
+- name: USER_LEVEL_LABEL_INTERNAL
+  value: 内部
+  description: A string for the label of internal user level.
+  raw: Internal
+
+- name: USER_LEVEL_LABEL_PAID
+  value: 付费
+  description: A string for the label of paid user level.
+  raw: Paid
+
+- name: USER_LEVEL_LABEL_GENERAL
+  value: 普通
+  description: A string for the label of general user level.
+  raw: General
+
+- name: USER_LEVEL_LABEL_SPECIFIC
+  value: 特定
+  description: A string for the label of specific user level.
+  raw: Specific
+
+- name: USER_LEVEL_LABEL_DISABLED
+  value: 禁用
+  description: A string for the label of disabled user level.
+  raw: Disabled

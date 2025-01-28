@@ -13,7 +13,7 @@ const ProblemDetailPage: React.FC = () => {
 
     useSetPageTitle(`#${problem.displayId}.${problem.title}`);
 
-    return null;
+    return <div>{problem.title}</div>;
 };
 
 const queryOptions = createQueryOptions(CE_QueryId.ProblemDetail, withThrowErrors(ProblemModule.getProblemDetailAsync));

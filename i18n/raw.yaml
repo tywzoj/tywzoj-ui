@@ -312,3 +312,35 @@
 - name: VISIBILITY_LABEL_PRIVATE
   value: Private
   description: A string for the visibility of private.
+
+- name: USER_LEVEL_LABEL
+  value: Level
+  description: A string for the label of user level.
+
+- name: USER_LEVEL_LABEL_ADMIN
+  value: Admin
+  description: A string for the label of admin user level.
+
+- name: USER_LEVEL_LABEL_MANAGER
+  value: Manager
+  description: A string for the label of manager user level.
+
+- name: USER_LEVEL_LABEL_INTERNAL
+  value: Internal
+  description: A string for the label of internal user level.
+
+- name: USER_LEVEL_LABEL_PAID
+  value: Paid
+  description: A string for the label of paid user level.
+
+- name: USER_LEVEL_LABEL_GENERAL
+  value: General
+  description: A string for the label of general user level.
+
+- name: USER_LEVEL_LABEL_SPECIFIC
+  value: Specific
+  description: A string for the label of specific user level.
+
+- name: USER_LEVEL_LABEL_DISABLED
+  value: Disabled
+  description: A string for the label of disabled user level.
