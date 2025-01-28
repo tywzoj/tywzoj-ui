@@ -217,6 +217,34 @@
   value: Tags
   description: A string for the label of tags input.
 
+- name: PREVIOUS_PAGE_TOOLTIP
+  value: Previous
+  description: A string for the label of previous page button.
+
+- name: PREVIOUS_PAGE_ARIA_LABEL
+  value: Go to the previous page.
+  description: A string for the label of previous page button.
+
+- name: NEXT_PAGE_TOOLTIP
+  value: Next
+  description: A string for the label of next page button.
+
+- name: NEXT_PAGE_ARIA_LABEL
+  value: Go to the next page.
+  description: A string for the label of next page button.
+
+- name: PAGE_BUTTON_ARIA_LABEL
+  value: Go to page {0}.
+  description: A string for the label of page number. {0} is the page number.
+
+- name: FIRST_PAGE_BUTTON_ARIA_LABEL
+  value: Go to the first page.
+  description: A string for the label of first page button.
+
+- name: LAST_PAGE_BUTTON_ARIA_LABEL
+  value: Go to the last page. The last page is {0}.
+  description: A string for the label of last page button.
+
 - name: VALIDATION_ERROR_USERNAME_EMAIL_EMPTY
   value: Username or email cannot be empty.
   description: A string for the error message when username or email is empty.

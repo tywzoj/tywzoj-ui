@@ -252,29 +252,64 @@
   raw: Confirm Password
 
 - name: TITLE_LABEL
-  value: null
+  value: 标题
   description: A string for the label of title input.
   raw: Title
 
 - name: ID_LABEL
-  value: null
+  value: ID
   description: A string for the label of ID input.
   raw: ID
 
 - name: VISIBILITY_LABEL
-  value: null
+  value: 可见度
   description: A string for the label of visibility input.
   raw: Visibility
 
 - name: DESCRIPTION_LABEL
-  value: null
+  value: 描述
   description: A string for the label of description input.
   raw: Description
 
 - name: TAGS_LABEL
-  value: null
+  value: 标签
   description: A string for the label of tags input.
   raw: Tags
+
+- name: PREVIOUS_PAGE_TOOLTIP
+  value: 上一页
+  description: A string for the label of previous page button.
+  raw: Previous
+
+- name: PREVIOUS_PAGE_ARIA_LABEL
+  value: 前往上一页。
+  description: A string for the label of previous page button.
+  raw: Go to the previous page.
+
+- name: NEXT_PAGE_TOOLTIP
+  value: 下一页
+  description: A string for the label of next page button.
+  raw: Next
+
+- name: NEXT_PAGE_ARIA_LABEL
+  value: 前往下一页。
+  description: A string for the label of next page button.
+  raw: Go to the next page.
+
+- name: PAGE_BUTTON_ARIA_LABEL
+  value: 前往第 {0} 页。
+  description: A string for the label of page number. {0} is the page number.
+  raw: Go to page {0}.
+
+- name: FIRST_PAGE_BUTTON_ARIA_LABEL
+  value: 前往第一页。
+  description: A string for the label of first page button.
+  raw: Go to the first page.
+
+- name: LAST_PAGE_BUTTON_ARIA_LABEL
+  value: 前往最后一页。最后一页是 {0}。
+  description: A string for the label of last page button.
+  raw: Go to the last page. The last page is {0}.
 
 - name: VALIDATION_ERROR_USERNAME_EMAIL_EMPTY
   value: 用户名或邮箱不能为空。

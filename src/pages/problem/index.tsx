@@ -69,7 +69,7 @@ const ProblemListPage: React.FC = () => {
             <PaginationButtons
                 className={styles.headerPagination}
                 page={page}
-                pageCount={pageCount}
+                pageCount={pageCount && 999}
                 onPageChange={onPageChange}
             />
             <div className={styles.body}>
