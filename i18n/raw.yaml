@@ -392,3 +392,11 @@
 - name: PROBLEM_TAGS_LABEL
   value: Tags
   description: A string for the label of problem tags.
+
+- name: SHOW_TAGS_LABEL
+  value: Show problem tags
+  description: A string for the label of show tags button.
+
+- name: HIDE_TAGS_LABEL
+  value: Hide problem tags
+  description: A string for the label of hide tags button.

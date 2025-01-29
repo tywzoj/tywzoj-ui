@@ -469,31 +469,41 @@
   raw: Limit and Hint
 
 - name: PROBLEM_SAMPLES_LABEL
-  value: null
+  value: 样例
   description: A string for the label of problem samples.
   raw: Samples
 
 - name: PROBLEM_SAMPLE_ITEM_LABEL
-  value: null
+  value: 样例 {0}
   description: A string for the label of problem sample item. {0} is the sample number.
   raw: Sample {0}
 
 - name: PROBLEM_SAMPLE_INPUT_LABEL
-  value: null
+  value: 输入样例
   description: A string for the label of problem sample input.
   raw: Input
 
 - name: PROBLEM_SAMPLE_OUTPUT_LABEL
-  value: null
+  value: 输出样例
   description: A string for the label of problem sample output.
   raw: Output
 
 - name: PROBLEM_SAMPLE_EXPLANATION_LABEL
-  value: null
+  value: 样例解释
   description: A string for the label of problem sample explanation.
   raw: Explanation
 
 - name: PROBLEM_TAGS_LABEL
-  value: null
+  value: 标签
   description: A string for the label of problem tags.
   raw: Tags
+
+- name: SHOW_TAGS_LABEL
+  value: 显示题目标签
+  description: A string for the label of show tags button.
+  raw: Show problem tags
+
+- name: HIDE_TAGS_LABEL
+  value: 隐藏题目标签
+  description: A string for the label of hide tags button.
+  raw: Hide problem tags

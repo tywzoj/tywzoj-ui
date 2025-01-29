@@ -497,3 +497,13 @@
   value: Tags
   description: A string for the label of problem tags.
   raw: Tags
+
+- name: SHOW_TAGS_LABEL
+  value: Show problem tags
+  description: A string for the label of show tags button.
+  raw: Show problem tags
+
+- name: HIDE_TAGS_LABEL
+  value: Hide problem tags
+  description: A string for the label of hide tags button.
+  raw: Hide problem tags
