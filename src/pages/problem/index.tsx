@@ -24,7 +24,8 @@ import { Z_ORDER, Z_PROBLEM_SORT_BY } from "@/common/validators/zod";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { LinkWithRouter } from "@/components/LinkWithRouter";
 import { PaginationButtons } from "@/components/PaginationButtons";
-import { VisibilityLabel } from "@/components/VisibilityLable";
+import { ProblemTag } from "@/components/ProblemTag";
+import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { CE_QueryId } from "@/query/id";
@@ -34,7 +35,7 @@ import { CE_Order } from "@/server/common/types";
 import { CE_ProblemSortBy } from "@/server/modules/problem.types";
 import { withThrowErrors } from "@/server/utils";
 import { useIsMiddleScreen } from "@/store/hooks";
-import { getPagination } from "@/store/selectors";
+import { getPagination, getPreference } from "@/store/selectors";
 
 const ProblemListPage: React.FC = () => {
     const { problemList, pageCount } = Route.useLoaderData();
@@ -110,7 +111,7 @@ const ProblemListPage: React.FC = () => {
                         {problemList.map((problem) => (
                             <TableRow key={problem.id}>
                                 <TableCell>{problem.displayId}</TableCell>
-                                <TableCell>
+                                <TableCell className={styles.problemTitleWithTags}>
                                     <LinkWithRouter
                                         className={styles.problemLink}
                                         tabIndex={0}
@@ -120,6 +121,13 @@ const ProblemListPage: React.FC = () => {
                                     >
                                         {problem.title}
                                     </LinkWithRouter>
+                                    {problem.tags.length > 0 && (
+                                        <div className={styles.problemTags}>
+                                            {problem.tags.map((tag) => (
+                                                <ProblemTag key={tag.id} name={tag.name} color={tag.color} smallSize />
+                                            ))}
+                                        </div>
+                                    )}
                                 </TableCell>
                                 <TableCell>
                                     <VisibilityLabel visibility={problem.visibility} />
@@ -191,13 +199,30 @@ const useStyles = makeStyles({
     problemLink: {
         ...noUnderlineLinkStyles,
     },
+    problemTitleWithTags: {
+        ...flex({
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+        }),
+        padding: "12px 0",
+        gap: "8px",
+        height: "max-content",
+    },
+    problemTags: {
+        ...flex({
+            flexDirection: "row",
+            flexWrap: "wrap",
+            alignItems: "center",
+        }),
+        gap: "4px",
+    },
 });
 
 const searchParams = z.object({
     p: fallback(z.number().positive(), 1).default(1), // page
     o: fallback(Z_ORDER, CE_Order.ASC).default(CE_Order.ASC), // order
     s: fallback(Z_PROBLEM_SORT_BY, CE_ProblemSortBy.DisplayId).default(CE_ProblemSortBy.DisplayId), // sortBy
-    t: fallback(z.boolean(), false).optional(), // showTags
     k: z.any().optional(), // keyword
     km: fallback(z.boolean(), false).optional(), // keywordMatchesId
 });
@@ -208,26 +233,23 @@ export const Route = createFileRoute("/problem/")({
     component: ProblemListPage,
     errorComponent: ErrorPageLazy,
     validateSearch: zodValidator(searchParams),
-    loaderDeps: ({ search: { p, o, s, t, k, km } }) => ({
+    loaderDeps: ({ search: { p, o, s, k, km } }) => ({
         page: p,
         order: o,
         sortBy: s,
-        queryTags: t,
         keyword: k,
         keywordMatchesId: km,
     }),
-    loader: async ({
-        context: { queryClient, store },
-        deps: { page, order, sortBy, queryTags, keyword, keywordMatchesId },
-    }) => {
+    loader: async ({ context: { queryClient, store }, deps: { page, order, sortBy, keyword, keywordMatchesId } }) => {
         const { problem: takeCount } = getPagination(store.getState());
+        const { showTagsOnProblemList } = getPreference(store.getState());
 
         const { data } = await queryClient.ensureQueryData(
             queryOptions({
                 ...calcCount(page, takeCount),
                 sortBy,
                 order,
-                queryTags,
+                queryTags: showTagsOnProblemList,
                 keyword,
                 keywordMatchesId,
             }),

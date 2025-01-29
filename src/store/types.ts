@@ -1,6 +1,5 @@
 import type { ILocaleState } from "@/locales/types";
-import type { IUserDetail } from "@/server/modules/user.types";
-import type { ConfigTypes, PermissionTypes } from "@/server/types";
+import type { ConfigTypes, PermissionTypes, UserTypes } from "@/server/types";
 import type { CE_Theme } from "@/theme/types";
 
 import type { store } from "./store";
@@ -23,10 +22,11 @@ export interface IEnvState {
 }
 
 export interface IAuthState {
-    user: IUserDetail | null;
+    user: UserTypes.IUserDetail | null;
     token: string | null;
 }
 
+export type IPreferenceState = Omit<UserTypes.IUserPreferenceDetail, "userId" | "preferTheme" | "preferLanguage">;
 export type IPermissionState = PermissionTypes.IPermission;
 export type IPaginationState = ConfigTypes.IPagination;
 export type IFeatureState = ConfigTypes.IFeature;
@@ -40,6 +40,8 @@ export interface IRootState {
     locale: ILocaleState;
 
     auth: IAuthState;
+    preference: IPreferenceState;
+
     permission: IPermissionState;
     pagination: IPaginationState;
     feature: IFeatureState;

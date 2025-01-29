@@ -11,6 +11,7 @@ import {
     setPageTitleAction,
     setPaginationAction,
     setPermissionAction,
+    setPreferenceAction,
 } from "./actions";
 import { initialState } from "./initial-state";
 import type { IRootState } from "./types";
@@ -37,6 +38,15 @@ export const reducer: Reducer<IRootState> = createReducer<IRootState>(initialSta
                 ...state,
                 locale: {
                     ...state.locale,
+                    ...action.payload,
+                },
+            };
+        })
+        .addCase(setPreferenceAction, (state, action) => {
+            return {
+                ...state,
+                preference: {
+                    ...state.preference,
                     ...action.payload,
                 },
             };
