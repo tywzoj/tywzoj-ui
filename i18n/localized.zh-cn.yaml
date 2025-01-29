@@ -43,6 +43,11 @@
   description: A string for the label of confirm button.
   raw: Confirm
 
+- name: COMMON_SEARCH_BUTTON
+  value: 搜索
+  description: A string for the label of search button.
+  raw: Search
+
 - name: COMMON_ERROR_TITLE
   value: 错误
   description: A string for the title of error message.
@@ -124,37 +129,37 @@
   raw: You send email verification code too frequently. Please try again later.
 
 - name: ERROR_2100_NO_SUCH_USER
-  value: null
+  value: 无此用户。
   description: A string for the error message when no such user.
   raw: No such user.
 
 - name: ERROR_2200_NO_SUCH_PROBLEM
-  value: null
+  value: 无此题目。
   description: A string for the error message when no such problem.
   raw: No such problem.
 
 - name: ERROR_2201_INVALID_FILE_UPLOAD_TOKEN
-  value: null
+  value: 无效的文件上传令牌。
   description: A string for the error message when the file upload token is invalid.
   raw: Invalid file upload token.
 
 - name: ERROR_2203_TOO_MANY_FILE_UPLOAD_REQUEST
-  value: null
+  value: 您请求了太多文件上传。请稍后再试。
   description: A string for the error message when too many file upload requests.
   raw: You requested too many file uploads. Please try again later.
 
 - name: ERROR_2204_TOO_LARGE_UPLOAD_FILE
-  value: null
+  value: 文件太大。请上传一个较小的文件。
   description: A string for the error message when the file is too large.
   raw: The file is too large. Please upload a smaller file.
 
 - name: ERROR_2205_FILE_LIMIT_EXCEEDED
-  value: null
+  value: 您上传了太多文件。请删除一些文件后重试。
   description: A string for the error message when the file limit is exceeded.
   raw: You uploaded too many files. Please delete some files and try again.
 
 - name: ERROR_2206_NO_SUCH_PROBLEM_FILE
-  value: null
+  value: 无此题目文件。
   description: A string for the error message when no such problem file.
   raw: No such problem file.
 
@@ -204,7 +209,7 @@
   raw: Forgot Password
 
 - name: NAVIGATION_SUBMISSIONS
-  value: null
+  value: 提交记录
   description: A string for the label of submissions navigation.
   raw: Submissions
 
@@ -437,3 +442,8 @@
   value: 禁用
   description: A string for the label of disabled user level.
   raw: Disabled
+
+- name: PROBLEM_SEARCH_PLACEHOLDER
+  value: 输入题目 ID 或关键字以搜索题目
+  description: A string for the placeholder of problem search input.
+  raw: Keyword or ID

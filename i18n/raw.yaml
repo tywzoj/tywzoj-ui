@@ -34,6 +34,10 @@
   value: Confirm
   description: A string for the label of confirm button.
 
+- name: COMMON_SEARCH_BUTTON
+  value: Search
+  description: A string for the label of search button.
+
 - name: COMMON_ERROR_TITLE
   value: Error
   description: A string for the title of error message.
@@ -344,3 +348,7 @@
 - name: USER_LEVEL_LABEL_DISABLED
   value: Disabled
   description: A string for the label of disabled user level.
+
+- name: PROBLEM_SEARCH_PLACEHOLDER
+  value: Keyword or ID
+  description: A string for the placeholder of problem search input.
