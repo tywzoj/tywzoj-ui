@@ -68,8 +68,10 @@ const ProblemListPage: React.FC = () => {
 
     const { tableTabsterAttribute, onTableKeyDown } = useTableCompositeNavigation();
 
-    const tableSortAttributes = useTableSortAttributes(order, sortBy, (order, sortBy) =>
-        navigate({ search: { ...search, o: order, s: sortBy } }),
+    const tableSortAttributes = useTableSortAttributes(
+        order,
+        sortBy,
+        (order, sortBy) => navigate({ search: { ...search, o: order, s: sortBy } }) /* onSortChange */,
     );
 
     const onPageChange = (page: number) => navigate({ search: { ...search, p: page } });
@@ -153,7 +155,7 @@ const ProblemListPage: React.FC = () => {
                                     {problem.tags.length > 0 && (
                                         <div className={styles.problemTags}>
                                             {problem.tags.map((tag) => (
-                                                <ProblemTag key={tag.id} name={tag.name} color={tag.color} smallSize />
+                                                <ProblemTag key={tag.id} name={tag.name} color={tag.color} />
                                             ))}
                                         </div>
                                     )}

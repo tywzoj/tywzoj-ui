@@ -352,3 +352,19 @@
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: Keyword or ID
   description: A string for the placeholder of problem search input.
+
+- name: PROBLEM_DESCRIPTION_LABEL
+  value: Description
+  description: A string for the label of problem description.
+
+- name: PROBLEM_INPUT_FORMAT_LABEL
+  value: Input Format
+  description: A string for the label of problem input format.
+
+- name: PROBLEM_OUTPUT_FORMAT_LABEL
+  value: Output Format
+  description: A string for the label of problem output format.
+
+- name: PROBLEM_LIMIT_AND_HINT_LABEL
+  value: Limit and Hint
+  description: A string for the label of problem limit and hint.

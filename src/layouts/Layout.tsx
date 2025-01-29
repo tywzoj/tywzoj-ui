@@ -103,7 +103,12 @@ export const Layout: React.FC = () => {
 
     return (
         <div className={styles.root}>
-            <NavDrawer open={isNavDrawerOpen} type={isOverlay ? "overlay" : "inline"} selectedValue={ACTIVE_ITEM_TAG}>
+            <NavDrawer
+                className={styles.nav}
+                open={isNavDrawerOpen}
+                type={isOverlay ? "overlay" : "inline"}
+                selectedValue={ACTIVE_ITEM_TAG}
+            >
                 <NavDrawerHeader>{hamburger}</NavDrawerHeader>
                 <NavDrawerBody>
                     {createNavItem("/", ls.homePage, <Home20Filled />)}
@@ -153,15 +158,21 @@ export const Layout: React.FC = () => {
 const useStyles = makeStyles({
     root: {
         ...flex({ flexDirection: "row" }),
-        width: "100%",
+        width: "100vw",
         height: "100%",
         minWidth: "360px",
+        maxWidth: "100%",
         overflowY: "auto",
+    },
+    nav: {
+        flex: "0 1 180px",
+        minWidth: "180px",
     },
     container: {
         ...flex({ flexDirection: "column" }),
-        width: "100%",
         height: "100%",
+        flex: 1,
+        minWidth: "0",
         boxSizing: "border-box",
     },
     header: {
@@ -205,6 +216,7 @@ const useStyles = makeStyles({
             alignItems: "center",
         }),
         width: "100%",
+        maxWidth: "100%",
         height: "100%",
         boxSizing: "border-box",
         overflow: "auto",
