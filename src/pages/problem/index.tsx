@@ -45,7 +45,12 @@ const ProblemListPage: React.FC = () => {
     const isMiddleScreen = useIsMiddleScreen();
     const navigate = Route.useNavigate();
     const search = Route.useSearch();
-    const [searchBoxValue, setSearchBoxValue] = React.useState(keyword ?? "");
+    const [searchBoxValue, setSearchBoxValue] = React.useState("");
+
+    React.useEffect(() => {
+        // Update search box value when search param keyword changes
+        setSearchBoxValue(keyword ?? "");
+    }, [keyword]);
 
     const ls = useLocalizedStrings({
         title: CE_Strings.NAVIGATION_PROBLEMS,
@@ -58,7 +63,9 @@ const ProblemListPage: React.FC = () => {
     });
 
     useSetPageTitle(ls.title);
+
     const styles = useStyles();
+
     const { tableTabsterAttribute, onTableKeyDown } = useTableCompositeNavigation();
 
     const tableSortAttributes = useTableSortAttributes(order, sortBy, (order, sortBy) =>
@@ -276,7 +283,7 @@ export const Route = createFileRoute("/problem/")({
         sortBy: s,
         keyword: k,
     }),
-    loader: async ({ context: { queryClient, store }, deps: { page, order, sortBy, keyword, keywordMatchesId } }) => {
+    loader: async ({ context: { queryClient, store }, deps: { page, order, sortBy, keyword } }) => {
         const { problem: takeCount } = getPagination(store.getState());
         const { showTagsOnProblemList } = getPreference(store.getState());
 
