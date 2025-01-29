@@ -34,6 +34,10 @@
   value: Confirm
   description: A string for the label of confirm button.
 
+- name: COMMON_SEARCH_BUTTON
+  value: Search
+  description: A string for the label of search button.
+
 - name: COMMON_ERROR_TITLE
   value: Error
   description: A string for the title of error message.
@@ -97,6 +101,34 @@
 - name: ERROR_2006_EMAIL_VERIFICATION_CODE_RATE_LIMITED
   value: You send email verification code too frequently. Please try again later.
   description: A string for the error message when email verification code is rate limited.
+
+- name: ERROR_2100_NO_SUCH_USER
+  value: No such user.
+  description: A string for the error message when no such user.
+
+- name: ERROR_2200_NO_SUCH_PROBLEM
+  value: No such problem.
+  description: A string for the error message when no such problem.
+
+- name: ERROR_2201_INVALID_FILE_UPLOAD_TOKEN
+  value: Invalid file upload token.
+  description: A string for the error message when the file upload token is invalid.
+
+- name: ERROR_2203_TOO_MANY_FILE_UPLOAD_REQUEST
+  value: You requested too many file uploads. Please try again later.
+  description: A string for the error message when too many file upload requests.
+
+- name: ERROR_2204_TOO_LARGE_UPLOAD_FILE
+  value: The file is too large. Please upload a smaller file.
+  description: A string for the error message when the file is too large.
+
+- name: ERROR_2205_FILE_LIMIT_EXCEEDED
+  value: You uploaded too many files. Please delete some files and try again.
+  description: A string for the error message when the file limit is exceeded.
+
+- name: ERROR_2206_NO_SUCH_PROBLEM_FILE
+  value: No such problem file.
+  description: A string for the error message when no such problem file.
 
 - name: CUSTOM_ERROR_PAGE_NOT_FOUND
   value: Page not found.
@@ -284,3 +316,87 @@
 - name: VISIBILITY_LABEL_PRIVATE
   value: Private
   description: A string for the visibility of private.
+
+- name: USER_LEVEL_LABEL
+  value: Level
+  description: A string for the label of user level.
+
+- name: USER_LEVEL_LABEL_ADMIN
+  value: Admin
+  description: A string for the label of admin user level.
+
+- name: USER_LEVEL_LABEL_MANAGER
+  value: Manager
+  description: A string for the label of manager user level.
+
+- name: USER_LEVEL_LABEL_INTERNAL
+  value: Internal
+  description: A string for the label of internal user level.
+
+- name: USER_LEVEL_LABEL_PAID
+  value: Paid
+  description: A string for the label of paid user level.
+
+- name: USER_LEVEL_LABEL_GENERAL
+  value: General
+  description: A string for the label of general user level.
+
+- name: USER_LEVEL_LABEL_SPECIFIC
+  value: Specific
+  description: A string for the label of specific user level.
+
+- name: USER_LEVEL_LABEL_DISABLED
+  value: Disabled
+  description: A string for the label of disabled user level.
+
+- name: PROBLEM_SEARCH_PLACEHOLDER
+  value: Keyword or ID
+  description: A string for the placeholder of problem search input.
+
+- name: PROBLEM_DESCRIPTION_LABEL
+  value: Description
+  description: A string for the label of problem description.
+
+- name: PROBLEM_INPUT_FORMAT_LABEL
+  value: Input Format
+  description: A string for the label of problem input format.
+
+- name: PROBLEM_OUTPUT_FORMAT_LABEL
+  value: Output Format
+  description: A string for the label of problem output format.
+
+- name: PROBLEM_LIMIT_AND_HINT_LABEL
+  value: Limit and Hint
+  description: A string for the label of problem limit and hint.
+
+- name: PROBLEM_SAMPLES_LABEL
+  value: Samples
+  description: A string for the label of problem samples.
+
+- name: PROBLEM_SAMPLE_ITEM_LABEL
+  value: Sample {0}
+  description: A string for the label of problem sample item. {0} is the sample number.
+
+- name: PROBLEM_SAMPLE_INPUT_LABEL
+  value: Input
+  description: A string for the label of problem sample input.
+
+- name: PROBLEM_SAMPLE_OUTPUT_LABEL
+  value: Output
+  description: A string for the label of problem sample output.
+
+- name: PROBLEM_SAMPLE_EXPLANATION_LABEL
+  value: Explanation
+  description: A string for the label of problem sample explanation.
+
+- name: PROBLEM_TAGS_LABEL
+  value: Tags
+  description: A string for the label of problem tags.
+
+- name: SHOW_TAGS_LABEL
+  value: Show problem tags
+  description: A string for the label of show tags button.
+
+- name: HIDE_TAGS_LABEL
+  value: Hide problem tags
+  description: A string for the label of hide tags button.

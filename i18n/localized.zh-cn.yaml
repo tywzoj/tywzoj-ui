@@ -43,6 +43,11 @@
   description: A string for the label of confirm button.
   raw: Confirm
 
+- name: COMMON_SEARCH_BUTTON
+  value: 搜索
+  description: A string for the label of search button.
+  raw: Search
+
 - name: COMMON_ERROR_TITLE
   value: 错误
   description: A string for the title of error message.
@@ -123,6 +128,41 @@
   description: A string for the error message when email verification code is rate limited.
   raw: You send email verification code too frequently. Please try again later.
 
+- name: ERROR_2100_NO_SUCH_USER
+  value: 无此用户。
+  description: A string for the error message when no such user.
+  raw: No such user.
+
+- name: ERROR_2200_NO_SUCH_PROBLEM
+  value: 无此题目。
+  description: A string for the error message when no such problem.
+  raw: No such problem.
+
+- name: ERROR_2201_INVALID_FILE_UPLOAD_TOKEN
+  value: 无效的文件上传令牌。
+  description: A string for the error message when the file upload token is invalid.
+  raw: Invalid file upload token.
+
+- name: ERROR_2203_TOO_MANY_FILE_UPLOAD_REQUEST
+  value: 您请求了太多文件上传。请稍后再试。
+  description: A string for the error message when too many file upload requests.
+  raw: You requested too many file uploads. Please try again later.
+
+- name: ERROR_2204_TOO_LARGE_UPLOAD_FILE
+  value: 文件太大。请上传一个较小的文件。
+  description: A string for the error message when the file is too large.
+  raw: The file is too large. Please upload a smaller file.
+
+- name: ERROR_2205_FILE_LIMIT_EXCEEDED
+  value: 您上传了太多文件。请删除一些文件后重试。
+  description: A string for the error message when the file limit is exceeded.
+  raw: You uploaded too many files. Please delete some files and try again.
+
+- name: ERROR_2206_NO_SUCH_PROBLEM_FILE
+  value: 无此题目文件。
+  description: A string for the error message when no such problem file.
+  raw: No such problem file.
+
 - name: CUSTOM_ERROR_PAGE_NOT_FOUND
   value: 页面未找到。
   description: A string for the error message when the page is not found.
@@ -169,7 +209,7 @@
   raw: Forgot Password
 
 - name: NAVIGATION_SUBMISSIONS
-  value: null
+  value: 提交记录
   description: A string for the label of submissions navigation.
   raw: Submissions
 
@@ -362,3 +402,108 @@
   value: 私有
   description: A string for the visibility of private.
   raw: Private
+
+- name: USER_LEVEL_LABEL
+  value: 用户等级
+  description: A string for the label of user level.
+  raw: Level
+
+- name: USER_LEVEL_LABEL_ADMIN
+  value: 高级管理
+  description: A string for the label of admin user level.
+  raw: Admin
+
+- name: USER_LEVEL_LABEL_MANAGER
+  value: 管理
+  description: A string for the label of manager user level.
+  raw: Manager
+
+- name: USER_LEVEL_LABEL_INTERNAL
+  value: 内部
+  description: A string for the label of internal user level.
+  raw: Internal
+
+- name: USER_LEVEL_LABEL_PAID
+  value: 付费
+  description: A string for the label of paid user level.
+  raw: Paid
+
+- name: USER_LEVEL_LABEL_GENERAL
+  value: 普通
+  description: A string for the label of general user level.
+  raw: General
+
+- name: USER_LEVEL_LABEL_SPECIFIC
+  value: 特定
+  description: A string for the label of specific user level.
+  raw: Specific
+
+- name: USER_LEVEL_LABEL_DISABLED
+  value: 禁用
+  description: A string for the label of disabled user level.
+  raw: Disabled
+
+- name: PROBLEM_SEARCH_PLACEHOLDER
+  value: 输入题目 ID 或关键字以搜索题目
+  description: A string for the placeholder of problem search input.
+  raw: Keyword or ID
+
+- name: PROBLEM_DESCRIPTION_LABEL
+  value: 题目描述
+  description: A string for the label of problem description.
+  raw: Description
+
+- name: PROBLEM_INPUT_FORMAT_LABEL
+  value: 输入格式
+  description: A string for the label of problem input format.
+  raw: Input Format
+
+- name: PROBLEM_OUTPUT_FORMAT_LABEL
+  value: 输出格式
+  description: A string for the label of problem output format.
+  raw: Output Format
+
+- name: PROBLEM_LIMIT_AND_HINT_LABEL
+  value: 限制和提示
+  description: A string for the label of problem limit and hint.
+  raw: Limit and Hint
+
+- name: PROBLEM_SAMPLES_LABEL
+  value: 样例
+  description: A string for the label of problem samples.
+  raw: Samples
+
+- name: PROBLEM_SAMPLE_ITEM_LABEL
+  value: 样例 {0}
+  description: A string for the label of problem sample item. {0} is the sample number.
+  raw: Sample {0}
+
+- name: PROBLEM_SAMPLE_INPUT_LABEL
+  value: 输入样例
+  description: A string for the label of problem sample input.
+  raw: Input
+
+- name: PROBLEM_SAMPLE_OUTPUT_LABEL
+  value: 输出样例
+  description: A string for the label of problem sample output.
+  raw: Output
+
+- name: PROBLEM_SAMPLE_EXPLANATION_LABEL
+  value: 样例解释
+  description: A string for the label of problem sample explanation.
+  raw: Explanation
+
+- name: PROBLEM_TAGS_LABEL
+  value: 标签
+  description: A string for the label of problem tags.
+  raw: Tags
+
+- name: SHOW_TAGS_LABEL
+  value: 显示题目标签
+  description: A string for the label of show tags button.
+  raw: Show problem tags
+
+- name: HIDE_TAGS_LABEL
+  value: 隐藏题目标签
+  description: A string for the label of hide tags button.
+  raw: Hide problem tags

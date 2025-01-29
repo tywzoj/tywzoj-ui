@@ -12,8 +12,9 @@ import {
     setFeatureAction,
     setPaginationAction,
     setPermissionAction,
+    setPreferenceAction,
 } from "./store/actions";
-import type { IAppDispatch } from "./store/types";
+import type { IAppDispatch, IPreferenceState } from "./store/types";
 import { createAppAction } from "./store/utils";
 import { updateThemeAction } from "./theme/actions";
 
@@ -31,8 +32,18 @@ export const initAsyncAction = createAppAction(() => async (dispatch: IAppDispat
         dispatch(setPaginationAction(resp.data.clientConfig.pagination));
         dispatch(setPermissionAction(resp.data.permission));
         dispatch(setAuthAction({ user: resp.data.userDetail }));
-        dispatch(updateThemeAction(resp.data.userPreferenceDetail?.preferTheme || null));
-        await dispatch(updateLocaleAsyncAction(resp.data.userPreferenceDetail?.preferLanguage || null));
+        if (resp.data.userPreferenceDetail) {
+            const preference: IPreferenceState = {
+                showTagsOnProblemDetail: resp.data.userPreferenceDetail.showTagsOnProblemDetail,
+                showTagsOnProblemList: resp.data.userPreferenceDetail.showTagsOnProblemList,
+            };
+            dispatch(setPreferenceAction(preference));
+            dispatch(updateThemeAction(resp.data.userPreferenceDetail.preferTheme));
+            await dispatch(updateLocaleAsyncAction(resp.data.userPreferenceDetail.preferLanguage));
+        } else {
+            dispatch(updateThemeAction(null));
+            await dispatch(updateLocaleAsyncAction(null));
+        }
     } else {
         if (resp.data instanceof Error) {
             throw resp.data;

@@ -11,13 +11,13 @@ interface ITableSortAttributes {
 export const useTableSortAttributes = <T extends string>(
     order: CE_Order,
     sortBy: T,
-    onSortChanged: (order: CE_Order, sortBy: T) => void,
+    onSortChange: (order: CE_Order, sortBy: T) => void,
 ) => {
     return (column: T): ITableSortAttributes => {
         return {
             sortable: true,
             sortDirection: column === sortBy ? orderToDirection(order) : undefined,
-            onClick: () => onSortChanged(column === sortBy ? reverseOrder(order) : order, column),
+            onClick: () => onSortChange(column === sortBy ? reverseOrder(order) : order, column),
         };
     };
 };

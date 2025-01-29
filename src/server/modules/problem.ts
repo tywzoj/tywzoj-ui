@@ -19,7 +19,7 @@ export async function getProblemListAsync(query: IProblemListGetRequestQuery) {
     });
 }
 
-export async function getProblemDetailAsync(displayId: number, query: IProblemDetailGetRequestQuery) {
+export async function getProblemDetailAsync(displayId: number | string, query: IProblemDetailGetRequestQuery) {
     return await requestAsync<IProblemDetailGetResponse>({
         path: `problem/detail/${displayId}`,
         method: "GET",

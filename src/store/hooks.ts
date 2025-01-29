@@ -27,6 +27,7 @@ export const useToken = () => useAppSelector(Selectors.getToken);
 export const useApiEndPoint = () => useAppSelector(Selectors.getApiEndPoint);
 export const usePageTitle = () => useAppSelector(Selectors.getPageTitle);
 
+export const usePreference = () => useAppSelector(Selectors.getPreference);
 export const usePermission = () => useAppSelector(Selectors.getPermission);
 export const usePagination = () => useAppSelector(Selectors.getPagination);
 export const useFeature = () => useAppSelector(Selectors.getFeature);

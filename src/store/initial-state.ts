@@ -1,7 +1,7 @@
 import { getApiToken } from "@/common/utils/token";
 import { isAndroid, isChrome, isEdge, isFireFox, isIOS, isMobile, isSafari } from "@/common/utils/user-agent";
 import { isMiddleScreen, isMiniScreen, isSmallScreen } from "@/common/utils/window-width";
-import { CE_Locale } from "@/locales/types";
+import { defaultLanguage } from "@/locales/locale";
 import { CE_Theme } from "@/theme/types";
 
 import type { IFeatureState, IPaginationState, IPermissionState, IRootState } from "./types";
@@ -24,13 +24,17 @@ export const initialState: IRootState = {
         isMiniScreen: isMiniScreen(),
     },
     locale: {
-        lang: CE_Locale.en,
+        lang: defaultLanguage,
         isRtl: false,
         strings: {} as ILocalizedStrings, // Will be initialized later
     },
     auth: {
         user: null, // Will be initialized after called the API
         token: getApiToken(),
+    },
+    preference: {
+        showTagsOnProblemDetail: false,
+        showTagsOnProblemList: false,
     },
     permission: {} as IPermissionState, // Will be initialized after called the API
     pagination: {} as IPaginationState, // Will be initialized after called the API
