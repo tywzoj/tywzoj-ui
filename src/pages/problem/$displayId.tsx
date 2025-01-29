@@ -16,6 +16,7 @@ import type React from "react";
 
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
+import { format } from "@/common/utils/format";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
@@ -44,6 +45,8 @@ const ProblemDetailPage: React.FC = () => {
         inputFormat: CE_Strings.PROBLEM_INPUT_FORMAT_LABEL,
         outputFormat: CE_Strings.PROBLEM_OUTPUT_FORMAT_LABEL,
         limitAndHint: CE_Strings.PROBLEM_LIMIT_AND_HINT_LABEL,
+        samples: CE_Strings.PROBLEM_SAMPLES_LABEL,
+        tags: CE_Strings.PROBLEM_TAGS_LABEL,
     });
 
     useSetPageTitle(`#${problem.displayId}.${problem.title}`);
@@ -75,7 +78,7 @@ const ProblemDetailPage: React.FC = () => {
                     )}
 
                     {samples.length > 0 && (
-                        <ProblemCard title="Samples">
+                        <ProblemCard title={ls.samples}>
                             <div className={styles.sampleBoxContainer}>
                                 {samples.map((sample, index) => (
                                     <ProblemSampleBox
@@ -96,7 +99,7 @@ const ProblemDetailPage: React.FC = () => {
                 </div>
                 <div className={styles.rightColumn}>
                     <ProblemCard
-                        title="Tags"
+                        title={ls.tags}
                         action={
                             <ToggleButton
                                 appearance="transparent"
@@ -157,22 +160,29 @@ const ProblemSampleBox: React.FC<{
 }> = ({ index, input, output, explanation }) => {
     const styles = useStyles();
 
+    const ls = useLocalizedStrings({
+        sampleItem: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
+        sampleI: CE_Strings.PROBLEM_SAMPLE_INPUT_LABEL,
+        sampleO: CE_Strings.PROBLEM_SAMPLE_OUTPUT_LABEL,
+        sampleE: CE_Strings.PROBLEM_SAMPLE_EXPLANATION_LABEL,
+    });
+
     return (
         <div className={styles.sampleBox}>
             <Subtitle2 as="h3" className={styles.cardTitle}>
-                # {index}
+                {format(ls.sampleItem, index)}
             </Subtitle2>
             <div className={styles.sampleIO}>
                 <div>
                     <Body1Strong as="h4" className={styles.cardTitle}>
-                        Input
+                        {ls.sampleI}
                     </Body1Strong>
                     <div>{input}</div>
                 </div>
                 {output && (
                     <div>
                         <Body1Strong as="h4" className={styles.cardTitle}>
-                            Output
+                            {ls.sampleO}
                         </Body1Strong>
                         <div>{output}</div>
                     </div>
@@ -181,7 +191,7 @@ const ProblemSampleBox: React.FC<{
             {explanation && (
                 <div>
                     <Body1Strong as="h4" className={styles.cardTitle}>
-                        Explanation
+                        {ls.sampleE}
                     </Body1Strong>
                     <div>{explanation}</div>
                 </div>

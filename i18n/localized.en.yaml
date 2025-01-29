@@ -467,3 +467,33 @@
   value: Limit and Hint
   description: A string for the label of problem limit and hint.
   raw: Limit and Hint
+
+- name: PROBLEM_SAMPLES_LABEL
+  value: Samples
+  description: A string for the label of problem samples.
+  raw: Samples
+
+- name: PROBLEM_SAMPLE_ITEM_LABEL
+  value: Sample {0}
+  description: A string for the label of problem sample item. {0} is the sample number.
+  raw: Sample {0}
+
+- name: PROBLEM_SAMPLE_INPUT_LABEL
+  value: Input
+  description: A string for the label of problem sample input.
+  raw: Input
+
+- name: PROBLEM_SAMPLE_OUTPUT_LABEL
+  value: Output
+  description: A string for the label of problem sample output.
+  raw: Output
+
+- name: PROBLEM_SAMPLE_EXPLANATION_LABEL
+  value: Explanation
+  description: A string for the label of problem sample explanation.
+  raw: Explanation
+
+- name: PROBLEM_TAGS_LABEL
+  value: Tags
+  description: A string for the label of problem tags.
+  raw: Tags
