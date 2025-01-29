@@ -9,6 +9,7 @@ import {
     Text,
     Title3,
     ToggleButton,
+    Tooltip,
 } from "@fluentui/react-components";
 import { TagFilled, TagOff20Filled } from "@fluentui/react-icons";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
@@ -47,9 +48,20 @@ const ProblemDetailPage: React.FC = () => {
         limitAndHint: CE_Strings.PROBLEM_LIMIT_AND_HINT_LABEL,
         samples: CE_Strings.PROBLEM_SAMPLES_LABEL,
         tags: CE_Strings.PROBLEM_TAGS_LABEL,
+        showTags: CE_Strings.SHOW_TAGS_LABEL,
+        hideTags: CE_Strings.HIDE_TAGS_LABEL,
     });
 
     useSetPageTitle(`#${problem.displayId}.${problem.title}`);
+
+    // TODO: Add submission button
+    // TODO: Add manage button
+    // TODO: Add edit button
+    // TODO: Add delete button
+    // TODO: Add file button
+
+    // TODO: Markdown rendering
+    // TODO: Code highlighting
 
     return (
         <div className={styles.root}>
@@ -101,19 +113,21 @@ const ProblemDetailPage: React.FC = () => {
                     <ProblemCard
                         title={ls.tags}
                         action={
-                            <ToggleButton
-                                appearance="transparent"
-                                icon={showTagsOnProblemDetail ? <TagFilled /> : <TagOff20Filled />}
-                                checked={showTagsOnProblemDetail}
-                                onClick={() => {
-                                    dispatch(
-                                        setPreferenceAction({
-                                            showTagsOnProblemDetail: !showTagsOnProblemDetail,
-                                        }),
-                                    );
-                                    router.invalidate();
-                                }}
-                            />
+                            <Tooltip content={showTagsOnProblemDetail ? ls.hideTags : ls.showTags}>
+                                <ToggleButton
+                                    appearance="transparent"
+                                    icon={showTagsOnProblemDetail ? <TagFilled /> : <TagOff20Filled />}
+                                    checked={showTagsOnProblemDetail}
+                                    onClick={() => {
+                                        dispatch(
+                                            setPreferenceAction({
+                                                showTagsOnProblemDetail: !showTagsOnProblemDetail,
+                                            }),
+                                        );
+                                        router.invalidate();
+                                    }}
+                                />
+                            </Tooltip>
                         }
                     >
                         <div className={styles.tagContainer}>
