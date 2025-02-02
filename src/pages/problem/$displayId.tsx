@@ -4,16 +4,16 @@ import {
     CardHeader,
     makeStyles,
     mergeClasses,
+    Spinner,
     Subtitle1,
     Subtitle2,
-    Text,
     Title3,
     ToggleButton,
     Tooltip,
 } from "@fluentui/react-components";
-import { TagFilled, TagOff20Filled } from "@fluentui/react-icons";
+import { TagFilled, TagOffFilled } from "@fluentui/react-icons";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import type React from "react";
+import React from "react";
 
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
@@ -21,14 +21,16 @@ import { format } from "@/common/utils/format";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
+import { CodeBoxLazy } from "@/highlight/CodeBox.lazy";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
+import { MarkdownContentLazy } from "@/markdown/MarkdownContent.lazy";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptions } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
 import { withThrowErrors } from "@/server/utils";
 import { setPreferenceAction } from "@/store/actions";
-import { useAppDispatch, useAppSelector, useIsMiddleScreen } from "@/store/hooks";
+import { useAppDispatch, useAppSelector, useIsMiddleScreen, useIsSmallScreen } from "@/store/hooks";
 import { getPreference } from "@/store/selectors";
 
 const ProblemDetailPage: React.FC = () => {
@@ -76,15 +78,15 @@ const ProblemDetailPage: React.FC = () => {
                     {content && (
                         <>
                             <ProblemCard condition={content.description} title={ls.description}>
-                                <Text>{content.description}</Text>
+                                <ProblemContent content={content.description} />
                             </ProblemCard>
 
                             <ProblemCard condition={content.inputFormat} title={ls.inputFormat}>
-                                <Text>{content.inputFormat}</Text>
+                                <ProblemContent content={content.inputFormat} />
                             </ProblemCard>
 
                             <ProblemCard condition={content.outputFormat} title={ls.outputFormat}>
-                                <Text>{content.outputFormat}</Text>
+                                <ProblemContent content={content.outputFormat} />
                             </ProblemCard>
                         </>
                     )}
@@ -106,7 +108,7 @@ const ProblemDetailPage: React.FC = () => {
                     )}
 
                     <ProblemCard condition={content?.limitAndHint} title={ls.limitAndHint}>
-                        <Text>{content!.limitAndHint}</Text>
+                        <ProblemContent content={content!.limitAndHint} />
                     </ProblemCard>
                 </div>
                 <div className={styles.rightColumn}>
@@ -116,7 +118,7 @@ const ProblemDetailPage: React.FC = () => {
                             <Tooltip content={showTagsOnProblemDetail ? ls.hideTags : ls.showTags}>
                                 <ToggleButton
                                     appearance="transparent"
-                                    icon={showTagsOnProblemDetail ? <TagFilled /> : <TagOff20Filled />}
+                                    icon={showTagsOnProblemDetail ? <TagFilled /> : <TagOffFilled />}
                                     checked={showTagsOnProblemDetail}
                                     onClick={() => {
                                         dispatch(
@@ -174,6 +176,8 @@ const ProblemSampleBox: React.FC<{
 }> = ({ index, input, output, explanation }) => {
     const styles = useStyles();
 
+    const isSmallScreen = useIsSmallScreen();
+
     const ls = useLocalizedStrings({
         sampleItem: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
         sampleI: CE_Strings.PROBLEM_SAMPLE_INPUT_LABEL,
@@ -186,19 +190,25 @@ const ProblemSampleBox: React.FC<{
             <Subtitle2 as="h3" className={styles.cardTitle}>
                 {format(ls.sampleItem, index)}
             </Subtitle2>
-            <div className={styles.sampleIO}>
-                <div>
-                    <Body1Strong as="h4" className={styles.cardTitle}>
-                        {ls.sampleI}
-                    </Body1Strong>
-                    <div>{input}</div>
-                </div>
+            <div className={mergeClasses(styles.sampleIO, isSmallScreen && styles.sampleIOSingleLine)}>
+                {input && (
+                    <div className={styles.sampleIOItem}>
+                        <Body1Strong as="h4" className={styles.cardTitle}>
+                            {ls.sampleI}
+                        </Body1Strong>
+                        <React.Suspense fallback={<Spinner size="small" />}>
+                            <CodeBoxLazy code={input} lang="plaintext" />
+                        </React.Suspense>
+                    </div>
+                )}
                 {output && (
-                    <div>
+                    <div className={styles.sampleIOItem}>
                         <Body1Strong as="h4" className={styles.cardTitle}>
                             {ls.sampleO}
                         </Body1Strong>
-                        <div>{output}</div>
+                        <React.Suspense fallback={<Spinner size="small" />}>
+                            <CodeBoxLazy code={"test"} lang="plaintext" />
+                        </React.Suspense>
                     </div>
                 )}
             </div>
@@ -207,10 +217,18 @@ const ProblemSampleBox: React.FC<{
                     <Body1Strong as="h4" className={styles.cardTitle}>
                         {ls.sampleE}
                     </Body1Strong>
-                    <div>{explanation}</div>
+                    <ProblemContent content={explanation} />
                 </div>
             )}
         </div>
+    );
+};
+
+const ProblemContent: React.FC<{ content: string }> = ({ content }) => {
+    return (
+        <React.Suspense fallback={<Spinner size="small" />}>
+            <MarkdownContentLazy content={content} />
+        </React.Suspense>
     );
 };
 
@@ -224,7 +242,6 @@ const useStyles = makeStyles({
     },
     titleContainer: {
         ...flex({
-            flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
             flexWrap: "wrap",
@@ -238,9 +255,7 @@ const useStyles = makeStyles({
         marginBottom: "20px",
     },
     content: {
-        ...flex({
-            flexDirection: "row",
-        }),
+        ...flex(),
         gap: "20px",
         boxSizing: "border-box",
         maxWidth: "100%",
@@ -282,7 +297,6 @@ const useStyles = makeStyles({
     },
     tagContainer: {
         ...flex({
-            flexDirection: "row",
             flexWrap: "wrap",
         }),
         gap: "4px",
@@ -301,15 +315,20 @@ const useStyles = makeStyles({
         width: "100%",
     },
     sampleIO: {
-        ...flex({
-            flexDirection: "row",
-        }),
+        ...flex(),
         gap: "8px",
         width: "100%",
-        "> div": {
-            maxWidth: "100%",
-            flex: 1,
-        },
+    },
+    sampleIOSingleLine: {
+        ...flex({
+            flexDirection: "column",
+        }),
+        width: "100%",
+    },
+    sampleIOItem: {
+        maxWidth: "100%",
+        flex: 1,
+        minWidth: "50%",
     },
 });
 

@@ -1,9 +1,11 @@
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
+import fs from "fs";
 import path from "path";
 import { defineConfig } from "vite";
 import circleDependency from "vite-plugin-circular-dependency";
 import { createHtmlPlugin } from "vite-plugin-html";
+import { prismjsPlugin } from "vite-plugin-prismjs";
 import { viteVConsole } from "vite-plugin-vconsole";
 import tsconfigPaths from "vite-tsconfig-paths";
 
@@ -46,6 +48,10 @@ export default defineConfig(({ command }) => {
             circleDependency({
                 exclude: [/node_modules/, /\.yarn/, /\.pnp/],
             }),
+            prismjsPlugin({
+                languages: fs.readFileSync(path.resolve(".prism-languages"), "utf-8").trim().split("\n"),
+                css: false,
+            }),
         ],
         server: {
             host: "0.0.0.0",
@@ -61,6 +67,15 @@ export default defineConfig(({ command }) => {
                     entryFileNames: "assets/[name].[hash].js",
                     chunkFileNames: "assets/[name].[hash].js",
                     assetFileNames: "assets/[name].[hash].[ext]",
+                },
+            },
+        },
+        worker: {
+            rollupOptions: {
+                output: {
+                    entryFileNames: "workers/[name].[hash].js",
+                    chunkFileNames: "workers/[name].[hash].js",
+                    assetFileNames: "workers/[name].[hash].[ext]",
                 },
             },
         },

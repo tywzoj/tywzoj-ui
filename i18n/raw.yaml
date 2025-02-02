@@ -38,6 +38,10 @@
   value: Search
   description: A string for the label of search button.
 
+- name: COMMON_COPY_BUTTON
+  value: Copy
+  description: A string for the label of copy button.
+
 - name: COMMON_ERROR_TITLE
   value: Error
   description: A string for the title of error message.
@@ -400,3 +404,11 @@
 - name: HIDE_TAGS_LABEL
   value: Hide problem tags
   description: A string for the label of hide tags button.
+
+- name: CODE_COPIED_MESSAGE
+  value: The code is copied to the clipboard.
+  description: A string for the message when code is copied to clipboard.
+
+- name: CODE_COPY_FAILED_MESSAGE
+  value: Failed to copy the code to the clipboard.
+  description: A string for the message when failed to copy code to clipboard.

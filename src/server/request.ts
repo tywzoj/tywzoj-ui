@@ -12,14 +12,14 @@ export interface IRequestOptions {
 
 type IError = Exclude<CE_ErrorCode, CE_ErrorCode.OK>;
 type ISuccessResponseBody<T> = {
-    code: CE_ErrorCode.OK;
-    message: string;
-    data: T;
+    readonly code: CE_ErrorCode.OK;
+    readonly message: string;
+    readonly data: T;
 };
 type IErrorResponseBody<E extends IError> = {
-    code: E;
-    message: string;
-    data: unknown;
+    readonly code: E;
+    readonly message: string;
+    readonly data: unknown;
 };
 export type IResponseBody<T, E extends IError = IError> =
     | (E extends never ? never : IErrorResponseBody<E>)
