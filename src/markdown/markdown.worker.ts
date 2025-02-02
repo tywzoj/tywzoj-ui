@@ -13,9 +13,12 @@ import type {
     IMarkdownRenderResultEventData,
     IMarkdownRenderTaskEventData,
 } from "./types";
-import { generatePlaceholder } from "./utils";
 
-function renderMarkdown(text: string, onPatchRenderer?: (renderer: MarkdownIt) => void): IMarkdownRenderResult {
+export function generatePlaceholder(id: string) {
+    return `<span data-id=${id}></span>`;
+}
+
+function renderMarkdown(text: string): IMarkdownRenderResult {
     // Use a <span> placeholder for highlights and maths
     // They're replaced after HTML sanitation
 
@@ -68,8 +71,6 @@ function renderMarkdown(text: string, onPatchRenderer?: (renderer: MarkdownIt) =
 
     renderer.use(MarkdownItMergeCells);
 
-    onPatchRenderer?.(renderer);
-
     return {
         html: renderer.render(text),
         highlightPlaceholders,
@@ -78,13 +79,13 @@ function renderMarkdown(text: string, onPatchRenderer?: (renderer: MarkdownIt) =
 }
 
 self.onmessage = (event: MessageEvent<IMarkdownRenderTaskEventData>) => {
-    const { id, markdown, onPatchRenderer } = event.data;
+    const { id, markdown } = event.data;
     let msg: IMarkdownRenderResultEventData;
     try {
         msg = {
             id,
             success: true,
-            result: renderMarkdown(markdown, onPatchRenderer),
+            result: renderMarkdown(markdown),
         };
     } catch (error) {
         msg = { id, success: false, error };

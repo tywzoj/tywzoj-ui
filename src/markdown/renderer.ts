@@ -1,8 +1,7 @@
-import type MarkdownIt from "markdown-it";
 import { v4 as uuid4 } from "uuid";
 
 import MarkdownWorker from "./markdown.worker?worker";
-import type { IMarkdownRenderResult, IMarkdownRenderResultEventData } from "./types";
+import type { IMarkdownRenderResult, IMarkdownRenderResultEventData, IMarkdownRenderTaskEventData } from "./types";
 
 export class MarkdownRenderer {
     private static instance: MarkdownRenderer;
@@ -50,14 +49,15 @@ export class MarkdownRenderer {
         return this.instance;
     }
 
-    public render(markdown: string, onPatchRenderer?: (renderer: MarkdownIt) => void): Promise<IMarkdownRenderResult> {
+    public render(markdown: string): Promise<IMarkdownRenderResult> {
         return new Promise((resolve, reject) => {
             const id = uuid4();
             this.callbacks.set(id, {
                 resolve,
                 reject,
             });
-            this.worker.postMessage({ id, markdown, onPatchRenderer });
+            const msg: IMarkdownRenderTaskEventData = { id, markdown };
+            this.worker.postMessage(msg);
         });
     }
 }

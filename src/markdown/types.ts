@@ -1,5 +1,3 @@
-import type MarkdownIt from "markdown-it";
-
 export interface IMarkdownHighlightPlaceholder {
     readonly id: string;
     readonly code: string;
@@ -21,7 +19,6 @@ export interface IMarkdownRenderResult {
 export interface IMarkdownRenderTaskEventData {
     readonly id: string;
     readonly markdown: string;
-    readonly onPatchRenderer?: (renderer: MarkdownIt) => void;
 }
 
 export type IMarkdownRenderResultEventData = { readonly id: string } & (

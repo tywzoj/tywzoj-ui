@@ -1,6 +1,5 @@
 import { mergeClasses, Skeleton, SkeletonItem, Text, useId } from "@fluentui/react-components";
 import { useNavigate } from "@tanstack/react-router";
-import type MarkdownIt from "markdown-it";
 import React from "react";
 
 import { useAsyncFunctionResult } from "@/common/hooks/async-value";
@@ -25,19 +24,14 @@ export interface IMarkdownContentProps {
      */
     placeholderLines?: number;
 
-    onPatchRenderer?: (renderer: MarkdownIt) => void;
     onPatchResult?: (element: HTMLDivElement) => (() => void) | void;
 }
 
 export const MarkdownContent: React.FC<IMarkdownContentProps> = React.memo((props) => {
-    const { className, content, noSanitize = false, placeholderLines = 4, onPatchRenderer, onPatchResult } = props;
+    const { className, content, noSanitize = false, placeholderLines = 4, onPatchResult } = props;
     const [wrapperElement, setWrapperElement] = React.useState<HTMLDivElement | null>();
 
-    const {
-        result: html,
-        error,
-        pending,
-    } = useAsyncFunctionResult(renderMarkdownAsync, [content, noSanitize, onPatchRenderer]);
+    const { result: html, error, pending } = useAsyncFunctionResult(renderMarkdownAsync, [content, noSanitize]);
     const navigate = useNavigate();
 
     const styles = useMarkdownRenderStyles();
