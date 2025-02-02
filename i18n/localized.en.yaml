@@ -513,6 +513,11 @@
   description: A string for the label of hide tags button.
   raw: Hide problem tags
 
+- name: NO_TAGS_TEXT
+  value: No tags.
+  description: A string for the text when there are no tags.
+  raw: No tags.
+
 - name: CODE_COPIED_MESSAGE
   value: The code is copied to the clipboard.
   description: A string for the message when code is copied to clipboard.

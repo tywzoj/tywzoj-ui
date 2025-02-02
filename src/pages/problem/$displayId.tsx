@@ -7,6 +7,7 @@ import {
     Spinner,
     Subtitle1,
     Subtitle2,
+    Text,
     Title3,
     ToggleButton,
     Tooltip,
@@ -52,6 +53,7 @@ const ProblemDetailPage: React.FC = () => {
         tags: CE_Strings.PROBLEM_TAGS_LABEL,
         showTags: CE_Strings.SHOW_TAGS_LABEL,
         hideTags: CE_Strings.HIDE_TAGS_LABEL,
+        noTags: CE_Strings.NO_TAGS_TEXT,
     });
 
     useSetPageTitle(`#${problem.displayId}.${problem.title}`);
@@ -61,9 +63,6 @@ const ProblemDetailPage: React.FC = () => {
     // TODO: Add edit button
     // TODO: Add delete button
     // TODO: Add file button
-
-    // TODO: Markdown rendering
-    // TODO: Code highlighting
 
     return (
         <div className={styles.root}>
@@ -121,21 +120,26 @@ const ProblemDetailPage: React.FC = () => {
                                     icon={showTagsOnProblemDetail ? <TagFilled /> : <TagOffFilled />}
                                     checked={showTagsOnProblemDetail}
                                     onClick={() => {
+                                        const preShowTagsOnProblemDetail = showTagsOnProblemDetail;
                                         dispatch(
                                             setPreferenceAction({
-                                                showTagsOnProblemDetail: !showTagsOnProblemDetail,
+                                                showTagsOnProblemDetail: !preShowTagsOnProblemDetail,
                                             }),
                                         );
-                                        router.invalidate();
+                                        if (!preShowTagsOnProblemDetail) {
+                                            router.invalidate();
+                                        }
                                     }}
                                 />
                             </Tooltip>
                         }
                     >
                         <div className={styles.tagContainer}>
-                            {tags.map((tag) => (
-                                <ProblemTag key={tag.id} name={tag.name} color={tag.color} />
-                            ))}
+                            {!showTagsOnProblemDetail ? null : tags.length > 0 ? (
+                                tags.map((tag) => <ProblemTag key={tag.id} name={tag.name} color={tag.color} />)
+                            ) : (
+                                <Text>{ls.noTags}</Text>
+                            )}
                         </div>
                     </ProblemCard>
                 </div>

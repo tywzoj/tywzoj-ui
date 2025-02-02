@@ -49,7 +49,7 @@
   raw: Search
 
 - name: COMMON_COPY_BUTTON
-  value: null
+  value: 复制
   description: A string for the label of copy button.
   raw: Copy
 
@@ -513,12 +513,17 @@
   description: A string for the label of hide tags button.
   raw: Hide problem tags
 
+- name: NO_TAGS_TEXT
+  value: 无标签。
+  description: A string for the text when there are no tags.
+  raw: No tags.
+
 - name: CODE_COPIED_MESSAGE
-  value: null
+  value: 代码已复制到剪贴板。
   description: A string for the message when code is copied to clipboard.
   raw: The code is copied to the clipboard.
 
 - name: CODE_COPY_FAILED_MESSAGE
-  value: null
+  value: 复制代码到剪贴板失败。
   description: A string for the message when failed to copy code to clipboard.
   raw: Failed to copy the code to the clipboard.
