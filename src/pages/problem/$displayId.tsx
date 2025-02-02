@@ -198,7 +198,7 @@ const ProblemSampleBox: React.FC<{
                             {ls.sampleI}
                         </Body1Strong>
                         <React.Suspense fallback={<Spinner size="small" />}>
-                            <CodeBoxLazy code={input} lang="plaintext" />
+                            <CodeBoxLazy code={input} />
                         </React.Suspense>
                     </div>
                 )}
@@ -208,7 +208,7 @@ const ProblemSampleBox: React.FC<{
                             {ls.sampleO}
                         </Body1Strong>
                         <React.Suspense fallback={<Spinner size="small" />}>
-                            <CodeBoxLazy code={"test"} lang="plaintext" />
+                            <CodeBoxLazy code={"test"} />
                         </React.Suspense>
                     </div>
                 )}

@@ -11,12 +11,12 @@ import type { ICodeLanguage } from "./types";
 
 export interface ICodeBoxProps {
     readonly code: string;
-    readonly lang: ICodeLanguage | "plaintext";
+    readonly lang?: ICodeLanguage | "plaintext";
     readonly showCopy?: boolean;
 }
 
 export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
-    const { code, showCopy = true, lang } = props;
+    const { code, showCopy = true, lang = "plaintext" } = props;
     const styles = useStyles();
 
     const dispatchToastSuccess = useDispatchToastSuccess();
