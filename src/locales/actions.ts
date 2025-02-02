@@ -20,4 +20,5 @@ export const updateLocaleAsyncAction = createAppAction((locale: CE_Locale | null
 
     dispatch(setLocaleAction({ lang: locale, isRtl: checkIsRtl(locale) }));
     dispatch(setLocaleAction({ strings: await loadLocaleStringsAsync(locale) }));
+    window.document.documentElement.lang = locale;
 });

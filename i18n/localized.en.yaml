@@ -48,6 +48,11 @@
   description: A string for the label of search button.
   raw: Search
 
+- name: COMMON_COPY_BUTTON
+  value: Copy
+  description: A string for the label of copy button.
+  raw: Copy
+
 - name: COMMON_ERROR_TITLE
   value: Error
   description: A string for the title of error message.
@@ -507,3 +512,18 @@
   value: Hide problem tags
   description: A string for the label of hide tags button.
   raw: Hide problem tags
+
+- name: NO_TAGS_TEXT
+  value: No tags.
+  description: A string for the text when there are no tags.
+  raw: No tags.
+
+- name: CODE_COPIED_MESSAGE
+  value: The code is copied to the clipboard.
+  description: A string for the message when code is copied to clipboard.
+  raw: The code is copied to the clipboard.
+
+- name: CODE_COPY_FAILED_MESSAGE
+  value: Failed to copy the code to the clipboard.
+  description: A string for the message when failed to copy code to clipboard.
+  raw: Failed to copy the code to the clipboard.

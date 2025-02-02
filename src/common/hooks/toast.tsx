@@ -13,7 +13,7 @@ export const useDispatchToastError = () => {
     const [title] = useLocalizedStrings(CE_Strings.COMMON_ERROR_TITLE);
 
     return React.useCallback(
-        (message: string) => {
+        (message: string, options?: Parameters<typeof dispatchToast>[1]) => {
             dispatchToast(
                 <Toast>
                     <ToastTitle>{title}</ToastTitle>
@@ -22,9 +22,31 @@ export const useDispatchToastError = () => {
                 {
                     position: "top-end",
                     intent: "error",
+                    ...options,
                 },
             );
         },
         [dispatchToast, title],
+    );
+};
+
+export const useDispatchToastSuccess = () => {
+    const { dispatchToast } = useToast();
+
+    return React.useCallback(
+        (title: string, message?: string, options?: Parameters<typeof dispatchToast>[1]) => {
+            dispatchToast(
+                <Toast>
+                    <ToastTitle>{title}</ToastTitle>
+                    {message && <ToastBody>{message}</ToastBody>}
+                </Toast>,
+                {
+                    position: "top-end",
+                    intent: "success",
+                    ...options,
+                },
+            );
+        },
+        [dispatchToast],
     );
 };

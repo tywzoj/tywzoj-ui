@@ -2,16 +2,18 @@ import {
     Button,
     makeStyles,
     SearchBox,
+    Spinner,
     Table,
     TableBody,
     TableCell,
     TableHeader,
     TableHeaderCell,
     TableRow,
+    Title3,
     tokens,
     useTableCompositeNavigation,
 } from "@fluentui/react-components";
-import { createFileRoute } from "@tanstack/react-router";
+import { Await, createFileRoute } from "@tanstack/react-router";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import React from "react";
 import { z } from "zod";
@@ -40,7 +42,7 @@ import { useIsMiddleScreen } from "@/store/hooks";
 import { getPagination, getPreference } from "@/store/selectors";
 
 const ProblemListPage: React.FC = () => {
-    const { problemList, pageCount } = Route.useLoaderData();
+    const { queryProblemListPromise } = Route.useLoaderData();
     const { sortBy, order, page, keyword } = Route.useLoaderDeps();
     const isMiddleScreen = useIsMiddleScreen();
     const navigate = Route.useNavigate();
@@ -80,6 +82,9 @@ const ProblemListPage: React.FC = () => {
     return (
         <div className={styles.root}>
             <div className={styles.header}>
+                <div className={styles.title}>
+                    <Title3 as="h1">{ls.title}</Title3>
+                </div>
                 <div className={styles.search}>
                     <SearchBox
                         placeholder={ls.searchPlc}
@@ -102,86 +107,110 @@ const ProblemListPage: React.FC = () => {
                 {/* TODO: Add button */}
                 {/* TODO: Tag filter */}
             </div>
-            <PaginationButtons
-                className={styles.headerPagination}
-                page={page}
-                pageCount={pageCount}
-                onPageChange={onPageChange}
-            />
-            <div className={styles.body}>
-                <Table onKeyDown={onTableKeyDown} {...tableTabsterAttribute}>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHeaderCell
-                                className={styles.tableIdCol}
-                                {...tableSortAttributes(CE_ProblemSortBy.DisplayId)}
-                            >
-                                {ls.colId}
-                            </TableHeaderCell>
-                            <TableHeaderCell
-                                className={styles.tableTitleCol}
-                                {...tableSortAttributes(CE_ProblemSortBy.Title)}
-                            >
-                                {ls.colTitle}
-                            </TableHeaderCell>
-                            <TableHeaderCell className={styles.tableVisibilityCol}>{ls.colVisibility}</TableHeaderCell>
-                            {!isMiddleScreen && (
-                                <>
-                                    <TableHeaderCell
-                                        className={styles.tableSubmissionCol}
-                                        {...tableSortAttributes(CE_ProblemSortBy.SubmissionCount)}
-                                    >
-                                        {ls.colSubmission}
-                                    </TableHeaderCell>
-                                    <TableHeaderCell className={styles.tableAcceptanceCol}>Acceptance</TableHeaderCell>
-                                </>
-                            )}
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {problemList.map((problem) => (
-                            <TableRow key={problem.id}>
-                                <TableCell>{problem.displayId}</TableCell>
-                                <TableCell className={styles.problemTitleWithTags}>
-                                    <LinkWithRouter
-                                        className={styles.problemLink}
-                                        tabIndex={0}
-                                        to="/problem/$displayId"
-                                        params={{ displayId: `${problem.displayId}` }}
-                                        preload={false}
-                                    >
-                                        {problem.title}
-                                    </LinkWithRouter>
-                                    {problem.tags.length > 0 && (
-                                        <div className={styles.problemTags}>
-                                            {problem.tags.map((tag) => (
-                                                <ProblemTag key={tag.id} name={tag.name} color={tag.color} />
-                                            ))}
-                                        </div>
-                                    )}
-                                </TableCell>
-                                <TableCell>
-                                    <VisibilityLabel visibility={problem.visibility} />
-                                </TableCell>
-                                {!isMiddleScreen && (
-                                    <>
-                                        <TableCell>{problem.submissionCount}</TableCell>
-                                        <TableCell>
-                                            {percent(problem.acceptedSubmissionCount, problem.submissionCount)}
-                                        </TableCell>
-                                    </>
-                                )}
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
-            <PaginationButtons
-                className={styles.footerPagination}
-                page={page}
-                pageCount={pageCount}
-                onPageChange={onPageChange}
-            />
+            <Await
+                promise={queryProblemListPromise}
+                fallback={
+                    <div className={styles.loading}>
+                        <Spinner />
+                    </div>
+                }
+            >
+                {({ problemList, pageCount }) => (
+                    <>
+                        <PaginationButtons
+                            className={styles.headerPagination}
+                            page={page}
+                            pageCount={pageCount}
+                            onPageChange={onPageChange}
+                        />
+                        <div className={styles.tableContainer}>
+                            <Table onKeyDown={onTableKeyDown} {...tableTabsterAttribute}>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHeaderCell
+                                            className={styles.tableIdCol}
+                                            {...tableSortAttributes(CE_ProblemSortBy.DisplayId)}
+                                        >
+                                            {ls.colId}
+                                        </TableHeaderCell>
+                                        <TableHeaderCell
+                                            className={styles.tableTitleCol}
+                                            {...tableSortAttributes(CE_ProblemSortBy.Title)}
+                                        >
+                                            {ls.colTitle}
+                                        </TableHeaderCell>
+                                        <TableHeaderCell className={styles.tableVisibilityCol}>
+                                            {ls.colVisibility}
+                                        </TableHeaderCell>
+                                        {!isMiddleScreen && (
+                                            <>
+                                                <TableHeaderCell
+                                                    className={styles.tableSubmissionCol}
+                                                    {...tableSortAttributes(CE_ProblemSortBy.SubmissionCount)}
+                                                >
+                                                    {ls.colSubmission}
+                                                </TableHeaderCell>
+                                                <TableHeaderCell className={styles.tableAcceptanceCol}>
+                                                    Acceptance
+                                                </TableHeaderCell>
+                                            </>
+                                        )}
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {problemList.map((problem) => (
+                                        <TableRow key={problem.id}>
+                                            <TableCell>{problem.displayId}</TableCell>
+                                            <TableCell className={styles.problemTitleWithTags}>
+                                                <LinkWithRouter
+                                                    className={styles.problemLink}
+                                                    tabIndex={0}
+                                                    to="/problem/$displayId"
+                                                    params={{ displayId: `${problem.displayId}` }}
+                                                    preload={false}
+                                                >
+                                                    {problem.title}
+                                                </LinkWithRouter>
+                                                {problem.tags.length > 0 && (
+                                                    <div className={styles.problemTags}>
+                                                        {problem.tags.map((tag) => (
+                                                            <ProblemTag
+                                                                key={tag.id}
+                                                                name={tag.name}
+                                                                color={tag.color}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                <VisibilityLabel visibility={problem.visibility} />
+                                            </TableCell>
+                                            {!isMiddleScreen && (
+                                                <>
+                                                    <TableCell>{problem.submissionCount}</TableCell>
+                                                    <TableCell>
+                                                        {percent(
+                                                            problem.acceptedSubmissionCount,
+                                                            problem.submissionCount,
+                                                        )}
+                                                    </TableCell>
+                                                </>
+                                            )}
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
+                        <PaginationButtons
+                            className={styles.footerPagination}
+                            page={page}
+                            pageCount={pageCount}
+                            onPageChange={onPageChange}
+                        />
+                    </>
+                )}
+            </Await>
         </div>
     );
 };
@@ -193,6 +222,7 @@ const useStyles = makeStyles({
         }),
         width: "100%",
         boxSizing: "border-box",
+        flexGrow: 1,
     },
     header: {
         ...flex({
@@ -200,6 +230,17 @@ const useStyles = makeStyles({
         }),
         marginBottom: "20px",
         width: "100%",
+    },
+    title: {
+        ...flex({
+            flexDirection: "row",
+            justifyContent: "center",
+        }),
+        width: "100%",
+        "> h1": {
+            marginTop: "0",
+            marginBottom: "20px",
+        },
     },
     search: {
         ...flex({
@@ -211,6 +252,14 @@ const useStyles = makeStyles({
         },
         width: "100%",
     },
+    loading: {
+        ...flex({
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+        }),
+        flexGrow: 1,
+    },
     headerPagination: {
         ...flex({
             flexDirection: "column",
@@ -218,17 +267,17 @@ const useStyles = makeStyles({
         }),
         marginBottom: "20px",
     },
-    body: {
-        padding: "20px",
-        boxShadow: tokens.shadow2Brand,
-        borderRadius: tokens.borderRadiusSmall,
-    },
     footerPagination: {
         ...flex({
             flexDirection: "column",
             alignItems: "center",
         }),
         marginTop: "20px",
+    },
+    tableContainer: {
+        padding: "20px",
+        boxShadow: tokens.shadow2Brand,
+        borderRadius: tokens.borderRadiusSmall,
     },
     tableIdCol: {
         width: "60px",
@@ -285,24 +334,26 @@ export const Route = createFileRoute("/problem/")({
         sortBy: s,
         keyword: k,
     }),
-    loader: async ({ context: { queryClient, store }, deps: { page, order, sortBy, keyword } }) => {
+    loader: ({ context: { queryClient, store }, deps: { page, order, sortBy, keyword } }) => {
         const { problem: takeCount } = getPagination(store.getState());
         const { showTagsOnProblemList } = getPreference(store.getState());
 
-        const { data } = await queryClient.ensureQueryData(
-            queryOptions({
-                ...calcCount(page, takeCount),
-                sortBy,
-                order,
-                queryTags: showTagsOnProblemList,
-                keyword,
-                keywordMatchesId: true,
-            }),
-        );
+        const queryProblemListPromise = queryClient
+            .ensureQueryData(
+                queryOptions({
+                    ...calcCount(page, takeCount),
+                    sortBy,
+                    order,
+                    queryTags: showTagsOnProblemList,
+                    keyword,
+                    keywordMatchesId: true,
+                }),
+            )
+            .then((res) => ({
+                problemList: res.data.problemBasicDetails,
+                pageCount: calcPageCount(res.data.count, takeCount),
+            }));
 
-        return {
-            problemList: data.problemBasicDetails,
-            pageCount: calcPageCount(data.count, takeCount),
-        };
+        return { queryProblemListPromise };
     },
 });
