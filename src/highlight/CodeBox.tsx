@@ -65,12 +65,15 @@ CodeBox.displayName = "CodeBox";
 
 const useStyles = makeStyles({
     root: {
-        "> pre": {
+        "& pre": {
             overflowX: "auto",
             overflowY: "hidden",
             padding: "0.5em",
             borderRadius: tokens.borderRadiusMedium,
             border: `1px solid ${tokens.colorNeutralStroke2}`,
+        },
+        "& pre, & code": {
+            fontFamily: '"Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace',
         },
         position: "relative",
     },

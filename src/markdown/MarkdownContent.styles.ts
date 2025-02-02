@@ -47,6 +47,10 @@ export const useMarkdownRenderStyles = makeStyles({
             border: `1px solid ${tokens.colorNeutralStroke2}`,
         },
 
+        "& pre, & code": {
+            fontFamily: '"Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace',
+        },
+
         "& p, & blockquote": {
             overflowX: "auto",
             overflowY: "hidden",
