@@ -19,8 +19,6 @@ export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
     const { code, showCopy = true, lang } = props;
     const styles = useStyles();
 
-    const allowedToCopy = showCopy && !!window?.navigator?.clipboard?.writeText;
-
     const dispatchToastSuccess = useDispatchToastSuccess();
     const dispatchToastError = useDispatchToastError();
 
@@ -30,19 +28,19 @@ export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
         errorMsg: CE_Strings.CODE_COPY_FAILED_MESSAGE,
     });
 
-    const onCopyButtonClick = React.useCallback(() => {
-        if (allowedToCopy) {
-            window.navigator.clipboard
-                .writeText(code)
-                .then(() => {
-                    dispatchToastSuccess(ls.successMsg, "", { timeout: 800 });
-                })
-                .catch((e) => {
-                    dispatchToastError(ls.errorMsg, { timeout: 800 });
-                    console.error(e);
-                });
-        }
-    }, [allowedToCopy, code, dispatchToastError, dispatchToastSuccess, ls.errorMsg, ls.successMsg]);
+    const allowedToCopy = showCopy && !!window?.navigator?.clipboard?.writeText;
+
+    const onCopyButtonClick = () => {
+        window.navigator.clipboard
+            .writeText(code)
+            .then(() => {
+                dispatchToastSuccess(ls.successMsg, "", { timeout: 800 });
+            })
+            .catch((e) => {
+                dispatchToastError(ls.errorMsg, { timeout: 800 });
+                console.error(e);
+            });
+    };
 
     return (
         <div className={styles.root}>
