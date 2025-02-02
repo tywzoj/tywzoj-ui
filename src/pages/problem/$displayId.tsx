@@ -13,7 +13,7 @@ import {
     Tooltip,
 } from "@fluentui/react-components";
 import { TagFilled, TagOffFilled } from "@fluentui/react-icons";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useMatch, useRouter, useRouterState } from "@tanstack/react-router";
 import React from "react";
 
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
@@ -135,11 +135,9 @@ const ProblemDetailPage: React.FC = () => {
                         }
                     >
                         <div className={styles.tagContainer}>
-                            {!showTagsOnProblemDetail ? null : tags.length > 0 ? (
-                                tags.map((tag) => <ProblemTag key={tag.id} name={tag.name} color={tag.color} />)
-                            ) : (
-                                <Text>{ls.noTags}</Text>
-                            )}
+                            {showTagsOnProblemDetail
+                                ? tags.map((tag) => <ProblemTag key={tag.id} name={tag.name} color={tag.color} />)
+                                : null}
                         </div>
                     </ProblemCard>
                 </div>
