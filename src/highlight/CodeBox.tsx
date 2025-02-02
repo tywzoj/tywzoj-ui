@@ -49,15 +49,17 @@ export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
             <pre className={`language-${lang}`}>
                 <code className={`language-${lang}`}>{highlight(code, lang)}</code>
             </pre>
-            <Tooltip content={ls.copyBtn}>
-                <Button
-                    className={styles.copy}
-                    size="small"
-                    appearance="subtle"
-                    onClick={onCopyButtonClick}
-                    icon={<CopyRegular />}
-                />
-            </Tooltip>
+            {allowedToCopy && (
+                <Tooltip content={ls.copyBtn}>
+                    <Button
+                        className={styles.copy}
+                        size="small"
+                        appearance="subtle"
+                        onClick={onCopyButtonClick}
+                        icon={<CopyRegular />}
+                    />
+                </Tooltip>
+            )}
         </div>
     );
 });
