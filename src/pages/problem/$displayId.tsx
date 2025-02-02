@@ -193,7 +193,7 @@ const ProblemSampleBox: React.FC<{
             </Subtitle2>
             <div className={mergeClasses(styles.sampleIO, isSmallScreen && styles.sampleIOSingleLine)}>
                 {input && (
-                    <div className={styles.sampleIOItem}>
+                    <div className={styles.sampleItem}>
                         <Body1Strong as="h4" className={styles.cardTitle}>
                             {ls.sampleI}
                         </Body1Strong>
@@ -203,7 +203,7 @@ const ProblemSampleBox: React.FC<{
                     </div>
                 )}
                 {output && (
-                    <div className={styles.sampleIOItem}>
+                    <div className={styles.sampleItem}>
                         <Body1Strong as="h4" className={styles.cardTitle}>
                             {ls.sampleO}
                         </Body1Strong>
@@ -214,21 +214,21 @@ const ProblemSampleBox: React.FC<{
                 )}
             </div>
             {explanation && (
-                <div>
+                <div className={styles.sampleItem}>
                     <Body1Strong as="h4" className={styles.cardTitle}>
                         {ls.sampleE}
                     </Body1Strong>
-                    <ProblemContent content={explanation} />
+                    <ProblemContent content={explanation} placeHolderLines={2} />
                 </div>
             )}
         </div>
     );
 };
 
-const ProblemContent: React.FC<{ content: string }> = ({ content }) => {
+const ProblemContent: React.FC<{ content: string; placeHolderLines?: number }> = ({ content, placeHolderLines }) => {
     return (
         <React.Suspense fallback={<Spinner size="small" />}>
-            <MarkdownContentLazy content={content} />
+            <MarkdownContentLazy content={content} placeholderLines={placeHolderLines} />
         </React.Suspense>
     );
 };
@@ -326,7 +326,7 @@ const useStyles = makeStyles({
         }),
         width: "100%",
     },
-    sampleIOItem: {
+    sampleItem: {
         maxWidth: "100%",
         flex: 1,
         minWidth: "50%",
