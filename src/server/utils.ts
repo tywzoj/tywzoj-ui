@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { ArrayValues } from "type-fest";
+import type { ArrayValues, TupleToUnion } from "type-fest";
 
 import { ERROR_LINKS_MAP } from "@/common/constants/error-links-map";
 import { AppError } from "@/common/exceptions/app-error";
@@ -13,6 +13,9 @@ type IRequestAsyncFn<T, P extends any[]> = (...args: P) => Promise<IResponseBody
 type IRequestAsyncFnWithThrow<T, P extends any[], E extends IError[]> = (
     ...args: P
 ) => Promise<IResponseBodyAfterThrow<T, E>>;
+
+export type IErrorCodeWillBeReturned<F> =
+    F extends IRequestAsyncFnWithThrow<any, any, infer E> ? TupleToUnion<E> : never;
 
 export function withThrowErrorsExcept<T, P extends any[], E extends IError[]>(
     fn: IRequestAsyncFn<T, P>,

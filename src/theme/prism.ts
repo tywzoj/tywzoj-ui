@@ -1,3 +1,5 @@
+import { neverGuard } from "@/common/utils/never-guard";
+
 import { CE_Theme } from "./types";
 
 const cssUrlOneLightHref = new URL("../assets/themes/prism-one-light.css", import.meta.url).href;
@@ -15,5 +17,7 @@ export function injectPrismTheme(theme: CE_Theme) {
         case CE_Theme.Dark:
             cssLinkTag.href = cssUrlDraculaHref;
             break;
+        default:
+            neverGuard(theme);
     }
 }
