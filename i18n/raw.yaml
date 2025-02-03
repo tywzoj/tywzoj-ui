@@ -175,7 +175,7 @@
   description: A string for the label of submissions navigation.
 
 - name: SITE_ICON_IMAGE_ALT
-  value: "TYWZOJ's icon."
+  value: TYWZOJ's icon.
   description: A string for the alt text of site icon image.
 
 - name: SITE_TITLE_IMAGE_ALT
@@ -195,14 +195,15 @@
   description: A string for the label of settings menu item.
 
 - name: COPYRIGHT_NOTICE
-  value: "© {0} TYWZOJ. All rights reserved."
+  value: © {0} TYWZOJ. All rights reserved.
   description: A string for the copyright notice. {0} is the current year.
 
 - name: GOOGLE_RECAPTCHA_NOTICE
   value: >-
-    This site is protected by reCAPTCHA and the Google
-    <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer noopener">Privacy Policy</a> and
-    <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer noopener">Terms of Service</a> apply.
+    This site is protected by reCAPTCHA and the Google <a
+    href="https://policies.google.com/privacy" target="_blank" rel="noreferrer
+    noopener">Privacy Policy</a> and <a href="https://policies.google.com/terms"
+    target="_blank" rel="noreferrer noopener">Terms of Service</a> apply.
   description: A string for the notice of reCAPTCHA.
 
 - name: SHOW_PASSWORD_LABEL
@@ -303,7 +304,9 @@
 
 - name: VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH
   value: Password confirm does not match the password.
-  description: A string for the error message when password confirm does not match the password.
+  description: >-
+    A string for the error message when password confirm does not match the
+    password.
 
 - name: VISIBILITY_LABEL_PUBLIC
   value: Public
@@ -494,23 +497,23 @@
   description: A string for the label of GNU C++20 standard.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O0
-  value: -O0 (disable optimization)
+  value: '-O0 (disable optimization)'
   description: A string for the label of O0 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O1
-  value: -O1
+  value: '-O1'
   description: A string for the label of O1 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O2
-  value: -O2
+  value: '-O2'
   description: A string for the label of O2 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O3
-  value: -O3
+  value: '-O3'
   description: A string for the label of O3 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_OFAST
-  value: -Ofast (fastest)
+  value: '-Ofast (fastest)'
   description: A string for the label of Ofast optimization.
 
 - name: COMPILATION_CPP_ARCHITECTURE_64
@@ -570,11 +573,11 @@
   description: A string for the label of JVM platform.
 
 - name: COMPILATION_PAS_OPTIMIZATION_O
-  value: -O
+  value: '-O'
   description: A string for the label of O optimization.
 
 - name: COMPILATION_PAS_OPTIMIZATION_O4
-  value: -O4 (fastest)
+  value: '-O4 (fastest)'
   description: A string for the label of O4 optimization.
 
 - name: COMPILATION_RS_OPTIMIZATION_1
