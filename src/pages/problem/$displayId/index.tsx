@@ -31,15 +31,15 @@ import {
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import React from "react";
 
+import { ButtonGroup, firstButtonClassName, lastButtonClassName } from "@/common/components/ButtonGroup";
+import type { IButtonWithRouterProps } from "@/common/components/ButtonWithRouter";
+import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
+import type { IMenuItemLinkWithRouterProps } from "@/common/components/MenuItemLinkWithRouter";
+import { MenuItemLinkWithRouter } from "@/common/components/MenuItemLinkWithRouter";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
-import { ButtonGroup, firstButtonClassName, lastButtonClassName } from "@/components/ButtonGroup";
-import type { IButtonWithRouterProps } from "@/components/ButtonWithRouter";
-import { ButtonWithRouter } from "@/components/ButtonWithRouter";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
-import type { IMenuItemLinkWithRouterProps } from "@/components/MenuItemLinkWithRouter";
-import { MenuItemLinkWithRouter } from "@/components/MenuItemLinkWithRouter";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { CodeBoxLazy } from "@/highlight/CodeBox.lazy";
@@ -255,7 +255,10 @@ const ProblemSampleBox: React.FC<{
     );
 };
 
-const ProblemContent: React.FC<{ content: string; placeHolderLines?: number }> = ({ content, placeHolderLines }) => {
+const ProblemContent: React.FC<{
+    content: string;
+    placeHolderLines?: number;
+}> = ({ content, placeHolderLines }) => {
     return (
         <React.Suspense fallback={<Spinner size="small" />}>
             <MarkdownContentLazy content={content} placeholderLines={placeHolderLines} />
@@ -280,7 +283,7 @@ const ProblemActions: React.FC<{
     const permission = usePermission();
 
     const actionPropsList = React.useMemo<IProblemActionProps[]>(() => {
-        const strId = String(problem.id);
+        const displayId = String(problem.displayId);
 
         const items: IProblemActionProps[] = [];
 
@@ -295,8 +298,8 @@ const ProblemActions: React.FC<{
         // TODO: check file exists
         items.push({
             key: "files",
-            to: "/problem/$id/files",
-            params: { id: strId },
+            to: "/problem/$displayId/files",
+            params: { displayId },
             icon: <DocumentTextFilled />,
             content: "Files",
             overflow: isSmallScreen,
@@ -306,16 +309,16 @@ const ProblemActions: React.FC<{
             items.push(
                 {
                     key: "edit",
-                    to: "/problem/$id/edit",
-                    params: { id: strId },
+                    to: "/problem/$displayId/edit",
+                    params: { displayId },
                     icon: <EditFilled />,
                     content: "Edit",
                     overflow: isMiddleScreen,
                 },
                 {
                     key: "judge",
-                    to: "/problem/$id/judge",
-                    params: { id: strId },
+                    to: "/problem/$displayId/judge",
+                    params: { displayId },
                     icon: <TaskListSquareSettingsFilled />,
                     content: "Judgement Settings",
                     overflow: isMiddleScreen,
@@ -324,7 +327,7 @@ const ProblemActions: React.FC<{
         }
 
         return items;
-    }, [problem.id, isSmallScreen, permission.manageProblem, isMiddleScreen]);
+    }, [problem, isSmallScreen, permission.manageProblem, isMiddleScreen]);
 
     const buttonPropsList: IProblemActionProps[] = actionPropsList.filter(({ overflow }) => isVertical || !overflow);
     const menuItemPropsList: IProblemActionProps[] = actionPropsList.filter(({ overflow }) => !isVertical && overflow);
@@ -499,7 +502,7 @@ const useStyles = makeStyles({
 
 const queryOptions = createQueryOptions(CE_QueryId.ProblemDetail, withThrowErrors(ProblemModule.getProblemDetailAsync));
 
-export const Route = createFileRoute("/problem/$displayId")({
+export const Route = createFileRoute("/problem/$displayId/")({
     component: ProblemDetailPage,
     errorComponent: ErrorPageLazy,
     loader: async ({ context: { queryClient, store }, params: { displayId } }) => {

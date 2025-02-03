@@ -1,4 +1,4 @@
-import { ErrorBox } from "@/components/ErrorBox";
+import { ErrorBox } from "@/common/components/ErrorBox";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 

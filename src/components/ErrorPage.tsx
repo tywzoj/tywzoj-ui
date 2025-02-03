@@ -1,7 +1,7 @@
 import React from "react";
 
+import { ErrorBox } from "@/common/components/ErrorBox";
 import type { IErrorLink, IStringCodeErrorLink } from "@/common/types/error-link";
-import { ErrorBox } from "@/components/ErrorBox";
 import { useLocalizedStrings } from "@/locales/hooks";
 
 import { AppError } from "../common/exceptions/app-error";

@@ -4,13 +4,13 @@ import { createFileRoute, Navigate } from "@tanstack/react-router";
 import React from "react";
 
 import { signInAsyncAction } from "@/common/actions/sign-in";
+import { LinkWithRouter } from "@/common/components/LinkWithRouter";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
 import { neverGuard } from "@/common/utils/never-guard";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
-import { LinkWithRouter } from "@/components/LinkWithRouter";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { AuthModule } from "@/server/api";

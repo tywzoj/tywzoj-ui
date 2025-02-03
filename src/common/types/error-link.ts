@@ -1,4 +1,4 @@
-import type { ILinkWithRouterProps } from "@/components/LinkWithRouter";
+import type { ILinkWithRouterProps } from "@/common/components/LinkWithRouter";
 import type { CE_Strings } from "@/locales/types";
 
 export type IErrorLink = {

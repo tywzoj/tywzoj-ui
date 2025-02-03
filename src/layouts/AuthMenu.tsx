@@ -2,8 +2,8 @@ import { makeStyles } from "@fluentui/react-components";
 import { useRouterState } from "@tanstack/react-router";
 import type React from "react";
 
+import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
 import { flex } from "@/common/styles/flex";
-import { ButtonWithRouter } from "@/components/ButtonWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { useIsMiniScreen } from "@/store/hooks";
