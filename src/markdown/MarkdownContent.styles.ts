@@ -1,5 +1,6 @@
 import { makeStyles, tokens } from "@fluentui/react-components";
 
+import { CODE_FONT_FAMILY } from "@/common/constants/font";
 import { flex } from "@/common/styles/flex";
 import { commonLinkStyles } from "@/common/styles/link";
 
@@ -48,7 +49,7 @@ export const useMarkdownRenderStyles = makeStyles({
         },
 
         "& pre, & code": {
-            fontFamily: '"Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace',
+            fontFamily: CODE_FONT_FAMILY,
         },
 
         "& p, & blockquote": {

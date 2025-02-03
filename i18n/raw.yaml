@@ -416,3 +416,191 @@
 - name: CODE_COPY_FAILED_MESSAGE
   value: Failed to copy the code to the clipboard.
   description: A string for the message when failed to copy code to clipboard.
+
+- name: COMPILATION_COMPILER_LABEL
+  value: Compiler
+  description: A string for the label of compiler.
+
+- name: COMPILATION_STD_LABEL
+  value: Standard
+  description: A string for the label of standard.
+
+- name: COMPILATION_OPTIMIZATION_LABEL
+  value: Optimization
+  description: A string for the label of optimization.
+
+- name: COMPILATION_ARCHITECTURE_LABEL
+  value: Architecture
+  description: A string for the label of architecture.
+
+- name: COMPILATION_VERSION_LABEL
+  value: Version
+  description: A string for the label of version.
+
+- name: COMPILATION_PLATFORM_LABEL
+  value: Platform
+  description: A string for the label of platform.
+
+- name: COMPILATION_OPTIMIZATION_DISABLED
+  value: Disabled
+  description: A string for the label of disabled optimization.
+
+- name: COMPILATION_CPP_COMPILER_GCC
+  value: G++
+  description: A string for the label of GCC compiler.
+
+- name: COMPILATION_CPP_COMPILER_CLANG
+  value: Clang++
+  description: A string for the label of Clang compiler.
+
+- name: COMPILATION_CPP_STD_ISO_03
+  value: ISO C++03
+  description: A string for the label of ISO C++03 standard.
+
+- name: COMPILATION_CPP_STD_ISO_11
+  value: ISO C++11
+  description: A string for the label of ISO C++11 standard.
+
+- name: COMPILATION_CPP_STD_ISO_14
+  value: ISO C++14
+  description: A string for the label of ISO C++14 standard.
+
+- name: COMPILATION_CPP_STD_ISO_17
+  value: ISO C++17
+  description: A string for the label of ISO C++17 standard.
+
+- name: COMPILATION_CPP_STD_ISO_20
+  value: ISO C++20
+  description: A string for the label of ISO C++20 standard.
+
+- name: COMPILATION_CPP_STD_GNU_03
+  value: GNU C++03
+  description: A string for the label of GNU C++03 standard.
+
+- name: COMPILATION_CPP_STD_GNU_11
+  value: GNU C++11
+  description: A string for the label of GNU C++11 standard.
+
+- name: COMPILATION_CPP_STD_GNU_14
+  value: GNU C++14
+  description: A string for the label of GNU C++14 standard.
+
+- name: COMPILATION_CPP_STD_GNU_17
+  value: GNU C++17
+  description: A string for the label of GNU C++17 standard.
+
+- name: COMPILATION_CPP_STD_GNU_20
+  value: GNU C++20
+  description: A string for the label of GNU C++20 standard.
+
+- name: COMPILATION_CPP_OPTIMIZATION_O0
+  value: -O0 (disable optimization)
+  description: A string for the label of O0 optimization.
+
+- name: COMPILATION_CPP_OPTIMIZATION_O1
+  value: -O1
+  description: A string for the label of O1 optimization.
+
+- name: COMPILATION_CPP_OPTIMIZATION_O2
+  value: -O2
+  description: A string for the label of O2 optimization.
+
+- name: COMPILATION_CPP_OPTIMIZATION_O3
+  value: -O3
+  description: A string for the label of O3 optimization.
+
+- name: COMPILATION_CPP_OPTIMIZATION_OFAST
+  value: -Ofast (fastest)
+  description: A string for the label of Ofast optimization.
+
+- name: COMPILATION_CPP_ARCHITECTURE_64
+  value: 64-bit
+  description: A string for the label of 64-bit architecture.
+
+- name: COMPILATION_CPP_ARCHITECTURE_32
+  value: 32-bit
+  description: A string for the label of 32-bit architecture.
+
+- name: COMPILATION_CPP_ARCHITECTURE_X32
+  value: 64-bit with 32-bit pointers
+  description: A string for the label of 64-bit with 32-bit pointers architecture.
+
+- name: COMPILATION_C_COMPILER_GCC
+  value: GCC
+  description: A string for the label of GCC compiler.
+
+- name: COMPILATION_C_COMPILER_CLANG
+  value: Clang
+  description: A string for the label of Clang compiler.
+
+- name: COMPILATION_C_STD_ISO_89
+  value: ISO C89
+  description: A string for the label of ISO C89 standard.
+
+- name: COMPILATION_C_STD_ISO_99
+  value: ISO C99
+  description: A string for the label of ISO C99 standard.
+
+- name: COMPILATION_C_STD_ISO_11
+  value: ISO C11
+  description: A string for the label of ISO C11 standard.
+
+- name: COMPILATION_C_STD_ISO_17
+  value: ISO C17
+  description: A string for the label of ISO C17 standard.
+
+- name: COMPILATION_C_STD_GNU_89
+  value: GNU C89
+  description: A string for the label of GNU C89 standard.
+
+- name: COMPILATION_C_STD_GNU_99
+  value: GNU C99
+  description: A string for the label of GNU C99 standard.
+
+- name: COMPILATION_C_STD_GNU_11
+  value: GNU C11
+  description: A string for the label of GNU C11 standard.
+
+- name: COMPILATION_C_STD_GNU_17
+  value: GNU C17
+  description: A string for the label of GNU C17 standard.
+
+- name: COMPILATION_KT_PLATFORM_JVM
+  value: JVM
+  description: A string for the label of JVM platform.
+
+- name: COMPILATION_PAS_OPTIMIZATION_O
+  value: -O
+  description: A string for the label of O optimization.
+
+- name: COMPILATION_PAS_OPTIMIZATION_O4
+  value: -O4 (fastest)
+  description: A string for the label of O4 optimization.
+
+- name: COMPILATION_RS_OPTIMIZATION_1
+  value: Level 1
+  description: A string for the label of level 1 optimization.
+
+- name: COMPILATION_RS_OPTIMIZATION_2
+  value: Level 2
+  description: A string for the label of level 2 optimization.
+
+- name: COMPILATION_RS_OPTIMIZATION_3
+  value: Level 3 (fastest)
+  description: A string for the label of level 3 optimization.
+
+- name: COMPILATION_SW_OPTIMIZATION_O
+  value: Enabled
+  description: A string for the label of enabled optimization.
+
+- name: COMPILATION_SW_OPTIMIZATION_O_UNCHECKED
+  value: Enabled (no safety checks)
+  description: A string for the label of enabled optimization without safety checks.
+
+- name: COMPILATION_HS_VERSION_98
+  value: Haskell 98
+  description: A string for the label of Haskell 98 version.
+
+- name: COMPILATION_HS_VERSION_2010
+  value: Haskell 2010
+  description: A string for the label of Haskell 2010 version.
