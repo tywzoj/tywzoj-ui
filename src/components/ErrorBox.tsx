@@ -8,7 +8,7 @@ import type { IErrorLink } from "@/common/types/error-link";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 
-import { LinkWithRouter } from "./LinkWithRouter";
+import { LinkWithRouter } from "../common/components/LinkWithRouter";
 
 export interface IErrorBoxProps {
     message: string;

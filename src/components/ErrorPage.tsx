@@ -1,10 +1,10 @@
 import React from "react";
 
-import { ErrorBox } from "@/common/components/ErrorBox";
 import type { IErrorLink, IStringCodeErrorLink } from "@/common/types/error-link";
 import { useLocalizedStrings } from "@/locales/hooks";
 
 import { AppError } from "../common/exceptions/app-error";
+import { ErrorBox } from "./ErrorBox";
 
 export interface IErrorPageProps {
     error: Error;
