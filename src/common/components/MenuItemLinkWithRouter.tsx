@@ -6,6 +6,8 @@ import React from "react";
 type FluentMenuItemLinkProps = Omit<MenuItemLinkProps, "href">;
 
 const FluentMenuItemLinkComponent = React.forwardRef<HTMLAnchorElement, FluentMenuItemLinkProps>((props, ref) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return <MenuItemLink as="a" ref={ref} {...props} />;
 });
 FluentMenuItemLinkComponent.displayName = "FluentMenuItemLinkComponent";
