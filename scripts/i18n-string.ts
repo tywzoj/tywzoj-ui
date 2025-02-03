@@ -126,7 +126,10 @@ function setLocalizedString(lang: string, strings: ILocalizedString[]) {
 function getRawStrings(): ILocalizedString[] {
     const rawStringFilePath = pathResolve(localeDir, "raw.yaml");
     const raw = yamlLoad(fs.readFileSync(rawStringFilePath, "utf-8")) as ILocalizedString[];
+
+    // Rewrite the file to standard YAML format
     fs.writeFileSync(rawStringFilePath, yamlDump(raw).replace(/\n-/g, "\n\n-"));
+
     return raw;
 }
 
