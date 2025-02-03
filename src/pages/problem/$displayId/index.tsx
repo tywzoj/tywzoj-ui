@@ -1,8 +1,13 @@
+import type { Slot } from "@fluentui/react-components";
 import {
     Body1Strong,
     Button,
     Card,
     CardHeader,
+    Dialog,
+    DialogBody,
+    DialogSurface,
+    DialogTitle,
     makeStyles,
     Menu,
     MenuButton,
@@ -62,6 +67,8 @@ const ProblemDetailPage: React.FC = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
     const isMiddleScreen = useIsMiddleScreen();
+    const permission = usePermission();
+    const [isSubmissionDialogOpen, setIsSubmissionDialogOpen] = React.useState(false);
 
     const styles = useStyles();
 
@@ -144,7 +151,7 @@ const ProblemDetailPage: React.FC = () => {
                     <ProblemCard
                         title={ls.tags}
                         action={
-                            <Tooltip content={showTagsOnProblemDetail ? ls.hideTags : ls.showTags}>
+                            <Tooltip content={showTagsOnProblemDetail ? ls.hideTags : ls.showTags} relationship="label">
                                 <ToggleButton
                                     appearance="transparent"
                                     icon={showTagsOnProblemDetail ? <TagFilled /> : <TagOffFilled />}
@@ -172,6 +179,15 @@ const ProblemDetailPage: React.FC = () => {
                     </ProblemCard>
                 </div>
             </div>
+            {permission.submitAnswer && (
+                <Dialog open={isSubmissionDialogOpen} onOpenChange={(_, data) => setIsSubmissionDialogOpen(data.open)}>
+                    <DialogSurface>
+                        <DialogBody>
+                            <DialogTitle>Dialog title</DialogTitle>
+                        </DialogBody>
+                    </DialogSurface>
+                </Dialog>
+            )}
         </div>
     );
 };
@@ -179,7 +195,7 @@ const ProblemDetailPage: React.FC = () => {
 const ProblemCard: React.FC<
     React.PropsWithChildren<{
         title: string;
-        action?: React.ReactNode;
+        action?: Slot<"div">;
     }>
 > = ({ title, action, children }) => {
     const styles = useStyles();
@@ -266,11 +282,10 @@ const ProblemContent: React.FC<{
     );
 };
 
-type IProblemActionProps = {
-    key: string;
-    content: string;
-    overflow?: boolean;
-} & (IButtonWithRouterProps | IMenuItemLinkWithRouterProps);
+type IProblemActionSharedProps = { key: string; content: string };
+type IProblemActionButtonProps = IProblemActionSharedProps & IButtonWithRouterProps;
+type IProblemActionMenuItemProps = IProblemActionSharedProps & IMenuItemLinkWithRouterProps;
+type IProblemActionProps = { overflow?: boolean } & (IProblemActionButtonProps | IProblemActionMenuItemProps);
 
 const ProblemActions: React.FC<{
     problem: IProblemDetail;
@@ -329,8 +344,14 @@ const ProblemActions: React.FC<{
         return items;
     }, [problem, isSmallScreen, permission.manageProblem, isMiddleScreen]);
 
-    const buttonPropsList: IProblemActionProps[] = actionPropsList.filter(({ overflow }) => isVertical || !overflow);
-    const menuItemPropsList: IProblemActionProps[] = actionPropsList.filter(({ overflow }) => !isVertical && overflow);
+    const buttonPropsList: IProblemActionButtonProps[] = React.useMemo(
+        () => actionPropsList.filter(({ overflow }) => isVertical || !overflow) as IProblemActionButtonProps[],
+        [actionPropsList, isVertical],
+    );
+    const menuItemPropsList: IProblemActionMenuItemProps[] = React.useMemo(
+        () => actionPropsList.filter(({ overflow }) => !isVertical && overflow) as IProblemActionMenuItemProps[],
+        [actionPropsList, isVertical],
+    );
     const showOverflow = !isVertical && menuItemPropsList.length > 0;
 
     return (
