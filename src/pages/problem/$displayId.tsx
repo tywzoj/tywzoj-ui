@@ -1,24 +1,45 @@
 import {
     Body1Strong,
+    Button,
     Card,
     CardHeader,
     makeStyles,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuPopover,
+    MenuTrigger,
     mergeClasses,
     Spinner,
     Subtitle1,
     Subtitle2,
     Title3,
     ToggleButton,
+    tokens,
     Tooltip,
 } from "@fluentui/react-components";
-import { TagFilled, TagOffFilled } from "@fluentui/react-icons";
+import {
+    CodeFilled,
+    DocumentTextFilled,
+    EditFilled,
+    MoreHorizontalFilled,
+    TagFilled,
+    TagOffFilled,
+    TaskListLtrFilled,
+    TaskListSquareSettingsFilled,
+} from "@fluentui/react-icons";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import React from "react";
 
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
+import { ButtonGroup, firstButtonClassName, lastButtonClassName } from "@/components/ButtonGroup";
+import type { IButtonWithRouterProps } from "@/components/ButtonWithRouter";
+import { ButtonWithRouter } from "@/components/ButtonWithRouter";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
+import type { IMenuItemLinkWithRouterProps } from "@/components/MenuItemLinkWithRouter";
+import { MenuItemLinkWithRouter } from "@/components/MenuItemLinkWithRouter";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { CodeBoxLazy } from "@/highlight/CodeBox.lazy";
@@ -28,9 +49,10 @@ import { MarkdownContentLazy } from "@/markdown/MarkdownContent.lazy";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptions } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
+import type { IProblemDetail } from "@/server/modules/problem.types";
 import { withThrowErrors } from "@/server/utils";
 import { setPreferenceAction } from "@/store/actions";
-import { useAppDispatch, useAppSelector, useIsMiddleScreen, useIsSmallScreen } from "@/store/hooks";
+import { useAppDispatch, useAppSelector, useIsMiddleScreen, useIsSmallScreen, usePermission } from "@/store/hooks";
 import { getPreference } from "@/store/selectors";
 
 const ProblemDetailPage: React.FC = () => {
@@ -73,20 +95,24 @@ const ProblemDetailPage: React.FC = () => {
             </div>
             <div className={mergeClasses(styles.content, isMiddleScreen && styles.oneLineContent)}>
                 <div className={styles.leftColumn}>
-                    {content && (
-                        <>
-                            <ProblemCard condition={content.description} title={ls.description}>
-                                <ProblemContent content={content.description} />
-                            </ProblemCard>
+                    {isMiddleScreen && <ProblemActions problem={problem} />}
 
-                            <ProblemCard condition={content.inputFormat} title={ls.inputFormat}>
-                                <ProblemContent content={content.inputFormat} />
-                            </ProblemCard>
+                    {content?.description && (
+                        <ProblemCard title={ls.description}>
+                            <ProblemContent content={content.description} />
+                        </ProblemCard>
+                    )}
 
-                            <ProblemCard condition={content.outputFormat} title={ls.outputFormat}>
-                                <ProblemContent content={content.outputFormat} />
-                            </ProblemCard>
-                        </>
+                    {content?.inputFormat && (
+                        <ProblemCard title={ls.inputFormat}>
+                            <ProblemContent content={content.inputFormat} />
+                        </ProblemCard>
+                    )}
+
+                    {content?.outputFormat && (
+                        <ProblemCard title={ls.outputFormat}>
+                            <ProblemContent content={content.outputFormat} />
+                        </ProblemCard>
                     )}
 
                     {samples.length > 0 && (
@@ -105,11 +131,16 @@ const ProblemDetailPage: React.FC = () => {
                         </ProblemCard>
                     )}
 
-                    <ProblemCard condition={content?.limitAndHint} title={ls.limitAndHint}>
-                        <ProblemContent content={content!.limitAndHint} />
-                    </ProblemCard>
+                    {content?.limitAndHint && (
+                        <ProblemCard title={ls.limitAndHint}>
+                            <ProblemContent content={content.limitAndHint} />
+                        </ProblemCard>
+                    )}
                 </div>
+
                 <div className={styles.rightColumn}>
+                    {!isMiddleScreen && <ProblemActions problem={problem} />}
+
                     <ProblemCard
                         title={ls.tags}
                         action={
@@ -149,12 +180,11 @@ const ProblemCard: React.FC<
     React.PropsWithChildren<{
         title: string;
         action?: React.ReactNode;
-        condition?: unknown;
     }>
-> = ({ title, action, condition = true, children }) => {
+> = ({ title, action, children }) => {
     const styles = useStyles();
 
-    return condition ? (
+    return (
         <Card className={styles.card}>
             <CardHeader
                 header={
@@ -166,7 +196,7 @@ const ProblemCard: React.FC<
             />
             <div className={styles.cardContent}>{children}</div>
         </Card>
-    ) : null;
+    );
 };
 
 const ProblemSampleBox: React.FC<{
@@ -233,6 +263,124 @@ const ProblemContent: React.FC<{ content: string; placeHolderLines?: number }> =
     );
 };
 
+type IProblemActionProps = {
+    key: string;
+    content: string;
+    overflow?: boolean;
+} & (IButtonWithRouterProps | IMenuItemLinkWithRouterProps);
+
+const ProblemActions: React.FC<{
+    problem: IProblemDetail;
+    onSubmission?: () => void;
+}> = ({ problem, onSubmission }) => {
+    const styles = useStyles();
+    const isMiddleScreen = useIsMiddleScreen();
+    const isSmallScreen = useIsSmallScreen();
+    const isVertical = !isMiddleScreen;
+    const permission = usePermission();
+
+    const actionPropsList = React.useMemo<IProblemActionProps[]>(() => {
+        const strId = String(problem.id);
+
+        const items: IProblemActionProps[] = [];
+
+        items.push({
+            key: "submission",
+            to: "/submission",
+            search: { pid: problem.id },
+            icon: <TaskListLtrFilled />,
+            content: "Submissions",
+        });
+
+        // TODO: check file exists
+        items.push({
+            key: "files",
+            to: "/problem/$id/files",
+            params: { id: strId },
+            icon: <DocumentTextFilled />,
+            content: "Files",
+            overflow: isSmallScreen,
+        });
+
+        if (permission.manageProblem) {
+            items.push(
+                {
+                    key: "edit",
+                    to: "/problem/$id/edit",
+                    params: { id: strId },
+                    icon: <EditFilled />,
+                    content: "Edit",
+                    overflow: isMiddleScreen,
+                },
+                {
+                    key: "judge",
+                    to: "/problem/$id/judge",
+                    params: { id: strId },
+                    icon: <TaskListSquareSettingsFilled />,
+                    content: "Judgement Settings",
+                    overflow: isMiddleScreen,
+                },
+            );
+        }
+
+        return items;
+    }, [problem.id, isSmallScreen, permission.manageProblem, isMiddleScreen]);
+
+    const buttonPropsList: IProblemActionProps[] = actionPropsList.filter(({ overflow }) => isVertical || !overflow);
+    const menuItemPropsList: IProblemActionProps[] = actionPropsList.filter(({ overflow }) => !isVertical && overflow);
+    const showOverflow = !isVertical && menuItemPropsList.length > 0;
+
+    return (
+        <ButtonGroup
+            vertical={isVertical}
+            className={isVertical ? styles.buttonGroupVertical : styles.buttonGroupHorizontal}
+        >
+            {permission.submitAnswer && (
+                <Button
+                    className={mergeClasses(firstButtonClassName, isVertical && styles.submitButton)}
+                    onClick={onSubmission}
+                    shape="square"
+                    appearance="primary"
+                    icon={<CodeFilled />}
+                >
+                    Submit
+                </Button>
+            )}
+
+            {buttonPropsList.map(({ key, content, ...props }, index) => (
+                <ButtonWithRouter
+                    {...props}
+                    shape="square"
+                    key={key}
+                    className={!showOverflow && index === buttonPropsList.length - 1 ? lastButtonClassName : undefined}
+                >
+                    {content}
+                </ButtonWithRouter>
+            ))}
+
+            {showOverflow && (
+                <Menu>
+                    <MenuTrigger disableButtonEnhancement>
+                        <Tooltip content="More" relationship="label">
+                            <MenuButton className={lastButtonClassName} icon={<MoreHorizontalFilled />} />
+                        </Tooltip>
+                    </MenuTrigger>
+
+                    <MenuPopover>
+                        <MenuList>
+                            {menuItemPropsList.map(({ key, content, ...props }) => (
+                                <MenuItemLinkWithRouter {...props} key={key}>
+                                    {content}
+                                </MenuItemLinkWithRouter>
+                            ))}
+                        </MenuList>
+                    </MenuPopover>
+                </Menu>
+            )}
+        </ButtonGroup>
+    );
+};
+
 const useStyles = makeStyles({
     root: {
         ...flex({
@@ -258,7 +406,6 @@ const useStyles = makeStyles({
     content: {
         ...flex(),
         gap: "20px",
-        boxSizing: "border-box",
         maxWidth: "100%",
         minWidth: "0",
     },
@@ -272,7 +419,6 @@ const useStyles = makeStyles({
             flexDirection: "column",
         }),
         gap: "20px",
-        boxSizing: "border-box",
         flexShrink: 1,
         flex: 2.5,
         minWidth: "0",
@@ -282,13 +428,11 @@ const useStyles = makeStyles({
             flexDirection: "column",
         }),
         gap: "20px",
-        boxSizing: "border-box",
         flex: 1,
         minWidth: "0",
     },
     card: {
         width: "100%",
-        boxSizing: "border-box",
     },
     cardTitle: {
         margin: "unset",
@@ -307,6 +451,7 @@ const useStyles = makeStyles({
             flexDirection: "column",
         }),
         gap: "8px",
+        width: "100%",
     },
     sampleBox: {
         ...flex({
@@ -328,8 +473,27 @@ const useStyles = makeStyles({
     },
     sampleItem: {
         maxWidth: "100%",
-        flex: 1,
-        minWidth: "50%",
+        flexGrow: 1,
+        minWidth: "calc(50% - 4px)",
+    },
+    buttonGroupVertical: {
+        width: "100%",
+        "& button, & a": {
+            ...flex({
+                alignItems: "center",
+            }),
+            gap: tokens.spacingHorizontalM,
+            minWidth: "fit-content",
+            width: "100%",
+        },
+    },
+    buttonGroupHorizontal: {
+        ...flex({
+            flexWrap: "nowrap",
+        }),
+    },
+    submitButton: {
+        height: "40px",
     },
 });
 

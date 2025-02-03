@@ -82,7 +82,7 @@ export const Layout: React.FC = () => {
         [isOverlay, ls.navigationTitle],
     );
 
-    const createNavItem = (to: NavTo<typeof NavItemWithRouter>, text: string, icon: JSX.Element) => {
+    const createNavItem = (to: NavTo<typeof NavItemWithRouter>, text: string, icon: JSX.Element, preload = false) => {
         return (
             <NavItemWithRouter
                 key={to}
@@ -95,6 +95,7 @@ export const Layout: React.FC = () => {
                         setIsNavDrawerOpen(false);
                     }
                 }}
+                preload={preload && "intent"}
             >
                 {text}
             </NavItemWithRouter>
