@@ -1,13 +1,5 @@
-import type { Slot } from "@fluentui/react-components";
 import {
-    Body1Strong,
     Button,
-    Card,
-    CardHeader,
-    Dialog,
-    DialogBody,
-    DialogSurface,
-    DialogTitle,
     makeStyles,
     Menu,
     MenuButton,
@@ -15,9 +7,6 @@ import {
     MenuPopover,
     MenuTrigger,
     mergeClasses,
-    Spinner,
-    Subtitle1,
-    Subtitle2,
     Title3,
     ToggleButton,
     tokens,
@@ -43,18 +32,18 @@ import type { IMenuItemLinkWithRouterProps } from "@/common/components/MenuItemL
 import { MenuItemLinkWithRouter } from "@/common/components/MenuItemLinkWithRouter";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
-import { format } from "@/common/utils/format";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
+import { ProblemCard } from "@/components/ProblemCard";
+import { ProblemContent } from "@/components/ProblemContent";
+import { ProblemSubmissionDialog } from "@/components/ProblemSubmissionDialog";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
-import { CodeBoxLazy } from "@/highlight/CodeBox.lazy";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
-import { MarkdownContentLazy } from "@/markdown/MarkdownContent.lazy";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptions } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
-import type { IProblemDetail } from "@/server/modules/problem.types";
+import type { IProblemDetail, IProblemTagDetail } from "@/server/modules/problem.types";
 import { withThrowErrors } from "@/server/utils";
 import { setPreferenceAction } from "@/store/actions";
 import { useAppDispatch, useAppSelector, useIsMiddleScreen, useIsSmallScreen, usePermission } from "@/store/hooks";
@@ -63,34 +52,14 @@ import { getPreference } from "@/store/selectors";
 const ProblemDetailPage: React.FC = () => {
     const problem = Route.useLoaderData();
     const { tags, content, samples } = problem;
-    const { showTagsOnProblemDetail } = useAppSelector(getPreference);
-    const dispatch = useAppDispatch();
-    const router = useRouter();
+
     const isMiddleScreen = useIsMiddleScreen();
     const permission = usePermission();
     const [isSubmissionDialogOpen, setIsSubmissionDialogOpen] = React.useState(false);
 
     const styles = useStyles();
 
-    const ls = useLocalizedStrings({
-        description: CE_Strings.PROBLEM_DESCRIPTION_LABEL,
-        inputFormat: CE_Strings.PROBLEM_INPUT_FORMAT_LABEL,
-        outputFormat: CE_Strings.PROBLEM_OUTPUT_FORMAT_LABEL,
-        limitAndHint: CE_Strings.PROBLEM_LIMIT_AND_HINT_LABEL,
-        samples: CE_Strings.PROBLEM_SAMPLES_LABEL,
-        tags: CE_Strings.PROBLEM_TAGS_LABEL,
-        showTags: CE_Strings.SHOW_TAGS_LABEL,
-        hideTags: CE_Strings.HIDE_TAGS_LABEL,
-        noTags: CE_Strings.NO_TAGS_TEXT,
-    });
-
     useSetPageTitle(`#${problem.displayId}.${problem.title}`);
-
-    // TODO: Add submission button
-    // TODO: Add manage button
-    // TODO: Add edit button
-    // TODO: Add delete button
-    // TODO: Add file button
 
     return (
         <div className={styles.root}>
@@ -100,185 +69,80 @@ const ProblemDetailPage: React.FC = () => {
                 </Title3>
                 <VisibilityLabel visibility={problem.visibility} />
             </div>
+
             <div className={mergeClasses(styles.content, isMiddleScreen && styles.oneLineContent)}>
                 <div className={styles.leftColumn}>
-                    {isMiddleScreen && <ProblemActions problem={problem} />}
-
-                    {content?.description && (
-                        <ProblemCard title={ls.description}>
-                            <ProblemContent content={content.description} />
-                        </ProblemCard>
+                    {isMiddleScreen && (
+                        <ProblemActions problem={problem} onSubmit={() => setIsSubmissionDialogOpen(true)} />
                     )}
 
-                    {content?.inputFormat && (
-                        <ProblemCard title={ls.inputFormat}>
-                            <ProblemContent content={content.inputFormat} />
-                        </ProblemCard>
-                    )}
-
-                    {content?.outputFormat && (
-                        <ProblemCard title={ls.outputFormat}>
-                            <ProblemContent content={content.outputFormat} />
-                        </ProblemCard>
-                    )}
-
-                    {samples.length > 0 && (
-                        <ProblemCard title={ls.samples}>
-                            <div className={styles.sampleBoxContainer}>
-                                {samples.map((sample, index) => (
-                                    <ProblemSampleBox
-                                        key={sample.id}
-                                        index={index + 1}
-                                        input={sample.input}
-                                        output={sample.output}
-                                        explanation={sample.explanation}
-                                    />
-                                ))}
-                            </div>
-                        </ProblemCard>
-                    )}
-
-                    {content?.limitAndHint && (
-                        <ProblemCard title={ls.limitAndHint}>
-                            <ProblemContent content={content.limitAndHint} />
-                        </ProblemCard>
-                    )}
+                    <ProblemContent content={content} samples={samples} />
                 </div>
 
                 <div className={styles.rightColumn}>
-                    {!isMiddleScreen && <ProblemActions problem={problem} />}
+                    {!isMiddleScreen && (
+                        <ProblemActions problem={problem} onSubmit={() => setIsSubmissionDialogOpen(true)} />
+                    )}
 
-                    <ProblemCard
-                        title={ls.tags}
-                        action={
-                            <Tooltip content={showTagsOnProblemDetail ? ls.hideTags : ls.showTags} relationship="label">
-                                <ToggleButton
-                                    appearance="transparent"
-                                    icon={showTagsOnProblemDetail ? <TagFilled /> : <TagOffFilled />}
-                                    checked={showTagsOnProblemDetail}
-                                    onClick={() => {
-                                        const preShowTagsOnProblemDetail = showTagsOnProblemDetail;
-                                        dispatch(
-                                            setPreferenceAction({
-                                                showTagsOnProblemDetail: !preShowTagsOnProblemDetail,
-                                            }),
-                                        );
-                                        if (!preShowTagsOnProblemDetail) {
-                                            router.invalidate();
-                                        }
-                                    }}
-                                />
-                            </Tooltip>
-                        }
-                    >
-                        <div className={styles.tagContainer}>
-                            {showTagsOnProblemDetail
-                                ? tags.map((tag) => <ProblemTag key={tag.id} name={tag.name} color={tag.color} />)
-                                : null}
-                        </div>
-                    </ProblemCard>
+                    <ProblemTags tags={tags} />
                 </div>
             </div>
             {permission.submitAnswer && (
-                <Dialog open={isSubmissionDialogOpen} onOpenChange={(_, data) => setIsSubmissionDialogOpen(data.open)}>
-                    <DialogSurface>
-                        <DialogBody>
-                            <DialogTitle>Dialog title</DialogTitle>
-                        </DialogBody>
-                    </DialogSurface>
-                </Dialog>
+                <ProblemSubmissionDialog
+                    isOpen={isSubmissionDialogOpen}
+                    onClose={() => setIsSubmissionDialogOpen(false)}
+                    onSubmit={() => {}}
+                />
             )}
         </div>
     );
 };
 
-const ProblemCard: React.FC<
-    React.PropsWithChildren<{
-        title: string;
-        action?: Slot<"div">;
-    }>
-> = ({ title, action, children }) => {
-    const styles = useStyles();
-
-    return (
-        <Card className={styles.card}>
-            <CardHeader
-                header={
-                    <Subtitle1 as="h2" className={styles.cardTitle}>
-                        {title}
-                    </Subtitle1>
-                }
-                action={action}
-            />
-            <div className={styles.cardContent}>{children}</div>
-        </Card>
-    );
-};
-
-const ProblemSampleBox: React.FC<{
-    index: number;
-    input: string;
-    output: string;
-    explanation: string;
-}> = ({ index, input, output, explanation }) => {
-    const styles = useStyles();
-
-    const isSmallScreen = useIsSmallScreen();
+const ProblemTags: React.FC<{
+    tags: IProblemTagDetail[];
+}> = ({ tags }) => {
+    const { showTagsOnProblemDetail } = useAppSelector(getPreference);
+    const dispatch = useAppDispatch();
+    const router = useRouter();
 
     const ls = useLocalizedStrings({
-        sampleItem: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
-        sampleI: CE_Strings.PROBLEM_SAMPLE_INPUT_LABEL,
-        sampleO: CE_Strings.PROBLEM_SAMPLE_OUTPUT_LABEL,
-        sampleE: CE_Strings.PROBLEM_SAMPLE_EXPLANATION_LABEL,
+        tags: CE_Strings.PROBLEM_TAGS_LABEL,
+        showTags: CE_Strings.SHOW_TAGS_LABEL,
+        hideTags: CE_Strings.HIDE_TAGS_LABEL,
+        noTags: CE_Strings.NO_TAGS_TEXT,
     });
 
+    const styles = useStyles();
     return (
-        <div className={styles.sampleBox}>
-            <Subtitle2 as="h3" className={styles.cardTitle}>
-                {format(ls.sampleItem, index)}
-            </Subtitle2>
-            <div className={mergeClasses(styles.sampleIO, isSmallScreen && styles.sampleIOSingleLine)}>
-                {input && (
-                    <div className={styles.sampleItem}>
-                        <Body1Strong as="h4" className={styles.cardTitle}>
-                            {ls.sampleI}
-                        </Body1Strong>
-                        <React.Suspense fallback={<Spinner size="small" />}>
-                            <CodeBoxLazy code={input} />
-                        </React.Suspense>
-                    </div>
-                )}
-                {output && (
-                    <div className={styles.sampleItem}>
-                        <Body1Strong as="h4" className={styles.cardTitle}>
-                            {ls.sampleO}
-                        </Body1Strong>
-                        <React.Suspense fallback={<Spinner size="small" />}>
-                            <CodeBoxLazy code={"test"} />
-                        </React.Suspense>
-                    </div>
-                )}
+        <ProblemCard
+            title={ls.tags}
+            action={
+                <Tooltip content={showTagsOnProblemDetail ? ls.hideTags : ls.showTags} relationship="label">
+                    <ToggleButton
+                        appearance="transparent"
+                        icon={showTagsOnProblemDetail ? <TagFilled /> : <TagOffFilled />}
+                        checked={showTagsOnProblemDetail}
+                        onClick={() => {
+                            const preShowTagsOnProblemDetail = showTagsOnProblemDetail;
+                            dispatch(
+                                setPreferenceAction({
+                                    showTagsOnProblemDetail: !preShowTagsOnProblemDetail,
+                                }),
+                            );
+                            if (!preShowTagsOnProblemDetail) {
+                                router.invalidate();
+                            }
+                        }}
+                    />
+                </Tooltip>
+            }
+        >
+            <div className={styles.tagContainer}>
+                {showTagsOnProblemDetail
+                    ? tags.map((tag) => <ProblemTag key={tag.id} name={tag.name} color={tag.color} />)
+                    : null}
             </div>
-            {explanation && (
-                <div className={styles.sampleItem}>
-                    <Body1Strong as="h4" className={styles.cardTitle}>
-                        {ls.sampleE}
-                    </Body1Strong>
-                    <ProblemContent content={explanation} placeHolderLines={2} />
-                </div>
-            )}
-        </div>
-    );
-};
-
-const ProblemContent: React.FC<{
-    content: string;
-    placeHolderLines?: number;
-}> = ({ content, placeHolderLines }) => {
-    return (
-        <React.Suspense fallback={<Spinner size="small" />}>
-            <MarkdownContentLazy content={content} placeholderLines={placeHolderLines} />
-        </React.Suspense>
+        </ProblemCard>
     );
 };
 
@@ -289,8 +153,8 @@ type IProblemActionProps = { overflow?: boolean } & (IProblemActionButtonProps |
 
 const ProblemActions: React.FC<{
     problem: IProblemDetail;
-    onSubmission?: () => void;
-}> = ({ problem, onSubmission }) => {
+    onSubmit: () => void;
+}> = ({ problem, onSubmit: onSubmission }) => {
     const styles = useStyles();
     const isMiddleScreen = useIsMiddleScreen();
     const isSmallScreen = useIsSmallScreen();
@@ -455,50 +319,11 @@ const useStyles = makeStyles({
         flex: 1,
         minWidth: "0",
     },
-    card: {
-        width: "100%",
-    },
-    cardTitle: {
-        margin: "unset",
-    },
-    cardContent: {
-        width: "100%",
-    },
     tagContainer: {
         ...flex({
             flexWrap: "wrap",
         }),
         gap: "4px",
-    },
-    sampleBoxContainer: {
-        ...flex({
-            flexDirection: "column",
-        }),
-        gap: "8px",
-        width: "100%",
-    },
-    sampleBox: {
-        ...flex({
-            flexDirection: "column",
-        }),
-        gap: "8px",
-        width: "100%",
-    },
-    sampleIO: {
-        ...flex(),
-        gap: "8px",
-        width: "100%",
-    },
-    sampleIOSingleLine: {
-        ...flex({
-            flexDirection: "column",
-        }),
-        width: "100%",
-    },
-    sampleItem: {
-        maxWidth: "100%",
-        flexGrow: 1,
-        minWidth: "calc(50% - 4px)",
     },
     buttonGroupVertical: {
         width: "100%",
