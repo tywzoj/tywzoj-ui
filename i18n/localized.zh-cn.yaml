@@ -404,7 +404,7 @@
   raw: Internal
 
 - name: VISIBILITY_LABEL_PRIVATE
-  value: 私有
+  value: 未公开
   description: A string for the visibility of private.
   raw: Private
 
