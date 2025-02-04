@@ -1,9 +1,8 @@
+import cssUrlDraculaHref from "@/assets/styles/prism-dracula.css?url";
+import cssUrlOneLightHref from "@/assets/styles/prism-one-light.css?url";
 import { neverGuard } from "@/common/utils/never-guard";
 
 import { CE_Theme } from "./types";
-
-const cssUrlOneLightHref = new URL("../assets/themes/prism-one-light.css", import.meta.url).href;
-const cssUrlDraculaHref = new URL("../assets/themes/prism-dracula.css", import.meta.url).href;
 
 const cssLinkTag = document.createElement("link");
 cssLinkTag.rel = "stylesheet";

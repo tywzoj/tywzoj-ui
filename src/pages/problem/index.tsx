@@ -19,6 +19,7 @@ import React from "react";
 import { z } from "zod";
 
 import { LinkWithRouter } from "@/common/components/LinkWithRouter";
+import { PaginationButtons } from "@/common/components/PaginationButtons";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { useTableSortAttributes } from "@/common/hooks/table-sort";
 import { flex } from "@/common/styles/flex";
@@ -27,7 +28,6 @@ import { calcCount, calcPageCount } from "@/common/utils/pagination";
 import { percent } from "@/common/utils/percent";
 import { Z_ORDER, Z_PROBLEM_SORT_BY } from "@/common/validators/zod";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
-import { PaginationButtons } from "@/components/PaginationButtons";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";

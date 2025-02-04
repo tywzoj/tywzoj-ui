@@ -4,7 +4,7 @@ import type { IErrorLink, IStringCodeErrorLink } from "@/common/types/error-link
 import { useLocalizedStrings } from "@/locales/hooks";
 
 import { AppError } from "../common/exceptions/app-error";
-import { ErrorBox } from "./ErrorBox";
+import { ErrorBox } from "../common/components/ErrorBox";
 
 export interface IErrorPageProps {
     error: Error;
