@@ -4,16 +4,19 @@ import { createFileRoute, Navigate } from "@tanstack/react-router";
 import React from "react";
 
 import { signInAsyncAction } from "@/common/actions/sign-in";
+import { LinkWithRouter } from "@/common/components/LinkWithRouter";
+import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
-import { useDispatchToastError } from "@/common/hooks/toast";
 import { flex } from "@/common/styles/flex";
+import { neverGuard } from "@/common/utils/never-guard";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
-import { LinkWithRouter } from "@/components/LinkWithRouter";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
+import type { IErrorCodeWillBeReturned } from "@/server/utils";
+import { withThrowErrorsExcept } from "@/server/utils";
 import { useAppDispatch, useCurrentUser } from "@/store/hooks";
 
 export interface ISignInPageSearch {
@@ -26,7 +29,6 @@ const SignInPage: React.FC = () => {
     const { redirect = "/" } = Route.useSearch();
     const errorCodeToString = useErrorCodeToString();
     const currentUser = useCurrentUser();
-    const dispatchToastError = useDispatchToastError();
     const [loginSucceed, setLoginSucceed] = React.useState(!!currentUser);
 
     const ls = useLocalizedStrings({
@@ -69,7 +71,7 @@ const SignInPage: React.FC = () => {
     };
 
     const handleError = React.useCallback(
-        (code: CE_ErrorCode) => {
+        (code: IErrorCodeWillBeReturned<typeof signInRequestAsync>) => {
             switch (code) {
                 case CE_ErrorCode.Auth_NoSuchUser:
                     setUsernameError(errorCodeToString(code));
@@ -78,27 +80,23 @@ const SignInPage: React.FC = () => {
                     setPasswordError(errorCodeToString(code));
                     break;
                 default:
-                    dispatchToastError(errorCodeToString(code));
-                    break;
+                    neverGuard(code);
             }
         },
-        [dispatchToastError, errorCodeToString],
+        [errorCodeToString],
     );
 
-    const handleSignInAsync = React.useCallback(
-        async (usernameOrEmail: string, password: string) => {
-            const resp = await AuthModule.postSignInAsync({ usernameOrEmail, password }, recaptchaAsync);
+    const handleSignInAsync = useWithCatchError(async (usernameOrEmail: string, password: string) => {
+        const resp = await signInRequestAsync({ usernameOrEmail, password }, recaptchaAsync);
 
-            if (resp.code !== CE_ErrorCode.OK) {
-                handleError(resp.code);
-                return;
-            }
+        if (resp.code !== CE_ErrorCode.OK) {
+            handleError(resp.code);
+            return;
+        }
 
-            await dispatch(signInAsyncAction(resp.data));
-            setLoginSucceed(true);
-        },
-        [dispatch, handleError, recaptchaAsync],
-    );
+        await dispatch(signInAsyncAction(resp.data));
+        setLoginSucceed(true);
+    });
 
     const handleSubmit = () => {
         if (!validate()) {
@@ -106,13 +104,9 @@ const SignInPage: React.FC = () => {
         }
 
         setLoading(true);
-        handleSignInAsync(username, password)
-            .catch((err) => {
-                dispatchToastError(err.message);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        handleSignInAsync(username, password).finally(() => {
+            setLoading(false);
+        });
     };
 
     return loginSucceed ? (
@@ -177,12 +171,6 @@ const SignInPage: React.FC = () => {
     );
 };
 
-export const Route = createFileRoute("/sign-in")({
-    component: SignInPage,
-    validateSearch: (search): ISignInPageSearch => search,
-    errorComponent: ErrorPageLazy,
-});
-
 const useStyles = makeStyles({
     root: {
         ...flex({
@@ -222,4 +210,16 @@ const useStyles = makeStyles({
         marginTop: "16px",
         boxSizing: "border-box",
     },
+});
+
+const signInRequestAsync = withThrowErrorsExcept(
+    AuthModule.postSignInAsync,
+    CE_ErrorCode.Auth_NoSuchUser,
+    CE_ErrorCode.Auth_WrongPassword,
+);
+
+export const Route = createFileRoute("/sign-in")({
+    component: SignInPage,
+    validateSearch: (search): ISignInPageSearch => search,
+    errorComponent: ErrorPageLazy,
 });

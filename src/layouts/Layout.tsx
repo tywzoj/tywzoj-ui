@@ -9,11 +9,11 @@ import iconDark from "@/assets/icon.dark.png";
 import iconLight from "@/assets/icon.light.png";
 import titleDark from "@/assets/tywzoj.dark.svg";
 import titleLight from "@/assets/tywzoj.light.svg";
+import { NavItemWithRouter } from "@/common/components/NavItemWithRouter";
 import { flex } from "@/common/styles/flex";
 import { commonLinkStyles } from "@/common/styles/link";
 import type { NavTo } from "@/common/types/nav-to";
 import { format } from "@/common/utils/format";
-import { NavItemWithRouter } from "@/components/NavItemWithRouter";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { getLocale } from "@/locales/selectors";
 import { CE_Locale, CE_Strings } from "@/locales/types";
@@ -82,12 +82,13 @@ export const Layout: React.FC = () => {
         [isOverlay, ls.navigationTitle],
     );
 
-    const createNavItem = (to: NavTo<typeof NavItemWithRouter>, text: string, icon: JSX.Element) => {
+    const createNavItem = (to: NavTo<typeof NavItemWithRouter>, text: string, icon: JSX.Element, preload = false) => {
         return (
             <NavItemWithRouter
                 key={to}
                 to={to}
                 icon={icon}
+                value={INACTIVE_ITEM_TAG + to}
                 activeProps={{ value: ACTIVE_ITEM_TAG }}
                 inactiveProps={{ value: INACTIVE_ITEM_TAG + to }}
                 onClick={() => {
@@ -95,6 +96,7 @@ export const Layout: React.FC = () => {
                         setIsNavDrawerOpen(false);
                     }
                 }}
+                preload={preload && "intent"}
             >
                 {text}
             </NavItemWithRouter>

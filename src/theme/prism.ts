@@ -1,7 +1,8 @@
-import { CE_Theme } from "./types";
+import cssUrlDraculaHref from "@/assets/styles/prism-dracula.css?url";
+import cssUrlOneLightHref from "@/assets/styles/prism-one-light.css?url";
+import { neverGuard } from "@/common/utils/never-guard";
 
-const cssUrlOneLightHref = new URL("../assets/themes/prism-one-light.css", import.meta.url).href;
-const cssUrlDraculaHref = new URL("../assets/themes/prism-dracula.css", import.meta.url).href;
+import { CE_Theme } from "./types";
 
 const cssLinkTag = document.createElement("link");
 cssLinkTag.rel = "stylesheet";
@@ -15,5 +16,7 @@ export function injectPrismTheme(theme: CE_Theme) {
         case CE_Theme.Dark:
             cssLinkTag.href = cssUrlDraculaHref;
             break;
+        default:
+            neverGuard(theme);
     }
 }

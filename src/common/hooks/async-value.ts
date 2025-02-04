@@ -11,7 +11,7 @@ export const useAsyncFunctionResult = <P extends any[], R>(
     readonly error: Error | null;
     readonly pending: boolean;
 } => {
-    const latestId = React.useRef<string>(null);
+    const latestId = React.useRef<string>();
 
     const [result, setResult] = React.useState<R | null>(null);
     const [error, setError] = React.useState<Error | null>(null);

@@ -14,7 +14,7 @@ declare module "@tanstack/react-router" {
 
 export const router = createRouter({
     routeTree,
-    defaultPreload: "intent",
+    defaultPreload: false,
     context: {
         queryClient,
         store,

@@ -5,6 +5,8 @@ import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { CE_Visibility } from "@/server/common/permission";
 
+import { neverGuard } from "../utils/never-guard";
+
 export const useVisibilityColor = (visibility: CE_Visibility): Exclude<BadgeProps["color"], undefined> => {
     switch (visibility) {
         case CE_Visibility.Private:
@@ -15,6 +17,8 @@ export const useVisibilityColor = (visibility: CE_Visibility): Exclude<BadgeProp
             return "brand";
         case CE_Visibility.Public:
             return "informative";
+        default:
+            neverGuard(visibility);
     }
 };
 
@@ -29,6 +33,8 @@ export const useVisibilityString = (visibility: CE_Visibility) => {
                 return CE_Strings.VISIBILITY_LABEL_INTERNAL;
             case CE_Visibility.Paid:
                 return CE_Strings.VISIBILITY_LABEL_PAID;
+            default:
+                neverGuard(visibility);
         }
     }, [visibility]);
 

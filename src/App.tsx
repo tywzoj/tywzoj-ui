@@ -1,4 +1,4 @@
-import "@/assets/scrollbar.css";
+import "@/assets/styles/scrollbar.css";
 
 import { FluentProvider } from "@fluentui/react-components";
 import { QueryClientProvider } from "@tanstack/react-query";

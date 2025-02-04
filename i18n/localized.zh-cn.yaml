@@ -404,7 +404,7 @@
   raw: Internal
 
 - name: VISIBILITY_LABEL_PRIVATE
-  value: 私有
+  value: 未公开
   description: A string for the visibility of private.
   raw: Private
 
@@ -527,3 +527,238 @@
   value: 复制代码到剪贴板失败。
   description: A string for the message when failed to copy code to clipboard.
   raw: Failed to copy the code to the clipboard.
+
+- name: COMPILATION_COMPILER_LABEL
+  value: 编译器
+  description: A string for the label of compiler.
+  raw: Compiler
+
+- name: COMPILATION_STD_LABEL
+  value: 标准
+  description: A string for the label of standard.
+  raw: Standard
+
+- name: COMPILATION_OPTIMIZATION_LABEL
+  value: 优化
+  description: A string for the label of optimization.
+  raw: Optimization
+
+- name: COMPILATION_ARCHITECTURE_LABEL
+  value: 架构
+  description: A string for the label of architecture.
+  raw: Architecture
+
+- name: COMPILATION_VERSION_LABEL
+  value: 版本
+  description: A string for the label of version.
+  raw: Version
+
+- name: COMPILATION_PLATFORM_LABEL
+  value: 平台
+  description: A string for the label of platform.
+  raw: Platform
+
+- name: COMPILATION_OPTIMIZATION_DISABLED
+  value: 禁用
+  description: A string for the label of disabled optimization.
+  raw: Disabled
+
+- name: COMPILATION_CPP_COMPILER_GCC
+  value: G++
+  description: A string for the label of GCC compiler.
+  raw: G++
+
+- name: COMPILATION_CPP_COMPILER_CLANG
+  value: Clang++
+  description: A string for the label of Clang compiler.
+  raw: Clang++
+
+- name: COMPILATION_CPP_STD_ISO_03
+  value: ISO C++03
+  description: A string for the label of ISO C++03 standard.
+  raw: ISO C++03
+
+- name: COMPILATION_CPP_STD_ISO_11
+  value: ISO C++11
+  description: A string for the label of ISO C++11 standard.
+  raw: ISO C++11
+
+- name: COMPILATION_CPP_STD_ISO_14
+  value: ISO C++14
+  description: A string for the label of ISO C++14 standard.
+  raw: ISO C++14
+
+- name: COMPILATION_CPP_STD_ISO_17
+  value: ISO C++17
+  description: A string for the label of ISO C++17 standard.
+  raw: ISO C++17
+
+- name: COMPILATION_CPP_STD_ISO_20
+  value: ISO C++20
+  description: A string for the label of ISO C++20 standard.
+  raw: ISO C++20
+
+- name: COMPILATION_CPP_STD_GNU_03
+  value: GNU C++03
+  description: A string for the label of GNU C++03 standard.
+  raw: GNU C++03
+
+- name: COMPILATION_CPP_STD_GNU_11
+  value: GNU C++11
+  description: A string for the label of GNU C++11 standard.
+  raw: GNU C++11
+
+- name: COMPILATION_CPP_STD_GNU_14
+  value: GNU C++14
+  description: A string for the label of GNU C++14 standard.
+  raw: GNU C++14
+
+- name: COMPILATION_CPP_STD_GNU_17
+  value: GNU C++17
+  description: A string for the label of GNU C++17 standard.
+  raw: GNU C++17
+
+- name: COMPILATION_CPP_STD_GNU_20
+  value: GNU C++20
+  description: A string for the label of GNU C++20 standard.
+  raw: GNU C++20
+
+- name: COMPILATION_CPP_OPTIMIZATION_O0
+  value: '-O0 (禁用优化)'
+  description: A string for the label of O0 optimization.
+  raw: '-O0 (disable optimization)'
+
+- name: COMPILATION_CPP_OPTIMIZATION_O1
+  value: '-O1'
+  description: A string for the label of O1 optimization.
+  raw: '-O1'
+
+- name: COMPILATION_CPP_OPTIMIZATION_O2
+  value: '-O2'
+  description: A string for the label of O2 optimization.
+  raw: '-O2'
+
+- name: COMPILATION_CPP_OPTIMIZATION_O3
+  value: '-O3'
+  description: A string for the label of O3 optimization.
+  raw: '-O3'
+
+- name: COMPILATION_CPP_OPTIMIZATION_OFAST
+  value: '-Ofast (最快)'
+  description: A string for the label of Ofast optimization.
+  raw: '-Ofast (fastest)'
+
+- name: COMPILATION_CPP_ARCHITECTURE_64
+  value: 64 位
+  description: A string for the label of 64-bit architecture.
+  raw: 64-bit
+
+- name: COMPILATION_CPP_ARCHITECTURE_32
+  value: 32 位
+  description: A string for the label of 32-bit architecture.
+  raw: 32-bit
+
+- name: COMPILATION_CPP_ARCHITECTURE_X32
+  value: 使用 32 位指针的 64 位
+  description: A string for the label of 64-bit with 32-bit pointers architecture.
+  raw: 64-bit with 32-bit pointers
+
+- name: COMPILATION_C_COMPILER_GCC
+  value: GCC
+  description: A string for the label of GCC compiler.
+  raw: GCC
+
+- name: COMPILATION_C_COMPILER_CLANG
+  value: Clang
+  description: A string for the label of Clang compiler.
+  raw: Clang
+
+- name: COMPILATION_C_STD_ISO_89
+  value: ISO C89
+  description: A string for the label of ISO C89 standard.
+  raw: ISO C89
+
+- name: COMPILATION_C_STD_ISO_99
+  value: ISO C99
+  description: A string for the label of ISO C99 standard.
+  raw: ISO C99
+
+- name: COMPILATION_C_STD_ISO_11
+  value: ISO C11
+  description: A string for the label of ISO C11 standard.
+  raw: ISO C11
+
+- name: COMPILATION_C_STD_ISO_17
+  value: ISO C17
+  description: A string for the label of ISO C17 standard.
+  raw: ISO C17
+
+- name: COMPILATION_C_STD_GNU_89
+  value: GNU C89
+  description: A string for the label of GNU C89 standard.
+  raw: GNU C89
+
+- name: COMPILATION_C_STD_GNU_99
+  value: GNU C99
+  description: A string for the label of GNU C99 standard.
+  raw: GNU C99
+
+- name: COMPILATION_C_STD_GNU_11
+  value: GNU C11
+  description: A string for the label of GNU C11 standard.
+  raw: GNU C11
+
+- name: COMPILATION_C_STD_GNU_17
+  value: GNU C17
+  description: A string for the label of GNU C17 standard.
+  raw: GNU C17
+
+- name: COMPILATION_KT_PLATFORM_JVM
+  value: JVM
+  description: A string for the label of JVM platform.
+  raw: JVM
+
+- name: COMPILATION_PAS_OPTIMIZATION_O
+  value: '-O'
+  description: A string for the label of O optimization.
+  raw: '-O'
+
+- name: COMPILATION_PAS_OPTIMIZATION_O4
+  value: '-O4 (最快)'
+  description: A string for the label of O4 optimization.
+  raw: '-O4 (fastest)'
+
+- name: COMPILATION_RS_OPTIMIZATION_1
+  value: 1 级
+  description: A string for the label of level 1 optimization.
+  raw: Level 1
+
+- name: COMPILATION_RS_OPTIMIZATION_2
+  value: 2 级
+  description: A string for the label of level 2 optimization.
+  raw: Level 2
+
+- name: COMPILATION_RS_OPTIMIZATION_3
+  value: 3 级 (最快)
+  description: A string for the label of level 3 optimization.
+  raw: Level 3 (fastest)
+
+- name: COMPILATION_SW_OPTIMIZATION_O
+  value: 启用
+  description: A string for the label of enabled optimization.
+  raw: Enabled
+
+- name: COMPILATION_SW_OPTIMIZATION_O_UNCHECKED
+  value: 启用 (无安全检查)
+  description: A string for the label of enabled optimization without safety checks.
+  raw: Enabled (no safety checks)
+
+- name: COMPILATION_HS_VERSION_98
+  value: Haskell 98
+  description: A string for the label of Haskell 98 version.
+  raw: Haskell 98
+
+- name: COMPILATION_HS_VERSION_2010
+  value: Haskell 2010
+  description: A string for the label of Haskell 2010 version.
+  raw: Haskell 2010

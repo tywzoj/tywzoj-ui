@@ -5,6 +5,8 @@ import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { CE_UserLevel } from "@/server/common/permission";
 
+import { neverGuard } from "../utils/never-guard";
+
 export const useUserLevelColor = (UserLevel: CE_UserLevel): Exclude<BadgeProps["color"], undefined> => {
     switch (UserLevel) {
         case CE_UserLevel.Admin:
@@ -21,6 +23,8 @@ export const useUserLevelColor = (UserLevel: CE_UserLevel): Exclude<BadgeProps["
             return "severe";
         case CE_UserLevel.Disabled:
             return "danger";
+        default:
+            neverGuard(UserLevel);
     }
 };
 
@@ -41,6 +45,8 @@ export const useUserLevelString = (UserLevel: CE_UserLevel) => {
                 return CE_Strings.USER_LEVEL_LABEL_SPECIFIC;
             case CE_UserLevel.Disabled:
                 return CE_Strings.USER_LEVEL_LABEL_DISABLED;
+            default:
+                neverGuard(UserLevel);
         }
     }, [UserLevel]);
 

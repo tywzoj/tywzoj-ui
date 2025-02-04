@@ -2,6 +2,7 @@ import { Button, makeStyles, tokens, Tooltip } from "@fluentui/react-components"
 import { CopyRegular } from "@fluentui/react-icons";
 import React from "react";
 
+import { CODE_FONT_FAMILY } from "@/common/constants/font";
 import { useDispatchToastError, useDispatchToastSuccess } from "@/common/hooks/toast";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
@@ -48,7 +49,7 @@ export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
                 <code className={`language-${lang}`}>{highlight(code, lang)}</code>
             </pre>
             {allowedToCopy && (
-                <Tooltip content={ls.copyBtn}>
+                <Tooltip content={ls.copyBtn} relationship="label">
                     <Button
                         className={styles.copy}
                         size="small"
@@ -73,7 +74,7 @@ const useStyles = makeStyles({
             border: `1px solid ${tokens.colorNeutralStroke2}`,
         },
         "& pre, & code": {
-            fontFamily: '"Fira Code", "Fira Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace',
+            fontFamily: CODE_FONT_FAMILY,
         },
         position: "relative",
     },
