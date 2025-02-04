@@ -63,7 +63,7 @@ export const CodeEditor: React.FC<ICodeEditorProps> = (props) => {
 
     const theme = useTheme();
 
-    const refEditor = React.useRef<Monaco.editor.IStandaloneCodeEditor>(null);
+    const refEditor = React.useRef<Monaco.editor.IStandaloneCodeEditor>();
     const onMount = (editor: Monaco.editor.IStandaloneCodeEditor) => {
         editor.getModel()?.setEOL(Monaco.editor.EndOfLineSequence.LF);
 
@@ -75,8 +75,8 @@ export const CodeEditor: React.FC<ICodeEditorProps> = (props) => {
 
     // The Monaco Editor's automaticLayout option doesn't work on a initially hidden editor
     // So use ResizeSensor instead
-    const containerRef = React.useRef<HTMLDivElement>(null);
-    const resizeSensorRef = React.useRef<ResizeSensor>(null);
+    const containerRef = React.useRef<HTMLDivElement>();
+    const resizeSensorRef = React.useRef<ResizeSensor>();
     const initializeResizeSensor = (div: HTMLDivElement) => {
         if (containerRef.current !== div) {
             resizeSensorRef.current?.detach();
@@ -85,7 +85,7 @@ export const CodeEditor: React.FC<ICodeEditorProps> = (props) => {
                     refEditor.current?.layout();
                 });
             } else {
-                resizeSensorRef.current = null;
+                resizeSensorRef.current = undefined;
             }
             containerRef.current = div;
         }

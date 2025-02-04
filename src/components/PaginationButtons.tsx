@@ -88,7 +88,7 @@ export const PaginationButtons: React.FC<IPaginationButtonsProps> = (props) => {
     return (
         <div className={mergeClasses(styles.root, className)}>
             <div className={styles.container} {...arrowNavigationAttributes}>
-                <Tooltip content={ls.preTooltip}>
+                <Tooltip content={ls.preTooltip} relationship="label">
                     <Button
                         aria-label={ls.preLabel}
                         icon={<ChevronLeftFilled />}
@@ -140,7 +140,7 @@ export const PaginationButtons: React.FC<IPaginationButtonsProps> = (props) => {
                     </>
                 )}
 
-                <Tooltip content={ls.nxtTooltip}>
+                <Tooltip content={ls.nxtTooltip} relationship="label">
                     <Button
                         aria-label={ls.nxtLabel}
                         icon={<ChevronRightFilled />}

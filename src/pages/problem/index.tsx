@@ -95,7 +95,7 @@ const ProblemListPage: React.FC = () => {
                                 searchProblem(value);
                             }
                         }}
-                        onKeyDown={(e: KeyboardEvent) => {
+                        onKeyDown={(e) => {
                             if (e.key === "Enter") {
                                 searchProblem(searchBoxValue);
                             }
