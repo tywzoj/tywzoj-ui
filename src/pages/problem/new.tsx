@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/problem/new")({
-    component: RouteComponent,
-});
+const NewProblemPage: React.FC = () => {
+    // TODO: Implement page
+    return null;
+};
 
-function RouteComponent() {
-    return <div>TODO</div>;
-}
+export const Route = createFileRoute("/problem/new")({
+    component: NewProblemPage,
+});
