@@ -1,3 +1,5 @@
+import "@/assets/styles/scrollbar.css";
+
 import { makeStyles, tokens, Tooltip } from "@fluentui/react-components";
 import { Book20Filled, GroupList20Filled, Home20Filled } from "@fluentui/react-icons";
 import { Hamburger, NavDrawer, NavDrawerBody, NavDrawerHeader } from "@fluentui/react-nav-preview";
@@ -110,6 +112,7 @@ export const Layout: React.FC = () => {
                 open={isNavDrawerOpen}
                 type={isOverlay ? "overlay" : "inline"}
                 selectedValue={ACTIVE_ITEM_TAG}
+                onOpenChange={(_, { open }) => setIsNavDrawerOpen(open)}
             >
                 <NavDrawerHeader>{hamburger}</NavDrawerHeader>
                 <NavDrawerBody>
@@ -183,6 +186,7 @@ const useStyles = makeStyles({
         padding: "0px 14px",
         boxSizing: "border-box",
         boxShadow: tokens.shadow4,
+        zIndex: 1,
     },
     headerNavButton: {
         padding: "5px 0",

@@ -42,6 +42,18 @@
   value: Copy
   description: A string for the label of copy button.
 
+- name: COMMON_PREVIEW_BUTTON
+  value: Preview
+  description: A string for the label of preview button.
+
+- name: COMMON_MOVE_UP_BUTTON
+  value: Move Up
+  description: A string for the label of move up button.
+
+- name: COMMON_MOVE_DOWN_BUTTON
+  value: Move Down
+  description: A string for the label of move down button.
+
 - name: COMMON_ERROR_TITLE
   value: Error
   description: A string for the title of error message.
@@ -149,6 +161,10 @@
 - name: NAVIGATION_PROBLEMS
   value: Problems
   description: A string for the label of problems navigation.
+
+- name: NAVIGATION_PROBLEM_NEW
+  value: New Problem
+  description: A string for the label of new problem navigation.
 
 - name: NAVIGATION_PROBLEM_SETS
   value: Problem Sets
@@ -308,6 +324,18 @@
     A string for the error message when password confirm does not match the
     password.
 
+- name: VALIDATION_ERROR_TITLE_EMPTY
+  value: Title cannot be empty.
+  description: A string for the error message when title is empty.
+
+- name: VALIDATION_ERROR_ID_EMPTY
+  value: ID cannot be empty.
+  description: A string for the error message when ID is empty.
+
+- name: VALIDATION_ERROR_PROBLEM_TITLE_TOO_LONG
+  value: The problem title is too long. Please shorten it.
+  description: A string for the error message when the problem title is too long.
+
 - name: VISIBILITY_LABEL_PUBLIC
   value: Public
   description: A string for the visibility of public.
@@ -396,6 +424,14 @@
   value: Explanation
   description: A string for the label of problem sample explanation.
 
+- name: PROBLEM_SAMPLE_DELETE_CONFIRM
+  value: Are you sure to delete the sample?
+  description: A string for the confirmation message when deleting the sample.
+
+- name: PROBLEM_SAMPLE_ADD_BUTTON
+  value: Add Sample
+  description: A string for the label of add sample button.
+
 - name: PROBLEM_TAGS_LABEL
   value: Tags
   description: A string for the label of problem tags.
@@ -411,6 +447,18 @@
 - name: NO_TAGS_TEXT
   value: No tags.
   description: A string for the text when there are no tags.
+
+- name: PROBLEM_EDIT_TITLE_WITH_ID
+  value: '#{0}({1}). {2} - Edit'
+  description: >-
+    A string for the title of problem edit page. {0} is the problem display ID,
+    {1} is the problem ID, and {2} is the problem title.
+
+- name: PROBLEM_EDIT_TITLE
+  value: '#{0}. {1} - Edit'
+  description: >-
+    A string for the title of problem edit page. {0} is the problem display ID,
+    and {1} is the problem title.
 
 - name: CODE_COPIED_MESSAGE
   value: The code is copied to the clipboard.

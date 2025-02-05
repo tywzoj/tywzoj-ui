@@ -1,7 +1,4 @@
-export const enum CE_Order {
-    ASC = "ASC",
-    DESC = "DESC",
-}
+import type { CE_Order } from "./enums";
 
 export interface IListRequest<ISortBy extends string> {
     order: CE_Order;

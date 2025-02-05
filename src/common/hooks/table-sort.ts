@@ -1,4 +1,4 @@
-import type { CE_Order } from "@/server/common/types";
+import type { CE_Order } from "@/server/common/enums";
 
 import { orderToDirection, reverseOrder } from "../utils/order";
 
