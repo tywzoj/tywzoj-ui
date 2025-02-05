@@ -17,6 +17,7 @@ import {
 } from "@fluentui/react-components";
 import { Add16Filled, ArrowDownFilled, ArrowUpFilled, DeleteFilled } from "@fluentui/react-icons";
 import { useCanGoBack, useRouter } from "@tanstack/react-router";
+import exp from "constants";
 import React from "react";
 
 import { ConfirmationPopover } from "@/common/components/ConfirmationPopover";
@@ -232,7 +233,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                         disabled={disabled}
                     />
                 </Field>
-                <div>
+                <div className={styles.editorFooter}>
                     <Button appearance="primary" onClick={onSaveButtonClick} disabled={disabled}>
                         {ls.saveBtn}
                     </Button>
@@ -381,6 +382,9 @@ const ProblemSampleItemEditor: React.FC<{
         moveDown: CE_Strings.COMMON_MOVE_DOWN_BUTTON,
         delete: CE_Strings.COMMON_DELETE_BUTTON,
         sample: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
+        input: CE_Strings.PROBLEM_SAMPLE_INPUT_LABEL,
+        output: CE_Strings.PROBLEM_SAMPLE_OUTPUT_LABEL,
+        explanation: CE_Strings.PROBLEM_SAMPLE_EXPLANATION_LABEL,
     });
 
     const styles = useStyles();
@@ -424,7 +428,7 @@ const ProblemSampleItemEditor: React.FC<{
                 </div>
             </div>
             <div className={mergeClasses(styles.sampleItemIO, isSmallScreen && styles.sampleItemIOSingleLine)}>
-                <Field label="Input" className={styles.sampleItemIOField}>
+                <Field label={ls.input} className={styles.sampleItemIOField}>
                     <Textarea
                         className={styles.inputSmall}
                         value={sample.input}
@@ -437,7 +441,7 @@ const ProblemSampleItemEditor: React.FC<{
                         disabled={disabled}
                     />
                 </Field>
-                <Field label="Output" className={styles.sampleItemIOField}>
+                <Field label={ls.output} className={styles.sampleItemIOField}>
                     <Textarea
                         className={styles.inputSmall}
                         value={sample.output}
@@ -451,7 +455,7 @@ const ProblemSampleItemEditor: React.FC<{
                     />
                 </Field>
             </div>
-            <Field label="Explanation">
+            <Field label={ls.explanation}>
                 <Textarea
                     className={styles.inputSmall}
                     value={sample.explanation}
@@ -484,6 +488,12 @@ const useStyles = makeStyles({
         gap: "14px",
         width: "100%",
     },
+    editorFooter: {
+        ...flex({
+            justifyContent: "flex-end",
+        }),
+        gap: "14px",
+    },
     preview: {},
     previewHeader: {
         ...flex({
@@ -509,6 +519,7 @@ const useStyles = makeStyles({
             fontSize: tokens.fontSizeBase300,
         },
     },
+
     sampleList: {
         ...flex({
             flexDirection: "column",
