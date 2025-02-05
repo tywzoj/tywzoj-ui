@@ -118,7 +118,9 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
     const [samples, setSamples] = React.useState<IProblemSampleDetailEditableWithId[]>(problem?.samples || []);
 
     const [displayIdErr, setDisplayIdErr] = React.useState("");
+    const displayIdRef = React.useRef<HTMLInputElement>(null);
     const [titleErr, setTitleErr] = React.useState("");
+    const titleRef = React.useRef<HTMLInputElement>(null);
 
     const styles = useStyles();
 
@@ -127,16 +129,23 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
 
         if (!displayId) {
             setDisplayIdErr(ls.idEmpty);
+            displayIdRef.current?.focus();
             success = false;
         }
 
         if (!title) {
             setTitleErr(ls.titleEmpty);
+            if (success) {
+                titleRef.current?.focus();
+            }
             success = false;
         }
 
         if (title.length > PROBLEM_TITLE_MAX_LENGTH) {
             setTitleErr(ls.titleTooLong);
+            if (success) {
+                titleRef.current?.focus();
+            }
             success = false;
         }
 
@@ -204,10 +213,12 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
             <div className={mergeClasses(styles.editor, preview && styles.hidden)}>
                 <Field label={ls.displayId} className={styles.topField} validationMessage={displayIdErr}>
                     <Input
+                        ref={displayIdRef}
                         // 0 will be empty string
                         value={displayId ? displayId.toString() : ""}
                         onChange={(_, { value }) => {
                             if (!value) {
+                                // Empty string will be 0
                                 setDisplayId(0);
                                 return;
                             }
@@ -222,7 +233,12 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                 </Field>
 
                 <Field label={ls.pTitle} className={styles.topField} validationMessage={titleErr}>
-                    <Input value={title} onChange={(_, { value }) => setTitle(value)} disabled={disabled} />
+                    <Input
+                        ref={titleRef}
+                        value={title}
+                        onChange={(_, { value }) => setTitle(value)}
+                        disabled={disabled}
+                    />
                 </Field>
 
                 <Field label={ls.visibility} className={styles.topField}>
