@@ -9,7 +9,6 @@ import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 
 const NewProblemPage: React.FC = () => {
-    // TODO: Implement page
     const styles = useStyles();
 
     const ls = useLocalizedStrings({
@@ -18,13 +17,20 @@ const NewProblemPage: React.FC = () => {
 
     useSetPageTitle(ls.title);
 
+    // TODO: Implement API request
+    // TODO: Update styles
+
     return (
         <div className={styles.root}>
             <div className={styles.title}>
                 <Title3 as="h1">{ls.title}</Title3>
             </div>
             <div className={styles.editor}>
-                <ProblemEditor onSaveChanges={() => {}} />
+                <ProblemEditor
+                    onSaveChanges={() => {
+                        // TODO: API request
+                    }}
+                />
             </div>
         </div>
     );

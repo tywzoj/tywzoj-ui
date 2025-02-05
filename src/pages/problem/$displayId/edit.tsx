@@ -25,13 +25,21 @@ const ProblemEditPage: React.FC = () => {
 
     const styles = useStyles();
 
+    // TODO: Implement API request
+    // TODO: Update styles
+
     return (
         <div className={styles.root}>
             <div className={styles.title}>
                 <Title3 as="h1">{format(ls.titleWithId, problem.displayId, problem.id, problem.title)}</Title3>
             </div>
             <div className={styles.editor}>
-                <ProblemEditor problem={problem} onSaveChanges={() => {}} />
+                <ProblemEditor
+                    problem={problem}
+                    onSaveChanges={() => {
+                        // TODO: API request
+                    }}
+                />
             </div>
         </div>
     );
