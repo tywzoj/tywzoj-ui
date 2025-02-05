@@ -408,6 +408,21 @@
     password.
   raw: Password confirm does not match the password.
 
+- name: VALIDATION_ERROR_TITLE_EMPTY
+  value: null
+  description: A string for the error message when title is empty.
+  raw: Title cannot be empty.
+
+- name: VALIDATION_ERROR_ID_EMPTY
+  value: null
+  description: A string for the error message when ID is empty.
+  raw: ID cannot be empty.
+
+- name: VALIDATION_ERROR_PROBLEM_TITLE_TOO_LONG
+  value: null
+  description: A string for the error message when the problem title is too long.
+  raw: The problem title is too long. Please shorten it.
+
 - name: VISIBILITY_LABEL_PUBLIC
   value: 公开
   description: A string for the visibility of public.

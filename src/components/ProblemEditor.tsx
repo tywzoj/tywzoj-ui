@@ -6,6 +6,10 @@ import {
     Input,
     makeStyles,
     mergeClasses,
+    MessageBar,
+    MessageBarBody,
+    MessageBarTitle,
+    Spinner,
     Subtitle2,
     Tab,
     TabList,
@@ -16,11 +20,11 @@ import {
     useId,
 } from "@fluentui/react-components";
 import { Add16Filled, ArrowDownFilled, ArrowUpFilled, DeleteFilled } from "@fluentui/react-icons";
-import { useCanGoBack, useRouter } from "@tanstack/react-router";
-import exp from "constants";
+import { useRouter } from "@tanstack/react-router";
 import React from "react";
 
 import { ConfirmationPopover } from "@/common/components/ConfirmationPopover";
+import { PROBLEM_TITLE_MAX_LENGTH } from "@/common/constants/data-length";
 import { CODE_FONT_FAMILY } from "@/common/constants/font";
 import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
@@ -46,7 +50,14 @@ export interface IProblemEditorProps {
     className?: string;
     problem?: IProblemDetail;
     disabled?: boolean;
+    submitting?: boolean;
+    error?: string;
     onSaveChanges: (data: IProblemEditorChangedData) => void;
+    /**
+     * Callback when the editor go back button is clicked and before the editor go back
+     * @returns Whether the editor can go back, if true the editor will go back, else the editor will stay
+     */
+    onBeforeGoBack?: () => boolean;
 }
 
 export interface IProblemEditorChangedData {
@@ -60,10 +71,9 @@ export interface IProblemEditorChangedData {
 type IProblemSampleDetailEditableWithId = IProblemSampleDetailEditable & { id: number };
 
 export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
-    const { className, problem, onSaveChanges, disabled } = props;
+    const { className, problem, disabled, submitting, error, onSaveChanges, onBeforeGoBack = () => true } = props;
 
     const isMiniScreen = useIsMiniScreen();
-    const canGoBack = useCanGoBack();
     const router = useRouter();
 
     const ls = useLocalizedStrings({
@@ -78,6 +88,10 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
         limitAndHint: CE_Strings.PROBLEM_LIMIT_AND_HINT_LABEL,
         saveBtn: CE_Strings.COMMON_SAVE_BUTTON,
         goBackBtn: CE_Strings.COMMON_BACK_BUTTON,
+        errorTitle: CE_Strings.COMMON_ERROR_TITLE,
+        idEmpty: CE_Strings.VALIDATION_ERROR_ID_EMPTY,
+        titleEmpty: CE_Strings.VALIDATION_ERROR_TITLE_EMPTY,
+        titleTooLong: CE_Strings.VALIDATION_ERROR_PROBLEM_TITLE_TOO_LONG,
     });
 
     const [preview, setPreview] = React.useState(false);
@@ -103,9 +117,37 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
     const [limitAndHint, setLimitAndHint] = React.useState(problem?.content?.limitAndHint || "");
     const [samples, setSamples] = React.useState<IProblemSampleDetailEditableWithId[]>(problem?.samples || []);
 
+    const [displayIdErr, setDisplayIdErr] = React.useState("");
+    const [titleErr, setTitleErr] = React.useState("");
+
     const styles = useStyles();
 
+    const validate = (): boolean => {
+        let success = true;
+
+        if (!displayId) {
+            setDisplayIdErr(ls.idEmpty);
+            success = false;
+        }
+
+        if (!title) {
+            setTitleErr(ls.titleEmpty);
+            success = false;
+        }
+
+        if (title.length > PROBLEM_TITLE_MAX_LENGTH) {
+            setTitleErr(ls.titleTooLong);
+            success = false;
+        }
+
+        return success;
+    };
+
     const onSaveButtonClick = () => {
+        if (!validate()) {
+            return;
+        }
+
         onSaveChanges({
             problem: {
                 displayId,
@@ -160,7 +202,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                 </TabList>
             </div>
             <div className={mergeClasses(styles.editor, preview && styles.hidden)}>
-                <Field label={ls.displayId} className={styles.topField}>
+                <Field label={ls.displayId} className={styles.topField} validationMessage={displayIdErr}>
                     <Input
                         // 0 will be empty string
                         value={displayId ? displayId.toString() : ""}
@@ -179,7 +221,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     />
                 </Field>
 
-                <Field label={ls.pTitle} className={styles.topField}>
+                <Field label={ls.pTitle} className={styles.topField} validationMessage={titleErr}>
                     <Input value={title} onChange={(_, { value }) => setTitle(value)} disabled={disabled} />
                 </Field>
 
@@ -233,11 +275,35 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                         disabled={disabled}
                     />
                 </Field>
+                {error && (
+                    <MessageBar intent="error">
+                        <MessageBarBody>
+                            <MessageBarTitle>{ls.errorTitle}</MessageBarTitle>
+                            {error}
+                        </MessageBarBody>
+                    </MessageBar>
+                )}
                 <div className={styles.editorFooter}>
-                    <Button appearance="primary" onClick={onSaveButtonClick} disabled={disabled}>
+                    <Button
+                        appearance="primary"
+                        onClick={onSaveButtonClick}
+                        disabledFocusable={disabled}
+                        icon={submitting ? <Spinner size="tiny" /> : null}
+                    >
                         {ls.saveBtn}
                     </Button>
-                    <Button disabled={!canGoBack} onClick={() => router.history.back()}>
+                    <Button
+                        disabledFocusable={disabled}
+                        onClick={() => {
+                            if (onBeforeGoBack()) {
+                                if (router.history.canGoBack()) {
+                                    router.history.back();
+                                } else {
+                                    router.navigate({ to: "/problem" });
+                                }
+                            }
+                        }}
+                    >
                         {ls.goBackBtn}
                     </Button>
                 </div>

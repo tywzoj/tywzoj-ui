@@ -324,6 +324,18 @@
     A string for the error message when password confirm does not match the
     password.
 
+- name: VALIDATION_ERROR_TITLE_EMPTY
+  value: Title cannot be empty.
+  description: A string for the error message when title is empty.
+
+- name: VALIDATION_ERROR_ID_EMPTY
+  value: ID cannot be empty.
+  description: A string for the error message when ID is empty.
+
+- name: VALIDATION_ERROR_PROBLEM_TITLE_TOO_LONG
+  value: The problem title is too long. Please shorten it.
+  description: A string for the error message when the problem title is too long.
+
 - name: VISIBILITY_LABEL_PUBLIC
   value: Public
   description: A string for the visibility of public.
