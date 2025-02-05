@@ -412,6 +412,14 @@
   value: Explanation
   description: A string for the label of problem sample explanation.
 
+- name: PROBLEM_SAMPLE_DELETE_CONFIRM
+  value: Are you sure to delete the sample?
+  description: A string for the confirmation message when deleting the sample.
+
+- name: PROBLEM_SAMPLE_ADD_BUTTON
+  value: Add Sample
+  description: A string for the label of add sample button.
+
 - name: PROBLEM_TAGS_LABEL
   value: Tags
   description: A string for the label of problem tags.
@@ -427,10 +435,6 @@
 - name: NO_TAGS_TEXT
   value: No tags.
   description: A string for the text when there are no tags.
-
-- name: PROBLEM_ADD_SAMPLE_BUTTON
-  value: Add Sample
-  description: A string for the label of add sample button.
 
 - name: CODE_COPIED_MESSAGE
   value: The code is copied to the clipboard.

@@ -22,6 +22,7 @@ import React from "react";
 import { ConfirmationPopover } from "@/common/components/ConfirmationPopover";
 import { CODE_FONT_FAMILY } from "@/common/constants/font";
 import { flex } from "@/common/styles/flex";
+import { format } from "@/common/utils/format";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { CE_Visibility } from "@/server/common/permission";
@@ -265,7 +266,8 @@ const ProblemSampleListEditor: React.FC<{
     const titleId = useId("sample-list-title");
     const ls = useLocalizedStrings({
         samples: CE_Strings.PROBLEM_SAMPLES_LABEL,
-        addSample: CE_Strings.PROBLEM_ADD_SAMPLE_BUTTON,
+        addSample: CE_Strings.PROBLEM_SAMPLE_ADD_BUTTON,
+        delConfirm: CE_Strings.PROBLEM_SAMPLE_DELETE_CONFIRM,
     });
 
     const positioningRef = React.useRef<PositioningImperativeRef>(null);
@@ -349,7 +351,7 @@ const ProblemSampleListEditor: React.FC<{
             )}
             <div className={styles.sampleListFooter}>{hasSample && addButton}</div>
             <ConfirmationPopover
-                message="Are you sure you want to delete this sample?"
+                message={ls.delConfirm}
                 open={showDeleteConfirmation}
                 onConfirmed={onDeleteItemConfirmed}
                 onCanceled={() => {
@@ -378,6 +380,7 @@ const ProblemSampleItemEditor: React.FC<{
         moveUp: CE_Strings.COMMON_MOVE_UP_BUTTON,
         moveDown: CE_Strings.COMMON_MOVE_DOWN_BUTTON,
         delete: CE_Strings.COMMON_DELETE_BUTTON,
+        sample: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
     });
 
     const styles = useStyles();
@@ -385,7 +388,7 @@ const ProblemSampleItemEditor: React.FC<{
     return (
         <div role="listitem" className={styles.sampleItem}>
             <div className={styles.sampleItemHeader}>
-                <Body1Strong as="span">Sample {index + 1}</Body1Strong>
+                <Body1Strong as="span">{format(ls.sample, index + 1)}</Body1Strong>
                 <div>
                     <Tooltip content={ls.delete} relationship="label">
                         <Button

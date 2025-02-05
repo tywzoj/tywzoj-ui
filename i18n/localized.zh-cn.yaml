@@ -518,6 +518,16 @@
   description: A string for the label of problem sample explanation.
   raw: Explanation
 
+- name: PROBLEM_SAMPLE_DELETE_CONFIRM
+  value: null
+  description: A string for the confirmation message when deleting the sample.
+  raw: Are you sure to delete the sample?
+
+- name: PROBLEM_SAMPLE_ADD_BUTTON
+  value: null
+  description: A string for the label of add sample button.
+  raw: Add Sample
+
 - name: PROBLEM_TAGS_LABEL
   value: 标签
   description: A string for the label of problem tags.
@@ -537,11 +547,6 @@
   value: 无标签。
   description: A string for the text when there are no tags.
   raw: No tags.
-
-- name: PROBLEM_ADD_SAMPLE_BUTTON
-  value: null
-  description: A string for the label of add sample button.
-  raw: Add Sample
 
 - name: CODE_COPIED_MESSAGE
   value: 代码已复制到剪贴板。
