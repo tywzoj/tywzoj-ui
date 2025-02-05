@@ -53,6 +53,21 @@
   description: A string for the label of copy button.
   raw: Copy
 
+- name: COMMON_PREVIEW_BUTTON
+  value: Preview
+  description: A string for the label of preview button.
+  raw: Preview
+
+- name: COMMON_MOVE_UP_BUTTON
+  value: Move Up
+  description: A string for the label of move up button.
+  raw: Move Up
+
+- name: COMMON_MOVE_DOWN_BUTTON
+  value: Move Down
+  description: A string for the label of move down button.
+  raw: Move Down
+
 - name: COMMON_ERROR_TITLE
   value: Error
   description: A string for the title of error message.
@@ -187,6 +202,11 @@
   value: Problems
   description: A string for the label of problems navigation.
   raw: Problems
+
+- name: NAVIGATION_PROBLEM_NEW
+  value: New Problem
+  description: A string for the label of new problem navigation.
+  raw: New Problem
 
 - name: NAVIGATION_PROBLEM_SETS
   value: Problem Sets
@@ -517,6 +537,11 @@
   value: No tags.
   description: A string for the text when there are no tags.
   raw: No tags.
+
+- name: PROBLEM_ADD_SAMPLE_BUTTON
+  value: Add Sample
+  description: A string for the label of add sample button.
+  raw: Add Sample
 
 - name: CODE_COPIED_MESSAGE
   value: The code is copied to the clipboard.
