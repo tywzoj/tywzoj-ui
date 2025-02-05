@@ -1,67 +1,64 @@
 import type { CE_Visibility } from "../common/permission";
 import type { IListRequest } from "../common/types";
+import type { CE_ProblemSortBy, CE_ProblemType } from "./problem.enums";
 
 // BEGIN: shared types
 
-export const enum CE_ProblemType {
-    Traditional = "traditional",
-    SubmitAnswer = "submit-answer",
-    Interaction = "interaction",
+export interface IProblemBasicDetailEditable {
+    displayId: number;
+    title: string;
+    visibility: CE_Visibility;
 }
 
-export const enum CE_ProblemFileType {
-    Testdata = "testdata",
-    Additional = "additional",
-}
-
-export interface IProblemBasicDetail {
+export interface IProblemBasicDetail extends Readonly<IProblemBasicDetailEditable> {
     readonly id: number;
-    readonly displayId: number;
-    readonly title: string;
     readonly creationTime: Date;
     readonly submissionCount: number;
     readonly acceptedSubmissionCount: number;
-    readonly visibility: CE_Visibility;
     readonly tags: IProblemTagDetail[];
 }
 
-export interface IProblemDetail extends IProblemBasicDetail {
-    readonly type: CE_ProblemType;
+export interface IProblemDetailEditable extends IProblemBasicDetailEditable {
+    type: CE_ProblemType;
+}
+
+export interface IProblemDetail extends IProblemBasicDetail, Readonly<IProblemDetailEditable> {
     readonly content: IProblemContentDetail | null;
     readonly samples: IProblemSampleDetail[];
 }
 
-export interface IProblemContentDetail {
-    readonly description: string;
-    readonly inputFormat: string;
-    readonly outputFormat: string;
-    readonly limitAndHint: string;
+export interface IProblemContentDetailEditable {
+    description: string;
+    inputFormat: string;
+    outputFormat: string;
+    limitAndHint: string;
 }
 
-export interface IProblemSampleDetail {
+export type IProblemContentDetail = Readonly<IProblemContentDetailEditable>;
+
+export interface IProblemSampleDetailEditable {
+    input: string;
+    output: string;
+    explanation: string;
+}
+
+export interface IProblemSampleDetail extends Readonly<IProblemSampleDetailEditable> {
     readonly id: number;
     readonly problemId: number;
-    readonly input: string;
-    readonly output: string;
-    readonly explanation: string;
 }
 
-export interface IProblemTagDetail {
-    readonly id: number;
+export interface IProblemTagDetailEditable {
     readonly name: string;
     readonly color: string;
+}
+
+export interface IProblemTagDetail extends Readonly<IProblemTagDetailEditable> {
+    readonly id: number;
 }
 
 // END: shared types
 
 // BEGIN: problem list types
-
-export const enum CE_ProblemSortBy {
-    DisplayId = "displayId",
-    Title = "title",
-    SubmissionCount = "submissionCount",
-    AcSubmissionCount = "acceptedSubmissionCount",
-}
 
 export interface IProblemListGetRequestQuery extends IListRequest<CE_ProblemSortBy> {
     keyword?: string;

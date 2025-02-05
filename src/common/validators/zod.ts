@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import { CE_Order } from "@/server/common/types";
-import { CE_ProblemSortBy } from "@/server/modules/problem.types";
+import { CE_Order } from "@/server/common/enums";
+import { CE_ProblemSortBy } from "@/server/modules/problem.enums";
 
 export const Z_ORDER = z.enum([CE_Order.ASC, CE_Order.DESC]);
 

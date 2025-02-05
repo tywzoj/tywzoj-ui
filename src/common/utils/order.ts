@@ -1,4 +1,4 @@
-import { CE_Order } from "@/server/common/types";
+import { CE_Order } from "@/server/common/enums";
 
 import { neverGuard } from "./never-guard";
 
