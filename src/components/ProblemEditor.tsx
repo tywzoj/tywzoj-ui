@@ -54,7 +54,7 @@ export interface IProblemEditorProps {
     error?: string;
     onSaveChanges: (data: IProblemEditorChangedData) => void;
     /**
-     * Callback when the editor go back button is clicked and before the editor go back
+     * Callback when the editor go back button is clicked and before the editor go back.
      * @returns Whether the editor can go back, if true the editor will go back, else the editor will stay
      */
     onBeforeGoBack?: () => boolean;
@@ -298,6 +298,11 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                             if (onBeforeGoBack()) {
                                 if (router.history.canGoBack()) {
                                     router.history.back();
+                                } else if (problem?.displayId) {
+                                    router.navigate({
+                                        to: `/problem/$displayId`,
+                                        params: { displayId: String(problem.displayId) },
+                                    });
                                 } else {
                                     router.navigate({ to: "/problem" });
                                 }
