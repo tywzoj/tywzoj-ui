@@ -448,6 +448,18 @@
   value: No tags.
   description: A string for the text when there are no tags.
 
+- name: PROBLEM_EDIT_TITLE_WITH_ID
+  value: '#{0}({1}). {2} - Edit'
+  description: >-
+    A string for the title of problem edit page. {0} is the problem display ID,
+    {1} is the problem ID, and {2} is the problem title.
+
+- name: PROBLEM_EDIT_TITLE
+  value: '#{0}. {1} - Edit'
+  description: >-
+    A string for the title of problem edit page. {0} is the problem display ID,
+    and {1} is the problem title.
+
 - name: CODE_COPIED_MESSAGE
   value: The code is copied to the clipboard.
   description: A string for the message when code is copied to clipboard.

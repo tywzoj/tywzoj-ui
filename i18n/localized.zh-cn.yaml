@@ -54,17 +54,17 @@
   raw: Copy
 
 - name: COMMON_PREVIEW_BUTTON
-  value: null
+  value: 预览
   description: A string for the label of preview button.
   raw: Preview
 
 - name: COMMON_MOVE_UP_BUTTON
-  value: null
+  value: 上移
   description: A string for the label of move up button.
   raw: Move Up
 
 - name: COMMON_MOVE_DOWN_BUTTON
-  value: null
+  value: 下移
   description: A string for the label of move down button.
   raw: Move Down
 
@@ -204,7 +204,7 @@
   raw: Problems
 
 - name: NAVIGATION_PROBLEM_NEW
-  value: null
+  value: 新建题目
   description: A string for the label of new problem navigation.
   raw: New Problem
 
@@ -409,17 +409,17 @@
   raw: Password confirm does not match the password.
 
 - name: VALIDATION_ERROR_TITLE_EMPTY
-  value: null
+  value: 标题不能为空。
   description: A string for the error message when title is empty.
   raw: Title cannot be empty.
 
 - name: VALIDATION_ERROR_ID_EMPTY
-  value: null
+  value: ID 不能为空。
   description: A string for the error message when ID is empty.
   raw: ID cannot be empty.
 
 - name: VALIDATION_ERROR_PROBLEM_TITLE_TOO_LONG
-  value: null
+  value: 题目标题太长。请缩短。
   description: A string for the error message when the problem title is too long.
   raw: The problem title is too long. Please shorten it.
 
@@ -534,12 +534,12 @@
   raw: Explanation
 
 - name: PROBLEM_SAMPLE_DELETE_CONFIRM
-  value: null
+  value: 确认删除样例？
   description: A string for the confirmation message when deleting the sample.
   raw: Are you sure to delete the sample?
 
 - name: PROBLEM_SAMPLE_ADD_BUTTON
-  value: null
+  value: 添加样例
   description: A string for the label of add sample button.
   raw: Add Sample
 
@@ -562,6 +562,20 @@
   value: 无标签。
   description: A string for the text when there are no tags.
   raw: No tags.
+
+- name: PROBLEM_EDIT_TITLE_WITH_ID
+  value: '#{0}({1}). {2} - 编辑'
+  description: >-
+    A string for the title of problem edit page. {0} is the problem display ID,
+    {1} is the problem ID, and {2} is the problem title.
+  raw: '#{0}({1}). {2} - Edit'
+
+- name: PROBLEM_EDIT_TITLE
+  value: '#{0}. {1} - 编辑'
+  description: >-
+    A string for the title of problem edit page. {0} is the problem display ID,
+    and {1} is the problem title.
+  raw: '#{0}. {1} - Edit'
 
 - name: CODE_COPIED_MESSAGE
   value: 代码已复制到剪贴板。
