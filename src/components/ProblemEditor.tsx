@@ -109,7 +109,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
     });
 
     const [visibility, setVisibility] = React.useState(problem?.visibility || CE_Visibility.Private);
-    const [displayId, setDisplayId] = React.useState<number>(0);
+    const [displayId, setDisplayId] = React.useState<number>(problem?.displayId || 0);
     const [title, setTitle] = React.useState(problem?.title || "");
     const [description, setDescription] = React.useState(problem?.content?.description || "");
     const [inputFormat, setInputFormat] = React.useState(problem?.content?.inputFormat || "");
@@ -215,17 +215,19 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     <Input
                         ref={displayIdRef}
                         // 0 will be empty string
-                        value={displayId ? displayId.toString() : ""}
+                        value={displayId ? displayId.toString(10) : ""}
                         onChange={(_, { value }) => {
                             if (!value) {
                                 // Empty string will be 0
                                 setDisplayId(0);
+                                setDisplayIdErr("");
                                 return;
                             }
 
                             const newValue = Number.parseInt(value, 10);
                             if (Number.isInteger(newValue) && newValue > 0) {
                                 setDisplayId(newValue);
+                                setDisplayIdErr("");
                             }
                         }}
                         disabled={disabled}
@@ -236,7 +238,10 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     <Input
                         ref={titleRef}
                         value={title}
-                        onChange={(_, { value }) => setTitle(value)}
+                        onChange={(_, { value }) => {
+                            setTitle(value);
+                            setTitleErr("");
+                        }}
                         disabled={disabled}
                     />
                 </Field>
