@@ -112,6 +112,7 @@ export const Layout: React.FC = () => {
                 open={isNavDrawerOpen}
                 type={isOverlay ? "overlay" : "inline"}
                 selectedValue={ACTIVE_ITEM_TAG}
+                onOpenChange={(_, { open }) => setIsNavDrawerOpen(open)}
             >
                 <NavDrawerHeader>{hamburger}</NavDrawerHeader>
                 <NavDrawerBody>
