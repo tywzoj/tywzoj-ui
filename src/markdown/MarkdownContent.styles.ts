@@ -63,7 +63,6 @@ export const useMarkdownRenderStyles = makeStyles({
             backgroundColor: tokens.colorNeutralBackground3,
             paddingLeft: "1em",
             borderLeft: `0.25em solid ${tokens.colorNeutralStroke1}`,
-            margin: "0 0 1em",
         },
 
         "& ul, & ol, & blockquote": {
@@ -87,6 +86,18 @@ export const useMarkdownRenderStyles = makeStyles({
             "& ul, & ol": {
                 paddingLeft: "1.5em",
             },
+        },
+
+        "> .katex-display": {
+            margin: "0.5em 0",
+        },
+
+        "> :first-child": {
+            marginTop: "0",
+        },
+
+        "> :last-child": {
+            marginBottom: "0",
         },
     },
 });
