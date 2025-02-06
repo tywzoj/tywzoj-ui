@@ -1,4 +1,5 @@
 import { makeStyles, Title3 } from "@fluentui/react-components";
+import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 
@@ -11,6 +12,7 @@ import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
+import { problemListQueryKeys } from "@/query/keys";
 import { ProblemModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import type { IErrorCodeWillBeReturned } from "@/server/utils";
@@ -20,6 +22,7 @@ const NewProblemPage: React.FC = () => {
     const errorCodeToString = useErrorCodeToString();
     const recaptchaAsync = useRecaptchaAsync();
     const navigate = Route.useNavigate();
+    const queryClient = useQueryClient();
 
     const ls = useLocalizedStrings({
         title: CE_Strings.NAVIGATION_PROBLEM_NEW,
@@ -59,6 +62,7 @@ const NewProblemPage: React.FC = () => {
 
             if (resp.code === CE_ErrorCode.OK) {
                 const { displayId } = resp.data;
+                await queryClient.resetQueries({ queryKey: problemListQueryKeys() });
                 navigate({
                     to: "/problem/$displayId",
                     params: { displayId: displayId.toString(10) },

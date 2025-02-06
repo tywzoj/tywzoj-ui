@@ -41,7 +41,7 @@ export async function requestAsync<T>(options: IRequestOptions): Promise<IRespon
         headers.append("X-Recaptcha-Token", options.recaptchaToken);
     }
 
-    if (options.noCache) {
+    if (options.noCache ?? true) {
         headers.append("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.append("Pragma", "no-cache");
     }

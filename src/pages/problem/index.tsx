@@ -18,6 +18,7 @@ import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import React from "react";
 import { z } from "zod";
 
+import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
 import { LinkWithRouter } from "@/common/components/LinkWithRouter";
 import { PaginationButtons } from "@/common/components/PaginationButtons";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
@@ -38,7 +39,7 @@ import { ProblemModule } from "@/server/api";
 import { CE_Order } from "@/server/common/enums";
 import { CE_ProblemSortBy } from "@/server/modules/problem.enums";
 import { withThrowErrors } from "@/server/utils";
-import { useIsMiddleScreen } from "@/store/hooks";
+import { useIsMiddleScreen, usePermission } from "@/store/hooks";
 import { getPagination, getPreference } from "@/store/selectors";
 
 const ProblemListPage: React.FC = () => {
@@ -48,6 +49,7 @@ const ProblemListPage: React.FC = () => {
     const navigate = Route.useNavigate();
     const search = Route.useSearch();
     const [searchBoxValue, setSearchBoxValue] = React.useState("");
+    const permission = usePermission();
 
     React.useEffect(() => {
         // Update search box value when search param keyword changes
@@ -62,6 +64,7 @@ const ProblemListPage: React.FC = () => {
         colId: CE_Strings.ID_LABEL,
         searchBtn: CE_Strings.COMMON_SEARCH_BUTTON,
         searchPlc: CE_Strings.PROBLEM_SEARCH_PLACEHOLDER,
+        new: CE_Strings.NAVIGATION_PROBLEM_NEW,
     });
 
     useSetPageTitle(ls.title);
@@ -85,6 +88,14 @@ const ProblemListPage: React.FC = () => {
                 <div className={styles.title}>
                     <Title3 as="h1">{ls.title}</Title3>
                 </div>
+                {permission.manageProblem && (
+                    <div className={styles.actions}>
+                        <Button>Manage Tags</Button>
+                        <ButtonWithRouter appearance="primary" to="/problem/new">
+                            {ls.new}
+                        </ButtonWithRouter>
+                    </div>
+                )}
                 <div className={styles.search}>
                     <SearchBox
                         placeholder={ls.searchPlc}
@@ -251,6 +262,14 @@ const useStyles = makeStyles({
             flexGrow: 1,
         },
         width: "100%",
+    },
+    actions: {
+        ...flex({
+            justifyContent: "flex-end",
+        }),
+        width: "100%",
+        marginBottom: "20px",
+        gap: "8px",
     },
     loading: {
         ...flex({
