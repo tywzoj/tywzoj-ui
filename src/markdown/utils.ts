@@ -9,11 +9,11 @@ export function findPlaceholderElement(wrapperElement: HTMLElement, id: string):
     return wrapperElement.querySelector(`[data-id="${id}"]`);
 }
 
-export async function renderMarkdownAsync(content: string, noSanitize: boolean): Promise<string> {
+export async function renderMarkdownAsync(content: string, noSanitize: boolean, removeImage: boolean): Promise<string> {
     const { html, mathPlaceholders, highlightPlaceholders } = await MarkdownRenderer.getInstance().render(content);
 
     const wrapper = document.createElement("div");
-    wrapper.innerHTML = noSanitize ? html : sanitize(html);
+    wrapper.innerHTML = noSanitize ? html : sanitize(html, removeImage);
 
     // Render highlights
     if (highlightPlaceholders.length > 0) {
