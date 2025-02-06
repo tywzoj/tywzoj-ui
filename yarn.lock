@@ -3848,6 +3848,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/regenerator-runtime@npm:^0":
+  version: 0.13.8
+  resolution: "@types/regenerator-runtime@npm:0.13.8"
+  checksum: 10c0/10c094584c097aec51a29f598425306febab764f054db14d5dd892961bf97c96272d620af5bd6e4c5f7d20c4e5b9ce98b6069b0f009cfc57f54614b33760b86e
+  languageName: node
+  linkType: hard
+
 "@types/scheduler@npm:^0":
   version: 0.23.0
   resolution: "@types/scheduler@npm:0.23.0"
@@ -8305,9 +8312,11 @@ __metadata:
     "@types/prismjs": "npm:^1"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
+    "@types/regenerator-runtime": "npm:^0"
     "@types/scheduler": "npm:^0"
     "@vitejs/plugin-legacy": "npm:^6.0.1"
     "@vitejs/plugin-react": "npm:^4.3.4"
+    core-js: "npm:^3.40.0"
     css-element-queries: "npm:^1.2.3"
     dompurify: "npm:^3.2.4"
     eslint: "npm:^9.17.0"
@@ -8332,6 +8341,7 @@ __metadata:
     react-google-recaptcha-v3-safe: "npm:^1.11.1"
     react-helmet-async: "npm:^2.0.5"
     react-redux: "npm:^9.2.0"
+    regenerator-runtime: "npm:^0.14.1"
     scheduler: "npm:^0.25.0"
     terser: "npm:^5.38.0"
     ts-node: "npm:^10.9.2"
@@ -8346,6 +8356,7 @@ __metadata:
     vite-plugin-prismjs: "npm:^0.0.11"
     vite-plugin-vconsole: "npm:^2.1.1"
     vite-tsconfig-paths: "npm:^5.1.4"
+    whatwg-fetch: "npm:^3.6.20"
     zod: "npm:^3.24.1"
   languageName: unknown
   linkType: soft
@@ -8635,6 +8646,13 @@ __metadata:
   version: 0.6.2
   resolution: "webpack-virtual-modules@npm:0.6.2"
   checksum: 10c0/5ffbddf0e84bf1562ff86cf6fcf039c74edf09d78358a6904a09bbd4484e8bb6812dc385fe14330b715031892dcd8423f7a88278b57c9f5002c84c2860179add
+  languageName: node
+  linkType: hard
+
+"whatwg-fetch@npm:^3.6.20":
+  version: 3.6.20
+  resolution: "whatwg-fetch@npm:3.6.20"
+  checksum: 10c0/fa972dd14091321d38f36a4d062298df58c2248393ef9e8b154493c347c62e2756e25be29c16277396046d6eaa4b11bd174f34e6403fff6aaca9fb30fa1ff46d
   languageName: node
   linkType: hard
 
