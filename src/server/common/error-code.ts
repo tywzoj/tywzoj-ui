@@ -33,6 +33,7 @@ export const enum CE_ErrorCode {
     Problem_TooLargeUploadFile = 2204,
     Problem_FileLimitExceeded = 2205,
     Problem_NoSuchProblemFile = 2206,
+    Problem_DuplicateDisplayId = 2207,
 
     // File (23xx)
     File_DuplicateUUID = 2300,

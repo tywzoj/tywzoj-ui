@@ -94,6 +94,15 @@ export interface IProblemDetailPostRequestBody {
 
 export type IProblemDetailPostResponse = IProblemBasicDetail;
 
+export interface IProblemDetailPatchRequestBody {
+    displayId?: number;
+    title?: string;
+    type?: CE_ProblemType;
+    visibility?: CE_Visibility;
+    samples?: IProblemSampleDetailPostRequestBody[];
+    tagIds?: number[];
+}
+
 // END: problem detail types
 
 // BEGIN: problem content types
@@ -103,6 +112,13 @@ export interface IProblemContentDetailPostRequestBody {
     inputFormat: string;
     outputFormat: string;
     limitAndHint: string;
+}
+
+export interface IProblemContentDetailPatchRequestBody {
+    description?: string;
+    inputFormat?: string;
+    outputFormat?: string;
+    limitAndHint?: string;
 }
 
 // END: problem content types

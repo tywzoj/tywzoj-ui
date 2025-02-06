@@ -8,6 +8,7 @@ export interface IRequestOptions {
     query?: Record<string, string | number | boolean | undefined>;
     body?: object | string;
     recaptchaToken?: string;
+    noCache?: boolean;
 }
 
 type IError = Exclude<CE_ErrorCode, CE_ErrorCode.OK>;
@@ -38,6 +39,11 @@ export async function requestAsync<T>(options: IRequestOptions): Promise<IRespon
     }
     if (options.recaptchaToken) {
         headers.append("X-Recaptcha-Token", options.recaptchaToken);
+    }
+
+    if (options.noCache ?? true) {
+        headers.append("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.append("Pragma", "no-cache");
     }
 
     const url = new URL(`/api/${options.path}`, apiEndPoint);

@@ -25,6 +25,7 @@
     "@tanstack/react-query": "^5.62.16",
     "@tanstack/react-router": "^1.95.1",
     "@tanstack/zod-adapter": "^1.97.23",
+    "core-js": "^3.40.0",
     "css-element-queries": "^1.2.3",
     "dompurify": "^3.2.4",
     "js-yaml": "^4.1.0",
@@ -40,13 +41,16 @@
     "react-google-recaptcha-v3-safe": "^1.11.1",
     "react-helmet-async": "^2.0.5",
     "react-redux": "^9.2.0",
+    "regenerator-runtime": "^0.14.1",
     "scheduler": "^0.25.0",
     "uuid": "^11.0.5",
+    "whatwg-fetch": "^3.6.20",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
     "@tanstack/eslint-plugin-router": "^1.92.7",
+    "@tanstack/react-query-devtools": "^5.66.0",
     "@tanstack/router-devtools": "^1.95.1",
     "@tanstack/router-plugin": "^1.95.1",
     "@types/js-yaml": "^4",
@@ -55,7 +59,9 @@
     "@types/prismjs": "^1",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/regenerator-runtime": "^0",
     "@types/scheduler": "^0",
+    "@vitejs/plugin-legacy": "^6.0.1",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
@@ -66,6 +72,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
+    "terser": "^5.38.0",
     "ts-node": "^10.9.2",
     "type-fest": "^4.33.0",
     "typescript": "^5.7.2",
@@ -77,5 +84,12 @@
     "vite-plugin-prismjs": "^0.0.11",
     "vite-plugin-vconsole": "^2.1.1",
     "vite-tsconfig-paths": "^5.1.4"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "chrome 50",
+    "firefox 45",
+    "edge 14",
+    "safari 10"
+  ]
 }

@@ -25,9 +25,11 @@ export const useMarkdownRenderStyles = makeStyles({
         transform: "translate3d(0, 0, 0)",
         wordBreak: "break-word",
 
-        "& a": {
-            ...commonLinkStyles,
-        },
+        lineHeight: tokens.lineHeightBase300,
+        fontSize: tokens.fontSizeBase300,
+        fontFamily: tokens.fontFamilyBase,
+
+        "& a": commonLinkStyles,
 
         "& h1, & h2, & h3, & h4, & h5, & h6": {
             margin: "0.5em 0",
@@ -55,7 +57,7 @@ export const useMarkdownRenderStyles = makeStyles({
         "& p, & blockquote": {
             overflowX: "auto",
             overflowY: "hidden",
-            margin: "0 0 0.5em",
+            margin: "0.5em 0",
         },
 
         "& blockquote": {
@@ -63,7 +65,10 @@ export const useMarkdownRenderStyles = makeStyles({
             backgroundColor: tokens.colorNeutralBackground3,
             paddingLeft: "1em",
             borderLeft: `0.25em solid ${tokens.colorNeutralStroke1}`,
-            margin: "0 0 1em",
+        },
+
+        "> blockquote": {
+            borderRadius: tokens.borderRadiusMedium,
         },
 
         "& ul, & ol, & blockquote": {
@@ -79,7 +84,11 @@ export const useMarkdownRenderStyles = makeStyles({
         "& p>img:only-child": {
             display: "block",
             margin: "0 auto",
+        },
+
+        "& img": {
             maxWidth: "100%",
+            height: "auto",
         },
 
         "> ul, > ol": {
@@ -87,6 +96,31 @@ export const useMarkdownRenderStyles = makeStyles({
             "& ul, & ol": {
                 paddingLeft: "1.5em",
             },
+        },
+
+        "& table": {
+            width: "100%",
+            borderCollapse: "collapse",
+            borderSpacing: "0",
+        },
+
+        "& th, & td": {
+            border: `1px solid ${tokens.colorNeutralStroke1}`,
+            padding: "0.5em",
+        },
+
+        "& th": { backgroundColor: tokens.colorNeutralBackground4 },
+
+        "> .katex-display": {
+            margin: "0.5em 0",
+        },
+
+        "> :first-child": {
+            marginTop: "0",
+        },
+
+        "> :last-child": {
+            marginBottom: "0",
         },
     },
 });

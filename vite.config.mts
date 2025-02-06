@@ -1,4 +1,5 @@
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
@@ -16,6 +17,10 @@ export default defineConfig(({ command }) => {
     return {
         envPrefix: ENV_PREFIX,
         plugins: [
+            legacy({
+                targets: ["defaults", "chrome 50", "firefox 45", "edge 14", "safari 10"],
+                additionalLegacyPolyfills: ["regenerator-runtime/runtime"],
+            }),
             createHtmlPlugin({
                 minify: {
                     collapseWhitespace: true,

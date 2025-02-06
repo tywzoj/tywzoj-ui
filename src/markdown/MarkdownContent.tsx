@@ -24,14 +24,24 @@ export interface IMarkdownContentProps {
      */
     placeholderLines?: number;
 
+    /**
+     * If `true`, remove all images from the content.
+     * @default false
+     */
+    removeImage?: boolean;
+
     onPatchResult?: (element: HTMLDivElement) => (() => void) | void;
 }
 
 export const MarkdownContent: React.FC<IMarkdownContentProps> = React.memo((props) => {
-    const { className, content, noSanitize = false, placeholderLines = 4, onPatchResult } = props;
+    const { className, content, noSanitize = false, placeholderLines = 4, removeImage = false, onPatchResult } = props;
     const [wrapperElement, setWrapperElement] = React.useState<HTMLDivElement | null>();
 
-    const { result: html, error, pending } = useAsyncFunctionResult(renderMarkdownAsync, [content, noSanitize]);
+    const {
+        result: html,
+        error,
+        pending,
+    } = useAsyncFunctionResult(renderMarkdownAsync, [content, noSanitize, removeImage]);
     const navigate = useNavigate();
 
     const styles = useMarkdownRenderStyles();
