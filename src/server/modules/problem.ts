@@ -1,3 +1,6 @@
+import { CE_RecaptchaAction } from "@/common/enums/recaptcha-action";
+import type { IRecaptchaAsync } from "@/common/hooks/recaptcha";
+
 import { requestAsync } from "../request";
 import type {
     IProblemDetailGetRequestQuery,
@@ -29,10 +32,20 @@ export async function getProblemDetailAsync(displayId: string, query: IProblemDe
     });
 }
 
-export async function postProblemDetailAsync(body: IProblemDetailPostRequestBody) {
+export async function postProblemDetailAsync(body: IProblemDetailPostRequestBody, recaptchaAsync: IRecaptchaAsync) {
     return await requestAsync<IProblemDetailPostResponse>({
         path: "problem/detail",
         method: "POST",
         body,
+        recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.ProblemDetailPost),
+    });
+}
+
+export async function getProblemAvailableDisplayIdAsync(recaptchaAsync: IRecaptchaAsync) {
+    return await requestAsync<number>({
+        path: "problem/available-display-id",
+        method: "GET",
+        recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.ProblemDetailPost),
+        noCache: true,
     });
 }

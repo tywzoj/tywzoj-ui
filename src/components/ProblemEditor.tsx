@@ -26,10 +26,13 @@ import React from "react";
 import { ConfirmationPopover } from "@/common/components/ConfirmationPopover";
 import { PROBLEM_TITLE_MAX_LENGTH } from "@/common/constants/data-length";
 import { CODE_FONT_FAMILY } from "@/common/constants/font";
+import { useWithCatchError } from "@/common/hooks/catch-error";
+import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
+import { ProblemModule } from "@/server/api";
 import { CE_Visibility } from "@/server/common/permission";
 import { CE_ProblemType } from "@/server/modules/problem.enums";
 import type {
@@ -40,6 +43,7 @@ import type {
     IProblemSampleDetail,
     IProblemSampleDetailEditable,
 } from "@/server/modules/problem.types";
+import { withThrowErrors } from "@/server/utils";
 import { useIsMiniScreen, useIsSmallScreen } from "@/store/hooks";
 
 import { ProblemContent } from "./ProblemContent";
@@ -75,6 +79,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
 
     const isMiniScreen = useIsMiniScreen();
     const router = useRouter();
+    const recaptchaAsync = useRecaptchaAsync();
 
     const ls = useLocalizedStrings({
         editTab: CE_Strings.COMMON_EDIT_BUTTON,
@@ -92,6 +97,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
         idEmpty: CE_Strings.VALIDATION_ERROR_ID_EMPTY,
         titleEmpty: CE_Strings.VALIDATION_ERROR_TITLE_EMPTY,
         titleTooLong: CE_Strings.VALIDATION_ERROR_PROBLEM_TITLE_TOO_LONG,
+        idGenBtn: CE_Strings.PROBLEM_EDIT_GEN_ID,
     });
 
     const [preview, setPreview] = React.useState(false);
@@ -181,6 +187,18 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
         });
     };
 
+    const [generatingDisplayId, setGeneratingDisplayId] = React.useState(false);
+    const handleGenerateDisplayIdAsync = useWithCatchError(async () => {
+        const resp = await getProblemAvailableDisplayIdAsync(recaptchaAsync);
+        setDisplayId(resp.data);
+    });
+    const onGenerateDisplayIdButtonClick = () => {
+        setGeneratingDisplayId(true);
+        handleGenerateDisplayIdAsync().finally(() => {
+            setGeneratingDisplayId(false);
+        });
+    };
+
     return (
         <div className={mergeClasses(styles.root, className)}>
             <div className={styles.tabList}>
@@ -211,28 +229,38 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                 </TabList>
             </div>
             <div className={mergeClasses(styles.editor, preview && styles.hidden)}>
-                <Field label={ls.displayId} className={styles.topField} validationMessage={displayIdErr}>
-                    <Input
-                        ref={displayIdRef}
-                        // 0 will be empty string
-                        value={displayId ? displayId.toString(10) : ""}
-                        onChange={(_, { value }) => {
-                            if (!value) {
-                                // Empty string will be 0
-                                setDisplayId(0);
-                                setDisplayIdErr("");
-                                return;
-                            }
+                <div className={styles.displayIdFieldContainer}>
+                    <Field label={ls.displayId} className={styles.topField} validationMessage={displayIdErr}>
+                        <Input
+                            ref={displayIdRef}
+                            // 0 will be empty string
+                            value={displayId ? displayId.toString(10) : ""}
+                            onChange={(_, { value }) => {
+                                if (!value) {
+                                    // Empty string will be 0
+                                    setDisplayId(0);
+                                    setDisplayIdErr("");
+                                    return;
+                                }
 
-                            const newValue = Number.parseInt(value, 10);
-                            if (Number.isInteger(newValue) && newValue > 0) {
-                                setDisplayId(newValue);
-                                setDisplayIdErr("");
-                            }
-                        }}
-                        disabled={disabled}
-                    />
-                </Field>
+                                const newValue = Number.parseInt(value, 10);
+                                if (Number.isInteger(newValue) && newValue > 0) {
+                                    setDisplayId(newValue);
+                                    setDisplayIdErr("");
+                                }
+                            }}
+                            disabled={disabled || generatingDisplayId}
+                        />
+                    </Field>
+                    {!problem && (
+                        <Button
+                            onClick={onGenerateDisplayIdButtonClick}
+                            disabledFocusable={disabled || generatingDisplayId}
+                        >
+                            {ls.idGenBtn}
+                        </Button>
+                    )}
+                </div>
 
                 <Field label={ls.pTitle} className={styles.topField} validationMessage={titleErr}>
                     <Input
@@ -611,6 +639,19 @@ const useStyles = makeStyles({
             fontSize: tokens.fontSizeBase300,
         },
     },
+    displayIdFieldContainer: {
+        ...flex({
+            flexDirection: "row",
+            alignItems: "flex-end",
+        }),
+        gap: "8px",
+        "> .fui-Field": {
+            flexGrow: 1,
+        },
+        "> .fui-Button": {
+            marginBottom: "2px",
+        },
+    },
 
     sampleList: {
         ...flex({
@@ -664,3 +705,5 @@ const useStyles = makeStyles({
         }),
     },
 });
+
+const getProblemAvailableDisplayIdAsync = withThrowErrors(ProblemModule.getProblemAvailableDisplayIdAsync);

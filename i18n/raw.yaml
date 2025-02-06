@@ -146,6 +146,10 @@
   value: No such problem file.
   description: A string for the error message when no such problem file.
 
+- name: ERROR_2207_DUPLICATE_DISPLAY_ID
+  value: The problem ID is already used.
+  description: A string for the error message when the problem ID is already used.
+
 - name: CUSTOM_ERROR_PAGE_NOT_FOUND
   value: Page not found.
   description: A string for the error message when the page is not found.
@@ -447,6 +451,10 @@
 - name: NO_TAGS_TEXT
   value: No tags.
   description: A string for the text when there are no tags.
+
+- name: PROBLEM_EDIT_GEN_ID
+  value: Generate ID
+  description: A string for the label of generate ID button.
 
 - name: PROBLEM_EDIT_TITLE_WITH_ID
   value: '#{0}({1}). {2} - Edit'
