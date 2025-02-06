@@ -114,14 +114,29 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
         samples: problem?.samples || [],
     });
 
-    const [visibility, setVisibility] = React.useState(problem?.visibility || CE_Visibility.Private);
-    const [displayId, setDisplayId] = React.useState<number>(problem?.displayId || 0);
-    const [title, setTitle] = React.useState(problem?.title || "");
-    const [description, setDescription] = React.useState(problem?.content?.description || "");
-    const [inputFormat, setInputFormat] = React.useState(problem?.content?.inputFormat || "");
-    const [outputFormat, setOutputFormat] = React.useState(problem?.content?.outputFormat || "");
-    const [limitAndHint, setLimitAndHint] = React.useState(problem?.content?.limitAndHint || "");
-    const [samples, setSamples] = React.useState<IProblemSampleDetailEditableWithId[]>(problem?.samples || []);
+    const [visibility, setVisibility] = React.useState(CE_Visibility.Private);
+    const [displayId, setDisplayId] = React.useState<number>(0);
+    const [title, setTitle] = React.useState("");
+    const [description, setDescription] = React.useState("");
+    const [inputFormat, setInputFormat] = React.useState("");
+    const [outputFormat, setOutputFormat] = React.useState("");
+    const [limitAndHint, setLimitAndHint] = React.useState("");
+    const [samples, setSamples] = React.useState<IProblemSampleDetailEditableWithId[]>([]);
+
+    React.useEffect(() => {
+        if (problem) {
+            setVisibility(problem.visibility);
+            setDisplayId(problem.displayId);
+            setTitle(problem.title);
+            if (problem.content) {
+                setDescription(problem.content.description);
+                setInputFormat(problem.content.inputFormat);
+                setOutputFormat(problem.content.outputFormat);
+                setLimitAndHint(problem.content.limitAndHint);
+            }
+            setSamples(problem.samples);
+        }
+    }, [problem]);
 
     const [displayIdErr, setDisplayIdErr] = React.useState("");
     const displayIdRef = React.useRef<HTMLInputElement>(null);

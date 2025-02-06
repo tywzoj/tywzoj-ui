@@ -71,6 +71,7 @@ const NewProblemPage: React.FC = () => {
 
     const onSaveChanges = (data: IProblemEditorChangedData) => {
         setLoading(true);
+        setError("");
         handlePostProblemDetailAsync(data).finally(() => {
             setLoading(false);
         });

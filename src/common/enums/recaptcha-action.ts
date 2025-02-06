@@ -4,4 +4,7 @@ export const enum CE_RecaptchaAction {
     EmailVerificationCode = "EmailVerificationCode",
 
     ProblemDetailPost = "ProblemDetailPost",
+    ProblemDetailPatch = "ProblemDetailPatch",
+    ProblemContentDetailPatch = "ProblemContentDetailPatch",
+    ProblemAvailableDisplayIdGet = "ProblemAvailableDisplayIdGet",
 }

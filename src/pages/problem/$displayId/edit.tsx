@@ -1,20 +1,38 @@
 import { makeStyles, Title3 } from "@fluentui/react-components";
+import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import type React from "react";
+import React from "react";
 
+import { useWithCatchError } from "@/common/hooks/catch-error";
+import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
+import { diff } from "@/common/utils/diff";
 import { format } from "@/common/utils/format";
+import { neverGuard } from "@/common/utils/never-guard";
+import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
-import { useLocalizedStrings } from "@/locales/hooks";
+import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/types";
 import { CE_QueryId } from "@/query/id";
+import { problemDetailQueryKeys, problemListQueryKeys } from "@/query/keys";
 import { createQueryOptions } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
-import { withThrowErrors } from "@/server/utils";
+import { CE_ErrorCode } from "@/server/common/error-code";
+import type {
+    IProblemContentDetail,
+    IProblemContentDetailPatchRequestBody,
+    IProblemDetailPatchRequestBody,
+} from "@/server/modules/problem.types";
+import type { IErrorCodeWillBeReturned } from "@/server/utils";
+import { withThrowErrors, withThrowErrorsExcept } from "@/server/utils";
 
 const ProblemEditPage: React.FC = () => {
     const problem = Route.useLoaderData();
+    const navigate = Route.useNavigate();
+    const recaptchaAsync = useRecaptchaAsync();
+    const queryClient = useQueryClient();
+    const errorCodeToString = useErrorCodeToString();
 
     const ls = useLocalizedStrings({
         title: CE_Strings.PROBLEM_EDIT_TITLE,
@@ -25,8 +43,72 @@ const ProblemEditPage: React.FC = () => {
 
     const styles = useStyles();
 
-    // TODO: Implement API request
-    // TODO: Update styles
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState<string>("");
+
+    const handleError = (code: IErrorCodeWillBeReturned<typeof patchProblemDetailAsync>) => {
+        switch (code) {
+            case CE_ErrorCode.Problem_DuplicateDisplayId:
+                setError(errorCodeToString(code));
+                break;
+            default:
+                neverGuard(code);
+        }
+    };
+
+    const handlePatchProblemAsync = useWithCatchError(async (data: IProblemEditorChangedData) => {
+        const problemPatchBody: IProblemDetailPatchRequestBody = {};
+        const shouldPatchProblem = diff<IProblemDetailPatchRequestBody>(
+            {
+                ...problem,
+                tagIds: problem.tags.map((tag) => tag.id),
+            },
+            {
+                ...data.problem,
+                samples: data.samples,
+                tagIds: data.tagIds,
+            },
+            problemPatchBody,
+            ["displayId", "title", "visibility", "samples", "tagIds"],
+        );
+
+        const problemContentPatchBody: IProblemContentDetailPatchRequestBody = {};
+        const shouldPatchContent = diff(
+            problem.content ?? ({} as IProblemContentDetail),
+            data.content,
+            problemContentPatchBody,
+            ["description", "inputFormat", "outputFormat", "limitAndHint"],
+        );
+
+        if (shouldPatchProblem) {
+            const resp = await patchProblemDetailAsync(problem.id, problemPatchBody, recaptchaAsync);
+            if (resp.code !== CE_ErrorCode.OK) {
+                handleError(resp.code);
+                return;
+            }
+        }
+
+        if (shouldPatchContent) {
+            await patchProblemContentDetailAsync(problem.id, problemContentPatchBody, recaptchaAsync);
+        }
+
+        const displayId = problem.displayId.toString(10);
+        const newDisplayId = problemPatchBody.displayId?.toString(10) ?? displayId;
+
+        await queryClient.resetQueries({ queryKey: problemListQueryKeys() });
+        await queryClient.resetQueries({ queryKey: problemDetailQueryKeys(displayId) });
+
+        navigate({
+            to: "/problem/$displayId",
+            params: { displayId: newDisplayId },
+        });
+    });
+
+    const onSaveChanges = (data: IProblemEditorChangedData) => {
+        setLoading(true);
+        setError("");
+        handlePatchProblemAsync(data).finally(() => setLoading(false));
+    };
 
     return (
         <div className={styles.root}>
@@ -36,9 +118,10 @@ const ProblemEditPage: React.FC = () => {
             <div className={styles.editor}>
                 <ProblemEditor
                     problem={problem}
-                    onSaveChanges={() => {
-                        // TODO: API request
-                    }}
+                    disabled={loading}
+                    submitting={loading}
+                    error={error}
+                    onSaveChanges={onSaveChanges}
                 />
             </div>
         </div>
@@ -60,6 +143,13 @@ const useStyles = makeStyles({
     },
     editor: {},
 });
+
+const patchProblemDetailAsync = withThrowErrorsExcept(
+    ProblemModule.patchProblemDetailAsync,
+    CE_ErrorCode.Problem_DuplicateDisplayId,
+);
+const patchProblemContentDetailAsync = withThrowErrors(ProblemModule.patchProblemContentDetailAsync);
+
 const queryOptions = createQueryOptions(CE_QueryId.ProblemDetail, withThrowErrors(ProblemModule.getProblemDetailAsync));
 
 export const Route = createFileRoute("/problem/$displayId/edit")({
