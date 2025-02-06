@@ -90,7 +90,7 @@ const ProblemListPage: React.FC = () => {
                 </div>
                 {permission.manageProblem && (
                     <div className={styles.actions}>
-                        <Button>Manage Tags</Button>
+                        <Button>Manage Tags</Button> {/* TODO: add a page */}
                         <ButtonWithRouter appearance="primary" to="/problem/new">
                             {ls.new}
                         </ButtonWithRouter>
@@ -115,7 +115,6 @@ const ProblemListPage: React.FC = () => {
                     <Button onClick={() => searchProblem(searchBoxValue)}>{ls.searchBtn}</Button>
                 </div>
                 {/* TODO: Show tag switch */}
-                {/* TODO: Add button */}
                 {/* TODO: Tag filter */}
             </div>
             <Await
