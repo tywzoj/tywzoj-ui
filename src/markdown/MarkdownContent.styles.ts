@@ -25,9 +25,11 @@ export const useMarkdownRenderStyles = makeStyles({
         transform: "translate3d(0, 0, 0)",
         wordBreak: "break-word",
 
-        "& a": {
-            ...commonLinkStyles,
-        },
+        lineHeight: tokens.lineHeightBase300,
+        fontSize: tokens.fontSizeBase300,
+        fontFamily: tokens.fontFamilyBase,
+
+        "& a": commonLinkStyles,
 
         "& h1, & h2, & h3, & h4, & h5, & h6": {
             margin: "0.5em 0",
