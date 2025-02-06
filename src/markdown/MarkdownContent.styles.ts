@@ -55,7 +55,7 @@ export const useMarkdownRenderStyles = makeStyles({
         "& p, & blockquote": {
             overflowX: "auto",
             overflowY: "hidden",
-            margin: "0 0 0.5em",
+            margin: "0.5em 0",
         },
 
         "& blockquote": {
