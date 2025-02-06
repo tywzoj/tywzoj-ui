@@ -38,7 +38,7 @@ export function sanitize(html: string): string {
             "caption",
             "img",
         ],
-        ALLOWED_ATTR: ["href", "title", "alt", "src", "width", "height", "target", "data-id"],
+        ALLOWED_ATTR: ["href", "title", "alt", "src", "width", "height", "target", "style", "data-id"],
     });
 
     return result;

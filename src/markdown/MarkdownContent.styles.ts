@@ -67,6 +67,10 @@ export const useMarkdownRenderStyles = makeStyles({
             borderLeft: `0.25em solid ${tokens.colorNeutralStroke1}`,
         },
 
+        "> blockquote": {
+            borderRadius: tokens.borderRadiusMedium,
+        },
+
         "& ul, & ol, & blockquote": {
             "&:first-child": {
                 marginTop: "0 !important",
@@ -80,7 +84,11 @@ export const useMarkdownRenderStyles = makeStyles({
         "& p>img:only-child": {
             display: "block",
             margin: "0 auto",
+        },
+
+        "& img": {
             maxWidth: "100%",
+            height: "auto",
         },
 
         "> ul, > ol": {
@@ -89,6 +97,19 @@ export const useMarkdownRenderStyles = makeStyles({
                 paddingLeft: "1.5em",
             },
         },
+
+        "& table": {
+            width: "100%",
+            borderCollapse: "collapse",
+            borderSpacing: "0",
+        },
+
+        "& th, & td": {
+            border: `1px solid ${tokens.colorNeutralStroke1}`,
+            padding: "0.5em",
+        },
+
+        "& th": { backgroundColor: tokens.colorNeutralBackground4 },
 
         "> .katex-display": {
             margin: "0.5em 0",
