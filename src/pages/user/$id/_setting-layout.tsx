@@ -15,6 +15,7 @@ const SettingLayout: React.FC = () => {
     const [selectedTab, setSelectedTab] = React.useState<CE_SettingPages>(CE_SettingPages.EditProfile);
     const checkMatch = (page: CE_SettingPages) => matchRoute({ to: `/user/$id/${page}` }) && setSelectedTab(page);
 
+    // Fuck! Tanstack Router designed this like shit!
     React.useEffect(() => {
         checkMatch(CE_SettingPages.EditProfile);
         checkMatch(CE_SettingPages.Security);
