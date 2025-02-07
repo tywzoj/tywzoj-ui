@@ -1,7 +1,9 @@
 import { Button, Field, Input, makeStyles, Spinner, ToggleButton, tokens, Tooltip } from "@fluentui/react-components";
 import { EyeFilled, EyeOffFilled } from "@fluentui/react-icons";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import React from "react";
+import { z } from "zod";
 
 import { signInAsyncAction } from "@/common/actions/sign-in";
 import { LinkWithRouter } from "@/common/components/LinkWithRouter";
@@ -19,14 +21,10 @@ import type { IErrorCodeWillBeReturned } from "@/server/utils";
 import { withThrowErrorsExcept } from "@/server/utils";
 import { useAppDispatch, useCurrentUser } from "@/store/hooks";
 
-export interface ISignInPageSearch {
-    redirect?: string;
-}
-
 const SignInPage: React.FC = () => {
     const recaptchaAsync = useRecaptchaAsync();
     const dispatch = useAppDispatch();
-    const { redirect = "/" } = Route.useSearch();
+    const { redirect } = Route.useSearch();
     const errorCodeToString = useErrorCodeToString();
     const currentUser = useCurrentUser();
     const [loginSucceed, setLoginSucceed] = React.useState(!!currentUser);
@@ -226,6 +224,10 @@ const useStyles = makeStyles({
     },
 });
 
+const searchParams = z.object({
+    redirect: fallback(z.coerce.string(), "/").default("/"),
+});
+
 const signInRequestAsync = withThrowErrorsExcept(
     AuthModule.postSignInAsync,
     CE_ErrorCode.Auth_NoSuchUser,
@@ -234,6 +236,6 @@ const signInRequestAsync = withThrowErrorsExcept(
 
 export const Route = createFileRoute("/sign-in")({
     component: SignInPage,
-    validateSearch: (search): ISignInPageSearch => search,
+    validateSearch: zodValidator(searchParams),
     errorComponent: ErrorPageLazy,
 });

@@ -48,6 +48,8 @@ export function useWithCatchError(
 
                 if (throwErrors) {
                     throw error;
+                } else {
+                    console.error(error);
                 }
             }
         },

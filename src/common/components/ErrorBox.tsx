@@ -49,12 +49,10 @@ export const ErrorBox: React.FC<IErrorBoxProps> = (props) => {
                     {<div className={styles.message}>{message}</div>}
                     <div className={styles.linkContainer}>
                         {links.map((link, index) => (
-                            <>
+                            <div key={(link.to || link.href || link.title) + index}>
                                 {index > 0 && <div className={styles.linkDivider} />}
-                                <LinkWithRouter key={(link.to || link.href || link.title) + index} {...link}>
-                                    {link.title}
-                                </LinkWithRouter>
-                            </>
+                                <LinkWithRouter {...link}>{link.title}</LinkWithRouter>
+                            </div>
                         ))}
                         {showGoBack && canGoBack && (
                             <>
@@ -83,14 +81,16 @@ const useStyles = makeStyles({
         fontSize: "14px",
     },
     linkContainer: {
-        ...flex({
-            flexDirection: "row",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            flexWrap: "wrap",
-        }),
         marginTop: "4px",
-        gap: "6px",
+        "&, > div": {
+            ...flex({
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                flexWrap: "nowrap",
+            }),
+            gap: "6px",
+        },
     },
     linkDivider: {
         minWidth: "1.5px",

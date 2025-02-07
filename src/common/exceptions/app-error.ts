@@ -9,8 +9,9 @@ export class AppError extends Error {
     public readonly links: IStringCodeErrorLink[];
     public readonly showGoBack: boolean;
 
-    constructor(code: CE_ErrorCode, links?: IStringCodeErrorLink[], showGoBack?: boolean) {
-        super("AppError");
+    constructor(code: CE_ErrorCode, links?: IStringCodeErrorLink[], showGoBack?: boolean, message?: string) {
+        super(message);
+        this.name = "AppError";
         this.code = code;
         this.links = links ?? [];
         this.showGoBack = showGoBack ?? false;

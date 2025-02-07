@@ -45,6 +45,7 @@ import { getPagination, getPreference } from "@/store/selectors";
 const ProblemListPage: React.FC = () => {
     const { queryProblemListPromise } = Route.useLoaderData();
     const { sortBy, order, page, keyword } = Route.useLoaderDeps();
+
     const isMiddleScreen = useIsMiddleScreen();
     const navigate = Route.useNavigate();
     const search = Route.useSearch();

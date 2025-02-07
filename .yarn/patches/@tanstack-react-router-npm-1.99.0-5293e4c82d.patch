@@ -1,0 +1,41 @@
+diff --git a/dist/esm/awaited.d.ts b/dist/esm/awaited.d.ts
+index b23221c38c18a67ec19f24b68002916002796b31..4883c06d808280ca591334437dc2d3d529c6a560 100644
+--- a/dist/esm/awaited.d.ts
++++ b/dist/esm/awaited.d.ts
+@@ -2,6 +2,7 @@ import { DeferredPromise } from '@tanstack/router-core';
+ import * as React from 'react';
+ export type AwaitOptions<T> = {
+     promise: Promise<T>;
++    errorShouldBeSerialized?: boolean;
+ };
+ export declare function useAwaited<T>({ promise: _promise, }: AwaitOptions<T>): [T, DeferredPromise<T>];
+ export declare function Await<T>(props: AwaitOptions<T> & {
+diff --git a/dist/esm/awaited.js b/dist/esm/awaited.js
+index e418058d2b2ba204c51b97e95a450c4b95c73f07..df75f434fb72d992600ba154a41a2f5ab836f975 100644
+--- a/dist/esm/awaited.js
++++ b/dist/esm/awaited.js
+@@ -2,14 +2,21 @@ import { jsx } from "react/jsx-runtime";
+ import * as React from "react";
+ import { defer, TSR_DEFERRED_PROMISE } from "@tanstack/router-core";
+ function useAwaited({
+-  promise: _promise
++  promise: _promise,
++  errorShouldBeSerialized: _errorShouldBeSerialized
+ }) {
+-  const promise = defer(_promise);
++  const promise = defer(_promise, {
++    serializeError: _errorShouldBeSerialized ? void 0 : (e) => e
++  });
+   if (promise[TSR_DEFERRED_PROMISE].status === "pending") {
+     throw promise;
+   }
+   if (promise[TSR_DEFERRED_PROMISE].status === "error") {
+-    throw promise[TSR_DEFERRED_PROMISE].error;
++    if (_errorShouldBeSerialized) {
++      throw promise[TSR_DEFERRED_PROMISE].error;
++    } else {
++      throw promise[TSR_DEFERRED_PROMISE].error.data;
++    }
+   }
+   return [promise[TSR_DEFERRED_PROMISE].data, promise];
+ }
