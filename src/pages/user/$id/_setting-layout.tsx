@@ -9,11 +9,10 @@ const enum CE_SettingPages {
 }
 
 const SettingLayout: React.FC = () => {
-    const [selectedTab, setSelectedTab] = React.useState<CE_SettingPages>(CE_SettingPages.EditProfile);
     const navigate = useNavigate();
-
     const matchRoute = useMatchRoute();
 
+    const [selectedTab, setSelectedTab] = React.useState<CE_SettingPages>(CE_SettingPages.EditProfile);
     const checkMatch = (page: CE_SettingPages) => matchRoute({ to: `/user/$id/${page}` }) && setSelectedTab(page);
 
     React.useEffect(() => {
