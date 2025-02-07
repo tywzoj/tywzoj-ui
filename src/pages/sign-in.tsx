@@ -1,4 +1,4 @@
-import { Button, Field, Input, makeStyles, Spinner, tokens, Tooltip } from "@fluentui/react-components";
+import { Button, Field, Input, makeStyles, Spinner, ToggleButton, tokens, Tooltip } from "@fluentui/react-components";
 import { EyeFilled, EyeOffFilled } from "@fluentui/react-icons";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
 import React from "react";
@@ -152,9 +152,10 @@ const SignInPage: React.FC = () => {
                         disabled={loading}
                         contentAfter={
                             <Tooltip content={showPassword ? ls.hidePwd : ls.showPwd} relationship="label">
-                                <Button
+                                <ToggleButton
+                                    checked={showPassword}
                                     appearance="transparent"
-                                    icon={showPassword ? <EyeOffFilled /> : <EyeFilled />}
+                                    icon={showPassword ? <EyeFilled /> : <EyeOffFilled />}
                                     onClick={() => setShowPassword((prev) => !prev)}
                                 />
                             </Tooltip>
