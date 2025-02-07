@@ -31,6 +31,8 @@ const SignInPage: React.FC = () => {
     const currentUser = useCurrentUser();
     const [loginSucceed, setLoginSucceed] = React.useState(!!currentUser);
 
+    const passwordRef = React.useRef<HTMLInputElement>(null);
+
     const ls = useLocalizedStrings({
         showPwd: CE_Strings.SHOW_PASSWORD_LABEL,
         hidePwd: CE_Strings.HIDE_PASSWORD_LABEL,
@@ -125,16 +127,27 @@ const SignInPage: React.FC = () => {
                             setUsername(value);
                             setUsernameError("");
                         }}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                passwordRef.current?.focus();
+                            }
+                        }}
                     />
                 </Field>
                 <Field label={ls.password} validationMessage={passwordError}>
                     <Input
+                        ref={passwordRef}
                         type={showPassword ? "text" : "password"}
                         placeholder={ls.password}
                         value={password}
                         onChange={(_, { value }) => {
                             setPassword(value);
                             setPasswordError("");
+                        }}
+                        onKeyDown={(e) => {
+                            if (!loading && e.key === "Enter") {
+                                handleSubmit();
+                            }
                         }}
                         disabled={loading}
                         contentAfter={

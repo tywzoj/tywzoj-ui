@@ -1,7 +1,7 @@
 import "@/assets/styles/scrollbar.css";
 
 import { makeStyles, tokens, Tooltip } from "@fluentui/react-components";
-import { Book20Filled, GroupList20Filled, Home20Filled } from "@fluentui/react-icons";
+import { Book20Filled, GroupList20Filled, Home20Filled, PeopleList20Filled } from "@fluentui/react-icons";
 import { Hamburger, NavDrawer, NavDrawerBody, NavDrawerHeader } from "@fluentui/react-nav-preview";
 import { Outlet } from "@tanstack/react-router";
 import type { JSX } from "react";
@@ -84,13 +84,19 @@ export const Layout: React.FC = () => {
         [isOverlay, ls.navigationTitle],
     );
 
-    const createNavItem = (to: NavTo<typeof NavItemWithRouter>, text: string, icon: JSX.Element, preload = false) => {
+    const createNavItem = (
+        to: NavTo<typeof NavItemWithRouter>,
+        text: string,
+        icon: JSX.Element,
+        { preload = false, matchExact = false }: { preload?: boolean; matchExact?: boolean } = {},
+    ) => {
         return (
             <NavItemWithRouter
                 key={to}
                 to={to}
                 icon={icon}
                 value={INACTIVE_ITEM_TAG + to}
+                activeOptions={{ exact: matchExact }}
                 activeProps={{ value: ACTIVE_ITEM_TAG }}
                 inactiveProps={{ value: INACTIVE_ITEM_TAG + to }}
                 onClick={() => {
@@ -119,6 +125,7 @@ export const Layout: React.FC = () => {
                     {createNavItem("/", ls.homePage, <Home20Filled />)}
                     {accessProblem && createNavItem("/problem", ls.problemsPage, <Book20Filled />)}
                     {accessProblem && createNavItem("/set", ls.problemSetsPage, <GroupList20Filled />)}
+                    {currentUser && createNavItem("/user", "Users", <PeopleList20Filled />, { matchExact: true })}
                 </NavDrawerBody>
             </NavDrawer>
             <div className={styles.container}>
