@@ -1,7 +1,5 @@
-import "core-js/es/promise";
-import "core-js/es/object"; // Object.entries, Object.values
-import "regenerator-runtime/runtime"; // async/await
-import "whatwg-fetch"; // fetch
+import "core-js/stable";
+import "whatwg-fetch";
 
 import React from "react";
 import { createRoot } from "react-dom/client";

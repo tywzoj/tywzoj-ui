@@ -3848,13 +3848,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/regenerator-runtime@npm:^0":
-  version: 0.13.8
-  resolution: "@types/regenerator-runtime@npm:0.13.8"
-  checksum: 10c0/10c094584c097aec51a29f598425306febab764f054db14d5dd892961bf97c96272d620af5bd6e4c5f7d20c4e5b9ce98b6069b0f009cfc57f54614b33760b86e
-  languageName: node
-  linkType: hard
-
 "@types/scheduler@npm:^0":
   version: 0.23.0
   resolution: "@types/scheduler@npm:0.23.0"
@@ -8312,7 +8305,6 @@ __metadata:
     "@types/prismjs": "npm:^1"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
-    "@types/regenerator-runtime": "npm:^0"
     "@types/scheduler": "npm:^0"
     "@vitejs/plugin-legacy": "npm:^6.0.1"
     "@vitejs/plugin-react": "npm:^4.3.4"
@@ -8341,7 +8333,6 @@ __metadata:
     react-google-recaptcha-v3-safe: "npm:^1.11.1"
     react-helmet-async: "npm:^2.0.5"
     react-redux: "npm:^9.2.0"
-    regenerator-runtime: "npm:^0.14.1"
     scheduler: "npm:^0.25.0"
     terser: "npm:^5.38.0"
     ts-node: "npm:^10.9.2"
