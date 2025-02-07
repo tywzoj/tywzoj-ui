@@ -19,7 +19,7 @@ export default defineConfig(({ command }) => {
         plugins: [
             legacy({
                 targets: ["defaults", "chrome 50", "firefox 45", "edge 14", "safari 10"],
-                additionalLegacyPolyfills: ["regenerator-runtime/runtime"],
+                additionalLegacyPolyfills: ["core-js/stable"],
             }),
             createHtmlPlugin({
                 minify: {
