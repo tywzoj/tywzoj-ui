@@ -12,14 +12,14 @@ const SettingLayout: React.FC = () => {
     const navigate = useNavigate();
     const matchRoute = useMatchRoute();
 
-    const [selectedTab, setSelectedTab] = React.useState<CE_SettingPages>(CE_SettingPages.EditProfile);
+    const [selectedTab, setSelectedTab] = React.useState<CE_SettingPages>(CE_SettingPages.Preference);
     const checkMatch = (page: CE_SettingPages) => matchRoute({ to: `/user/$id/${page}` }) && setSelectedTab(page);
 
     // Fuck! Tanstack Router designed this like shit!
     React.useEffect(() => {
+        checkMatch(CE_SettingPages.Preference);
         checkMatch(CE_SettingPages.EditProfile);
         checkMatch(CE_SettingPages.Security);
-        checkMatch(CE_SettingPages.Preference);
     });
 
     return (
@@ -31,9 +31,9 @@ const SettingLayout: React.FC = () => {
                         navigate({ to: `../${value}` });
                     }}
                 >
+                    <Tab value={CE_SettingPages.Preference}>Preference</Tab>
                     <Tab value={CE_SettingPages.EditProfile}>Edit Profile</Tab>
                     <Tab value={CE_SettingPages.Security}>Security</Tab>
-                    <Tab value={CE_SettingPages.Preference}>Preference</Tab>
                 </TabList>
             </div>
 
