@@ -92,7 +92,7 @@ export const UserMenu: React.FC = () => {
                     <MenuItemLinkWithRouter to="/user/$id" params={{ id: currentUser.id.toString() }}>
                         {ls.profile}
                     </MenuItemLinkWithRouter>
-                    <MenuItemLinkWithRouter to="/user/$id/edit" params={{ id: currentUser.id.toString() }}>
+                    <MenuItemLinkWithRouter to="/user/$id/preference" params={{ id: currentUser.id.toString() }}>
                         {ls.settings}
                     </MenuItemLinkWithRouter>
                     <MenuDivider />
