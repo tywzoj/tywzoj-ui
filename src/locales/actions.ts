@@ -3,7 +3,8 @@ import { createAction } from "@reduxjs/toolkit";
 import type { IAppDispatch } from "@/store/types";
 import { createAppAction } from "@/store/utils";
 
-import type { CE_Locale, ILocaleState } from "./types";
+import type { CE_Locale } from "./locale";
+import type { ILocaleState } from "./types";
 import { checkIsRtl, getBrowserPreferLanguage, loadLocaleStringsAsync } from "./utils";
 
 export const setLocaleAction = createAction("Locale/Set", (props: Partial<ILocaleState>) => ({ payload: props }));

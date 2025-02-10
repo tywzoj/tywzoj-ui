@@ -1,4 +1,4 @@
-import type { CE_Strings } from "@/locales/types";
+import type { CE_Strings } from "@/locales/locale";
 import { getStringIdFromErrorCode } from "@/locales/utils";
 import type { CE_ErrorCode } from "@/server/common/error-code";
 

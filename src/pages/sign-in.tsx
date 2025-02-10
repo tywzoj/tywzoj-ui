@@ -14,7 +14,7 @@ import { flex } from "@/common/styles/flex";
 import { neverGuard } from "@/common/utils/never-guard";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import type { IErrorCodeWillBeReturned } from "@/server/utils";

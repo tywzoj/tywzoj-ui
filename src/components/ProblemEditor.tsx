@@ -31,7 +31,7 @@ import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { ProblemModule } from "@/server/api";
 import { CE_Visibility } from "@/server/common/permission";
 import { CE_ProblemType } from "@/server/modules/problem.enums";

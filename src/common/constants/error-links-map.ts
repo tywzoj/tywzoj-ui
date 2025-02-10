@@ -1,4 +1,4 @@
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { CE_ErrorCode } from "@/server/common/error-code";
 
 import type { IStringCodeErrorLink } from "../types/error-link";

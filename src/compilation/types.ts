@@ -1,4 +1,4 @@
-import type { CE_Strings } from "@/locales/types";
+import type { CE_Strings } from "@/locales/locale";
 
 export const enum CE_CodeLanguage {
     Cpp = "cpp",

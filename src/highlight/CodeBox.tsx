@@ -5,7 +5,7 @@ import React from "react";
 import { CODE_FONT_FAMILY } from "@/common/constants/font";
 import { useDispatchToastError, useDispatchToastSuccess } from "@/common/hooks/toast";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 
 import { highlight } from "./highlighter";
 import type { ICodeLanguage } from "./types";

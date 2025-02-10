@@ -1,9 +1,4 @@
-export { default as CE_Strings } from "./locale.strings.gen";
-
-export const enum CE_Locale {
-    en = "en",
-    zh_cn = "zh-cn",
-}
+import type { CE_Locale } from "./locale";
 
 export interface ILocaleState {
     lang: CE_Locale;

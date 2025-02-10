@@ -5,7 +5,7 @@ import type React from "react";
 import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
 import { flex } from "@/common/styles/flex";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { useIsMiniScreen } from "@/store/hooks";
 
 export const AuthMenu: React.FC = () => {

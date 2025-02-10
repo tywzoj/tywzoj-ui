@@ -6,7 +6,7 @@ import type * as React from "react";
 import { flex } from "@/common/styles/flex";
 import type { IErrorLink } from "@/common/types/error-link";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 
 import { LinkWithRouter } from "./LinkWithRouter";
 

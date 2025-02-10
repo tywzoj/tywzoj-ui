@@ -13,7 +13,7 @@ import { neverGuard } from "@/common/utils/never-guard";
 import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { CE_QueryId } from "@/query/id";
 import { problemDetailQueryKeys, problemListQueryKeys } from "@/query/keys";
 import { createQueryOptions } from "@/query/utils";

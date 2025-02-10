@@ -1,4 +1,4 @@
-import type { CE_Locale } from "@/locales/types";
+import type { CE_Locale } from "@/locales/locale";
 import type { CE_Theme } from "@/theme/types";
 
 import type { CE_UserLevel } from "../common/permission";

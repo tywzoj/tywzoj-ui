@@ -2,7 +2,7 @@ import { Toast, ToastBody, ToastTitle, useToastController } from "@fluentui/reac
 import * as React from "react";
 
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 
 import { ToastContext } from "../providers/ToastProvider.ctx";
 

@@ -17,8 +17,8 @@ import { commonLinkStyles } from "@/common/styles/link";
 import type { NavTo } from "@/common/types/nav-to";
 import { format } from "@/common/utils/format";
 import { useLocalizedStrings } from "@/locales/hooks";
+import { CE_Locale, CE_Strings } from "@/locales/locale";
 import { getLocale } from "@/locales/selectors";
-import { CE_Locale, CE_Strings } from "@/locales/types";
 import { useAppSelector, useCurrentUser, useFeature, useIsSmallScreen, usePermission } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 

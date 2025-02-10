@@ -5,7 +5,7 @@ import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
 import { CodeBoxLazy } from "@/highlight/CodeBox.lazy";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { MarkdownContentLazy } from "@/markdown/MarkdownContent.lazy";
 import type { IProblemContentDetail, IProblemSampleDetail } from "@/server/modules/problem.types";
 import { useIsSmallScreen } from "@/store/hooks";
