@@ -91,15 +91,19 @@ class InlineConstEnum {
         await this.loadTsModulesAsync();
         this.findConstEnumDeclarations();
 
-        this.findConstEnumExports();
-
         while (true) {
             const prevConstEnumExportsSize = this.constEnumExports.size;
-            this.findConstEnumImports();
             this.findConstEnumExports();
             const nextConstEnumExportsSize = this.constEnumExports.size;
 
-            if (prevConstEnumExportsSize === nextConstEnumExportsSize) {
+            const prevConstEnumImportsSize = this.constEnumImports.size;
+            this.findConstEnumImports();
+            const nextConstEnumImportsSize = this.constEnumImports.size;
+
+            if (
+                prevConstEnumExportsSize === nextConstEnumExportsSize &&
+                prevConstEnumImportsSize === nextConstEnumImportsSize
+            ) {
                 break;
             }
         }
@@ -116,7 +120,7 @@ class InlineConstEnum {
     }
 
     private async loadTsModulesAsync() {
-        const files = await fg.async(`*.{ts,cts,mts,tsx}`, {
+        const files = await fg.async(`**/*.{ts,cts,mts,tsx}`, {
             cwd: this.options.sourceDir,
         });
 
