@@ -1,6 +1,5 @@
 import type { TSEnumDeclaration } from "@babel/types";
 import { babelParse, getLang, isTs } from "ast-kit";
-import type { Pattern } from "fast-glob";
 import fg from "fast-glob";
 import { readFileSync } from "fs";
 import path from "path";
@@ -9,7 +8,6 @@ import type { Plugin } from "vite";
 
 export interface IInlineConstEnumOptions {
     sourceDir: string;
-    filePattern: Pattern;
     tsConfigPath: string;
 }
 

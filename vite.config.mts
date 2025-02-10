@@ -62,7 +62,6 @@ export default defineConfig(({ command }) => {
             inlineConstEnum({
                 tsConfigPath: path.resolve("tsconfig.app.json"),
                 sourceDir: path.resolve("src"),
-                filePattern: "**/*.{ts,tsx}",
             }),
         ],
         server: {
