@@ -20,7 +20,7 @@ export default function inlineConstEnum(options: IInlineConstEnumOptions): Plugi
     return {
         name: "vite:plugin-inline-const-enum",
         enforce: "pre",
-        load(id) {
+        transform(code, id) {
             if (id.includes("node_modules")) {
                 return null;
             }
@@ -28,10 +28,8 @@ export default function inlineConstEnum(options: IInlineConstEnumOptions): Plugi
             const idWithoutSearch = id.split("?")[0];
 
             if (idWithoutSearch in replacements) {
-                let code = readFileSync(id, "utf-8");
-
                 for (const [enumItem, value] of Object.entries(replacements[idWithoutSearch])) {
-                    code = code.replaceAll(enumItem, value);
+                    code = code.replace(new RegExp(`\\b${enumItem}\\b`, "g"), value);
                 }
 
                 return code;
@@ -384,7 +382,7 @@ class InlineConstEnum {
         } else if (importPath.startsWith("/")) {
             return importPath;
         } else {
-            return this.tsConfigMatchPath(importPath, undefined, undefined, ["ts", "cts", "mts", "tsx"]) ?? importPath;
+            return this.tsConfigMatchPath(importPath, undefined, () => true) ?? importPath;
         }
     }
 
@@ -423,7 +421,7 @@ class InlineConstEnum {
         }, {});
 
         for (const importDeclaration of imports) {
-            const [pathWithoutExt] = importDeclaration.split(":") as [string, string];
+            const [pathWithoutExt, enumName] = importDeclaration.split(":") as [string, string];
             const filePath = this.fullPathMap.get(pathWithoutExt);
 
             if (!filePath) {
@@ -453,7 +451,9 @@ class InlineConstEnum {
                 if (!value) {
                     continue;
                 }
-                replacements[filePath][definition] = value;
+                const [, memberName] = definition.split(".") as [string, string];
+
+                replacements[filePath][`${enumName}.${memberName}`] = value;
             }
         }
 
