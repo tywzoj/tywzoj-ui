@@ -166,7 +166,7 @@ class InlineConstEnum {
     private findConstEnumImports() {
         for (const { name: moduleName, ast } of this.tsModules) {
             for (const node of ast.body) {
-                if (node.type === "ImportDeclaration") {
+                if (node.type === "ImportDeclaration" && node.importKind === "value") {
                     // import ... from importedModuleName
                     const importedModuleName = this.getImportedModuleName(node.source.value, moduleName);
 
