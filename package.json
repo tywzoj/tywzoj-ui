@@ -14,8 +14,7 @@
     "format": "prettier --write src",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "i18n": "ts-node scripts/i18n-string.ts && prettier --write src/locales/*.gen.* && eslint src/locales/*.gen.* --fix",
-    "test": "ts-node scripts/test.ts"
+    "i18n": "ts-node scripts/i18n-string.ts && prettier --write src/locales/*.gen.* && eslint src/locales/*.gen.* --fix"
   },
   "dependencies": {
     "@fluentui/react-components": "^9.57.0",
