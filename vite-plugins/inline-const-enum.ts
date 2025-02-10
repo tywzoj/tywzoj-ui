@@ -29,7 +29,7 @@ export default function inlineConstEnum(options: IInlineConstEnumOptions): Plugi
 
             if (idWithoutSearch in replacements) {
                 for (const [enumItem, value] of Object.entries(replacements[idWithoutSearch])) {
-                    code = code.replace(new RegExp(`\\b${enumItem}\\b`, "g"), value);
+                    code = code.replace(new RegExp(`\\b${enumItem.replaceAll(".", "\\.")}\\b`, "g"), value);
                 }
 
                 return code;
