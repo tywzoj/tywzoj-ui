@@ -431,15 +431,15 @@ class InlineConstEnum {
         if (node.type === "NumericLiteral" || node.type === "StringLiteral" || node.type === "BooleanLiteral") {
             // 1, "1", true, false
             return node.value;
-        } else if (
-            node.type === "UnaryExpression" &&
-            ["-", "+", "~", "!"].includes(node.operator) &&
-            (node.argument.type === "NumericLiteral" ||
-                node.argument.type === "StringLiteral" ||
-                node.argument.type === "BooleanLiteral")
-        ) {
-            // -1, +1, ~1, !1, -"1", +"1", ~"1", !"1", !true, !false
-            return this.evaluateConstExpression(`${node.operator}${JSON.stringify(node.argument.value)}`);
+        } else if (node.type === "UnaryExpression" && ["-", "+", "~", "!"].includes(node.operator)) {
+            const value = this.evaluateExpression(node.argument, moduleName, UnsupportedMemberTypeError);
+
+            // Skip if the argument is not defined, skip this iteration until the next iteration if it is defined
+            if (value === null) {
+                return null;
+            }
+
+            return this.evaluateConstExpression(`${node.operator} ${JSON.stringify(value)}`);
         } else if (node.type === "BinaryExpression") {
             return this.evaluateBinaryExpression(node, moduleName, UnsupportedMemberTypeError);
         } else if (
