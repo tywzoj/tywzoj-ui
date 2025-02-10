@@ -6,14 +6,16 @@ import type { IErrorLink, IStringCodeErrorLink } from "@/common/types/error-link
 import { useLocalizedStrings } from "@/locales/hooks";
 
 export interface IErrorPageProps {
-    error: Error;
+    error: unknown;
 }
 
 export const ErrorPage: React.FC<IErrorPageProps> = ({ error }) => {
     if (error instanceof AppError) {
         return <AppErrorBox error={error} />;
-    } else {
+    } else if (error instanceof Error) {
         return <ErrorBox message={error.message} />;
+    } else {
+        return <ErrorBox message={String(error)} />;
     }
 };
 

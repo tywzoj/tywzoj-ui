@@ -32,7 +32,7 @@ import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptions } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
@@ -45,6 +45,7 @@ import { getPagination, getPreference } from "@/store/selectors";
 const ProblemListPage: React.FC = () => {
     const { queryProblemListPromise } = Route.useLoaderData();
     const { sortBy, order, page, keyword } = Route.useLoaderDeps();
+
     const isMiddleScreen = useIsMiddleScreen();
     const navigate = Route.useNavigate();
     const search = Route.useSearch();

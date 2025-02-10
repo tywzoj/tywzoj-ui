@@ -1,8 +1,7 @@
 import type { CE_ErrorCode } from "@/server/common/error-code";
 
-import { defaultLanguage, errorToStringIdMap, rtlLanguages, supportedLanguages } from "./locale";
-import type { CE_Locale } from "./types";
-import { CE_Strings } from "./types";
+import type { CE_Locale } from "./locale";
+import { CE_Strings, defaultLanguage, errorToStringIdMap, rtlLanguages, supportedLanguages } from "./locale";
 
 export function checkIsRtl(locale: CE_Locale) {
     return rtlLanguages.findIndex((l) => locale.startsWith(l)) >= 0;

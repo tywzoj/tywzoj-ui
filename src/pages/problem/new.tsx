@@ -11,7 +11,7 @@ import { neverGuard } from "@/common/utils/never-guard";
 import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { problemListQueryKeys } from "@/query/keys";
 import { ProblemModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";

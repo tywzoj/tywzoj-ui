@@ -6,7 +6,7 @@ import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
 import { range } from "@/common/utils/range";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { useIsMiddleScreen, useIsMiniScreen, useIsSmallScreen } from "@/store/hooks";
 
 export interface IPaginationButtonsProps {

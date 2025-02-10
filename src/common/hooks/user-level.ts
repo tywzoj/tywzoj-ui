@@ -2,7 +2,7 @@ import type { BadgeProps } from "@fluentui/react-components";
 import React from "react";
 
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { CE_UserLevel } from "@/server/common/permission";
 
 import { neverGuard } from "../utils/never-guard";

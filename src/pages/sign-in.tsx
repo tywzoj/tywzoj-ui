@@ -1,7 +1,9 @@
-import { Button, Field, Input, makeStyles, Spinner, tokens, Tooltip } from "@fluentui/react-components";
+import { Button, Field, Input, makeStyles, Spinner, ToggleButton, tokens, Tooltip } from "@fluentui/react-components";
 import { EyeFilled, EyeOffFilled } from "@fluentui/react-icons";
 import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import React from "react";
+import { z } from "zod";
 
 import { signInAsyncAction } from "@/common/actions/sign-in";
 import { LinkWithRouter } from "@/common/components/LinkWithRouter";
@@ -12,24 +14,22 @@ import { flex } from "@/common/styles/flex";
 import { neverGuard } from "@/common/utils/never-guard";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import type { IErrorCodeWillBeReturned } from "@/server/utils";
 import { withThrowErrorsExcept } from "@/server/utils";
 import { useAppDispatch, useCurrentUser } from "@/store/hooks";
 
-export interface ISignInPageSearch {
-    redirect?: string;
-}
-
 const SignInPage: React.FC = () => {
     const recaptchaAsync = useRecaptchaAsync();
     const dispatch = useAppDispatch();
-    const { redirect = "/" } = Route.useSearch();
+    const { redirect } = Route.useSearch();
     const errorCodeToString = useErrorCodeToString();
     const currentUser = useCurrentUser();
     const [loginSucceed, setLoginSucceed] = React.useState(!!currentUser);
+
+    const passwordRef = React.useRef<HTMLInputElement>(null);
 
     const ls = useLocalizedStrings({
         showPwd: CE_Strings.SHOW_PASSWORD_LABEL,
@@ -125,10 +125,16 @@ const SignInPage: React.FC = () => {
                             setUsername(value);
                             setUsernameError("");
                         }}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                passwordRef.current?.focus();
+                            }
+                        }}
                     />
                 </Field>
                 <Field label={ls.password} validationMessage={passwordError}>
                     <Input
+                        ref={passwordRef}
                         type={showPassword ? "text" : "password"}
                         placeholder={ls.password}
                         value={password}
@@ -136,12 +142,18 @@ const SignInPage: React.FC = () => {
                             setPassword(value);
                             setPasswordError("");
                         }}
+                        onKeyDown={(e) => {
+                            if (!loading && e.key === "Enter") {
+                                handleSubmit();
+                            }
+                        }}
                         disabled={loading}
                         contentAfter={
                             <Tooltip content={showPassword ? ls.hidePwd : ls.showPwd} relationship="label">
-                                <Button
+                                <ToggleButton
+                                    checked={showPassword}
                                     appearance="transparent"
-                                    icon={showPassword ? <EyeOffFilled /> : <EyeFilled />}
+                                    icon={showPassword ? <EyeFilled /> : <EyeOffFilled />}
                                     onClick={() => setShowPassword((prev) => !prev)}
                                 />
                             </Tooltip>
@@ -212,6 +224,10 @@ const useStyles = makeStyles({
     },
 });
 
+const searchParams = z.object({
+    redirect: fallback(z.coerce.string(), "/").default("/"),
+});
+
 const signInRequestAsync = withThrowErrorsExcept(
     AuthModule.postSignInAsync,
     CE_ErrorCode.Auth_NoSuchUser,
@@ -220,6 +236,6 @@ const signInRequestAsync = withThrowErrorsExcept(
 
 export const Route = createFileRoute("/sign-in")({
     component: SignInPage,
-    validateSearch: (search): ISignInPageSearch => search,
+    validateSearch: zodValidator(searchParams),
     errorComponent: ErrorPageLazy,
 });

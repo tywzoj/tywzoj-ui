@@ -39,7 +39,7 @@ import { ProblemSubmissionDialog } from "@/components/ProblemSubmissionDialog";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptions } from "@/query/utils";
 import { ProblemModule } from "@/server/api";

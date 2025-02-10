@@ -26,7 +26,12 @@ export function withThrowErrorsExcept<T, P extends any[], E extends IError[]>(
         if (res.code === CE_ErrorCode.OK || except.includes(res.code)) {
             return res as IResponseBodyAfterThrow<T, E>;
         } else {
-            throw new AppError(res.code, ERROR_LINKS_MAP[res.code] /* links */, true /* showGoBack */);
+            throw new AppError(
+                res.code,
+                ERROR_LINKS_MAP[res.code] /* links */,
+                true /* showGoBack */,
+                res.data ? String(res.data) : undefined,
+            );
         }
     };
 }

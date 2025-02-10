@@ -15,9 +15,10 @@ import { useNavigate } from "@tanstack/react-router";
 import React from "react";
 
 import { signOutAsyncAction } from "@/common/actions/sign-in";
+import { MenuItemLinkWithRouter } from "@/common/components/MenuItemLinkWithRouter";
 import { useDispatchToastError } from "@/common/hooks/toast";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import { useAppDispatch, useCurrentUser, useIsMiniScreen } from "@/store/hooks";
@@ -88,8 +89,12 @@ export const UserMenu: React.FC = () => {
             </MenuTrigger>
             <MenuPopover>
                 <MenuList>
-                    <MenuItem>{ls.profile}</MenuItem>
-                    <MenuItem>{ls.settings}</MenuItem>
+                    <MenuItemLinkWithRouter to="/user/$id" params={{ id: currentUser.id.toString() }}>
+                        {ls.profile}
+                    </MenuItemLinkWithRouter>
+                    <MenuItemLinkWithRouter to="/user/$id/preference" params={{ id: currentUser.id.toString() }}>
+                        {ls.settings}
+                    </MenuItemLinkWithRouter>
                     <MenuDivider />
                     <MenuItem onClick={signOut}>{ls.signOut}</MenuItem>
                 </MenuList>

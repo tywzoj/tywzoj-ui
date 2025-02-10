@@ -3,7 +3,7 @@ import { Body1Strong, Button, makeStyles, Popover, PopoverSurface, PopoverTrigge
 import type React from "react";
 
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 
 import { flex } from "../styles/flex";
 

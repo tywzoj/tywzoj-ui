@@ -3,8 +3,8 @@ import React from "react";
 import type { CE_ErrorCode } from "@/server/common/error-code";
 import { useAppSelector } from "@/store/hooks";
 
+import type { CE_Strings } from "./locale";
 import { getIsRtl, getStrings } from "./selectors";
-import type { CE_Strings } from "./types";
 import { getLocalizedStringWithFallback, getStringIdFromErrorCode } from "./utils";
 
 export function useLocalizedStrings<T extends Record<string, CE_Strings>>(

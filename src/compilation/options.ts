@@ -1,4 +1,4 @@
-import { CE_Strings } from "@/locales/types";
+import { CE_Strings } from "@/locales/locale";
 
 import type { ICodeLanguageOption } from "./types";
 import { CE_CodeLanguage } from "./types";

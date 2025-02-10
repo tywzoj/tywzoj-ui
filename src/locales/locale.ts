@@ -1,4 +1,7 @@
-import { CE_Locale } from "./types";
+export const enum CE_Locale {
+    en = "en",
+    zh_cn = "zh-cn",
+}
 
 export const defaultLanguage = CE_Locale.zh_cn;
 
@@ -22,4 +25,6 @@ export const stringIdToRecaptchaLanguageMap: { [k in CE_Locale]: string } = {
     [CE_Locale.en]: "en",
     [CE_Locale.zh_cn]: "zh-CN",
 };
+
 export { errorIdMap as errorToStringIdMap } from "./error-map.gen";
+export { default as CE_Strings } from "./locale.strings.gen";
