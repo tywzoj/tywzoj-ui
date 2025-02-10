@@ -74,7 +74,6 @@ export default defineConfig(({ command }) => {
             port: 5056,
         },
         build: {
-            minify: false,
             rollupOptions: {
                 output: {
                     entryFileNames: "assets/[name].[hash].js",
