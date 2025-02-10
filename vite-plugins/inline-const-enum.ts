@@ -350,7 +350,7 @@ class InlineConstEnum {
                     class UnsupportedMemberTypeError extends TypeError {
                         constructor() {
                             super(
-                                `Const enum member "${enumName}.${memberName}" in file ${moduleName} has unsupported type.`,
+                                `Const enum member "${enumName}.${memberName}" in module ${moduleName} has unsupported type.`,
                             );
                         }
                     }
