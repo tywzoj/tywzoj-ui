@@ -1,4 +1,4 @@
-import type { TSEnumDeclaration } from "@babel/types";
+import type { BinaryExpression, Expression, PrivateName, TSEnumDeclaration } from "@babel/types";
 import { babelParse, getLang, isTs } from "ast-kit";
 import fg from "fast-glob";
 import { readFile } from "fs/promises";
@@ -337,7 +337,7 @@ class InlineConstEnum {
 
                 for (const member of constEnumNode.members) {
                     const memberName = member.id.type === "Identifier" ? member.id.name : member.id.value;
-                    let value: string;
+                    let value: string | number | boolean | null;
 
                     const definitionIdentifier: IConstEnumDefinitionIdentifier = `${declaration}.${memberName}`;
 
@@ -355,63 +355,27 @@ class InlineConstEnum {
                         }
                     }
 
-                    const { initializer } = member;
-                    if (initializer) {
+                    if (member.initializer) {
                         prevItemInitialized = true;
 
-                        if (initializer.type === "NumericLiteral" || initializer.type === "StringLiteral") {
-                            // 1, "1"
-                            value = JSON.stringify(initializer.value);
-                        } else if (initializer.type === "UnaryExpression") {
-                            const arg = initializer.argument;
-                            if (
-                                (arg.type === "NumericLiteral" || arg.type === "StringLiteral") &&
-                                ["-", "+", "~", "!"].includes(initializer.operator)
-                            ) {
-                                // -1, +1, ~1, !1, -"1", +"1", ~"1", !"1"
-                                value = `${initializer.operator}${JSON.stringify(arg.value)}`;
-                            } else {
-                                throw new UnsupportedMemberTypeError();
-                            }
-                        } else if (initializer.type === "MemberExpression") {
-                            // SomeEnum.SomeMember
-                            if (
-                                initializer.object.type === "Identifier" &&
-                                initializer.property.type === "Identifier"
-                            ) {
-                                const rootDeclaration = this.getConstEnumRootDeclaration(
-                                    `${moduleName}:${initializer.object.name}`,
-                                );
+                        // The current item have been initialized, calculate the value
+                        value = this.evaluateExpression(member.initializer, moduleName, UnsupportedMemberTypeError);
 
-                                // A MemberExpression must be a member of a const enum
-                                if (!rootDeclaration) {
-                                    throw new UnsupportedMemberTypeError();
-                                }
-
-                                // Check if the member is defined
-                                const definitionIdentifier: IConstEnumDefinitionIdentifier = `${rootDeclaration}.${initializer.property.name}`;
-
-                                // Skip if the member is not defined, skip this iteration until the next iteration if it is defined
-                                if (!this.constEnumDefinitions.has(definitionIdentifier)) {
-                                    continue;
-                                }
-
-                                value = this.constEnumDefinitions.get(definitionIdentifier)!;
-                            } else {
-                                throw new UnsupportedMemberTypeError();
-                            }
-                        } else {
-                            throw new UnsupportedMemberTypeError();
+                        if (value === null) {
+                            // Skip this iteration until the next iteration
+                            continue;
                         }
                     } else {
                         // If the previous item have been initialized, the current item must have initializer.
                         if (prevItemInitialized) {
                             throw new TypeError(`Enum member ${enumName}.${memberName} must have initializer.`);
                         }
-                        value = JSON.stringify(itemIndex);
+
+                        // The current item have not been initialized, use the index as the value
+                        value = itemIndex;
                     }
 
-                    this.constEnumDefinitions.set(definitionIdentifier, value);
+                    this.constEnumDefinitions.set(definitionIdentifier, JSON.stringify(value));
                     itemIndex++;
                 }
             }
@@ -457,6 +421,74 @@ class InlineConstEnum {
 
             declaration = parentDeclaration;
         }
+    }
+
+    private evaluateExpression(
+        node: Expression | PrivateName,
+        moduleName: string,
+        UnsupportedMemberTypeError: new () => TypeError,
+    ): string | number | boolean | null {
+        if (node.type === "NumericLiteral" || node.type === "StringLiteral" || node.type === "BooleanLiteral") {
+            // 1, "1", true, false
+            return node.value;
+        } else if (
+            node.type === "UnaryExpression" &&
+            ["-", "+", "~", "!"].includes(node.operator) &&
+            (node.argument.type === "NumericLiteral" ||
+                node.argument.type === "StringLiteral" ||
+                node.argument.type === "BooleanLiteral")
+        ) {
+            // -1, +1, ~1, !1, -"1", +"1", ~"1", !"1", !true, !false
+            return this.evaluateConstExpression(`${node.operator}${JSON.stringify(node.argument.value)}`);
+        } else if (node.type === "BinaryExpression") {
+            return this.evaluateBinaryExpression(node, moduleName, UnsupportedMemberTypeError);
+        } else if (
+            node.type === "MemberExpression" &&
+            node.object.type === "Identifier" &&
+            node.property.type === "Identifier"
+        ) {
+            // SomeEnum.SomeMember
+            const rootDeclaration = this.getConstEnumRootDeclaration(`${moduleName}:${node.object.name}`);
+
+            // A MemberExpression must be a member of a const enum
+            if (!rootDeclaration) {
+                throw new UnsupportedMemberTypeError();
+            }
+
+            const definitionIdentifier: IConstEnumDefinitionIdentifier = `${rootDeclaration}.${node.property.name}`;
+
+            // Skip if the member is not defined, skip this iteration until the next iteration if it is defined
+            if (!this.constEnumDefinitions.has(definitionIdentifier)) {
+                return null;
+            }
+
+            return this.evaluateConstExpression(this.constEnumDefinitions.get(definitionIdentifier)!);
+        } else {
+            throw new UnsupportedMemberTypeError();
+        }
+    }
+
+    private evaluateBinaryExpression(
+        binExp: BinaryExpression,
+        moduleName: string,
+        UnsupportedMemberTypeError: new () => TypeError,
+    ): string | number | boolean | null {
+        const { left, right, operator } = binExp;
+        const leftValue = this.evaluateExpression(left, moduleName, UnsupportedMemberTypeError);
+        if (leftValue === null) {
+            return null;
+        }
+
+        const rightValue = this.evaluateExpression(right, moduleName, UnsupportedMemberTypeError);
+        if (rightValue === null) {
+            return null;
+        }
+
+        return this.evaluateConstExpression(`${JSON.stringify(leftValue)} ${operator} ${JSON.stringify(rightValue)}`);
+    }
+
+    private evaluateConstExpression(express: string): string | number | boolean {
+        return new Function(`return ${express}`)();
     }
 
     public getFileReplacement(): IConstEnumReplacement {
