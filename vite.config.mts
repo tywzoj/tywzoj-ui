@@ -10,6 +10,8 @@ import { prismjsPlugin } from "vite-plugin-prismjs";
 import { viteVConsole } from "vite-plugin-vconsole";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+import inlineConstEnum from "./vite-plugins/inline-const-enum";
+
 const ENV_PREFIX = "TYWZOJ_";
 
 // https://vite.dev/config/
@@ -57,6 +59,11 @@ export default defineConfig(({ command }) => {
                 languages: fs.readFileSync(path.resolve(".prism-languages"), "utf-8").trim().split("\n"),
                 css: false,
             }),
+            inlineConstEnum({
+                tsConfigPath: path.resolve("tsconfig.app.json"),
+                sourceDir: path.resolve("src"),
+                filePattern: "**/*.{ts,tsx}",
+            }),
         ],
         server: {
             host: "0.0.0.0",
@@ -67,6 +74,7 @@ export default defineConfig(({ command }) => {
             port: 5056,
         },
         build: {
+            minify: false,
             rollupOptions: {
                 output: {
                     entryFileNames: "assets/[name].[hash].js",

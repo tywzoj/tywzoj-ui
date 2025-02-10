@@ -18,5 +18,13 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["scripts/**/*.ts", "scripts/**/*.mts", "scripts/**/*.cts", "vite.config.mts"]
+  "include": [
+    "scripts/**/*.ts",
+    "scripts/**/*.mts",
+    "scripts/**/*.cts",
+    "vite-plugins/**/*.ts",
+    "vite-plugins/**/*.cts",
+    "vite-plugins/**/*.mts",
+    "vite.config.mts"
+  ]
 }
