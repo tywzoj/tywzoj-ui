@@ -100,6 +100,8 @@ class InlineConstEnum {
             this.findConstEnumImports();
             const nextConstEnumImportsSize = this.constEnumImports.size;
 
+            // If there are no new const enum exports and imports,
+            // the dependency graph is complete and we can stop the loop
             if (
                 prevConstEnumExportsSize === nextConstEnumExportsSize &&
                 prevConstEnumImportsSize === nextConstEnumImportsSize
@@ -113,6 +115,8 @@ class InlineConstEnum {
             this.findConstEnumDefinitions();
             const nextConstEnumDefinitionsSize = this.constEnumDefinitions.size;
 
+            // If there are no new const enum definitions,
+            // that means all const enum members have been defined
             if (prevConstEnumDefinitionsSize === nextConstEnumDefinitionsSize) {
                 break;
             }
