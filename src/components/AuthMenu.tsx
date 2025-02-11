@@ -1,5 +1,4 @@
 import { makeStyles } from "@fluentui/react-components";
-import { useRouterState } from "@tanstack/react-router";
 import type React from "react";
 
 import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
@@ -11,15 +10,16 @@ import { useIsMiniScreen } from "@/store/hooks";
 export const AuthMenu: React.FC = () => {
     const isMiniScreen = useIsMiniScreen();
 
-    const currentHref = useRouterState({ select: (state) => state.location.href });
-    const currentRedirect = useRouterState({ select: (state) => state.location.search?.redirect });
-    const currentPath = useRouterState({ select: (state) => state.location.pathname });
-    const shouldNotRedirect = currentPath === "/sign-in" || currentPath === "/sign-up";
-
     const ls = useLocalizedStrings({
         signIn: CE_Strings.NAVIGATION_SIGN_IN,
         signUp: CE_Strings.NAVIGATION_SIGN_UP,
     });
+
+    const url = new URL(window.location.href);
+    const redirect =
+        url.pathname === "/sign-in" || url.pathname === "/sign-out"
+            ? url.searchParams.get("redirect") || undefined
+            : url.pathname + url.search + url.hash;
 
     const styles = useStyles();
 
@@ -28,14 +28,14 @@ export const AuthMenu: React.FC = () => {
             <ButtonWithRouter
                 className={styles.button}
                 to="/sign-in"
-                search={{ redirect: shouldNotRedirect ? currentRedirect : currentHref }}
+                search={{ redirect }}
                 appearance="primary"
                 preload="viewport"
             >
                 {ls.signIn}
             </ButtonWithRouter>
             {!isMiniScreen && (
-                <ButtonWithRouter className={styles.button} to="/sign-up">
+                <ButtonWithRouter className={styles.button} search={{ redirect }} to="/sign-up">
                     {ls.signUp}
                 </ButtonWithRouter>
             )}

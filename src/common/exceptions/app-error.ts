@@ -6,7 +6,7 @@ import type { IStringCodeErrorLink } from "../types/error-link";
 
 export class AppError extends Error {
     public readonly code: CE_ErrorCode;
-    public readonly links: IStringCodeErrorLink[];
+    private readonly links: IStringCodeErrorLink[];
     public readonly showGoBack: boolean;
 
     constructor(code: CE_ErrorCode, links?: IStringCodeErrorLink[], showGoBack?: boolean, message?: string) {
@@ -19,5 +19,9 @@ export class AppError extends Error {
 
     public getStringId(): CE_Strings {
         return getStringIdFromErrorCode(this.code);
+    }
+
+    public getLinks(): IStringCodeErrorLink[] {
+        return this.links;
     }
 }

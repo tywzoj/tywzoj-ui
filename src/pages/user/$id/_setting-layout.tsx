@@ -2,6 +2,11 @@ import { Tab, TabList } from "@fluentui/react-components";
 import { createFileRoute, Outlet, useMatchRoute, useNavigate } from "@tanstack/react-router";
 import React from "react";
 
+import { PermissionDeniedError } from "@/common/exceptions/permission-denied";
+import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
+import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
+import { canEditUserSettings } from "@/permission/checkers";
+
 const enum CE_SettingPages {
     EditProfile = "edit",
     Security = "security",
@@ -46,4 +51,14 @@ const SettingLayout: React.FC = () => {
 
 export const Route = createFileRoute("/user/$id/_setting-layout")({
     component: SettingLayout,
+    errorComponent: ErrorPageLazy,
+    beforeLoad: ({ context: { currentUser, permission }, params: { id } }) => {
+        if (!currentUser) {
+            throw new SignInRequiredError();
+        }
+
+        if (!canEditUserSettings(Number.parseInt(id), currentUser, permission)) {
+            throw new PermissionDeniedError();
+        }
+    },
 });

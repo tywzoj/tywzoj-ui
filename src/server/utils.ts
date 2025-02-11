@@ -26,9 +26,10 @@ export function withThrowErrorsExcept<T, P extends any[], E extends IError[]>(
         if (res.code === CE_ErrorCode.OK || except.includes(res.code)) {
             return res as IResponseBodyAfterThrow<T, E>;
         } else {
+            const links = ERROR_LINKS_MAP[res.code];
             throw new AppError(
                 res.code,
-                ERROR_LINKS_MAP[res.code] /* links */,
+                typeof links === "function" ? links() : links,
                 true /* showGoBack */,
                 res.data ? String(res.data) : undefined,
             );

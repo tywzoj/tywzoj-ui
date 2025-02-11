@@ -3,6 +3,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 
+import { PermissionDeniedError } from "@/common/exceptions/permission-denied";
+import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
@@ -10,13 +12,16 @@ import { flex } from "@/common/styles/flex";
 import { diff } from "@/common/utils/diff";
 import { format } from "@/common/utils/format";
 import { neverGuard } from "@/common/utils/never-guard";
+import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { canEditProblems } from "@/permission/checkers";
+import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { problemDetailQueryKeys, problemListQueryKeys } from "@/query/keys";
-import { createQueryOptions } from "@/query/utils";
+import { createQueryOptionsFn } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import type {
@@ -28,7 +33,8 @@ import type { IErrorCodeWillBeReturned } from "@/server/utils";
 import { withThrowErrors, withThrowErrorsExcept } from "@/server/utils";
 
 const ProblemEditPage: React.FC = () => {
-    const problem = Route.useLoaderData();
+    const { queryOptions } = Route.useLoaderData();
+    const { data: problem } = useSuspenseQueryData(queryOptions);
     const navigate = Route.useNavigate();
     const recaptchaAsync = useRecaptchaAsync();
     const queryClient = useQueryClient();
@@ -95,8 +101,8 @@ const ProblemEditPage: React.FC = () => {
         const displayId = problem.displayId.toString(10);
         const newDisplayId = problemPatchBody.displayId?.toString(10) ?? displayId;
 
-        await queryClient.resetQueries({ queryKey: problemListQueryKeys() });
-        await queryClient.resetQueries({ queryKey: problemDetailQueryKeys(displayId) });
+        await queryClient.invalidateQueries({ queryKey: problemListQueryKeys() });
+        await queryClient.invalidateQueries({ queryKey: problemDetailQueryKeys(displayId) });
 
         navigate({
             to: "/problem/$displayId",
@@ -150,17 +156,30 @@ const patchProblemDetailAsync = withThrowErrorsExcept(
 );
 const patchProblemContentDetailAsync = withThrowErrors(ProblemModule.patchProblemContentDetailAsync);
 
-const queryOptions = createQueryOptions(CE_QueryId.ProblemDetail, withThrowErrors(ProblemModule.getProblemDetailAsync));
+const queryOptionsFn = createQueryOptionsFn(
+    CE_QueryId.ProblemDetail,
+    withThrowErrors(ProblemModule.getProblemDetailAsync),
+);
 
 export const Route = createFileRoute("/problem/$displayId/edit")({
     component: ProblemEditPage,
-    loader: async ({ context: { queryClient }, params: { displayId } }) => {
-        const { data } = await queryClient.ensureQueryData(
-            queryOptions(displayId, {
-                queryTags: true,
-            }),
-        );
+    errorComponent: ErrorPageLazy,
+    beforeLoad: ({ context: { permission, currentUser } }) => {
+        if (!currentUser) {
+            throw new SignInRequiredError();
+        }
 
-        return data;
+        if (!canEditProblems(permission)) {
+            throw new PermissionDeniedError();
+        }
+    },
+    loader: async ({ context: { queryClient }, params: { displayId } }) => {
+        const queryOptions = queryOptionsFn(displayId, {
+            queryTags: true,
+        });
+
+        await queryClient.ensureQueryData(queryOptions);
+
+        return { queryOptions };
     },
 });
