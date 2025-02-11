@@ -497,54 +497,53 @@ class InlineConstEnum {
 
     public getFileReplacement(): IConstEnumReplacement {
         const replacements: IConstEnumReplacement = {};
+        const enumMembers = new Map<IConstEnumDeclaration, string[]>();
 
-        const moduleNameDefinitions = Array.from(this.constEnumDefinitions.keys()).reduce<{
-            [pathWithoutExt: string]: `${string}.${string}`[];
-        }>((acc, definition) => {
+        for (const definition of this.constEnumDefinitions.keys()) {
+            // moduleName may include "." character, so we need to split it by the first occurrence of ":" character.
             const [moduleName, enumItem] = definition.split(":") as [string, `${string}.${string}`];
-            if (!acc[moduleName]) {
-                acc[moduleName] = [];
-            }
-            acc[moduleName].push(enumItem);
+            const [enumName, memberName] = enumItem.split(".") as [string, string];
+            const declaration: IConstEnumDeclaration = `${moduleName}:${enumName}`;
 
-            return acc;
-        }, {});
+            if (!enumMembers.has(declaration)) {
+                enumMembers.set(declaration, []);
+            }
+
+            enumMembers.get(declaration)!.push(memberName);
+        }
 
         const importDeclarations = Array.from(this.constEnumImports.keys());
-        for (const importDeclaration of importDeclarations) {
-            const [moduleName, enumName] = importDeclaration.split(":") as [string, string];
+        const localDeclarations = Array.from(this.constEnumDeclarations.keys());
+        const declarations = new Set([...importDeclarations, ...localDeclarations]);
+        for (const declaration of declarations) {
+            const [moduleName, enumName] = declaration.split(":") as [string, string];
 
             if (!replacements[moduleName]) {
                 replacements[moduleName] = {};
             }
 
-            const rootDeclaration = this.getConstEnumRootDeclaration(importDeclaration);
-
+            const rootDeclaration = this.getConstEnumRootDeclaration(declaration);
             if (!rootDeclaration) {
                 throw new Error(`Root declaration not found for ${enumName} in ${moduleName}`);
             }
 
-            const [rootModuleName] = rootDeclaration.split(":") as [string, string];
-
-            const definitions = moduleNameDefinitions[rootModuleName];
-
-            if (!definitions) {
-                throw new Error(`Definitions not found for ${rootModuleName}`);
+            const memberNames = enumMembers.get(rootDeclaration);
+            if (!memberNames) {
+                throw new Error(`Members not found for ${rootDeclaration}`);
             }
 
-            for (const definition of definitions) {
-                const [, memberName] = definition.split(".") as [string, string];
-                const value = this.constEnumDefinitions.get(`${rootModuleName}:${definition}`);
+            for (const memberName of memberNames) {
+                const value = this.constEnumDefinitions.get(`${rootDeclaration}.${memberName}`);
 
                 if (!value) {
-                    throw new Error(`Value not found for ${enumName}.${memberName} in ${moduleName}`);
+                    throw new Error(`Value not found for ${memberName}.${memberName} in ${moduleName}`);
                 }
 
-                if (!replacements[moduleName][enumName]) {
-                    replacements[moduleName][enumName] = {};
+                if (!replacements[moduleName][memberName]) {
+                    replacements[moduleName][memberName] = {};
                 }
 
-                replacements[moduleName][enumName][memberName] = value;
+                replacements[moduleName][memberName][memberName] = value;
             }
         }
 
