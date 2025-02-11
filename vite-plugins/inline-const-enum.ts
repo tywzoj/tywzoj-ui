@@ -23,7 +23,6 @@ export default function vitePluginInlineConstEnum(options: IInlineConstEnumOptio
         async configResolved() {
             await inlineConstEnum.initAsync();
             replacement = inlineConstEnum.getFileReplacement();
-            console.log(replacement);
         },
         transform(code, id) {
             if (id.includes("node_modules")) {
@@ -162,8 +161,8 @@ class InlineConstEnum {
                     throw new Error(`Value not found for ${memberName}.${memberName} in ${moduleName}`);
                 }
 
-                if (!replacement[moduleName][memberName]) {
-                    replacement[moduleName][memberName] = {};
+                if (!replacement[moduleName][enumName]) {
+                    replacement[moduleName][enumName] = {};
                 }
 
                 replacement[moduleName][enumName][memberName] = value;
