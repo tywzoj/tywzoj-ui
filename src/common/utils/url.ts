@@ -17,3 +17,8 @@ export function parseUrlIfSameOrigin(href: string) {
     } catch {}
     return null;
 }
+
+export function getCurrentPageUrlPath() {
+    const loc = window.location;
+    return loc.pathname + loc.search + loc.hash;
+}

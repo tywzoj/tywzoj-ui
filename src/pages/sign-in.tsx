@@ -109,9 +109,12 @@ const SignInPage: React.FC = () => {
         });
     };
 
-    return loginSucceed ? (
-        <Navigate to={redirect} />
-    ) : (
+    if (loginSucceed) {
+        const redirectUrl = new URL(redirect, window.location.href);
+        return <Navigate to={redirectUrl.pathname} search={Object.fromEntries(redirectUrl.searchParams.entries())} />;
+    }
+
+    return (
         <div className={styles.root}>
             <h2>{ls.title}</h2>
             <form className={styles.formContainer}>

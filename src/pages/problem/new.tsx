@@ -3,15 +3,19 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 
+import { PermissionDeniedError } from "@/common/exceptions/premission-denied";
+import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
 import { neverGuard } from "@/common/utils/never-guard";
+import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { canEditProblems } from "@/permission/checkers";
 import { problemListQueryKeys } from "@/query/keys";
 import { ProblemModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
@@ -116,4 +120,14 @@ const postProblemDetailAsync = withThrowErrorsExcept(
 
 export const Route = createFileRoute("/problem/new")({
     component: NewProblemPage,
+    errorComponent: ErrorPageLazy,
+    beforeLoad: ({ context: { permission, currentUser } }) => {
+        if (!currentUser) {
+            throw new SignInRequiredError();
+        }
+
+        if (!canEditProblems(permission)) {
+            throw new PermissionDeniedError();
+        }
+    },
 });

@@ -23,7 +23,7 @@ const AppErrorBox: React.FC<{ error: AppError }> = ({ error }) => {
     const [msg] = useLocalizedStrings(error.getStringId());
 
     return (
-        <WithLinks links={error.links}>
+        <WithLinks links={error.getLinks()}>
             {(links) => <ErrorBox message={msg} links={links} showGoBack={error.showGoBack} />}
         </WithLinks>
     );

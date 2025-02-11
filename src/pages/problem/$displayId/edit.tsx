@@ -3,6 +3,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 
+import { PermissionDeniedError } from "@/common/exceptions/premission-denied";
+import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
@@ -10,10 +12,12 @@ import { flex } from "@/common/styles/flex";
 import { diff } from "@/common/utils/diff";
 import { format } from "@/common/utils/format";
 import { neverGuard } from "@/common/utils/never-guard";
+import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { canEditProblems } from "@/permission/checkers";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { problemDetailQueryKeys, problemListQueryKeys } from "@/query/keys";
@@ -159,6 +163,16 @@ const queryOptionsFn = createQueryOptionsFn(
 
 export const Route = createFileRoute("/problem/$displayId/edit")({
     component: ProblemEditPage,
+    errorComponent: ErrorPageLazy,
+    beforeLoad: ({ context: { permission, currentUser } }) => {
+        if (!currentUser) {
+            throw new SignInRequiredError();
+        }
+
+        if (!canEditProblems(permission)) {
+            throw new PermissionDeniedError();
+        }
+    },
     loader: async ({ context: { queryClient }, params: { displayId } }) => {
         const queryOptions = queryOptionsFn(displayId, {
             queryTags: true,
