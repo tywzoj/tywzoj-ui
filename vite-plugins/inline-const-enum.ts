@@ -512,9 +512,7 @@ class InlineConstEnum {
             enumMembers.get(declaration)!.push(memberName);
         }
 
-        const importDeclarations = Array.from(this.constEnumImports.keys());
-        const localDeclarations = Array.from(this.constEnumDeclarations.keys());
-        const declarations = new Set([...importDeclarations, ...localDeclarations]);
+        const declarations = new Set([...this.constEnumImports.keys(), ...this.constEnumDeclarations.keys()]);
         for (const declaration of declarations) {
             const [moduleName, enumName] = declaration.split(":") as [string, string];
 
