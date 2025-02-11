@@ -11,16 +11,18 @@ export interface IInlineConstEnumOptions {
     tsConfigPath: string;
 }
 
-export default function inlineConstEnum(options: IInlineConstEnumOptions): Plugin {
-    const instance = new InlineConstEnum(options);
+export { vitePluginInlineConstEnum as inlineConstEnum };
+
+export default function vitePluginInlineConstEnum(options: IInlineConstEnumOptions): Plugin {
+    const inlineConstEnum = new InlineConstEnum(options);
     let replacement: IReplacement;
 
     return {
         name: "vite:inline-const-enum",
         enforce: "pre",
         async configResolved() {
-            await instance.initAsync();
-            replacement = instance.getFileReplacement();
+            await inlineConstEnum.initAsync();
+            replacement = inlineConstEnum.getFileReplacement();
         },
         transform(code, id) {
             if (id.includes("node_modules")) {
@@ -118,7 +120,7 @@ class InlineConstEnum {
     }
 
     public getFileReplacement(): IReplacement {
-        const replacements: IReplacement = {};
+        const replacement: IReplacement = {};
         const enumMembers = new Map<IConstEnumDeclaration, IMemberName[]>();
 
         for (const definition of this.constEnumDefinitions.keys()) {
@@ -138,8 +140,8 @@ class InlineConstEnum {
         for (const declaration of declarations) {
             const [moduleName, enumName] = declaration.split(":") as [IModuleName, IEnumName];
 
-            if (!replacements[moduleName]) {
-                replacements[moduleName] = {};
+            if (!replacement[moduleName]) {
+                replacement[moduleName] = {};
             }
 
             const rootDeclaration = this.getConstEnumRootDeclaration(declaration);
@@ -159,15 +161,15 @@ class InlineConstEnum {
                     throw new Error(`Value not found for ${memberName}.${memberName} in ${moduleName}`);
                 }
 
-                if (!replacements[moduleName][memberName]) {
-                    replacements[moduleName][memberName] = {};
+                if (!replacement[moduleName][memberName]) {
+                    replacement[moduleName][memberName] = {};
                 }
 
-                replacements[moduleName][memberName][memberName] = value;
+                replacement[moduleName][memberName][memberName] = value;
             }
         }
 
-        return replacements;
+        return replacement;
     }
 
     private async loadTsModulesAsync() {
