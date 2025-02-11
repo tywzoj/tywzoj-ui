@@ -10,7 +10,7 @@ import { prismjsPlugin } from "vite-plugin-prismjs";
 import { viteVConsole } from "vite-plugin-vconsole";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-import inlineConstEnum from "./vite-plugins/inline-const-enum";
+import { inlineConstEnum } from "./vite-plugins/inline-const-enum";
 
 const ENV_PREFIX = "TYWZOJ_";
 

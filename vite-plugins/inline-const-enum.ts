@@ -11,18 +11,20 @@ export interface IInlineConstEnumOptions {
     tsConfigPath: string;
 }
 
-export default function inlineConstEnum(options: IInlineConstEnumOptions): Plugin {
-    const instance = new InlineConstEnum(options);
-    let replacements: IConstEnumReplacement;
+export { vitePluginInlineConstEnum as inlineConstEnum };
+
+export default function vitePluginInlineConstEnum(options: IInlineConstEnumOptions): Plugin {
+    const inlineConstEnum = new InlineConstEnum(options);
+    let replacement: IReplacement;
 
     return {
-        name: "vite:plugin-inline-const-enum",
+        name: "vite:inline-const-enum",
         enforce: "pre",
         async configResolved() {
-            await instance.initAsync();
-            replacements = instance.getFileReplacement();
+            await inlineConstEnum.initAsync();
+            replacement = inlineConstEnum.getFileReplacement();
         },
-        async transform(code, id) {
+        transform(code, id) {
             if (id.includes("node_modules")) {
                 return null;
             }
@@ -33,8 +35,8 @@ export default function inlineConstEnum(options: IInlineConstEnumOptions): Plugi
                 path.basename(idWithoutSearch, path.extname(idWithoutSearch)),
             );
 
-            if (moduleName in replacements) {
-                for (const [enumName, members] of Object.entries(replacements[moduleName])) {
+            if (moduleName in replacement && replacement[moduleName]) {
+                for (const [enumName, members] of Object.entries(replacement[moduleName])) {
                     for (const [memberName, value] of Object.entries(members)) {
                         const memberNameRegExp = new RegExp(`\\b${enumName}\\s*\\.\\s*${memberName}\\b`, "g");
                         code = code.replace(memberNameRegExp, value);
@@ -49,33 +51,27 @@ export default function inlineConstEnum(options: IInlineConstEnumOptions): Plugi
     };
 }
 
-interface ITsModule {
-    name: string;
-    ast: ReturnType<typeof babelParse>;
-}
-type IConstEnumDeclaration = `${string}:${string}`; // moduleName:enumName
-type IConstEnumImports = Map<IConstEnumDeclaration, IConstEnumDeclaration>;
-type IConstEnumExports = Map<IConstEnumDeclaration, IConstEnumDeclaration>;
-type IConstEnumDefinitionIdentifier = `${IConstEnumDeclaration}.${string}`; // moduleName:enumName.memberName
-type IConstEnumDefinitions = Map<IConstEnumDefinitionIdentifier, string>;
-type IConstEnumReplacement = Record<
-    string, // moduleName
-    Record<
-        string, // enumName
-        Record<
-            string, // memberName
-            string // value
-        >
-    >
->;
+type IModuleName = string;
+type IEnumName = string;
+type IMemberName = string;
+
+type ITsModule = { name: IModuleName; ast: ReturnType<typeof babelParse> };
+
+type IConstEnumDeclaration = `${IModuleName}:${IEnumName}`;
+type IConstEnumMember = `${IEnumName}.${IMemberName}`;
+type IConstEnumRelation = Map<IConstEnumDeclaration, IConstEnumDeclaration>;
+type IConstEnumDefinitionIdentifier = `${IConstEnumDeclaration}.${IMemberName}`;
+type IConstEnumDefinitions = Map<IConstEnumDefinitionIdentifier, string>; // identifier => value
+
+type IReplacement = Record<IModuleName, Record<IEnumName, Record<IMemberName, string>>>;
 
 class InlineConstEnum {
     private tsConfigMatchPath: tsConfigPaths.MatchPath;
 
     private tsModules: ITsModule[] = [];
     private constEnumDeclarations: Set<IConstEnumDeclaration> = new Set();
-    private constEnumImports: IConstEnumImports = new Map();
-    private constEnumExports: IConstEnumExports = new Map();
+    private constEnumImports: IConstEnumRelation = new Map();
+    private constEnumExports: IConstEnumRelation = new Map();
     private constEnumDefinitions: IConstEnumDefinitions = new Map();
 
     constructor(private options: IInlineConstEnumOptions) {
@@ -121,6 +117,59 @@ class InlineConstEnum {
                 break;
             }
         }
+    }
+
+    public getFileReplacement(): IReplacement {
+        const replacement: IReplacement = {};
+        const enumMembers = new Map<IConstEnumDeclaration, IMemberName[]>();
+
+        for (const definition of this.constEnumDefinitions.keys()) {
+            // moduleName may include "." character, so we need to split it by the first occurrence of ":" character.
+            const [moduleName, enumItem] = definition.split(":") as [IModuleName, IConstEnumMember];
+            const [enumName, memberName] = enumItem.split(".") as [IEnumName, IMemberName];
+            const declaration: IConstEnumDeclaration = `${moduleName}:${enumName}`;
+
+            if (!enumMembers.has(declaration)) {
+                enumMembers.set(declaration, []);
+            }
+
+            enumMembers.get(declaration)!.push(memberName);
+        }
+
+        const declarations = new Set([...this.constEnumImports.keys(), ...this.constEnumDeclarations.keys()]);
+        for (const declaration of declarations) {
+            const [moduleName, enumName] = declaration.split(":") as [IModuleName, IEnumName];
+
+            if (!replacement[moduleName]) {
+                replacement[moduleName] = {};
+            }
+
+            const rootDeclaration = this.getConstEnumRootDeclaration(declaration);
+            if (!rootDeclaration) {
+                throw new Error(`Root declaration not found for ${enumName} in ${moduleName}`);
+            }
+
+            const memberNames = enumMembers.get(rootDeclaration);
+            if (!memberNames) {
+                throw new Error(`Members not found for ${rootDeclaration}`);
+            }
+
+            for (const memberName of memberNames) {
+                const value = this.constEnumDefinitions.get(`${rootDeclaration}.${memberName}`);
+
+                if (!value) {
+                    throw new Error(`Value not found for ${memberName}.${memberName} in ${moduleName}`);
+                }
+
+                if (!replacement[moduleName][enumName]) {
+                    replacement[moduleName][enumName] = {};
+                }
+
+                replacement[moduleName][enumName][memberName] = value;
+            }
+        }
+
+        return replacement;
     }
 
     private async loadTsModulesAsync() {
@@ -386,7 +435,7 @@ class InlineConstEnum {
         }
     }
 
-    private getImportedModuleName(importedModuleName: string, currentModuleName: string): string {
+    private getImportedModuleName(importedModuleName: string, currentModuleName: IModuleName): IModuleName {
         if (importedModuleName.startsWith(".")) {
             // relative path
             return path.resolve(path.dirname(currentModuleName), importedModuleName);
@@ -412,9 +461,9 @@ class InlineConstEnum {
         while (true) {
             const parentDeclaration = this.constEnumExports.get(declaration)!;
 
-            // if the parent declaration is not found, there are no root declaration
+            // if the parent declaration is not found check the declaration in the same file
             if (!parentDeclaration) {
-                return null;
+                return this.constEnumDeclarations.has(declaration) ? declaration : null;
             }
 
             // if the parent declaration is the same as the current declaration,
@@ -493,61 +542,5 @@ class InlineConstEnum {
 
     private evaluateConstExpression(express: string): string | number | boolean {
         return new Function(`return ${express}`)();
-    }
-
-    public getFileReplacement(): IConstEnumReplacement {
-        const replacements: IConstEnumReplacement = {};
-
-        const moduleNameDefinitions = Array.from(this.constEnumDefinitions.keys()).reduce<{
-            [pathWithoutExt: string]: `${string}.${string}`[];
-        }>((acc, definition) => {
-            const [moduleName, enumItem] = definition.split(":") as [string, `${string}.${string}`];
-            if (!acc[moduleName]) {
-                acc[moduleName] = [];
-            }
-            acc[moduleName].push(enumItem);
-
-            return acc;
-        }, {});
-
-        const importDeclarations = Array.from(this.constEnumImports.keys());
-        for (const importDeclaration of importDeclarations) {
-            const [moduleName, enumName] = importDeclaration.split(":") as [string, string];
-
-            if (!replacements[moduleName]) {
-                replacements[moduleName] = {};
-            }
-
-            const rootDeclaration = this.getConstEnumRootDeclaration(importDeclaration);
-
-            if (!rootDeclaration) {
-                throw new Error(`Root declaration not found for ${enumName} in ${moduleName}`);
-            }
-
-            const [rootModuleName] = rootDeclaration.split(":") as [string, string];
-
-            const definitions = moduleNameDefinitions[rootModuleName];
-
-            if (!definitions) {
-                throw new Error(`Definitions not found for ${rootModuleName}`);
-            }
-
-            for (const definition of definitions) {
-                const [, memberName] = definition.split(".") as [string, string];
-                const value = this.constEnumDefinitions.get(`${rootModuleName}:${definition}`);
-
-                if (!value) {
-                    throw new Error(`Value not found for ${enumName}.${memberName} in ${moduleName}`);
-                }
-
-                if (!replacements[moduleName][enumName]) {
-                    replacements[moduleName][enumName] = {};
-                }
-
-                replacements[moduleName][enumName][memberName] = value;
-            }
-        }
-
-        return replacements;
     }
 }
