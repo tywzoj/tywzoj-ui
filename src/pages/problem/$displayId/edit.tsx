@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 
-import { PermissionDeniedError } from "@/common/exceptions/premission-denied";
+import { PermissionDeniedError } from "@/common/exceptions/permission-denied";
 import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";

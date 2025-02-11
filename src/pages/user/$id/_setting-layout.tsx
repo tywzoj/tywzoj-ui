@@ -2,7 +2,7 @@ import { Tab, TabList } from "@fluentui/react-components";
 import { createFileRoute, Outlet, useMatchRoute, useNavigate } from "@tanstack/react-router";
 import React from "react";
 
-import { PermissionDeniedError } from "@/common/exceptions/premission-denied";
+import { PermissionDeniedError } from "@/common/exceptions/permission-denied";
 import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { canEditUserSettings } from "@/permission/checkers";
