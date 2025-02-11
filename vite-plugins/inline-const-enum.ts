@@ -461,9 +461,9 @@ class InlineConstEnum {
         while (true) {
             const parentDeclaration = this.constEnumExports.get(declaration)!;
 
-            // if the parent declaration is not found, there are no root declaration
+            // if the parent declaration is not found check the declaration in the same file
             if (!parentDeclaration) {
-                return null;
+                return this.constEnumDeclarations.has(declaration) ? declaration : null;
             }
 
             // if the parent declaration is the same as the current declaration,
