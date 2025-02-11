@@ -62,7 +62,7 @@ const NewProblemPage: React.FC = () => {
 
             if (resp.code === CE_ErrorCode.OK) {
                 const { displayId } = resp.data;
-                await queryClient.resetQueries({ queryKey: problemListQueryKeys() });
+                await queryClient.invalidateQueries({ queryKey: problemListQueryKeys() });
                 navigate({
                     to: "/problem/$displayId",
                     params: { displayId: displayId.toString(10) },

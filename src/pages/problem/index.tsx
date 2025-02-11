@@ -13,7 +13,7 @@ import {
     tokens,
     useTableCompositeNavigation,
 } from "@fluentui/react-components";
-import { Await, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import React from "react";
 import { z } from "zod";
@@ -33,8 +33,9 @@ import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
-import { createQueryOptions } from "@/query/utils";
+import { createQueryOptionsFn } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
 import { CE_Order } from "@/server/common/enums";
 import { CE_ProblemSortBy } from "@/server/modules/problem.enums";
@@ -43,10 +44,8 @@ import { useIsMiddleScreen, usePermission } from "@/store/hooks";
 import { getPagination, getPreference } from "@/store/selectors";
 
 const ProblemListPage: React.FC = () => {
-    const { queryProblemListPromise } = Route.useLoaderData();
-    const { sortBy, order, page, keyword } = Route.useLoaderDeps();
+    const { keyword } = Route.useLoaderDeps();
 
-    const isMiddleScreen = useIsMiddleScreen();
     const navigate = Route.useNavigate();
     const search = Route.useSearch();
     const [searchBoxValue, setSearchBoxValue] = React.useState("");
@@ -59,10 +58,6 @@ const ProblemListPage: React.FC = () => {
 
     const ls = useLocalizedStrings({
         title: CE_Strings.NAVIGATION_PROBLEMS,
-        colTitle: CE_Strings.TITLE_LABEL,
-        colVisibility: CE_Strings.VISIBILITY_LABEL,
-        colSubmission: CE_Strings.NAVIGATION_SUBMISSIONS,
-        colId: CE_Strings.ID_LABEL,
         searchBtn: CE_Strings.COMMON_SEARCH_BUTTON,
         searchPlc: CE_Strings.PROBLEM_SEARCH_PLACEHOLDER,
         new: CE_Strings.NAVIGATION_PROBLEM_NEW,
@@ -72,15 +67,6 @@ const ProblemListPage: React.FC = () => {
 
     const styles = useStyles();
 
-    const { tableTabsterAttribute, onTableKeyDown } = useTableCompositeNavigation();
-
-    const tableSortAttributes = useTableSortAttributes(
-        order,
-        sortBy,
-        (order, sortBy) => navigate({ search: { ...search, o: order, s: sortBy } }) /* onSortChange */,
-    );
-
-    const onPageChange = (page: number) => navigate({ search: { ...search, p: page } });
     const searchProblem = (keyword: string) => navigate({ search: { ...search, k: keyword } });
 
     return (
@@ -118,111 +104,134 @@ const ProblemListPage: React.FC = () => {
                 {/* TODO: Show tag switch */}
                 {/* TODO: Tag filter */}
             </div>
-            <Await
-                promise={queryProblemListPromise}
+            <React.Suspense
                 fallback={
                     <div className={styles.loading}>
                         <Spinner />
                     </div>
                 }
             >
-                {({ problemList, pageCount }) => (
-                    <>
-                        <PaginationButtons
-                            className={styles.headerPagination}
-                            page={page}
-                            pageCount={pageCount}
-                            onPageChange={onPageChange}
-                        />
-                        <div className={styles.tableContainer}>
-                            <Table onKeyDown={onTableKeyDown} {...tableTabsterAttribute}>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHeaderCell
-                                            className={styles.tableIdCol}
-                                            {...tableSortAttributes(CE_ProblemSortBy.DisplayId)}
-                                        >
-                                            {ls.colId}
-                                        </TableHeaderCell>
-                                        <TableHeaderCell
-                                            className={styles.tableTitleCol}
-                                            {...tableSortAttributes(CE_ProblemSortBy.Title)}
-                                        >
-                                            {ls.colTitle}
-                                        </TableHeaderCell>
-                                        <TableHeaderCell className={styles.tableVisibilityCol}>
-                                            {ls.colVisibility}
-                                        </TableHeaderCell>
-                                        {!isMiddleScreen && (
-                                            <>
-                                                <TableHeaderCell
-                                                    className={styles.tableSubmissionCol}
-                                                    {...tableSortAttributes(CE_ProblemSortBy.SubmissionCount)}
-                                                >
-                                                    {ls.colSubmission}
-                                                </TableHeaderCell>
-                                                <TableHeaderCell className={styles.tableAcceptanceCol}>
-                                                    Acceptance
-                                                </TableHeaderCell>
-                                            </>
-                                        )}
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {problemList.map((problem) => (
-                                        <TableRow key={problem.id}>
-                                            <TableCell>{problem.displayId}</TableCell>
-                                            <TableCell className={styles.problemTitleWithTags}>
-                                                <LinkWithRouter
-                                                    className={styles.problemLink}
-                                                    tabIndex={0}
-                                                    to="/problem/$displayId"
-                                                    params={{ displayId: `${problem.displayId}` }}
-                                                    preload={false}
-                                                >
-                                                    {problem.title}
-                                                </LinkWithRouter>
-                                                {problem.tags.length > 0 && (
-                                                    <div className={styles.problemTags}>
-                                                        {problem.tags.map((tag) => (
-                                                            <ProblemTag
-                                                                key={tag.id}
-                                                                name={tag.name}
-                                                                color={tag.color}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                <VisibilityLabel visibility={problem.visibility} />
-                                            </TableCell>
-                                            {!isMiddleScreen && (
-                                                <>
-                                                    <TableCell>{problem.submissionCount}</TableCell>
-                                                    <TableCell>
-                                                        {percent(
-                                                            problem.acceptedSubmissionCount,
-                                                            problem.submissionCount,
-                                                        )}
-                                                    </TableCell>
-                                                </>
-                                            )}
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
-                        <PaginationButtons
-                            className={styles.footerPagination}
-                            page={page}
-                            pageCount={pageCount}
-                            onPageChange={onPageChange}
-                        />
-                    </>
-                )}
-            </Await>
+                <ProblemList />
+            </React.Suspense>
         </div>
+    );
+};
+
+const ProblemList: React.FC = () => {
+    const { queryOptions, takeCount } = Route.useLoaderData();
+    const { sortBy, order, page } = Route.useLoaderDeps();
+    const search = Route.useSearch();
+    const navigate = Route.useNavigate();
+
+    const { data } = useSuspenseQueryData(queryOptions);
+
+    const problemList = data.problemBasicDetails;
+    const pageCount = calcPageCount(data.count, takeCount);
+
+    const isMiddleScreen = useIsMiddleScreen();
+
+    const ls = useLocalizedStrings({
+        colTitle: CE_Strings.TITLE_LABEL,
+        colVisibility: CE_Strings.VISIBILITY_LABEL,
+        colSubmission: CE_Strings.NAVIGATION_SUBMISSIONS,
+        colId: CE_Strings.ID_LABEL,
+    });
+
+    const { tableTabsterAttribute, onTableKeyDown } = useTableCompositeNavigation();
+
+    const tableSortAttributes = useTableSortAttributes(
+        order,
+        sortBy,
+        (order, sortBy) => navigate({ search: { ...search, o: order, s: sortBy } }) /* onSortChange */,
+    );
+
+    const styles = useStyles();
+
+    const onPageChange = (page: number) => navigate({ search: { ...search, p: page } });
+
+    return (
+        <>
+            <PaginationButtons
+                className={styles.headerPagination}
+                page={page}
+                pageCount={pageCount}
+                onPageChange={onPageChange}
+            />
+            <div className={styles.tableContainer}>
+                <Table onKeyDown={onTableKeyDown} {...tableTabsterAttribute}>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHeaderCell
+                                className={styles.tableIdCol}
+                                {...tableSortAttributes(CE_ProblemSortBy.DisplayId)}
+                            >
+                                {ls.colId}
+                            </TableHeaderCell>
+                            <TableHeaderCell
+                                className={styles.tableTitleCol}
+                                {...tableSortAttributes(CE_ProblemSortBy.Title)}
+                            >
+                                {ls.colTitle}
+                            </TableHeaderCell>
+                            <TableHeaderCell className={styles.tableVisibilityCol}>{ls.colVisibility}</TableHeaderCell>
+                            {!isMiddleScreen && (
+                                <>
+                                    <TableHeaderCell
+                                        className={styles.tableSubmissionCol}
+                                        {...tableSortAttributes(CE_ProblemSortBy.SubmissionCount)}
+                                    >
+                                        {ls.colSubmission}
+                                    </TableHeaderCell>
+                                    <TableHeaderCell className={styles.tableAcceptanceCol}>Acceptance</TableHeaderCell>
+                                </>
+                            )}
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {problemList.map((problem) => (
+                            <TableRow key={problem.id}>
+                                <TableCell>{problem.displayId}</TableCell>
+                                <TableCell className={styles.problemTitleWithTags}>
+                                    <LinkWithRouter
+                                        className={styles.problemLink}
+                                        tabIndex={0}
+                                        to="/problem/$displayId"
+                                        params={{ displayId: `${problem.displayId}` }}
+                                        preload={false}
+                                    >
+                                        {problem.title}
+                                    </LinkWithRouter>
+                                    {problem.tags.length > 0 && (
+                                        <div className={styles.problemTags}>
+                                            {problem.tags.map((tag) => (
+                                                <ProblemTag key={tag.id} name={tag.name} color={tag.color} />
+                                            ))}
+                                        </div>
+                                    )}
+                                </TableCell>
+                                <TableCell>
+                                    <VisibilityLabel visibility={problem.visibility} />
+                                </TableCell>
+                                {!isMiddleScreen && (
+                                    <>
+                                        <TableCell>{problem.submissionCount}</TableCell>
+                                        <TableCell>
+                                            {percent(problem.acceptedSubmissionCount, problem.submissionCount)}
+                                        </TableCell>
+                                    </>
+                                )}
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+            <PaginationButtons
+                className={styles.footerPagination}
+                page={page}
+                pageCount={pageCount}
+                onPageChange={onPageChange}
+            />
+        </>
     );
 };
 
@@ -341,7 +350,7 @@ const searchParams = z.object({
     k: z.coerce.string().optional(), // keyword
 });
 
-const queryOptions = createQueryOptions(CE_QueryId.ProblemList, withThrowErrors(ProblemModule.getProblemListAsync));
+const queryOptionsFn = createQueryOptionsFn(CE_QueryId.ProblemList, withThrowErrors(ProblemModule.getProblemListAsync));
 
 export const Route = createFileRoute("/problem/")({
     component: ProblemListPage,
@@ -353,26 +362,25 @@ export const Route = createFileRoute("/problem/")({
         sortBy: s,
         keyword: k,
     }),
-    loader: ({ context: { queryClient, store }, deps: { page, order, sortBy, keyword } }) => {
+    loader: async ({ context: { queryClient, store }, deps: { page, order, sortBy, keyword } }) => {
         const { problem: takeCount } = getPagination(store.getState());
         const { showTagsOnProblemList } = getPreference(store.getState());
 
-        const queryProblemListPromise = queryClient
-            .ensureQueryData(
-                queryOptions({
-                    ...calcCount(page, takeCount),
-                    sortBy,
-                    order,
-                    queryTags: showTagsOnProblemList,
-                    keyword,
-                    keywordMatchesId: true,
-                }),
-            )
-            .then((res) => ({
-                problemList: res.data.problemBasicDetails,
-                pageCount: calcPageCount(res.data.count, takeCount),
-            }));
+        const queryOptions = queryOptionsFn({
+            ...calcCount(page, takeCount),
+            sortBy,
+            order,
+            queryTags: showTagsOnProblemList,
+            keyword,
+            keywordMatchesId: true,
+        });
 
-        return { queryProblemListPromise };
+        if (!keyword) {
+            await queryClient.ensureQueryData(queryOptions);
+        } else {
+            queryClient.prefetchQuery(queryOptions);
+        }
+
+        return { queryOptions, takeCount };
     },
 });

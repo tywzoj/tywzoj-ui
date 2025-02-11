@@ -14,9 +14,10 @@ import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { problemDetailQueryKeys, problemListQueryKeys } from "@/query/keys";
-import { createQueryOptions } from "@/query/utils";
+import { createQueryOptionsFn } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import type {
@@ -28,7 +29,8 @@ import type { IErrorCodeWillBeReturned } from "@/server/utils";
 import { withThrowErrors, withThrowErrorsExcept } from "@/server/utils";
 
 const ProblemEditPage: React.FC = () => {
-    const problem = Route.useLoaderData();
+    const { queryOptions } = Route.useLoaderData();
+    const { data: problem } = useSuspenseQueryData(queryOptions);
     const navigate = Route.useNavigate();
     const recaptchaAsync = useRecaptchaAsync();
     const queryClient = useQueryClient();
@@ -95,8 +97,8 @@ const ProblemEditPage: React.FC = () => {
         const displayId = problem.displayId.toString(10);
         const newDisplayId = problemPatchBody.displayId?.toString(10) ?? displayId;
 
-        await queryClient.resetQueries({ queryKey: problemListQueryKeys() });
-        await queryClient.resetQueries({ queryKey: problemDetailQueryKeys(displayId) });
+        await queryClient.invalidateQueries({ queryKey: problemListQueryKeys() });
+        await queryClient.invalidateQueries({ queryKey: problemDetailQueryKeys(displayId) });
 
         navigate({
             to: "/problem/$displayId",
@@ -150,17 +152,20 @@ const patchProblemDetailAsync = withThrowErrorsExcept(
 );
 const patchProblemContentDetailAsync = withThrowErrors(ProblemModule.patchProblemContentDetailAsync);
 
-const queryOptions = createQueryOptions(CE_QueryId.ProblemDetail, withThrowErrors(ProblemModule.getProblemDetailAsync));
+const queryOptionsFn = createQueryOptionsFn(
+    CE_QueryId.ProblemDetail,
+    withThrowErrors(ProblemModule.getProblemDetailAsync),
+);
 
 export const Route = createFileRoute("/problem/$displayId/edit")({
     component: ProblemEditPage,
     loader: async ({ context: { queryClient }, params: { displayId } }) => {
-        const { data } = await queryClient.ensureQueryData(
-            queryOptions(displayId, {
-                queryTags: true,
-            }),
-        );
+        const queryOptions = queryOptionsFn(displayId, {
+            queryTags: true,
+        });
 
-        return data;
+        await queryClient.ensureQueryData(queryOptions);
+
+        return { queryOptions };
     },
 });

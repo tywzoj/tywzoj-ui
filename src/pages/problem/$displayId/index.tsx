@@ -40,8 +40,9 @@ import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
-import { createQueryOptions } from "@/query/utils";
+import { createQueryOptionsFn } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
 import type { IProblemDetail, IProblemTagDetail } from "@/server/modules/problem.types";
 import { withThrowErrors } from "@/server/utils";
@@ -50,7 +51,8 @@ import { useAppDispatch, useAppSelector, useIsMiddleScreen, useIsSmallScreen, us
 import { getPreference } from "@/store/selectors";
 
 const ProblemDetailPage: React.FC = () => {
-    const problem = Route.useLoaderData();
+    const { queryOptions } = Route.useLoaderData();
+    const { data: problem } = useSuspenseQueryData(queryOptions);
     const { tags, content, samples } = problem;
 
     const isMiddleScreen = useIsMiddleScreen();
@@ -346,7 +348,10 @@ const useStyles = makeStyles({
     },
 });
 
-const queryOptions = createQueryOptions(CE_QueryId.ProblemDetail, withThrowErrors(ProblemModule.getProblemDetailAsync));
+const queryOptionsFn = createQueryOptionsFn(
+    CE_QueryId.ProblemDetail,
+    withThrowErrors(ProblemModule.getProblemDetailAsync),
+);
 
 export const Route = createFileRoute("/problem/$displayId/")({
     component: ProblemDetailPage,
@@ -354,12 +359,12 @@ export const Route = createFileRoute("/problem/$displayId/")({
     loader: async ({ context: { queryClient, store }, params: { displayId } }) => {
         const { showTagsOnProblemDetail } = getPreference(store.getState());
 
-        const { data } = await queryClient.ensureQueryData(
-            queryOptions(displayId, {
-                queryTags: showTagsOnProblemDetail,
-            }),
-        );
+        const queryOptions = queryOptionsFn(displayId, {
+            queryTags: showTagsOnProblemDetail,
+        });
 
-        return data;
+        await queryClient.ensureQueryData(queryOptions);
+
+        return { queryOptions };
     },
 });
