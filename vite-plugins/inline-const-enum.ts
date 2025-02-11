@@ -16,7 +16,7 @@ export default function inlineConstEnum(options: IInlineConstEnumOptions): Plugi
     let replacement: IReplacement;
 
     return {
-        name: "vite:plugin-inline-const-enum",
+        name: "vite:inline-const-enum",
         enforce: "pre",
         async configResolved() {
             await instance.initAsync();
