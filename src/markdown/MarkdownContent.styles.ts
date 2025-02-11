@@ -35,12 +35,30 @@ export const useMarkdownRenderStyles = makeStyles({
             margin: "0.5em 0",
         },
 
-        "& h1": { fontSize: tokens.fontSizeHero700 },
-        "& h2": { fontSize: tokens.fontSizeBase600 },
-        "& h3": { fontSize: tokens.fontSizeBase500 },
-        "& h4": { fontSize: tokens.fontSizeBase400 },
-        "& h5": { fontSize: tokens.fontSizeBase300 },
-        "& h6": { fontSize: tokens.fontSizeBase200 },
+        "& h1": {
+            lineHeight: tokens.lineHeightHero700,
+            fontSize: tokens.fontSizeHero700,
+        },
+        "& h2": {
+            lineHeight: tokens.lineHeightBase600,
+            fontSize: tokens.fontSizeBase600,
+        },
+        "& h3": {
+            lineHeight: tokens.lineHeightBase500,
+            fontSize: tokens.fontSizeBase500,
+        },
+        "& h4": {
+            lineHeight: tokens.lineHeightBase400,
+            fontSize: tokens.fontSizeBase400,
+        },
+        "& h5": {
+            lineHeight: tokens.lineHeightBase300,
+            fontSize: tokens.fontSizeBase300,
+        },
+        "& h6": {
+            lineHeight: tokens.lineHeightBase200,
+            fontSize: tokens.fontSizeBase200,
+        },
 
         "& pre": {
             overflowX: "auto",
