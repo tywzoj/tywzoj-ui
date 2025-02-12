@@ -1,26 +1,29 @@
 import { Card, CardHeader, makeStyles, mergeClasses, type Slot, Subtitle1 } from "@fluentui/react-components";
 
-export interface IProblemCardProps {
+export interface IContentCardProps {
     className?: string;
-    title: string;
+    title?: string;
     action?: Slot<"div">;
 }
 
-export const ProblemCard: React.FC<React.PropsWithChildren<IProblemCardProps>> = (props) => {
+export const ContentCard: React.FC<React.PropsWithChildren<IContentCardProps>> = (props) => {
     const { className, title, action, children } = props;
+    const showHeader = title || action;
 
     const styles = useStyles();
 
     return (
         <Card className={mergeClasses(styles.root, className)}>
-            <CardHeader
-                header={
-                    <Subtitle1 as="h2" className={styles.title}>
-                        {title}
-                    </Subtitle1>
-                }
-                action={action}
-            />
+            {showHeader && (
+                <CardHeader
+                    header={
+                        <Subtitle1 as="h2" className={styles.title}>
+                            {title}
+                        </Subtitle1>
+                    }
+                    action={action}
+                />
+            )}
             <div className={styles.content}>{children}</div>
         </Card>
     );

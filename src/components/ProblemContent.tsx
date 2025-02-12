@@ -10,7 +10,7 @@ import { MarkdownContentLazy } from "@/markdown/MarkdownContent.lazy";
 import type { IProblemContentDetail, IProblemSampleDetail } from "@/server/modules/problem.types";
 import { useIsSmallScreen } from "@/store/hooks";
 
-import { ProblemCard } from "./ProblemCard";
+import { ContentCard } from "./ContentCard";
 
 export interface IProblemContentProps {
     className?: string;
@@ -34,25 +34,25 @@ export const ProblemContent: React.FC<IProblemContentProps> = (props) => {
     return (
         <div className={mergeClasses(styles.root, className)}>
             {content?.description && (
-                <ProblemCard title={ls.description}>
+                <ContentCard title={ls.description}>
                     <ProblemMarkdownContent content={content.description} />
-                </ProblemCard>
+                </ContentCard>
             )}
 
             {content?.inputFormat && (
-                <ProblemCard title={ls.inputFormat}>
+                <ContentCard title={ls.inputFormat}>
                     <ProblemMarkdownContent content={content.inputFormat} />
-                </ProblemCard>
+                </ContentCard>
             )}
 
             {content?.outputFormat && (
-                <ProblemCard title={ls.outputFormat}>
+                <ContentCard title={ls.outputFormat}>
                     <ProblemMarkdownContent content={content.outputFormat} />
-                </ProblemCard>
+                </ContentCard>
             )}
 
             {samples.length > 0 && (
-                <ProblemCard title={ls.samples}>
+                <ContentCard title={ls.samples}>
                     <div className={styles.sampleBoxContainer}>
                         {samples.map((sample, index) => (
                             <ProblemSampleBox
@@ -64,13 +64,13 @@ export const ProblemContent: React.FC<IProblemContentProps> = (props) => {
                             />
                         ))}
                     </div>
-                </ProblemCard>
+                </ContentCard>
             )}
 
             {content?.limitAndHint && (
-                <ProblemCard title={ls.limitAndHint}>
+                <ContentCard title={ls.limitAndHint}>
                     <ProblemMarkdownContent content={content.limitAndHint} />
-                </ProblemCard>
+                </ContentCard>
             )}
         </div>
     );

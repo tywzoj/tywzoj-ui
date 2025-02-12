@@ -3,14 +3,18 @@ import type { CE_Theme } from "@/theme/types";
 
 import type { CE_UserLevel } from "../common/permission";
 
-export interface IUserDetail {
-    readonly id: number;
+// BEGIN: shared types
+export interface IUserDetailEditable {
     readonly username: string;
-    readonly avatar: string | null;
-    readonly email: string | null;
     readonly bio: string | null;
     readonly level: CE_UserLevel;
     readonly nickname: string | null;
+}
+
+export interface IUserDetail extends Readonly<IUserDetailEditable> {
+    readonly id: number;
+    readonly avatar: string | null;
+    readonly email: string | null;
     readonly acceptedProblemCount: number;
     readonly submissionCount: number;
     readonly rating: number;
@@ -24,3 +28,11 @@ export interface IUserPreferenceDetail {
     readonly showTagsOnProblemList: boolean;
     readonly showTagsOnProblemDetail: boolean;
 }
+
+// END: shared types
+
+// BEGIN: user detail types
+
+export type IUserDetailGetResponse = IUserDetail;
+
+// END: user detail types
