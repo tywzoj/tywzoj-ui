@@ -24,9 +24,9 @@ const UserDetailPage: React.FC = () => {
     const styles = useStyles();
 
     return (
-        <div className={mergeClasses(styles.root, isMiddleScreen && styles.rootSingleColumn)}>
+        <div className={mergeClasses(styles.$root, isMiddleScreen && styles.$rootSingleColumn)}>
             {isMiddleScreen ? <TopRow userDetail={userDetail} /> : <LeftColumn userDetail={userDetail} />}
-            <div className={styles.mainContent}>
+            <div className={styles.$mainContent}>
                 <ContentCard title="User Info">
                     <div></div>
                 </ContentCard>
@@ -41,7 +41,7 @@ const LeftColumn: React.FC<{
     const styles = useStyles();
 
     return (
-        <div className={styles.leftColumn}>
+        <div className={styles.$leftColumn}>
             <ContentCard>
                 <UserAvatar src={userDetail.avatar} />
             </ContentCard>
@@ -65,14 +65,14 @@ const TopRow: React.FC<{
     const isMiniScreen = useIsMiniScreen();
 
     return (
-        <div className={styles.topRow}>
+        <div className={styles.$topRow}>
             <ContentCard
-                className={mergeClasses(styles.topRowAvatarCard, isMiniScreen && styles.topRowAvatarCardNoPadding)}
+                className={mergeClasses(styles.$topRowAvatarCard, isMiniScreen && styles.$topRowAvatarCardNoPadding)}
             >
                 <UserAvatar src={userDetail.avatar} bordered={!isMiniScreen} />
             </ContentCard>
 
-            <ContentCard className={styles.topRowUserInfoCard}>
+            <ContentCard className={styles.$topRowUserInfoCard}>
                 <div>
                     <div>
                         <Subtitle1>{userDetail.username}</Subtitle1>
@@ -92,8 +92,8 @@ const UserAvatar: React.FC<{
     const styles = useStyles();
 
     return (
-        <div className={styles.avatarContainer}>
-            <div className={styles.avatar}>
+        <div className={styles.$avatarContainer}>
+            <div className={styles.$avatar}>
                 <Image bordered={bordered} shape="rounded" src={src || fallBackAvatar} />
             </div>
         </div>
@@ -101,19 +101,19 @@ const UserAvatar: React.FC<{
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex(),
         gap: "20px",
         width: "100%",
         maxWidth: "100%",
         minWidth: "0",
     },
-    rootSingleColumn: {
+    $rootSingleColumn: {
         ...flex({
             flexDirection: "column",
         }),
     },
-    leftColumn: {
+    $leftColumn: {
         ...flex({
             flexDirection: "column",
         }),
@@ -122,7 +122,7 @@ const useStyles = makeStyles({
         flex: 1,
         minWidth: "0",
     },
-    topRow: {
+    $topRow: {
         ...flex({
             flexDirection: "row",
         }),
@@ -130,7 +130,7 @@ const useStyles = makeStyles({
         width: "100%",
         minWidth: "0",
     },
-    mainContent: {
+    $mainContent: {
         ...flex({
             flexDirection: "column",
         }),
@@ -138,7 +138,7 @@ const useStyles = makeStyles({
         flex: 2.5,
         minWidth: "0",
     },
-    avatarContainer: {
+    $avatarContainer: {
         position: "relative",
         "&:before": {
             content: '""',
@@ -146,7 +146,7 @@ const useStyles = makeStyles({
             paddingTop: "100%",
         },
     },
-    avatar: {
+    $avatar: {
         position: "absolute",
         top: 0,
         left: 0,
@@ -157,17 +157,17 @@ const useStyles = makeStyles({
             height: "100%",
         },
     },
-    topRowAvatarCard: {
+    $topRowAvatarCard: {
         flexShrink: 1,
         flex: 1,
         minWidth: "0",
         width: "unset",
         minHeight: "fit-content",
     },
-    topRowAvatarCardNoPadding: {
+    $topRowAvatarCardNoPadding: {
         padding: "1px",
     },
-    topRowUserInfoCard: {
+    $topRowUserInfoCard: {
         flex: 2.5,
         minWidth: "0",
         width: "unset",
