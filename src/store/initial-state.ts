@@ -1,3 +1,4 @@
+import { envApiEndpoint } from "@/common/utils/env";
 import { getApiToken } from "@/common/utils/token";
 import { isAndroid, isChrome, isEdge, isFireFox, isIOS, isMobile, isSafari } from "@/common/utils/user-agent";
 import { isMiddleScreen, isMiniScreen, isSmallScreen } from "@/common/utils/window-width";
@@ -9,7 +10,7 @@ import type { IFeatureState, IPaginationState, IPermissionState, IRootState } fr
 export const initialState: IRootState = {
     theme: CE_Theme.Light,
     pageTitle: "",
-    apiEndPoint: import.meta.env.TYWZOJ_API_END_POINT,
+    apiEndPoint: envApiEndpoint(),
     env: {
         isChrome: isChrome(),
         isEdge: isEdge(),

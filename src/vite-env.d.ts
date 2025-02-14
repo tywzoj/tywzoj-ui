@@ -4,5 +4,4 @@
 
 interface ImportMetaEnv {
     readonly TYWZOJ_API_END_POINT: string;
-    readonly TYWZOJ_APP_NAME: string;
 }

@@ -3,7 +3,7 @@ import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import circleDependency from "vite-plugin-circular-dependency";
 import { createHtmlPlugin } from "vite-plugin-html";
 import { prismjsPlugin } from "vite-plugin-prismjs";
@@ -14,8 +14,14 @@ import { inlineConstEnum } from "./vite-plugins/inline-const-enum";
 
 const ENV_PREFIX = "TYWZOJ_";
 
+interface IEnv {
+    readonly TYWZOJ_API_END_POINT_PROXY: string;
+}
+
 // https://vite.dev/config/
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command, mode }) => {
+    const env = loadEnv(mode, process.cwd(), ENV_PREFIX) as unknown as IEnv;
+
     return {
         envPrefix: ENV_PREFIX,
         plugins: [
@@ -68,6 +74,12 @@ export default defineConfig(({ command }) => {
             host: "0.0.0.0",
             port: 5055,
             strictPort: true,
+            proxy: {
+                "/api": {
+                    target: env.TYWZOJ_API_END_POINT_PROXY,
+                    changeOrigin: true,
+                },
+            },
         },
         preview: {
             port: 5056,
