@@ -32,18 +32,18 @@ const SignInPage: React.FC = () => {
     const passwordRef = React.useRef<HTMLInputElement>(null);
 
     const ls = useLocalizedStrings({
-        showPwd: CE_Strings.SHOW_PASSWORD_LABEL,
-        hidePwd: CE_Strings.HIDE_PASSWORD_LABEL,
-        username: CE_Strings.USERNAME_OR_EMAIL_LABEL,
-        password: CE_Strings.PASSWORD_LABEL,
-        title: CE_Strings.NAVIGATION_SIGN_IN,
-        signUp: CE_Strings.NAVIGATION_SIGN_UP,
-        forgotPwd: CE_Strings.NAVIGATION_FORGOT_PASSWORD,
-        uEmpty: CE_Strings.VALIDATION_ERROR_USERNAME_EMAIL_EMPTY,
-        pEmpty: CE_Strings.VALIDATION_ERROR_PASSWORD_EMPTY,
+        $showPwd: CE_Strings.SHOW_PASSWORD_LABEL,
+        $hidePwd: CE_Strings.HIDE_PASSWORD_LABEL,
+        $username: CE_Strings.USERNAME_OR_EMAIL_LABEL,
+        $password: CE_Strings.PASSWORD_LABEL,
+        $title: CE_Strings.NAVIGATION_SIGN_IN,
+        $signUp: CE_Strings.NAVIGATION_SIGN_UP,
+        $forgotPwd: CE_Strings.NAVIGATION_FORGOT_PASSWORD,
+        $usernameEmpty: CE_Strings.VALIDATION_ERROR_USERNAME_EMAIL_EMPTY,
+        $passwordEmpty: CE_Strings.VALIDATION_ERROR_PASSWORD_EMPTY,
     });
 
-    useSetPageTitle(ls.title);
+    useSetPageTitle(ls.$title);
 
     const styles = useStyles();
 
@@ -58,12 +58,12 @@ const SignInPage: React.FC = () => {
         let isValid = true;
 
         if (!username) {
-            setUsernameError(ls.uEmpty);
+            setUsernameError(ls.$usernameEmpty);
             isValid = false;
         }
 
         if (!password) {
-            setPasswordError(ls.pEmpty);
+            setPasswordError(ls.$passwordEmpty);
             isValid = false;
         }
 
@@ -115,13 +115,13 @@ const SignInPage: React.FC = () => {
     }
 
     return (
-        <div className={styles.root}>
-            <h2>{ls.title}</h2>
-            <form className={styles.formContainer}>
-                <Field label={ls.username} validationMessage={usernameError}>
+        <div className={styles.$root}>
+            <h2>{ls.$title}</h2>
+            <form className={styles.$formContainer}>
+                <Field label={ls.$username} validationMessage={usernameError}>
                     <Input
                         type="text"
-                        placeholder={ls.username}
+                        placeholder={ls.$username}
                         value={username}
                         disabled={loading}
                         onChange={(_, { value }) => {
@@ -135,11 +135,11 @@ const SignInPage: React.FC = () => {
                         }}
                     />
                 </Field>
-                <Field label={ls.password} validationMessage={passwordError}>
+                <Field label={ls.$password} validationMessage={passwordError}>
                     <Input
                         ref={passwordRef}
                         type={showPassword ? "text" : "password"}
-                        placeholder={ls.password}
+                        placeholder={ls.$password}
                         value={password}
                         onChange={(_, { value }) => {
                             setPassword(value);
@@ -152,7 +152,7 @@ const SignInPage: React.FC = () => {
                         }}
                         disabled={loading}
                         contentAfter={
-                            <Tooltip content={showPassword ? ls.hidePwd : ls.showPwd} relationship="label">
+                            <Tooltip content={showPassword ? ls.$hidePwd : ls.$showPwd} relationship="label">
                                 <ToggleButton
                                     checked={showPassword}
                                     appearance="transparent"
@@ -163,23 +163,23 @@ const SignInPage: React.FC = () => {
                         }
                     />
                 </Field>
-                <div className={styles.signInButton}>
+                <div className={styles.$signInButton}>
                     <Button
                         appearance="primary"
                         disabledFocusable={loading}
                         icon={loading ? <Spinner size="tiny" /> : null}
                         onClick={handleSubmit}
                     >
-                        {ls.title}
+                        {ls.$title}
                     </Button>
                 </div>
             </form>
-            <div className={styles.links}>
+            <div className={styles.$links}>
                 <LinkWithRouter to="/sign-up" preload={false}>
-                    {ls.signUp}
+                    {ls.$signUp}
                 </LinkWithRouter>
                 <LinkWithRouter to="/forgot-password" preload={false}>
-                    {ls.forgotPwd}
+                    {ls.$forgotPwd}
                 </LinkWithRouter>
             </div>
         </div>
@@ -187,7 +187,7 @@ const SignInPage: React.FC = () => {
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex({
             flexDirection: "column",
             justifyContent: "center",
@@ -200,7 +200,7 @@ const useStyles = makeStyles({
         boxShadow: tokens.shadow4Brand,
         borderRadius: tokens.borderRadiusMedium,
     },
-    formContainer: {
+    $formContainer: {
         ...flex({
             flexDirection: "column",
         }),
@@ -208,14 +208,14 @@ const useStyles = makeStyles({
         width: "100%",
         boxSizing: "border-box",
     },
-    signInButton: {
+    $signInButton: {
         marginTop: "8px",
         width: "100%",
         "> button": {
             width: "100%",
         },
     },
-    links: {
+    $links: {
         ...flex({
             flexDirection: "row",
             justifyContent: "center",

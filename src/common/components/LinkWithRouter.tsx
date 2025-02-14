@@ -1,5 +1,5 @@
 import { Link, type LinkProps } from "@fluentui/react-components";
-import type { LinkComponent, LinkComponentProps } from "@tanstack/react-router";
+import type { LinkComponentProps } from "@tanstack/react-router";
 import { createLink } from "@tanstack/react-router";
 import React from "react";
 
@@ -14,8 +14,11 @@ FluentLinkComponent.displayName = "FluentLinkComponent";
 
 const FluentLinkComponentWithRouter = createLink(FluentLinkComponent);
 
-export type ILinkWithRouterProps = LinkComponentProps<typeof LinkWithRouter>;
+export type ILinkWithRouterProps = LinkComponentProps<typeof FluentLinkComponentWithRouter>;
 
-export const LinkWithRouter: LinkComponent<typeof FluentLinkComponentWithRouter> = (props) => {
-    return <FluentLinkComponentWithRouter {...props} />;
-};
+export const LinkWithRouter = React.forwardRef<React.ForwardedRef<HTMLAnchorElement>, ILinkWithRouterProps>(
+    (props, ref) => {
+        return <FluentLinkComponentWithRouter ref={ref} {...props} />;
+    },
+);
+LinkWithRouter.displayName = "LinkWithRouter";

@@ -1,5 +1,5 @@
 import { Button, type ButtonProps } from "@fluentui/react-components";
-import type { LinkComponent, LinkComponentProps } from "@tanstack/react-router";
+import type { LinkComponentProps } from "@tanstack/react-router";
 import { createLink } from "@tanstack/react-router";
 import React from "react";
 
@@ -14,8 +14,11 @@ FluentButtonComponent.displayName = "FluentButtonComponent";
 
 const FluentButtonComponentWithRouter = createLink(FluentButtonComponent);
 
-export type IButtonWithRouterProps = LinkComponentProps<typeof ButtonWithRouter>;
+export type IButtonWithRouterProps = LinkComponentProps<typeof FluentButtonComponentWithRouter>;
 
-export const ButtonWithRouter: LinkComponent<typeof FluentButtonComponentWithRouter> = (props) => {
-    return <FluentButtonComponentWithRouter {...props} />;
-};
+export const ButtonWithRouter = React.forwardRef<React.ForwardedRef<HTMLAnchorElement>, IButtonWithRouterProps>(
+    (props, ref) => {
+        return <FluentButtonComponentWithRouter ref={ref} {...props} />;
+    },
+);
+ButtonWithRouter.displayName = "ButtonWithRouter";

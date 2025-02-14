@@ -37,14 +37,14 @@ export const Layout: React.FC = () => {
     const { accessProblem } = usePermission();
 
     const ls = useLocalizedStrings({
-        navigationTitle: CE_Strings.NAVIGATION_LABEL,
-        homePage: CE_Strings.NAVIGATION_HOME,
-        problemsPage: CE_Strings.NAVIGATION_PROBLEMS,
-        problemSetsPage: CE_Strings.NAVIGATION_PROBLEM_SETS,
-        siteTitleAlt: CE_Strings.SITE_TITLE_IMAGE_ALT,
-        siteIconAlt: CE_Strings.SITE_ICON_IMAGE_ALT,
-        copyright: CE_Strings.COPYRIGHT_NOTICE,
-        recaptcha: CE_Strings.GOOGLE_RECAPTCHA_NOTICE,
+        $navigationTitle: CE_Strings.NAVIGATION_LABEL,
+        $homePage: CE_Strings.NAVIGATION_HOME,
+        $problemsPage: CE_Strings.NAVIGATION_PROBLEMS,
+        $problemSetsPage: CE_Strings.NAVIGATION_PROBLEM_SETS,
+        $siteTitleAlt: CE_Strings.SITE_TITLE_IMAGE_ALT,
+        $siteIconAlt: CE_Strings.SITE_ICON_IMAGE_ALT,
+        $copyright: CE_Strings.COPYRIGHT_NOTICE,
+        $recaptcha: CE_Strings.GOOGLE_RECAPTCHA_NOTICE,
     });
 
     const styles = useStyles();
@@ -68,7 +68,7 @@ export const Layout: React.FC = () => {
 
     const hamburger = React.useMemo(
         () => (
-            <Tooltip content={ls.navigationTitle} relationship="label">
+            <Tooltip content={ls.$navigationTitle} relationship="label">
                 <Hamburger
                     onClick={() => {
                         setIsNavDrawerOpen((prev) => {
@@ -81,7 +81,7 @@ export const Layout: React.FC = () => {
                 />
             </Tooltip>
         ),
-        [isOverlay, ls.navigationTitle],
+        [isOverlay, ls.$navigationTitle],
     );
 
     const createNavItem = (
@@ -112,9 +112,9 @@ export const Layout: React.FC = () => {
     };
 
     return (
-        <div className={styles.root}>
+        <div className={styles.$root}>
             <NavDrawer
-                className={styles.nav}
+                className={styles.$nav}
                 open={isNavDrawerOpen}
                 type={isOverlay ? "overlay" : "inline"}
                 selectedValue={ACTIVE_ITEM_TAG}
@@ -122,36 +122,36 @@ export const Layout: React.FC = () => {
             >
                 <NavDrawerHeader>{hamburger}</NavDrawerHeader>
                 <NavDrawerBody>
-                    {createNavItem("/", ls.homePage, <Home20Filled />)}
-                    {accessProblem && createNavItem("/problem", ls.problemsPage, <Book20Filled />)}
-                    {accessProblem && createNavItem("/set", ls.problemSetsPage, <GroupList20Filled />)}
+                    {createNavItem("/", ls.$homePage, <Home20Filled />)}
+                    {accessProblem && createNavItem("/problem", ls.$problemsPage, <Book20Filled />)}
+                    {accessProblem && createNavItem("/set", ls.$problemSetsPage, <GroupList20Filled />)}
                     {currentUser && createNavItem("/user", "Users", <PeopleList20Filled />, { matchExact: true })}
                 </NavDrawerBody>
             </NavDrawer>
-            <div className={styles.container}>
-                <div className={styles.header}>
-                    <div className={styles.headerNavButton}>{!isNavDrawerOpen && hamburger}</div>
-                    <div className={styles.headerInfo}>
+            <div className={styles.$container}>
+                <div className={styles.$header}>
+                    <div className={styles.$headerNavButton}>{!isNavDrawerOpen && hamburger}</div>
+                    <div className={styles.$headerInfo}>
                         <img
-                            className={styles.headerInfoIcon}
+                            className={styles.$headerInfoIcon}
                             src={isLightTheme ? iconLight : iconDark}
-                            alt={ls.siteIconAlt}
+                            alt={ls.$siteIconAlt}
                         />
                         <img
-                            className={styles.headerInfoTitle}
+                            className={styles.$headerInfoTitle}
                             src={isLightTheme ? titleLight : titleDark}
-                            alt={ls.siteTitleAlt}
+                            alt={ls.$siteTitleAlt}
                         />
                     </div>
-                    <div className={styles.headerRightMenu}>{currentUser ? <UserMenu /> : <AuthMenu />}</div>
+                    <div className={styles.$headerRightMenu}>{currentUser ? <UserMenu /> : <AuthMenu />}</div>
                 </div>
-                <div className={styles.body}>
-                    <div className={styles.content}>
+                <div className={styles.$body}>
+                    <div className={styles.$content}>
                         <Outlet />
                     </div>
-                    <div className={styles.footer}>
-                        <div>{format(ls.copyright, new Date().getFullYear())}</div>
-                        {recaptchaEnabled && <div dangerouslySetInnerHTML={{ __html: ls.recaptcha }} />}
+                    <div className={styles.$footer}>
+                        <div>{format(ls.$copyright, new Date().getFullYear())}</div>
+                        {recaptchaEnabled && <div dangerouslySetInnerHTML={{ __html: ls.$recaptcha }} />}
                         {domainIcpRecordInformation && locale === CE_Locale.zh_cn && (
                             // for Chinese users, display the ICP record information
                             <div>
@@ -168,7 +168,7 @@ export const Layout: React.FC = () => {
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex({ flexDirection: "row" }),
         width: "100vw",
         height: "100%",
@@ -176,18 +176,18 @@ const useStyles = makeStyles({
         maxWidth: "100%",
         overflowY: "auto",
     },
-    nav: {
+    $nav: {
         flex: "0 1 180px",
         minWidth: "180px",
     },
-    container: {
+    $container: {
         ...flex({ flexDirection: "column" }),
         height: "100%",
         flex: 1,
         minWidth: "0",
         boxSizing: "border-box",
     },
-    header: {
+    $header: {
         ...flex({ flexDirection: "row", justifyContent: "space-between" }),
         minHeight: "40px",
         padding: "0px 14px",
@@ -195,12 +195,12 @@ const useStyles = makeStyles({
         boxShadow: tokens.shadow4,
         zIndex: 1,
     },
-    headerNavButton: {
+    $headerNavButton: {
         padding: "5px 0",
         minHeight: "30px",
         minWidth: "30px",
     },
-    headerInfo: {
+    $headerInfo: {
         ...flex({
             flexDirection: "row",
             alignItems: "center",
@@ -210,20 +210,20 @@ const useStyles = makeStyles({
         height: "30px",
         overflow: "hidden",
     },
-    headerInfoTitle: {
+    $headerInfoTitle: {
         height: "28px",
     },
-    headerInfoIcon: {
+    $headerInfoIcon: {
         height: "40px",
     },
-    headerRightMenu: {
+    $headerRightMenu: {
         ...flex({
             justifyContent: "flex-end",
             alignItems: "center",
         }),
         height: "40px",
     },
-    body: {
+    $body: {
         ...flex({
             flexDirection: "column",
             alignItems: "center",
@@ -234,7 +234,7 @@ const useStyles = makeStyles({
         boxSizing: "border-box",
         overflow: "auto",
     },
-    content: {
+    $content: {
         ...flex({
             flexDirection: "column",
             alignItems: "center",
@@ -245,7 +245,7 @@ const useStyles = makeStyles({
         width: "100%",
         maxWidth: "1200px",
     },
-    footer: {
+    $footer: {
         ...flex({
             flexDirection: "column",
             alignItems: "center",

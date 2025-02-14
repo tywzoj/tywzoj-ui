@@ -32,8 +32,8 @@ import type { IMenuItemLinkWithRouterProps } from "@/common/components/MenuItemL
 import { MenuItemLinkWithRouter } from "@/common/components/MenuItemLinkWithRouter";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
+import { ContentCard } from "@/components/ContentCard";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
-import { ProblemCard } from "@/components/ProblemCard";
 import { ProblemContent } from "@/components/ProblemContent";
 import { ProblemSubmissionDialog } from "@/components/ProblemSubmissionDialog";
 import { ProblemTag } from "@/components/ProblemTag";
@@ -116,7 +116,7 @@ const ProblemTags: React.FC<{
 
     const styles = useStyles();
     return (
-        <ProblemCard
+        <ContentCard
             title={ls.tags}
             action={
                 <Tooltip content={showTagsOnProblemDetail ? ls.hideTags : ls.showTags} relationship="label">
@@ -144,7 +144,7 @@ const ProblemTags: React.FC<{
                     ? tags.map((tag) => <ProblemTag key={tag.id} name={tag.name} color={tag.color} />)
                     : null}
             </div>
-        </ProblemCard>
+        </ContentCard>
     );
 };
 

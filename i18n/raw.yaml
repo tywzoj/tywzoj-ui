@@ -388,6 +388,18 @@
   value: Disabled
   description: A string for the label of disabled user level.
 
+- name: USER_BIO_LABEL
+  value: Bio
+  description: A string for the label of user bio.
+
+- name: USER_NICKNAME_LABEL
+  value: Nickname
+  description: A string for the label of user nickname.
+
+- name: USER_AVATAR_LABEL
+  value: Avatar
+  description: A string for the label of user avatar.
+
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: Keyword or ID
   description: A string for the placeholder of problem search input.

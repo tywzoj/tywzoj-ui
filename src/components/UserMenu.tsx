@@ -16,6 +16,7 @@ import React from "react";
 
 import { signOutAsyncAction } from "@/common/actions/sign-in";
 import { MenuItemLinkWithRouter } from "@/common/components/MenuItemLinkWithRouter";
+import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useDispatchToastError } from "@/common/hooks/toast";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
@@ -57,15 +58,10 @@ export const UserMenu: React.FC = () => {
         }
     }, [dispatch, handleError]);
 
-    const signOut = () => {
-        handleSignOutAsync()
-            .then(() => {
-                navigate({ to: "/" });
-            })
-            .catch((e) => {
-                dispatchToastError(e.message);
-            });
-    };
+    const signOut = useWithCatchError(async () => {
+        await handleSignOutAsync();
+        await navigate({ to: "/" });
+    });
 
     if (!currentUser) {
         return null;
@@ -77,11 +73,12 @@ export const UserMenu: React.FC = () => {
                 <Tooltip content={ls.label} relationship="label">
                     <Button className={styles.button} appearance="transparent">
                         {isMiniScreen ? (
-                            <Avatar />
+                            <Avatar {...(currentUser.avatar && { image: { src: currentUser.avatar } })} />
                         ) : (
                             <Persona
                                 primaryText={currentUser.nickname || currentUser.username}
-                                secondaryText={currentUser.username}
+                                {...(currentUser.nickname && { secondaryText: currentUser.username })}
+                                {...(currentUser.avatar && { avatar: currentUser.avatar })}
                             />
                         )}
                     </Button>

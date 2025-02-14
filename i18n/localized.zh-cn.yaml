@@ -184,7 +184,7 @@
   raw: No such problem file.
 
 - name: ERROR_2207_DUPLICATE_DISPLAY_ID
-  value: null
+  value: 题目 ID 已被使用。
   description: A string for the error message when the problem ID is already used.
   raw: The problem ID is already used.
 
@@ -488,6 +488,21 @@
   description: A string for the label of disabled user level.
   raw: Disabled
 
+- name: USER_BIO_LABEL
+  value: 个人简介
+  description: A string for the label of user bio.
+  raw: Bio
+
+- name: USER_NICKNAME_LABEL
+  value: 昵称
+  description: A string for the label of user nickname.
+  raw: Nickname
+
+- name: USER_AVATAR_LABEL
+  value: 头像
+  description: A string for the label of user avatar.
+  raw: Avatar
+
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: 输入题目 ID 或关键字以搜索题目
   description: A string for the placeholder of problem search input.
@@ -569,23 +584,23 @@
   raw: No tags.
 
 - name: PROBLEM_EDIT_GEN_ID
-  value: null
+  value: 生成 ID
   description: A string for the label of generate ID button.
   raw: Generate ID
 
 - name: PROBLEM_EDIT_TITLE_WITH_ID
-  value: '#{0}({1}). {2} - 编辑'
+  value: "#{0}({1}). {2} - 编辑"
   description: >-
     A string for the title of problem edit page. {0} is the problem display ID,
     {1} is the problem ID, and {2} is the problem title.
-  raw: '#{0}({1}). {2} - Edit'
+  raw: "#{0}({1}). {2} - Edit"
 
 - name: PROBLEM_EDIT_TITLE
-  value: '#{0}. {1} - 编辑'
+  value: "#{0}. {1} - 编辑"
   description: >-
     A string for the title of problem edit page. {0} is the problem display ID,
     and {1} is the problem title.
-  raw: '#{0}. {1} - Edit'
+  raw: "#{0}. {1} - Edit"
 
 - name: CODE_COPIED_MESSAGE
   value: 代码已复制到剪贴板。
@@ -693,29 +708,29 @@
   raw: GNU C++20
 
 - name: COMPILATION_CPP_OPTIMIZATION_O0
-  value: '-O0 (禁用优化)'
+  value: "-O0 (禁用优化)"
   description: A string for the label of O0 optimization.
-  raw: '-O0 (disable optimization)'
+  raw: "-O0 (disable optimization)"
 
 - name: COMPILATION_CPP_OPTIMIZATION_O1
-  value: '-O1'
+  value: "-O1"
   description: A string for the label of O1 optimization.
-  raw: '-O1'
+  raw: "-O1"
 
 - name: COMPILATION_CPP_OPTIMIZATION_O2
-  value: '-O2'
+  value: "-O2"
   description: A string for the label of O2 optimization.
-  raw: '-O2'
+  raw: "-O2"
 
 - name: COMPILATION_CPP_OPTIMIZATION_O3
-  value: '-O3'
+  value: "-O3"
   description: A string for the label of O3 optimization.
-  raw: '-O3'
+  raw: "-O3"
 
 - name: COMPILATION_CPP_OPTIMIZATION_OFAST
-  value: '-Ofast (最快)'
+  value: "-Ofast (最快)"
   description: A string for the label of Ofast optimization.
-  raw: '-Ofast (fastest)'
+  raw: "-Ofast (fastest)"
 
 - name: COMPILATION_CPP_ARCHITECTURE_64
   value: 64 位
@@ -788,14 +803,14 @@
   raw: JVM
 
 - name: COMPILATION_PAS_OPTIMIZATION_O
-  value: '-O'
+  value: "-O"
   description: A string for the label of O optimization.
-  raw: '-O'
+  raw: "-O"
 
 - name: COMPILATION_PAS_OPTIMIZATION_O4
-  value: '-O4 (最快)'
+  value: "-O4 (最快)"
   description: A string for the label of O4 optimization.
-  raw: '-O4 (fastest)'
+  raw: "-O4 (fastest)"
 
 - name: COMPILATION_RS_OPTIMIZATION_1
   value: 1 级
