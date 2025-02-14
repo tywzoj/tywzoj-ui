@@ -92,6 +92,11 @@ export default defineConfig(({ command, mode }) => {
                     drop_console: ["log", "info"],
                     drop_debugger: true,
                 },
+                mangle: {
+                    properties: {
+                        regex: /^\$(?!\$).+/,
+                    },
+                },
             },
             rollupOptions: {
                 output: {
