@@ -77,11 +77,12 @@ export const UserMenu: React.FC = () => {
                 <Tooltip content={ls.label} relationship="label">
                     <Button className={styles.button} appearance="transparent">
                         {isMiniScreen ? (
-                            <Avatar />
+                            <Avatar {...(currentUser.avatar && { image: { src: currentUser.avatar } })} />
                         ) : (
                             <Persona
                                 primaryText={currentUser.nickname || currentUser.username}
-                                secondaryText={currentUser.username}
+                                {...(currentUser.nickname && { secondaryText: currentUser.username })}
+                                {...(currentUser.avatar && { avatar: currentUser.avatar })}
                             />
                         )}
                     </Button>
