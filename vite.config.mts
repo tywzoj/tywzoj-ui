@@ -94,7 +94,7 @@ export default defineConfig(({ command, mode }) => {
                 },
                 mangle: {
                     properties: {
-                        regex: /^\$(?!\$).+/,
+                        regex: /^\$[a-zA-Z]/,
                     },
                 },
             },
