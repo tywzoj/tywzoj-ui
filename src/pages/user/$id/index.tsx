@@ -1,102 +1,131 @@
-import { Image, makeStyles, mergeClasses, Subtitle1 } from "@fluentui/react-components";
+import {
+    Image,
+    Link,
+    makeStyles,
+    mergeClasses,
+    Spinner,
+    Subtitle1,
+    Subtitle2,
+    Tooltip,
+} from "@fluentui/react-components";
+import { EditFilled } from "@fluentui/react-icons";
 import { createFileRoute } from "@tanstack/react-router";
-import type React from "react";
+import React from "react";
 
 import logoDark from "@/assets/icon.dark.png";
 import logoLight from "@/assets/icon.light.png";
+import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
 import { flex } from "@/common/styles/flex";
 import { ContentCard } from "@/components/ContentCard";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
+import { UserLevelLabel } from "@/components/UserLevelLabel";
+import { MarkdownContentLazy } from "@/markdown/MarkdownContent.lazy";
+import { canEditUserSettings } from "@/permission/checkers";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptionsFn } from "@/query/utils";
 import { UserModule } from "@/server/api";
 import type { UserTypes } from "@/server/types";
 import { withThrowErrors } from "@/server/utils";
-import { useIsMiddleScreen, useIsMiniScreen } from "@/store/hooks";
+import { useCurrentUser, useFeature, useIsMiddleScreen, useIsMiniScreen, usePermission } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
 const UserDetailPage: React.FC = () => {
     const { queryOptions } = Route.useLoaderData();
     const { data: userDetail } = useSuspenseQueryData(queryOptions);
     const isMiddleScreen = useIsMiddleScreen();
+    const { renderMarkdownInUserBio } = useFeature();
 
     const styles = useStyles();
 
     return (
         <div className={mergeClasses(styles.$root, isMiddleScreen && styles.$rootSingleColumn)}>
-            {isMiddleScreen ? <TopRow userDetail={userDetail} /> : <LeftColumn userDetail={userDetail} />}
-            <div className={styles.$mainContent}>
-                <ContentCard title="User Info">
-                    <div></div>
-                </ContentCard>
+            <div className={styles.$leftColumn}>
+                <AvatarAndUserName userDetail={userDetail} />
+
+                {userDetail.email && (
+                    <ContentCard title="Email" small>
+                        <Link href={`mailto:${userDetail.email}`}>{userDetail.email}</Link>
+                    </ContentCard>
+                )}
+            </div>
+
+            <div className={styles.$rightColumn}>
+                {userDetail.bio && (
+                    <ContentCard title="Bio">
+                        {renderMarkdownInUserBio ? (
+                            <React.Suspense fallback={<Spinner />}>
+                                <MarkdownContentLazy content={userDetail.bio} />
+                            </React.Suspense>
+                        ) : (
+                            <Subtitle2>{userDetail.bio}</Subtitle2>
+                        )}
+                    </ContentCard>
+                )}
             </div>
         </div>
     );
 };
 
-const LeftColumn: React.FC<{
+const AvatarAndUserName: React.FC<{
     userDetail: UserTypes.IUserDetail;
 }> = ({ userDetail }) => {
-    const styles = useStyles();
-
-    return (
-        <div className={styles.$leftColumn}>
-            <ContentCard>
-                <UserAvatar src={userDetail.avatar} />
-            </ContentCard>
-
-            <ContentCard>
-                <div>
-                    <div>
-                        <Subtitle1>{userDetail.username}</Subtitle1>
-                    </div>
-                </div>
-            </ContentCard>
-        </div>
-    );
-};
-
-const TopRow: React.FC<{
-    userDetail: UserTypes.IUserDetail;
-}> = ({ userDetail }) => {
-    const styles = useStyles();
-
     const isMiniScreen = useIsMiniScreen();
-
-    return (
-        <div className={styles.$topRow}>
-            <ContentCard
-                className={mergeClasses(styles.$topRowAvatarCard, isMiniScreen && styles.$topRowAvatarCardNoPadding)}
-            >
-                <UserAvatar src={userDetail.avatar} bordered={!isMiniScreen} />
-            </ContentCard>
-
-            <ContentCard className={styles.$topRowUserInfoCard}>
-                <div>
-                    <div>
-                        <Subtitle1>{userDetail.username}</Subtitle1>
-                    </div>
-                </div>
-            </ContentCard>
-        </div>
-    );
-};
-
-const UserAvatar: React.FC<{
-    src: string | null;
-    bordered?: boolean;
-}> = ({ src, bordered = true }) => {
+    const isMiddleScreen = useIsMiddleScreen();
     const isLightTheme = useIsLightTheme();
+    const currentUser = useCurrentUser();
+    const permission = usePermission();
     const fallBackAvatar = isLightTheme ? logoLight : logoDark;
     const styles = useStyles();
 
     return (
-        <div className={styles.$avatarContainer}>
-            <div className={styles.$avatar}>
-                <Image bordered={bordered} shape="rounded" src={src || fallBackAvatar} />
+        <ContentCard>
+            <div className={mergeClasses(styles.$avatarCard, isMiddleScreen && styles.$avatarCardTopRow)}>
+                <div className={styles.$avatarContainer}>
+                    <div className={styles.$avatar}>
+                        <Image bordered shape="rounded" src={userDetail.avatar || fallBackAvatar} />
+                    </div>
+                </div>
+                <div className={mergeClasses(styles.$avatarCardLeft, !isMiddleScreen && styles.$avatarCardRow)}>
+                    <div className={styles.$usernameContainer}>
+                        <Subtitle1 as="span" wrap={false} truncate>
+                            {userDetail.nickname || userDetail.username}
+                        </Subtitle1>
+                        {userDetail.nickname ? (
+                            <Subtitle2 as="span" wrap={false} truncate>
+                                {userDetail.username}
+                            </Subtitle2>
+                        ) : null}
+                    </div>
+                </div>
+                <div className={mergeClasses(styles.$avatarCardRight, !isMiddleScreen && styles.$avatarCardRow)}>
+                    <UserLevelLabel userLevel={userDetail.level} />
+
+                    {canEditUserSettings(userDetail.id, currentUser, permission) &&
+                        (isMiniScreen ? (
+                            <Tooltip content={"Edit"} relationship="label">
+                                <ButtonWithRouter
+                                    icon={<EditFilled />}
+                                    to={"/user/$id/edit"}
+                                    params={{
+                                        id: userDetail.id.toString(),
+                                    }}
+                                />
+                            </Tooltip>
+                        ) : (
+                            <ButtonWithRouter
+                                icon={<EditFilled />}
+                                to={"/user/$id/edit"}
+                                params={{
+                                    id: userDetail.id.toString(),
+                                }}
+                            >
+                                Edit
+                            </ButtonWithRouter>
+                        ))}
+                </div>
             </div>
-        </div>
+        </ContentCard>
     );
 };
 
@@ -122,21 +151,28 @@ const useStyles = makeStyles({
         flex: 1,
         minWidth: "0",
     },
-    $topRow: {
-        ...flex({
-            flexDirection: "row",
-        }),
-        gap: "20px",
-        width: "100%",
-        minWidth: "0",
-    },
-    $mainContent: {
+    $rightColumn: {
         ...flex({
             flexDirection: "column",
         }),
         gap: "20px",
         flex: 2.5,
         minWidth: "0",
+    },
+    $avatarCard: {
+        ...flex({
+            flexDirection: "column",
+        }),
+        gap: "4px 20px",
+        width: "100%",
+    },
+    $avatarCardTopRow: {
+        ...flex({
+            justifyContent: "space-between",
+            alignItems: "center",
+        }),
+        gap: "20px",
+        width: "100%",
     },
     $avatarContainer: {
         position: "relative",
@@ -145,6 +181,8 @@ const useStyles = makeStyles({
             display: "block",
             paddingTop: "100%",
         },
+        flex: 1,
+        minWidth: "75px",
     },
     $avatar: {
         position: "absolute",
@@ -157,21 +195,40 @@ const useStyles = makeStyles({
             height: "100%",
         },
     },
-    $topRowAvatarCard: {
-        flexShrink: 1,
+    $avatarCardLeft: {
+        ...flex({
+            flexDirection: "row",
+            alignItems: "center",
+        }),
+        flex: 3,
+        gap: "0 20px",
+        minWidth: "0",
+    },
+    $avatarCardRight: {
+        ...flex({
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center",
+        }),
         flex: 1,
-        minWidth: "0",
-        width: "unset",
-        minHeight: "fit-content",
+        flexShrink: 1,
+        minWidth: "fit-content",
+        gap: "8px",
     },
-    $topRowAvatarCardNoPadding: {
-        padding: "1px",
+    $avatarCardRow: {
+        ...flex({
+            flexDirection: "column",
+        }),
+        flex: 1,
     },
-    $topRowUserInfoCard: {
-        flex: 2.5,
-        minWidth: "0",
-        width: "unset",
-        minHeight: "fit-content",
+    $usernameContainer: {
+        ...flex({
+            flexDirection: "column",
+        }),
+        width: "100%",
+        "> span": {
+            overflow: "hidden",
+        },
     },
 });
 
