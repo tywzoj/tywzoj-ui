@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React from "react";
+import type { Promisable } from "type-fest";
 
 import { useErrorCodeToString } from "@/locales/hooks";
 
@@ -15,18 +16,18 @@ import { useDispatchToastError } from "./toast";
  * @returns A function that catches errors and displays a toast message, if throwErrors is false, you can't use the return value.
  */
 export function useWithCatchError<P extends any[], R>(
-    fn: (...args: P) => Promise<R>,
+    fn: (...args: P) => Promisable<R>,
     throwErrors?: false,
-    onSucceed?: (result: R) => void,
+    onSucceed?: (result: R) => Promisable<void>,
 ): (...args: P) => Promise<void>;
 export function useWithCatchError<P extends any[], R>(
-    fn: (...args: P) => Promise<R>,
+    fn: (...args: P) => Promisable<R>,
     throwErrors: true,
 ): (...args: P) => Promise<R>;
 export function useWithCatchError(
     fn: (...args: any[]) => Promise<any>,
     throwErrors = false,
-    onSucceed?: (result: any) => void,
+    onSucceed?: (result: any) => Promisable<void>,
 ) {
     const errorToString = useErrorCodeToString();
     const dispatchError = useDispatchToastError();
@@ -35,7 +36,7 @@ export function useWithCatchError(
         async (...args: any[]): Promise<any> => {
             try {
                 const resp = await fn(...args);
-                onSucceed?.(resp);
+                await onSucceed?.(resp);
                 return resp;
             } catch (error) {
                 if (error instanceof AppError) {
