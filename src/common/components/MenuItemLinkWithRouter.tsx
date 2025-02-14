@@ -1,5 +1,5 @@
 import { MenuItemLink, type MenuItemLinkProps } from "@fluentui/react-components";
-import type { LinkComponent, LinkComponentProps } from "@tanstack/react-router";
+import type { LinkComponentProps } from "@tanstack/react-router";
 import { createLink } from "@tanstack/react-router";
 import React from "react";
 
@@ -14,8 +14,12 @@ FluentMenuItemLinkComponent.displayName = "FluentMenuItemLinkComponent";
 
 const FluentMenuItemLinkComponentWithRouter = createLink(FluentMenuItemLinkComponent);
 
-export type IMenuItemLinkWithRouterProps = LinkComponentProps<typeof MenuItemLinkWithRouter>;
+export type IMenuItemLinkWithRouterProps = LinkComponentProps<typeof FluentMenuItemLinkComponentWithRouter>;
 
-export const MenuItemLinkWithRouter: LinkComponent<typeof FluentMenuItemLinkComponentWithRouter> = (props) => {
-    return <FluentMenuItemLinkComponentWithRouter {...props} />;
-};
+export const MenuItemLinkWithRouter = React.forwardRef<
+    React.ForwardedRef<HTMLAnchorElement>,
+    IMenuItemLinkWithRouterProps
+>((props, ref) => {
+    return <FluentMenuItemLinkComponentWithRouter ref={ref} {...props} />;
+});
+MenuItemLinkWithRouter.displayName = "MenuItemLinkWithRouter";
