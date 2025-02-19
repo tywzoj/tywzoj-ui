@@ -6,10 +6,10 @@ import { CE_Strings } from "@/locales/locale";
 
 const ForgotPasswordPage: React.FC = () => {
     const ls = useLocalizedStrings({
-        title: CE_Strings.NAVIGATION_FORGOT_PASSWORD,
+        $title: CE_Strings.NAVIGATION_FORGOT_PASSWORD,
     });
 
-    useSetPageTitle(ls.title);
+    useSetPageTitle(ls.$title);
 
     return <div></div>;
 };

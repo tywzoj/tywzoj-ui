@@ -5,21 +5,21 @@ import { flex } from "@/common/styles/flex";
 import { commonLinkStyles } from "@/common/styles/link";
 
 export const useMarkdownRenderStyles = makeStyles({
-    placeholder: {
+    $placeholder: {
         ...flex({
             flexDirection: "column",
         }),
         gap: "14px",
         width: "100%",
     },
-    placeholderLine: {
+    $placeholderLine: {
         ...flex({
             flexDirection: "row",
         }),
         gap: "7px",
         width: "100%",
     },
-    root: {
+    $root: {
         position: "relative",
         overflow: "hidden",
         transform: "translate3d(0, 0, 0)",

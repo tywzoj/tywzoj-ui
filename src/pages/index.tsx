@@ -7,10 +7,10 @@ import { CE_Strings } from "@/locales/locale";
 
 const HomePage: React.FC = () => {
     const ls = useLocalizedStrings({
-        title: CE_Strings.NAVIGATION_HOME,
+        $title: CE_Strings.NAVIGATION_HOME,
     });
 
-    useSetPageTitle(ls.title);
+    useSetPageTitle(ls.$title);
 
     return (
         <div>

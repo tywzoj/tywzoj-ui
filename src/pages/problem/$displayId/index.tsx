@@ -64,16 +64,16 @@ const ProblemDetailPage: React.FC = () => {
     useSetPageTitle(`#${problem.displayId}.${problem.title}`);
 
     return (
-        <div className={styles.root}>
-            <div className={styles.titleContainer}>
+        <div className={styles.$root}>
+            <div className={styles.$titleContainer}>
                 <Title3 as="h1">
                     #{problem.displayId}. {problem.title}
                 </Title3>
                 <VisibilityLabel visibility={problem.visibility} />
             </div>
 
-            <div className={mergeClasses(styles.content, isMiddleScreen && styles.oneLineContent)}>
-                <div className={styles.leftColumn}>
+            <div className={mergeClasses(styles.$content, isMiddleScreen && styles.$oneLineContent)}>
+                <div className={styles.$leftColumn}>
                     {isMiddleScreen && (
                         <ProblemActions problem={problem} onSubmit={() => setIsSubmissionDialogOpen(true)} />
                     )}
@@ -81,7 +81,7 @@ const ProblemDetailPage: React.FC = () => {
                     <ProblemContent content={content} samples={samples} />
                 </div>
 
-                <div className={styles.rightColumn}>
+                <div className={styles.$rightColumn}>
                     {!isMiddleScreen && (
                         <ProblemActions problem={problem} onSubmit={() => setIsSubmissionDialogOpen(true)} />
                     )}
@@ -108,18 +108,18 @@ const ProblemTags: React.FC<{
     const router = useRouter();
 
     const ls = useLocalizedStrings({
-        tags: CE_Strings.PROBLEM_TAGS_LABEL,
-        showTags: CE_Strings.SHOW_TAGS_LABEL,
-        hideTags: CE_Strings.HIDE_TAGS_LABEL,
-        noTags: CE_Strings.NO_TAGS_TEXT,
+        $tags: CE_Strings.PROBLEM_TAGS_LABEL,
+        $showTags: CE_Strings.SHOW_TAGS_LABEL,
+        $hideTags: CE_Strings.HIDE_TAGS_LABEL,
+        $noTags: CE_Strings.NO_TAGS_TEXT,
     });
 
     const styles = useStyles();
     return (
         <ContentCard
-            title={ls.tags}
+            title={ls.$tags}
             action={
-                <Tooltip content={showTagsOnProblemDetail ? ls.hideTags : ls.showTags} relationship="label">
+                <Tooltip content={showTagsOnProblemDetail ? ls.$hideTags : ls.$showTags} relationship="label">
                     <ToggleButton
                         appearance="transparent"
                         icon={showTagsOnProblemDetail ? <TagFilled /> : <TagOffFilled />}
@@ -139,7 +139,7 @@ const ProblemTags: React.FC<{
                 </Tooltip>
             }
         >
-            <div className={styles.tagContainer}>
+            <div className={styles.$tagContainer}>
                 {showTagsOnProblemDetail
                     ? tags.map((tag) => <ProblemTag key={tag.id} name={tag.name} color={tag.color} />)
                     : null}
@@ -223,11 +223,11 @@ const ProblemActions: React.FC<{
     return (
         <ButtonGroup
             vertical={isVertical}
-            className={isVertical ? styles.buttonGroupVertical : styles.buttonGroupHorizontal}
+            className={isVertical ? styles.$buttonGroupVertical : styles.$buttonGroupHorizontal}
         >
             {permission.submitAnswer && (
                 <Button
-                    className={mergeClasses(firstButtonClassName, isVertical && styles.submitButton)}
+                    className={mergeClasses(firstButtonClassName, isVertical && styles.$submitButton)}
                     onClick={onSubmission}
                     shape="square"
                     appearance="primary"
@@ -272,14 +272,14 @@ const ProblemActions: React.FC<{
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex({
             flexDirection: "column",
         }),
         width: "100%",
         minWidth: "0",
     },
-    titleContainer: {
+    $titleContainer: {
         ...flex({
             justifyContent: "center",
             alignItems: "center",
@@ -293,18 +293,18 @@ const useStyles = makeStyles({
         },
         marginBottom: "20px",
     },
-    content: {
+    $content: {
         ...flex(),
         gap: "20px",
         maxWidth: "100%",
         minWidth: "0",
     },
-    oneLineContent: {
+    $oneLineContent: {
         ...flex({
             flexDirection: "column",
         }),
     },
-    leftColumn: {
+    $leftColumn: {
         ...flex({
             flexDirection: "column",
         }),
@@ -313,7 +313,7 @@ const useStyles = makeStyles({
         flex: 2.5,
         minWidth: "0",
     },
-    rightColumn: {
+    $rightColumn: {
         ...flex({
             flexDirection: "column",
         }),
@@ -321,13 +321,13 @@ const useStyles = makeStyles({
         flex: 1,
         minWidth: "0",
     },
-    tagContainer: {
+    $tagContainer: {
         ...flex({
             flexWrap: "wrap",
         }),
         gap: "4px",
     },
-    buttonGroupVertical: {
+    $buttonGroupVertical: {
         width: "100%",
         "& button, & a": {
             ...flex({
@@ -338,12 +338,12 @@ const useStyles = makeStyles({
             width: "100%",
         },
     },
-    buttonGroupHorizontal: {
+    $buttonGroupHorizontal: {
         ...flex({
             flexWrap: "nowrap",
         }),
     },
-    submitButton: {
+    $submitButton: {
         height: "40px",
     },
 });

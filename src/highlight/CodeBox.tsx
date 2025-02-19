@@ -24,9 +24,9 @@ export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
     const dispatchToastError = useDispatchToastError();
 
     const ls = useLocalizedStrings({
-        copyBtn: CE_Strings.COMMON_COPY_BUTTON,
-        successMsg: CE_Strings.CODE_COPIED_MESSAGE,
-        errorMsg: CE_Strings.CODE_COPY_FAILED_MESSAGE,
+        $copyBtn: CE_Strings.COMMON_COPY_BUTTON,
+        $successMsg: CE_Strings.CODE_COPIED_MESSAGE,
+        $errorMsg: CE_Strings.CODE_COPY_FAILED_MESSAGE,
     });
 
     const allowedToCopy = showCopy && !!window?.navigator?.clipboard?.writeText;
@@ -35,23 +35,23 @@ export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
         window.navigator.clipboard
             .writeText(code)
             .then(() => {
-                dispatchToastSuccess(ls.successMsg, "", { timeout: 800 });
+                dispatchToastSuccess(ls.$successMsg, "", { timeout: 800 });
             })
             .catch((e) => {
-                dispatchToastError(ls.errorMsg, { timeout: 800 });
+                dispatchToastError(ls.$errorMsg, { timeout: 800 });
                 console.error(e);
             });
     };
 
     return (
-        <div className={styles.root}>
+        <div className={styles.$root}>
             <pre className={`language-${lang}`}>
                 <code className={`language-${lang}`}>{highlight(code, lang)}</code>
             </pre>
             {allowedToCopy && (
-                <Tooltip content={ls.copyBtn} relationship="label">
+                <Tooltip content={ls.$copyBtn} relationship="label">
                     <Button
-                        className={styles.copy}
+                        className={styles.$copy}
                         size="small"
                         appearance="subtle"
                         onClick={onCopyButtonClick}
@@ -65,7 +65,7 @@ export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
 CodeBox.displayName = "CodeBox";
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         "& pre": {
             overflowX: "auto",
             overflowY: "hidden",
@@ -78,7 +78,7 @@ const useStyles = makeStyles({
         },
         position: "relative",
     },
-    copy: {
+    $copy: {
         position: "absolute",
         top: "6px",
         right: "6px",

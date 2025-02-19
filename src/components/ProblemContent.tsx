@@ -24,36 +24,36 @@ export const ProblemContent: React.FC<IProblemContentProps> = (props) => {
     const styles = useStyles();
 
     const ls = useLocalizedStrings({
-        description: CE_Strings.PROBLEM_DESCRIPTION_LABEL,
-        inputFormat: CE_Strings.PROBLEM_INPUT_FORMAT_LABEL,
-        outputFormat: CE_Strings.PROBLEM_OUTPUT_FORMAT_LABEL,
-        limitAndHint: CE_Strings.PROBLEM_LIMIT_AND_HINT_LABEL,
-        samples: CE_Strings.PROBLEM_SAMPLES_LABEL,
+        $description: CE_Strings.PROBLEM_DESCRIPTION_LABEL,
+        $inputFormat: CE_Strings.PROBLEM_INPUT_FORMAT_LABEL,
+        $outputFormat: CE_Strings.PROBLEM_OUTPUT_FORMAT_LABEL,
+        $limitAndHint: CE_Strings.PROBLEM_LIMIT_AND_HINT_LABEL,
+        $samples: CE_Strings.PROBLEM_SAMPLES_LABEL,
     });
 
     return (
-        <div className={mergeClasses(styles.root, className)}>
+        <div className={mergeClasses(styles.$root, className)}>
             {content?.description && (
-                <ContentCard title={ls.description}>
+                <ContentCard title={ls.$description}>
                     <ProblemMarkdownContent content={content.description} />
                 </ContentCard>
             )}
 
             {content?.inputFormat && (
-                <ContentCard title={ls.inputFormat}>
+                <ContentCard title={ls.$inputFormat}>
                     <ProblemMarkdownContent content={content.inputFormat} />
                 </ContentCard>
             )}
 
             {content?.outputFormat && (
-                <ContentCard title={ls.outputFormat}>
+                <ContentCard title={ls.$outputFormat}>
                     <ProblemMarkdownContent content={content.outputFormat} />
                 </ContentCard>
             )}
 
             {samples.length > 0 && (
-                <ContentCard title={ls.samples}>
-                    <div className={styles.sampleBoxContainer}>
+                <ContentCard title={ls.$samples}>
+                    <div className={styles.$sampleBoxContainer}>
                         {samples.map((sample, index) => (
                             <ProblemSampleBox
                                 key={sample.id}
@@ -68,7 +68,7 @@ export const ProblemContent: React.FC<IProblemContentProps> = (props) => {
             )}
 
             {content?.limitAndHint && (
-                <ContentCard title={ls.limitAndHint}>
+                <ContentCard title={ls.$limitAndHint}>
                     <ProblemMarkdownContent content={content.limitAndHint} />
                 </ContentCard>
             )}
@@ -98,22 +98,22 @@ const ProblemSampleBox: React.FC<{
     const isSmallScreen = useIsSmallScreen();
 
     const ls = useLocalizedStrings({
-        sampleItem: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
-        sampleI: CE_Strings.PROBLEM_SAMPLE_INPUT_LABEL,
-        sampleO: CE_Strings.PROBLEM_SAMPLE_OUTPUT_LABEL,
-        sampleE: CE_Strings.PROBLEM_SAMPLE_EXPLANATION_LABEL,
+        $sampleItem: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
+        $sampleI: CE_Strings.PROBLEM_SAMPLE_INPUT_LABEL,
+        $sampleO: CE_Strings.PROBLEM_SAMPLE_OUTPUT_LABEL,
+        $sampleE: CE_Strings.PROBLEM_SAMPLE_EXPLANATION_LABEL,
     });
 
     return (
-        <div className={styles.sampleBox}>
-            <Subtitle2 as="h3" className={styles.title}>
-                {format(ls.sampleItem, index)}
+        <div className={styles.$sampleBox}>
+            <Subtitle2 as="h3" className={styles.$title}>
+                {format(ls.$sampleItem, index)}
             </Subtitle2>
-            <div className={mergeClasses(styles.sampleIO, isSmallScreen && styles.sampleIOSingleLine)}>
+            <div className={mergeClasses(styles.$sampleIO, isSmallScreen && styles.$sampleIOSingleLine)}>
                 {input && (
-                    <div className={styles.sampleItem}>
-                        <Body1Strong as="h4" className={styles.title}>
-                            {ls.sampleI}
+                    <div className={styles.$sampleItem}>
+                        <Body1Strong as="h4" className={styles.$title}>
+                            {ls.$sampleI}
                         </Body1Strong>
                         <React.Suspense fallback={<Spinner size="small" />}>
                             <CodeBoxLazy code={input} />
@@ -121,9 +121,9 @@ const ProblemSampleBox: React.FC<{
                     </div>
                 )}
                 {output && (
-                    <div className={styles.sampleItem}>
-                        <Body1Strong as="h4" className={styles.title}>
-                            {ls.sampleO}
+                    <div className={styles.$sampleItem}>
+                        <Body1Strong as="h4" className={styles.$title}>
+                            {ls.$sampleO}
                         </Body1Strong>
                         <React.Suspense fallback={<Spinner size="small" />}>
                             <CodeBoxLazy code={"test"} />
@@ -132,9 +132,9 @@ const ProblemSampleBox: React.FC<{
                 )}
             </div>
             {explanation && (
-                <div className={styles.sampleItem}>
-                    <Body1Strong as="h4" className={styles.title}>
-                        {ls.sampleE}
+                <div className={styles.$sampleItem}>
+                    <Body1Strong as="h4" className={styles.$title}>
+                        {ls.$sampleE}
                     </Body1Strong>
                     <ProblemMarkdownContent content={explanation} placeHolderLines={2} />
                 </div>
@@ -144,41 +144,41 @@ const ProblemSampleBox: React.FC<{
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex({
             flexDirection: "column",
         }),
         gap: "20px",
     },
-    title: {
+    $title: {
         margin: "unset",
     },
-    sampleBoxContainer: {
+    $sampleBoxContainer: {
         ...flex({
             flexDirection: "column",
         }),
         gap: "8px",
         width: "100%",
     },
-    sampleBox: {
+    $sampleBox: {
         ...flex({
             flexDirection: "column",
         }),
         gap: "8px",
         width: "100%",
     },
-    sampleIO: {
+    $sampleIO: {
         ...flex(),
         gap: "8px",
         width: "100%",
     },
-    sampleIOSingleLine: {
+    $sampleIOSingleLine: {
         ...flex({
             flexDirection: "column",
         }),
         width: "100%",
     },
-    sampleItem: {
+    $sampleItem: {
         maxWidth: "100%",
         flexGrow: 1,
         minWidth: "calc(50% - 4px)",

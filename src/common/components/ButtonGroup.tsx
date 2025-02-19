@@ -14,7 +14,7 @@ export const ButtonGroup: React.FC<React.PropsWithChildren<IButtonGroupProps>> =
     const styles = useStyles();
 
     return (
-        <div className={mergeClasses(vertical ? styles.rootVertical : styles.rootHorizontal, props.className)}>
+        <div className={mergeClasses(vertical ? styles.$rootVertical : styles.$rootHorizontal, props.className)}>
             {children}
         </div>
     );
@@ -24,7 +24,7 @@ export const firstButtonClassName = "button-group-first";
 export const lastButtonClassName = "button-group-last";
 
 const useStyles = makeStyles({
-    rootHorizontal: {
+    $rootHorizontal: {
         "&, & div": flex(),
         "& .fui-Button": {
             minWidth: "fit-content",
@@ -46,7 +46,7 @@ const useStyles = makeStyles({
             borderBottomRightRadius: tokens.borderRadiusLarge,
         },
     },
-    rootVertical: {
+    $rootVertical: {
         "&, & div": flex({
             flexDirection: "column",
         }),

@@ -20,7 +20,7 @@ export const ProblemTag = (props: IProblemTagProps) => {
 
     return (
         <div
-            className={mergeClasses(styles.root, largeSize && styles.largeSize, className)}
+            className={mergeClasses(styles.$root, largeSize && styles.$largeSize, className)}
             style={{
                 color: foreground,
                 backgroundColor: color,
@@ -33,7 +33,7 @@ export const ProblemTag = (props: IProblemTagProps) => {
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex({
             display: "inline-flex",
             justifyContent: "center",
@@ -52,7 +52,7 @@ const useStyles = makeStyles({
         borderRadius: tokens.borderRadiusMedium,
         ...shorthands.borderColor(tokens.colorTransparentStroke),
     },
-    largeSize: {
+    $largeSize: {
         height: "24px",
         width: "24px",
         fontSize: tokens.fontSizeBase300,

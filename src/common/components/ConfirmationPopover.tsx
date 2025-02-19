@@ -23,8 +23,8 @@ export const ConfirmationPopover: React.FC<IConfirmationPopoverProps> = (props) 
     const styles = useStyles();
 
     const ls = useLocalizedStrings({
-        confirm: CE_Strings.COMMON_CONFIRM_BUTTON,
-        cancel: CE_Strings.COMMON_CANCEL_BUTTON,
+        $confirm: CE_Strings.COMMON_CONFIRM_BUTTON,
+        $cancel: CE_Strings.COMMON_CANCEL_BUTTON,
     });
 
     return (
@@ -39,11 +39,11 @@ export const ConfirmationPopover: React.FC<IConfirmationPopoverProps> = (props) 
             }}
         >
             <PopoverSurface>
-                <div className={styles.message}>
+                <div className={styles.$message}>
                     <Body1Strong>{message}</Body1Strong>
                 </div>
 
-                <div className={styles.actions}>
+                <div className={styles.$actions}>
                     <Button
                         appearance="primary"
                         onClick={(e) => {
@@ -52,10 +52,10 @@ export const ConfirmationPopover: React.FC<IConfirmationPopoverProps> = (props) 
                             onConfirmed?.();
                         }}
                     >
-                        {confirmText ?? ls.confirm}
+                        {confirmText ?? ls.$confirm}
                     </Button>
                     <PopoverTrigger>
-                        <Button>{cancelText ?? ls.cancel}</Button>
+                        <Button>{cancelText ?? ls.$cancel}</Button>
                     </PopoverTrigger>
                 </div>
             </PopoverSurface>
@@ -64,10 +64,10 @@ export const ConfirmationPopover: React.FC<IConfirmationPopoverProps> = (props) 
 };
 
 const useStyles = makeStyles({
-    message: {
+    $message: {
         marginBottom: "16px",
     },
-    actions: {
+    $actions: {
         width: "100%",
         ...flex({
             justifyContent: "flex-end",

@@ -33,10 +33,10 @@ export const UserMenu: React.FC = () => {
     const navigate = useNavigate();
 
     const ls = useLocalizedStrings({
-        label: CE_Strings.USER_MENU_LABEL,
-        profile: CE_Strings.USER_MENU_PROFILE,
-        settings: CE_Strings.USER_MENU_SETTINGS,
-        signOut: CE_Strings.NAVIGATION_SIGN_OUT,
+        $label: CE_Strings.USER_MENU_LABEL,
+        $profile: CE_Strings.USER_MENU_PROFILE,
+        $settings: CE_Strings.USER_MENU_SETTINGS,
+        $signOut: CE_Strings.NAVIGATION_SIGN_OUT,
     });
 
     const styles = useStyles();
@@ -70,8 +70,8 @@ export const UserMenu: React.FC = () => {
     return (
         <Menu positioning={{ autoSize: true, position: "below", align: "end" }}>
             <MenuTrigger>
-                <Tooltip content={ls.label} relationship="label">
-                    <Button className={styles.button} appearance="transparent">
+                <Tooltip content={ls.$label} relationship="label">
+                    <Button className={styles.$button} appearance="transparent">
                         {isMiniScreen ? (
                             <Avatar {...(currentUser.avatar && { image: { src: currentUser.avatar } })} />
                         ) : (
@@ -87,13 +87,13 @@ export const UserMenu: React.FC = () => {
             <MenuPopover>
                 <MenuList>
                     <MenuItemLinkWithRouter to="/user/$id" params={{ id: currentUser.id.toString() }}>
-                        {ls.profile}
+                        {ls.$profile}
                     </MenuItemLinkWithRouter>
                     <MenuItemLinkWithRouter to="/user/$id/preference" params={{ id: currentUser.id.toString() }}>
-                        {ls.settings}
+                        {ls.$settings}
                     </MenuItemLinkWithRouter>
                     <MenuDivider />
-                    <MenuItem onClick={signOut}>{ls.signOut}</MenuItem>
+                    <MenuItem onClick={signOut}>{ls.$signOut}</MenuItem>
                 </MenuList>
             </MenuPopover>
         </Menu>
@@ -101,7 +101,7 @@ export const UserMenu: React.FC = () => {
 };
 
 const useStyles = makeStyles({
-    button: {
+    $button: {
         minWidth: "unset",
     },
 });
