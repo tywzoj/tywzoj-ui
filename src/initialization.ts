@@ -27,9 +27,9 @@ const initWindowSizeListenerAction = createAppAction(() => (dispatch) => {
 
 const initIosScaleListenerAction = createAppAction(() => (_dispatch, getState) => {
     const isIos = getIsIOS(getState());
-    const isSafair = getIsSafari(getState());
-    if (isIos && isSafair) {
-        document.addEventListener("gesturestart", function (event) {
+    const isSafari = getIsSafari(getState());
+    if (isIos && isSafari) {
+        document.addEventListener("gesturestart", (event) => {
             event.preventDefault();
         });
     }
