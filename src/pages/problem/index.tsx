@@ -57,35 +57,35 @@ const ProblemListPage: React.FC = () => {
     }, [keyword]);
 
     const ls = useLocalizedStrings({
-        title: CE_Strings.NAVIGATION_PROBLEMS,
-        searchBtn: CE_Strings.COMMON_SEARCH_BUTTON,
-        searchPlc: CE_Strings.PROBLEM_SEARCH_PLACEHOLDER,
-        new: CE_Strings.NAVIGATION_PROBLEM_NEW,
+        $title: CE_Strings.NAVIGATION_PROBLEMS,
+        $searchBtn: CE_Strings.COMMON_SEARCH_BUTTON,
+        $searchPlc: CE_Strings.PROBLEM_SEARCH_PLACEHOLDER,
+        $new: CE_Strings.NAVIGATION_PROBLEM_NEW,
     });
 
-    useSetPageTitle(ls.title);
+    useSetPageTitle(ls.$title);
 
     const styles = useStyles();
 
     const searchProblem = (keyword: string) => navigate({ search: { ...search, k: keyword } });
 
     return (
-        <div className={styles.root}>
-            <div className={styles.header}>
-                <div className={styles.title}>
-                    <Title3 as="h1">{ls.title}</Title3>
+        <div className={styles.$root}>
+            <div className={styles.$header}>
+                <div className={styles.$title}>
+                    <Title3 as="h1">{ls.$title}</Title3>
                 </div>
                 {permission.manageProblem && (
-                    <div className={styles.actions}>
+                    <div className={styles.$actions}>
                         <Button>Manage Tags</Button> {/* TODO: add a page */}
                         <ButtonWithRouter appearance="primary" to="/problem/new">
-                            {ls.new}
+                            {ls.$new}
                         </ButtonWithRouter>
                     </div>
                 )}
-                <div className={styles.search}>
+                <div className={styles.$search}>
                     <SearchBox
-                        placeholder={ls.searchPlc}
+                        placeholder={ls.$searchPlc}
                         value={searchBoxValue}
                         onChange={(_, { value }) => {
                             setSearchBoxValue(value);
@@ -99,14 +99,14 @@ const ProblemListPage: React.FC = () => {
                             }
                         }}
                     />
-                    <Button onClick={() => searchProblem(searchBoxValue)}>{ls.searchBtn}</Button>
+                    <Button onClick={() => searchProblem(searchBoxValue)}>{ls.$searchBtn}</Button>
                 </div>
                 {/* TODO: Show tag switch */}
                 {/* TODO: Tag filter */}
             </div>
             <React.Suspense
                 fallback={
-                    <div className={styles.loading}>
+                    <div className={styles.$loading}>
                         <Spinner />
                     </div>
                 }
@@ -131,10 +131,10 @@ const ProblemList: React.FC = () => {
     const isMiddleScreen = useIsMiddleScreen();
 
     const ls = useLocalizedStrings({
-        colTitle: CE_Strings.TITLE_LABEL,
-        colVisibility: CE_Strings.VISIBILITY_LABEL,
-        colSubmission: CE_Strings.NAVIGATION_SUBMISSIONS,
-        colId: CE_Strings.ID_LABEL,
+        $colTitle: CE_Strings.TITLE_LABEL,
+        $colVisibility: CE_Strings.VISIBILITY_LABEL,
+        $colSubmission: CE_Strings.NAVIGATION_SUBMISSIONS,
+        $colId: CE_Strings.ID_LABEL,
     });
 
     const { tableTabsterAttribute, onTableKeyDown } = useTableCompositeNavigation();
@@ -152,37 +152,39 @@ const ProblemList: React.FC = () => {
     return (
         <>
             <PaginationButtons
-                className={styles.headerPagination}
+                className={styles.$headerPagination}
                 page={page}
                 pageCount={pageCount}
                 onPageChange={onPageChange}
             />
-            <div className={styles.tableContainer}>
+            <div className={styles.$tableContainer}>
                 <Table onKeyDown={onTableKeyDown} {...tableTabsterAttribute}>
                     <TableHeader>
                         <TableRow>
                             <TableHeaderCell
-                                className={styles.tableIdCol}
+                                className={styles.$tableIdCol}
                                 {...tableSortAttributes(CE_ProblemSortBy.DisplayId)}
                             >
-                                {ls.colId}
+                                {ls.$colId}
                             </TableHeaderCell>
                             <TableHeaderCell
-                                className={styles.tableTitleCol}
+                                className={styles.$tableTitleCol}
                                 {...tableSortAttributes(CE_ProblemSortBy.Title)}
                             >
-                                {ls.colTitle}
+                                {ls.$colTitle}
                             </TableHeaderCell>
-                            <TableHeaderCell className={styles.tableVisibilityCol}>{ls.colVisibility}</TableHeaderCell>
+                            <TableHeaderCell className={styles.$tableVisibilityCol}>
+                                {ls.$colVisibility}
+                            </TableHeaderCell>
                             {!isMiddleScreen && (
                                 <>
                                     <TableHeaderCell
-                                        className={styles.tableSubmissionCol}
+                                        className={styles.$tableSubmissionCol}
                                         {...tableSortAttributes(CE_ProblemSortBy.SubmissionCount)}
                                     >
-                                        {ls.colSubmission}
+                                        {ls.$colSubmission}
                                     </TableHeaderCell>
-                                    <TableHeaderCell className={styles.tableAcceptanceCol}>Acceptance</TableHeaderCell>
+                                    <TableHeaderCell className={styles.$tableAcceptanceCol}>Acceptance</TableHeaderCell>
                                 </>
                             )}
                         </TableRow>
@@ -191,9 +193,9 @@ const ProblemList: React.FC = () => {
                         {problemList.map((problem) => (
                             <TableRow key={problem.id}>
                                 <TableCell>{problem.displayId}</TableCell>
-                                <TableCell className={styles.problemTitleWithTags}>
+                                <TableCell className={styles.$problemTitleWithTags}>
                                     <LinkWithRouter
-                                        className={styles.problemLink}
+                                        className={styles.$problemLink}
                                         tabIndex={0}
                                         to="/problem/$displayId"
                                         params={{ displayId: `${problem.displayId}` }}
@@ -202,7 +204,7 @@ const ProblemList: React.FC = () => {
                                         {problem.title}
                                     </LinkWithRouter>
                                     {problem.tags.length > 0 && (
-                                        <div className={styles.problemTags}>
+                                        <div className={styles.$problemTags}>
                                             {problem.tags.map((tag) => (
                                                 <ProblemTag key={tag.id} name={tag.name} color={tag.color} />
                                             ))}
@@ -226,7 +228,7 @@ const ProblemList: React.FC = () => {
                 </Table>
             </div>
             <PaginationButtons
-                className={styles.footerPagination}
+                className={styles.$footerPagination}
                 page={page}
                 pageCount={pageCount}
                 onPageChange={onPageChange}
@@ -236,7 +238,7 @@ const ProblemList: React.FC = () => {
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex({
             flexDirection: "column",
         }),
@@ -244,14 +246,14 @@ const useStyles = makeStyles({
         boxSizing: "border-box",
         flexGrow: 1,
     },
-    header: {
+    $header: {
         ...flex({
             flexDirection: "column",
         }),
         marginBottom: "20px",
         width: "100%",
     },
-    title: {
+    $title: {
         ...flex({
             flexDirection: "row",
             justifyContent: "center",
@@ -262,7 +264,7 @@ const useStyles = makeStyles({
             marginBottom: "20px",
         },
     },
-    search: {
+    $search: {
         ...flex({
             flexDirection: "row",
         }),
@@ -272,7 +274,7 @@ const useStyles = makeStyles({
         },
         width: "100%",
     },
-    actions: {
+    $actions: {
         ...flex({
             justifyContent: "flex-end",
         }),
@@ -280,7 +282,7 @@ const useStyles = makeStyles({
         marginBottom: "20px",
         gap: "8px",
     },
-    loading: {
+    $loading: {
         ...flex({
             flexDirection: "column",
             alignItems: "center",
@@ -288,42 +290,42 @@ const useStyles = makeStyles({
         }),
         flexGrow: 1,
     },
-    headerPagination: {
+    $headerPagination: {
         ...flex({
             flexDirection: "column",
             alignItems: "center",
         }),
         marginBottom: "20px",
     },
-    footerPagination: {
+    $footerPagination: {
         ...flex({
             flexDirection: "column",
             alignItems: "center",
         }),
         marginTop: "20px",
     },
-    tableContainer: {
+    $tableContainer: {
         padding: "20px",
         boxShadow: tokens.shadow2Brand,
         borderRadius: tokens.borderRadiusSmall,
     },
-    tableIdCol: {
+    $tableIdCol: {
         width: "60px",
     },
-    tableTitleCol: {},
-    tableVisibilityCol: {
+    $tableTitleCol: {},
+    $tableVisibilityCol: {
         width: "80px",
     },
-    tableSubmissionCol: {
+    $tableSubmissionCol: {
         width: "100px",
     },
-    tableAcceptanceCol: {
+    $tableAcceptanceCol: {
         width: "100px",
     },
-    problemLink: {
+    $problemLink: {
         ...noUnderlineLinkStyles,
     },
-    problemTitleWithTags: {
+    $problemTitleWithTags: {
         ...flex({
             flexDirection: "row",
             flexWrap: "wrap",
@@ -333,7 +335,7 @@ const useStyles = makeStyles({
         gap: "8px",
         height: "max-content",
     },
-    problemTags: {
+    $problemTags: {
         ...flex({
             flexDirection: "row",
             flexWrap: "wrap",

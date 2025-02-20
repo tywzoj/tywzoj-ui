@@ -6,10 +6,10 @@ import { CE_Strings } from "@/locales/locale";
 
 const ProblemSetListPage: React.FC = () => {
     const ls = useLocalizedStrings({
-        title: CE_Strings.NAVIGATION_PROBLEM_SETS,
+        $title: CE_Strings.NAVIGATION_PROBLEM_SETS,
     });
 
-    useSetPageTitle(ls.title);
+    useSetPageTitle(ls.$title);
 
     return null;
 };

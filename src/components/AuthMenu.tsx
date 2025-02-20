@@ -11,8 +11,8 @@ export const AuthMenu: React.FC = () => {
     const isMiniScreen = useIsMiniScreen();
 
     const ls = useLocalizedStrings({
-        signIn: CE_Strings.NAVIGATION_SIGN_IN,
-        signUp: CE_Strings.NAVIGATION_SIGN_UP,
+        $signIn: CE_Strings.NAVIGATION_SIGN_IN,
+        $signUp: CE_Strings.NAVIGATION_SIGN_UP,
     });
 
     const url = new URL(window.location.href);
@@ -24,19 +24,19 @@ export const AuthMenu: React.FC = () => {
     const styles = useStyles();
 
     return (
-        <div className={styles.root}>
+        <div className={styles.$root}>
             <ButtonWithRouter
-                className={styles.button}
+                className={styles.$button}
                 to="/sign-in"
                 search={{ redirect }}
                 appearance="primary"
                 preload="viewport"
             >
-                {ls.signIn}
+                {ls.$signIn}
             </ButtonWithRouter>
             {!isMiniScreen && (
-                <ButtonWithRouter className={styles.button} search={{ redirect }} to="/sign-up">
-                    {ls.signUp}
+                <ButtonWithRouter className={styles.$button} search={{ redirect }} to="/sign-up">
+                    {ls.$signUp}
                 </ButtonWithRouter>
             )}
         </div>
@@ -44,11 +44,11 @@ export const AuthMenu: React.FC = () => {
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex({}),
         gap: "8px",
     },
-    button: {
+    $button: {
         minWidth: "unset",
     },
 });

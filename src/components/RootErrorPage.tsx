@@ -7,14 +7,14 @@ export const RootErrorPage: React.FC<IErrorPageProps> = ({ error }) => {
     const styles = useStyles();
 
     return (
-        <div className={styles.root}>
+        <div className={styles.$root}>
             <ErrorPage error={error} />
         </div>
     );
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         padding: "20px",
     },
 });

@@ -22,16 +22,16 @@ export const ContentCard: React.FC<React.PropsWithChildren<IContentCardProps>> =
     const styles = useStyles();
 
     return (
-        <Card className={mergeClasses(styles.root, className)}>
+        <Card className={mergeClasses(styles.$root, className)}>
             {showHeader && (
                 <CardHeader
                     header={
                         small ? (
-                            <Subtitle2 as="h2" className={styles.title}>
+                            <Subtitle2 as="h2" className={styles.$title}>
                                 {title}
                             </Subtitle2>
                         ) : (
-                            <Subtitle1 as="h2" className={styles.title}>
+                            <Subtitle1 as="h2" className={styles.$title}>
                                 {title}
                             </Subtitle1>
                         )
@@ -39,19 +39,19 @@ export const ContentCard: React.FC<React.PropsWithChildren<IContentCardProps>> =
                     action={action}
                 />
             )}
-            <div className={styles.content}>{children}</div>
+            <div className={styles.$content}>{children}</div>
         </Card>
     );
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         width: "100%",
     },
-    title: {
+    $title: {
         margin: "unset",
     },
-    content: {
+    $content: {
         width: "100%",
     },
 });

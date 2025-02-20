@@ -36,7 +36,7 @@ export const ErrorBox: React.FC<IErrorBoxProps> = (props) => {
     );
 
     return (
-        <div className={styles.root}>
+        <div className={styles.$root}>
             <MessageBar
                 layout="multiline"
                 intent="error"
@@ -45,18 +45,18 @@ export const ErrorBox: React.FC<IErrorBoxProps> = (props) => {
                 icon={<ErrorCircle48Filled />}
             >
                 <MessageBarBody>
-                    <MessageBarTitle className={styles.title}>{titleString}</MessageBarTitle>
-                    {<div className={styles.message}>{message}</div>}
-                    <div className={styles.linkContainer}>
+                    <MessageBarTitle className={styles.$title}>{titleString}</MessageBarTitle>
+                    {<div className={styles.$message}>{message}</div>}
+                    <div className={styles.$linkContainer}>
                         {links.map((link, index) => (
                             <div key={(link.to || link.href || link.title) + index}>
-                                {index > 0 && <div className={styles.linkDivider} />}
+                                {index > 0 && <div className={styles.$linkDivider} />}
                                 <LinkWithRouter {...link}>{link.title}</LinkWithRouter>
                             </div>
                         ))}
                         {showGoBack && canGoBack && (
                             <>
-                                {links.length > 0 && <div className={styles.linkDivider} />}
+                                {links.length > 0 && <div className={styles.$linkDivider} />}
                                 <Link as="button" onClick={() => router.history.back()}>
                                     {backButtonString}
                                 </Link>
@@ -70,17 +70,17 @@ export const ErrorBox: React.FC<IErrorBoxProps> = (props) => {
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         width: "100%",
     },
-    title: {
+    $title: {
         fontSize: "16px",
         fontWeight: "bold",
     },
-    message: {
+    $message: {
         fontSize: "14px",
     },
-    linkContainer: {
+    $linkContainer: {
         marginTop: "4px",
         "&, > div": {
             ...flex({
@@ -92,7 +92,7 @@ const useStyles = makeStyles({
             gap: "6px",
         },
     },
-    linkDivider: {
+    $linkDivider: {
         minWidth: "1.5px",
         minHeight: "14px",
         backgroundColor: tokens.colorNeutralForegroundDisabled,

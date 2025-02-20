@@ -14,18 +14,30 @@ import {
     setPermissionAction,
     setPreferenceAction,
 } from "./store/actions";
+import { getIsIOS, getIsSafari } from "./store/selectors";
 import type { IAppDispatch, IPreferenceState } from "./store/types";
 import { createAppAction } from "./store/utils";
 import { updateThemeAction } from "./theme/actions";
 
-export const initWindowSizeListenerAction = createAppAction(() => (dispatch) => {
+const initWindowSizeListenerAction = createAppAction(() => (dispatch) => {
     registerMiniScreenListener((isMiniScreen) => dispatch(setEnvAction({ isMiniScreen })));
     registerSmallScreenListener((isSmallScreen) => dispatch(setEnvAction({ isSmallScreen })));
     registerMiddleScreenListener((isMiddleScreen) => dispatch(setEnvAction({ isMiddleScreen })));
 });
 
+const initIosScaleListenerAction = createAppAction(() => (_dispatch, getState) => {
+    const isIos = getIsIOS(getState());
+    const isSafari = getIsSafari(getState());
+    if (isIos && isSafari) {
+        document.addEventListener("gesturestart", (event) => {
+            event.preventDefault();
+        });
+    }
+});
+
 export const initAsyncAction = createAppAction(() => async (dispatch: IAppDispatch) => {
     dispatch(initWindowSizeListenerAction());
+    dispatch(initIosScaleListenerAction());
     const resp = await AuthModule.getSessionInfoAsync();
     if (resp.code === CE_ErrorCode.OK) {
         dispatch(setFeatureAction(resp.data.clientConfig.feature));

@@ -29,7 +29,7 @@ const NewProblemPage: React.FC = () => {
     const queryClient = useQueryClient();
 
     const ls = useLocalizedStrings({
-        title: CE_Strings.NAVIGATION_PROBLEM_NEW,
+        $title: CE_Strings.NAVIGATION_PROBLEM_NEW,
     });
 
     const styles = useStyles();
@@ -37,7 +37,7 @@ const NewProblemPage: React.FC = () => {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<string>("");
 
-    useSetPageTitle(ls.title);
+    useSetPageTitle(ls.$title);
 
     // TODO: Implement API request
     // TODO: Update styles
@@ -86,11 +86,11 @@ const NewProblemPage: React.FC = () => {
     };
 
     return (
-        <div className={styles.root}>
-            <div className={styles.title}>
-                <Title3 as="h1">{ls.title}</Title3>
+        <div className={styles.$root}>
+            <div className={styles.$title}>
+                <Title3 as="h1">{ls.$title}</Title3>
             </div>
-            <div className={styles.editor}>
+            <div className={styles.$editor}>
                 <ProblemEditor disabled={loading} submitting={loading} error={error} onSaveChanges={onSaveChanges} />
             </div>
         </div>
@@ -98,19 +98,19 @@ const NewProblemPage: React.FC = () => {
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex({
             flexDirection: "column",
         }),
         width: "100%",
     },
-    title: {
+    $title: {
         ...flex({
             justifyContent: "center",
         }),
         width: "100%",
     },
-    editor: {},
+    $editor: {},
 });
 
 const postProblemDetailAsync = withThrowErrorsExcept(

@@ -25,13 +25,13 @@ export const PaginationButtons: React.FC<IPaginationButtonsProps> = (props) => {
     const isMiddleScreen = useIsMiddleScreen();
 
     const ls = useLocalizedStrings({
-        preTooltip: CE_Strings.PREVIOUS_PAGE_TOOLTIP,
-        nxtTooltip: CE_Strings.NEXT_PAGE_TOOLTIP,
-        preLabel: CE_Strings.PREVIOUS_PAGE_ARIA_LABEL,
-        nxtLabel: CE_Strings.NEXT_PAGE_ARIA_LABEL,
-        fstP: CE_Strings.FIRST_PAGE_BUTTON_ARIA_LABEL,
-        lstP: CE_Strings.LAST_PAGE_BUTTON_ARIA_LABEL,
-        page: CE_Strings.PAGE_BUTTON_ARIA_LABEL,
+        $preTooltip: CE_Strings.PREVIOUS_PAGE_TOOLTIP,
+        $nxtTooltip: CE_Strings.NEXT_PAGE_TOOLTIP,
+        $preLabel: CE_Strings.PREVIOUS_PAGE_ARIA_LABEL,
+        $nxtLabel: CE_Strings.NEXT_PAGE_ARIA_LABEL,
+        $fstP: CE_Strings.FIRST_PAGE_BUTTON_ARIA_LABEL,
+        $lstP: CE_Strings.LAST_PAGE_BUTTON_ARIA_LABEL,
+        $page: CE_Strings.PAGE_BUTTON_ARIA_LABEL,
     });
 
     const showPage = pageCount > 1;
@@ -86,11 +86,11 @@ export const PaginationButtons: React.FC<IPaginationButtonsProps> = (props) => {
     }
 
     return (
-        <div className={mergeClasses(styles.root, className)}>
-            <div className={styles.container} {...arrowNavigationAttributes}>
-                <Tooltip content={ls.preTooltip} relationship="label">
+        <div className={mergeClasses(styles.$root, className)}>
+            <div className={styles.$container} {...arrowNavigationAttributes}>
+                <Tooltip content={ls.$preTooltip} relationship="label">
                     <Button
-                        aria-label={ls.preLabel}
+                        aria-label={ls.$preLabel}
                         icon={<ChevronLeftFilled />}
                         shape="square"
                         appearance="transparent"
@@ -101,11 +101,16 @@ export const PaginationButtons: React.FC<IPaginationButtonsProps> = (props) => {
 
                 {!tiny && (
                     <>
-                        <PageButton ariaLabel={ls.fstP} page={1} active={isFirstPage} onClick={() => onPageChange(1)} />
+                        <PageButton
+                            ariaLabel={ls.$fstP}
+                            page={1}
+                            active={isFirstPage}
+                            onClick={() => onPageChange(1)}
+                        />
 
                         {omitLeft && (
                             <Button
-                                className={styles.omitButton}
+                                className={styles.$omitButton}
                                 icon={<MoreHorizontalFilled />}
                                 disabled
                                 appearance="transparent"
@@ -115,7 +120,7 @@ export const PaginationButtons: React.FC<IPaginationButtonsProps> = (props) => {
                         {range(page - leftCount, page + rightCount, 1).map((p) => (
                             <PageButton
                                 key={p}
-                                ariaLabel={format(ls.page, p)}
+                                ariaLabel={format(ls.$page, p)}
                                 page={p}
                                 active={p == page}
                                 onClick={() => onPageChange(p)}
@@ -124,7 +129,7 @@ export const PaginationButtons: React.FC<IPaginationButtonsProps> = (props) => {
 
                         {omitRight && (
                             <Button
-                                className={styles.omitButton}
+                                className={styles.$omitButton}
                                 icon={<MoreHorizontalFilled />}
                                 disabled
                                 appearance="transparent"
@@ -132,7 +137,7 @@ export const PaginationButtons: React.FC<IPaginationButtonsProps> = (props) => {
                         )}
 
                         <PageButton
-                            ariaLabel={format(ls.lstP, pageCount)}
+                            ariaLabel={format(ls.$lstP, pageCount)}
                             page={pageCount}
                             active={isLastPage}
                             onClick={() => onPageChange(pageCount)}
@@ -140,9 +145,9 @@ export const PaginationButtons: React.FC<IPaginationButtonsProps> = (props) => {
                     </>
                 )}
 
-                <Tooltip content={ls.nxtTooltip} relationship="label">
+                <Tooltip content={ls.$nxtTooltip} relationship="label">
                     <Button
-                        aria-label={ls.nxtLabel}
+                        aria-label={ls.$nxtLabel}
                         icon={<ChevronRightFilled />}
                         shape="square"
                         appearance="transparent"
@@ -169,7 +174,7 @@ const PageButton: React.FC<IPageButtonProps> = (props) => {
 
     return (
         <Button
-            className={styles.pageButton}
+            className={styles.$pageButton}
             aria-label={ariaLabel}
             appearance={active ? "primary" : "transparent"}
             onClick={() => !active && onClick()}
@@ -181,10 +186,10 @@ const PageButton: React.FC<IPageButtonProps> = (props) => {
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         width: "100%",
     },
-    container: {
+    $container: {
         ...flex({
             flexDirection: "row",
             justifyContent: "center",
@@ -193,12 +198,12 @@ const useStyles = makeStyles({
         width: "100%",
         overflow: "visible",
     },
-    omitButton: {
+    $omitButton: {
         "& svg": {
             color: tokens.colorNeutralForeground1,
         },
     },
-    pageButton: {
+    $pageButton: {
         minWidth: "unset",
         maxWidth: "38px",
     },

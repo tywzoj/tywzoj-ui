@@ -7,10 +7,10 @@ import { CE_Strings } from "@/locales/locale";
 
 const SignUpPage: React.FC = () => {
     const ls = useLocalizedStrings({
-        title: CE_Strings.NAVIGATION_SIGN_UP,
+        $title: CE_Strings.NAVIGATION_SIGN_UP,
     });
 
-    useSetPageTitle(ls.title);
+    useSetPageTitle(ls.$title);
 
     return <div></div>;
 };

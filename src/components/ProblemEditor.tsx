@@ -82,22 +82,22 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
     const recaptchaAsync = useRecaptchaAsync();
 
     const ls = useLocalizedStrings({
-        editTab: CE_Strings.COMMON_EDIT_BUTTON,
-        previewTab: CE_Strings.COMMON_PREVIEW_BUTTON,
-        displayId: CE_Strings.ID_LABEL,
-        pTitle: CE_Strings.TITLE_LABEL,
-        visibility: CE_Strings.VISIBILITY_LABEL,
-        description: CE_Strings.DESCRIPTION_LABEL,
-        inputFormat: CE_Strings.PROBLEM_INPUT_FORMAT_LABEL,
-        outputFormat: CE_Strings.PROBLEM_OUTPUT_FORMAT_LABEL,
-        limitAndHint: CE_Strings.PROBLEM_LIMIT_AND_HINT_LABEL,
-        saveBtn: CE_Strings.COMMON_SAVE_BUTTON,
-        goBackBtn: CE_Strings.COMMON_BACK_BUTTON,
-        errorTitle: CE_Strings.COMMON_ERROR_TITLE,
-        idEmpty: CE_Strings.VALIDATION_ERROR_ID_EMPTY,
-        titleEmpty: CE_Strings.VALIDATION_ERROR_TITLE_EMPTY,
-        titleTooLong: CE_Strings.VALIDATION_ERROR_PROBLEM_TITLE_TOO_LONG,
-        idGenBtn: CE_Strings.PROBLEM_EDIT_GEN_ID,
+        $editTab: CE_Strings.COMMON_EDIT_BUTTON,
+        $previewTab: CE_Strings.COMMON_PREVIEW_BUTTON,
+        $displayId: CE_Strings.ID_LABEL,
+        $pTitle: CE_Strings.TITLE_LABEL,
+        $visibility: CE_Strings.VISIBILITY_LABEL,
+        $description: CE_Strings.DESCRIPTION_LABEL,
+        $inputFormat: CE_Strings.PROBLEM_INPUT_FORMAT_LABEL,
+        $outputFormat: CE_Strings.PROBLEM_OUTPUT_FORMAT_LABEL,
+        $limitAndHint: CE_Strings.PROBLEM_LIMIT_AND_HINT_LABEL,
+        $saveBtn: CE_Strings.COMMON_SAVE_BUTTON,
+        $goBackBtn: CE_Strings.COMMON_BACK_BUTTON,
+        $errorTitle: CE_Strings.COMMON_ERROR_TITLE,
+        $idEmpty: CE_Strings.VALIDATION_ERROR_ID_EMPTY,
+        $titleEmpty: CE_Strings.VALIDATION_ERROR_TITLE_EMPTY,
+        $titleTooLong: CE_Strings.VALIDATION_ERROR_PROBLEM_TITLE_TOO_LONG,
+        $idGenBtn: CE_Strings.PROBLEM_EDIT_GEN_ID,
     });
 
     const [preview, setPreview] = React.useState(false);
@@ -149,13 +149,13 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
         let success = true;
 
         if (!displayId) {
-            setDisplayIdErr(ls.idEmpty);
+            setDisplayIdErr(ls.$idEmpty);
             displayIdRef.current?.focus();
             success = false;
         }
 
         if (!title) {
-            setTitleErr(ls.titleEmpty);
+            setTitleErr(ls.$titleEmpty);
             if (success) {
                 titleRef.current?.focus();
             }
@@ -163,7 +163,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
         }
 
         if (title.length > PROBLEM_TITLE_MAX_LENGTH) {
-            setTitleErr(ls.titleTooLong);
+            setTitleErr(ls.$titleTooLong);
             if (success) {
                 titleRef.current?.focus();
             }
@@ -215,8 +215,8 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
     };
 
     return (
-        <div className={mergeClasses(styles.root, className)}>
-            <div className={styles.tabList}>
+        <div className={mergeClasses(styles.$root, className)}>
+            <div className={styles.$tabList}>
                 <TabList
                     appearance="subtle-circular"
                     selectedValue={preview ? "preview" : "edit"}
@@ -239,13 +239,13 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                         setPreview(isPreview);
                     }}
                 >
-                    <Tab value="edit">{ls.editTab}</Tab>
-                    <Tab value="preview">{ls.previewTab}</Tab>
+                    <Tab value="edit">{ls.$editTab}</Tab>
+                    <Tab value="preview">{ls.$previewTab}</Tab>
                 </TabList>
             </div>
-            <div className={mergeClasses(styles.editor, preview && styles.hidden)}>
-                <div className={styles.displayIdFieldContainer}>
-                    <Field label={ls.displayId} className={styles.topField} validationMessage={displayIdErr}>
+            <div className={mergeClasses(styles.$editor, preview && styles.$hidden)}>
+                <div className={styles.$displayIdFieldContainer}>
+                    <Field label={ls.$displayId} className={styles.$topField} validationMessage={displayIdErr}>
                         <Input
                             ref={displayIdRef}
                             // 0 will be empty string
@@ -272,12 +272,12 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                             onClick={onGenerateDisplayIdButtonClick}
                             disabledFocusable={disabled || generatingDisplayId}
                         >
-                            {ls.idGenBtn}
+                            {ls.$idGenBtn}
                         </Button>
                     )}
                 </div>
 
-                <Field label={ls.pTitle} className={styles.topField} validationMessage={titleErr}>
+                <Field label={ls.$pTitle} className={styles.$topField} validationMessage={titleErr}>
                     <Input
                         ref={titleRef}
                         value={title}
@@ -289,7 +289,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     />
                 </Field>
 
-                <Field label={ls.visibility} className={styles.topField}>
+                <Field label={ls.$visibility} className={styles.$topField}>
                     <VisibilitySelector
                         layout={isMiniScreen ? "horizontal-stacked" : "horizontal"}
                         visibility={visibility}
@@ -298,27 +298,27 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     />
                 </Field>
 
-                <Field label={ls.description} className={styles.topField}>
+                <Field label={ls.$description} className={styles.$topField}>
                     <Textarea
-                        className={styles.inputLarge}
+                        className={styles.$inputLarge}
                         value={description}
                         onChange={(_, { value }) => setDescription(value)}
                         disabled={disabled}
                     />
                 </Field>
 
-                <Field label={ls.inputFormat} className={styles.topField}>
+                <Field label={ls.$inputFormat} className={styles.$topField}>
                     <Textarea
-                        className={styles.inputMiddle}
+                        className={styles.$inputMiddle}
                         value={inputFormat}
                         onChange={(_, { value }) => setInputFormat(value)}
                         disabled={disabled}
                     />
                 </Field>
 
-                <Field label={ls.outputFormat} className={styles.topField}>
+                <Field label={ls.$outputFormat} className={styles.$topField}>
                     <Textarea
-                        className={styles.inputMiddle}
+                        className={styles.$inputMiddle}
                         value={outputFormat}
                         onChange={(_, { value }) => setOutputFormat(value)}
                         disabled={disabled}
@@ -331,9 +331,9 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     disabled={disabled}
                 />
 
-                <Field label={ls.limitAndHint} className={styles.topField}>
+                <Field label={ls.$limitAndHint} className={styles.$topField}>
                     <Textarea
-                        className={styles.inputMiddle}
+                        className={styles.$inputMiddle}
                         value={limitAndHint}
                         onChange={(_, { value }) => setLimitAndHint(value)}
                         disabled={disabled}
@@ -342,19 +342,19 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                 {error && (
                     <MessageBar intent="error">
                         <MessageBarBody>
-                            <MessageBarTitle>{ls.errorTitle}</MessageBarTitle>
+                            <MessageBarTitle>{ls.$errorTitle}</MessageBarTitle>
                             {error}
                         </MessageBarBody>
                     </MessageBar>
                 )}
-                <div className={styles.editorFooter}>
+                <div className={styles.$editorFooter}>
                     <Button
                         appearance="primary"
                         onClick={onSaveButtonClick}
                         disabledFocusable={disabled}
                         icon={submitting ? <Spinner size="tiny" /> : null}
                     >
-                        {ls.saveBtn}
+                        {ls.$saveBtn}
                     </Button>
                     <Button
                         disabledFocusable={disabled}
@@ -373,13 +373,13 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                             }
                         }}
                     >
-                        {ls.goBackBtn}
+                        {ls.$goBackBtn}
                     </Button>
                 </div>
             </div>
-            <div className={mergeClasses(styles.preview, !preview && styles.hidden)}>
+            <div className={mergeClasses(styles.$preview, !preview && styles.$hidden)}>
                 {title && (
-                    <div className={styles.previewHeader}>
+                    <div className={styles.$previewHeader}>
                         <Title3 as="h1">
                             #{displayId}. {title}
                         </Title3>
@@ -401,9 +401,9 @@ const ProblemSampleListEditor: React.FC<{
 
     const titleId = useId("sample-list-title");
     const ls = useLocalizedStrings({
-        samples: CE_Strings.PROBLEM_SAMPLES_LABEL,
-        addSample: CE_Strings.PROBLEM_SAMPLE_ADD_BUTTON,
-        delConfirm: CE_Strings.PROBLEM_SAMPLE_DELETE_CONFIRM,
+        $samples: CE_Strings.PROBLEM_SAMPLES_LABEL,
+        $addSample: CE_Strings.PROBLEM_SAMPLE_ADD_BUTTON,
+        $delConfirm: CE_Strings.PROBLEM_SAMPLE_DELETE_CONFIRM,
     });
 
     const positioningRef = React.useRef<PositioningImperativeRef>(null);
@@ -436,20 +436,20 @@ const ProblemSampleListEditor: React.FC<{
             size="small"
             icon={<Add16Filled />}
         >
-            {ls.addSample}
+            {ls.$addSample}
         </Button>
     );
 
     return (
-        <div className={styles.sampleList}>
-            <div className={styles.sampleListHeader}>
+        <div className={styles.$sampleList}>
+            <div className={styles.$sampleListHeader}>
                 <Subtitle2 as="span" id={titleId}>
-                    {ls.samples}
+                    {ls.$samples}
                 </Subtitle2>
                 {!hasSample && addButton}
             </div>
             {samples.length > 0 && (
-                <div className={styles.sampleListItems} role="list" aria-describedby={titleId}>
+                <div className={styles.$sampleListItems} role="list" aria-describedby={titleId}>
                     {samples.map((sample, index) => (
                         <ProblemSampleItemEditor
                             key={sample.id}
@@ -485,9 +485,9 @@ const ProblemSampleListEditor: React.FC<{
                     ))}
                 </div>
             )}
-            <div className={styles.sampleListFooter}>{hasSample && addButton}</div>
+            <div className={styles.$sampleListFooter}>{hasSample && addButton}</div>
             <ConfirmationPopover
-                message={ls.delConfirm}
+                message={ls.$delConfirm}
                 open={showDeleteConfirmation}
                 onConfirmed={onDeleteItemConfirmed}
                 onCanceled={() => {
@@ -513,23 +513,23 @@ const ProblemSampleItemEditor: React.FC<{
     const isSmallScreen = useIsSmallScreen();
 
     const ls = useLocalizedStrings({
-        moveUp: CE_Strings.COMMON_MOVE_UP_BUTTON,
-        moveDown: CE_Strings.COMMON_MOVE_DOWN_BUTTON,
-        delete: CE_Strings.COMMON_DELETE_BUTTON,
-        sample: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
-        input: CE_Strings.PROBLEM_SAMPLE_INPUT_LABEL,
-        output: CE_Strings.PROBLEM_SAMPLE_OUTPUT_LABEL,
-        explanation: CE_Strings.PROBLEM_SAMPLE_EXPLANATION_LABEL,
+        $moveUp: CE_Strings.COMMON_MOVE_UP_BUTTON,
+        $moveDown: CE_Strings.COMMON_MOVE_DOWN_BUTTON,
+        $delete: CE_Strings.COMMON_DELETE_BUTTON,
+        $sample: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
+        $input: CE_Strings.PROBLEM_SAMPLE_INPUT_LABEL,
+        $output: CE_Strings.PROBLEM_SAMPLE_OUTPUT_LABEL,
+        $explanation: CE_Strings.PROBLEM_SAMPLE_EXPLANATION_LABEL,
     });
 
     const styles = useStyles();
 
     return (
-        <div role="listitem" className={styles.sampleItem}>
-            <div className={styles.sampleItemHeader}>
-                <Body1Strong as="span">{format(ls.sample, index + 1)}</Body1Strong>
+        <div role="listitem" className={styles.$sampleItem}>
+            <div className={styles.$sampleItemHeader}>
+                <Body1Strong as="span">{format(ls.$sample, index + 1)}</Body1Strong>
                 <div>
-                    <Tooltip content={ls.delete} relationship="label">
+                    <Tooltip content={ls.$delete} relationship="label">
                         <Button
                             appearance="subtle"
                             disabled={disabled}
@@ -541,7 +541,7 @@ const ProblemSampleItemEditor: React.FC<{
                         />
                     </Tooltip>
 
-                    <Tooltip content={ls.moveUp} relationship="label">
+                    <Tooltip content={ls.$moveUp} relationship="label">
                         <Button
                             appearance="subtle"
                             onClick={onMoveUp}
@@ -551,7 +551,7 @@ const ProblemSampleItemEditor: React.FC<{
                         />
                     </Tooltip>
 
-                    <Tooltip content={ls.moveDown} relationship="label">
+                    <Tooltip content={ls.$moveDown} relationship="label">
                         <Button
                             appearance="subtle"
                             onClick={onMoveDown}
@@ -562,10 +562,10 @@ const ProblemSampleItemEditor: React.FC<{
                     </Tooltip>
                 </div>
             </div>
-            <div className={mergeClasses(styles.sampleItemIO, isSmallScreen && styles.sampleItemIOSingleLine)}>
-                <Field label={ls.input} className={styles.sampleItemIOField}>
+            <div className={mergeClasses(styles.$sampleItemIO, isSmallScreen && styles.$sampleItemIOSingleLine)}>
+                <Field label={ls.$input} className={styles.$sampleItemIOField}>
                     <Textarea
-                        className={styles.inputSmall}
+                        className={styles.$inputSmall}
                         value={sample.input}
                         onChange={(_, { value }) => {
                             onChange({
@@ -576,9 +576,9 @@ const ProblemSampleItemEditor: React.FC<{
                         disabled={disabled}
                     />
                 </Field>
-                <Field label={ls.output} className={styles.sampleItemIOField}>
+                <Field label={ls.$output} className={styles.$sampleItemIOField}>
                     <Textarea
-                        className={styles.inputSmall}
+                        className={styles.$inputSmall}
                         value={sample.output}
                         onChange={(_, { value }) => {
                             onChange({
@@ -590,9 +590,9 @@ const ProblemSampleItemEditor: React.FC<{
                     />
                 </Field>
             </div>
-            <Field label={ls.explanation}>
+            <Field label={ls.$explanation}>
                 <Textarea
-                    className={styles.inputSmall}
+                    className={styles.$inputSmall}
                     value={sample.explanation}
                     onChange={(_, { value }) => {
                         onChange({
@@ -608,29 +608,29 @@ const ProblemSampleItemEditor: React.FC<{
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex({
             flexDirection: "column",
         }),
         width: "100%",
         gap: "20px",
     },
-    tabList: {},
-    editor: {
+    $tabList: {},
+    $editor: {
         ...flex({
             flexDirection: "column",
         }),
         gap: "14px",
         width: "100%",
     },
-    editorFooter: {
+    $editorFooter: {
         ...flex({
             justifyContent: "flex-end",
         }),
         gap: "14px",
     },
-    preview: {},
-    previewHeader: {
+    $preview: {},
+    $previewHeader: {
         ...flex({
             alignItems: "center",
             flexWrap: "wrap",
@@ -643,18 +643,18 @@ const useStyles = makeStyles({
         },
         marginBottom: "14px",
     },
-    hidden: { display: "none" },
-    inputLarge: { height: "280px" },
-    inputMiddle: { height: "180px" },
-    inputSmall: { height: "120px" },
-    topField: {
+    $hidden: { display: "none" },
+    $inputLarge: { height: "280px" },
+    $inputMiddle: { height: "180px" },
+    $inputSmall: { height: "120px" },
+    $topField: {
         "> .fui-Field__label": {
             lineHeight: tokens.lineHeightBase300,
             fontWeight: tokens.fontWeightSemibold,
             fontSize: tokens.fontSizeBase300,
         },
     },
-    displayIdFieldContainer: {
+    $displayIdFieldContainer: {
         ...flex({
             flexDirection: "row",
             alignItems: "flex-end",
@@ -668,53 +668,53 @@ const useStyles = makeStyles({
         },
     },
 
-    sampleList: {
+    $sampleList: {
         ...flex({
             flexDirection: "column",
         }),
         gap: "14px",
     },
-    sampleListHeader: {
+    $sampleListHeader: {
         ...flex({
             flexDirection: "row",
             justifyContent: "space-between",
         }),
     },
-    sampleListItems: {
+    $sampleListItems: {
         ...flex({
             flexDirection: "column",
         }),
         gap: "14px",
     },
-    sampleListFooter: {
+    $sampleListFooter: {
         ...flex({
             justifyContent: "flex-end",
         }),
     },
-    sampleItem: {
+    $sampleItem: {
         ...flex({
             flexDirection: "column",
         }),
     },
-    sampleItemHeader: {
+    $sampleItemHeader: {
         ...flex({
             flexDirection: "row",
             alignItems: "flex-end",
             justifyContent: "space-between",
         }),
     },
-    sampleItemIO: {
+    $sampleItemIO: {
         ...flex(),
         width: "100%",
         gap: "14px",
     },
-    sampleItemIOField: {
+    $sampleItemIOField: {
         flexGrow: 1,
         "& .fui-Textarea__textarea": {
             fontFamily: CODE_FONT_FAMILY,
         },
     },
-    sampleItemIOSingleLine: {
+    $sampleItemIOSingleLine: {
         ...flex({
             flexDirection: "column",
         }),

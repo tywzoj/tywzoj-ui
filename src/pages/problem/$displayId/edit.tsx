@@ -41,11 +41,11 @@ const ProblemEditPage: React.FC = () => {
     const errorCodeToString = useErrorCodeToString();
 
     const ls = useLocalizedStrings({
-        title: CE_Strings.PROBLEM_EDIT_TITLE,
-        titleWithId: CE_Strings.PROBLEM_EDIT_TITLE_WITH_ID,
+        $title: CE_Strings.PROBLEM_EDIT_TITLE,
+        $titleWithId: CE_Strings.PROBLEM_EDIT_TITLE_WITH_ID,
     });
 
-    useSetPageTitle(format(ls.title, problem.displayId, problem.title));
+    useSetPageTitle(format(ls.$title, problem.displayId, problem.title));
 
     const styles = useStyles();
 
@@ -117,11 +117,11 @@ const ProblemEditPage: React.FC = () => {
     };
 
     return (
-        <div className={styles.root}>
-            <div className={styles.title}>
-                <Title3 as="h1">{format(ls.titleWithId, problem.displayId, problem.id, problem.title)}</Title3>
+        <div className={styles.$root}>
+            <div className={styles.$title}>
+                <Title3 as="h1">{format(ls.$titleWithId, problem.displayId, problem.id, problem.title)}</Title3>
             </div>
-            <div className={styles.editor}>
+            <div className={styles.$editor}>
                 <ProblemEditor
                     problem={problem}
                     disabled={loading}
@@ -135,19 +135,19 @@ const ProblemEditPage: React.FC = () => {
 };
 
 const useStyles = makeStyles({
-    root: {
+    $root: {
         ...flex({
             flexDirection: "column",
         }),
         width: "100%",
     },
-    title: {
+    $title: {
         ...flex({
             justifyContent: "center",
         }),
         width: "100%",
     },
-    editor: {},
+    $editor: {},
 });
 
 const patchProblemDetailAsync = withThrowErrorsExcept(
