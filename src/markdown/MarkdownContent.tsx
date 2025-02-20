@@ -83,7 +83,7 @@ export const MarkdownContent: React.FC<IMarkdownContentProps> = React.memo((prop
         <Text>{content}</Text>
     ) : (
         <div
-            className={mergeClasses(styles.root, className)}
+            className={mergeClasses(styles.$root, className)}
             dangerouslySetInnerHTML={{ __html: html! }}
             ref={setWrapperElement}
         />
@@ -96,7 +96,7 @@ const Placeholder: React.FC<{ lines: number }> = ({ lines }) => {
     const id = useId("markdown-content-placeholder");
 
     return (
-        <Skeleton className={styles.placeholder}>
+        <Skeleton className={styles.$placeholder}>
             {range(0, lines).map((line) => {
                 const widths = randomPartitionIntWithMin(
                     100 /* total */,
@@ -105,7 +105,7 @@ const Placeholder: React.FC<{ lines: number }> = ({ lines }) => {
                 );
 
                 return (
-                    <div key={`${id}-${line}`} className={styles.placeholderLine}>
+                    <div key={`${id}-${line}`} className={styles.$placeholderLine}>
                         {widths.map((width, index) => (
                             <SkeletonItem key={`${id}-${line}-${index}-${width}`} style={{ width: `${width}%` }} />
                         ))}
