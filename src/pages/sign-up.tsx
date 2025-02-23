@@ -1,6 +1,7 @@
 import { Button, Field, Input, makeStyles, mergeClasses } from "@fluentui/react-components";
 import { createFileRoute } from "@tanstack/react-router";
 
+import { LinkWithRouter } from "@/common/components/LinkWithRouter";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
@@ -17,60 +18,72 @@ const SignUpPage: React.FC = () => {
 
     useSetPageTitle(ls.$title);
 
+    const fieldContainerCls = mergeClasses(styles.$fieldContainer, isSmallScreen && styles.$fieldContainerSingle);
+
     return (
         <div className={styles.$root}>
             <h2>{ls.$title}</h2>
-            <div className={mergeClasses(styles.$cols, isSmallScreen && styles.$colsSingle)}>
-                <div className={styles.$field}>
-                    <Field label="username">
+            <form className={styles.$form}>
+                <div className={fieldContainerCls}>
+                    <Field label="username" className={styles.$field}>
+                        <Input type="text" />
+                    </Field>
+                    <div className={styles.$field}></div>
+                </div>
+                <div className={fieldContainerCls}>
+                    <Field label="email" className={styles.$field}>
+                        <Input type="text" />
+                    </Field>
+                    <Field label="code" className={styles.$field}>
+                        <div className={styles.$codeInputContainer}>
+                            <Input type="text" />
+                            <Button>send</Button>
+                        </div>
+                    </Field>
+                </div>
+                <div className={fieldContainerCls}>
+                    <Field label="pass1" className={styles.$field}>
+                        <Input type="text" />
+                    </Field>
+                    <Field label="pass2" className={styles.$field}>
                         <Input type="text" />
                     </Field>
                 </div>
-                <div className={styles.$field}></div>
+                <Button appearance="primary" className={styles.$submitButton}>
+                    Submit
+                </Button>
+            </form>
+            <div className={styles.$signInLinks}>
+                <span>Already have an account?</span>
+                <LinkWithRouter to="/sign-in">Sign in</LinkWithRouter>
             </div>
-            <div className={mergeClasses(styles.$cols, isSmallScreen && styles.$colsSingle)}>
-                <div className={styles.$field}>
-                    <Field label="email">
-                        <Input type="text" />
-                    </Field>
-                </div>
-                <div className={mergeClasses(styles.$field, styles.$codeContainer)}>
-                    <Field label="code">
-                        <Input type="text" />
-                    </Field>
-                    <Button>send</Button>
-                </div>
-            </div>
-            <div className={mergeClasses(styles.$cols, isSmallScreen && styles.$colsSingle)}>
-                <div className={styles.$field}>
-                    <Field label="pass1">
-                        <Input type="text" />
-                    </Field>
-                </div>
-                <div className={styles.$field}>
-                    <Field label="pass2">
-                        <Input type="text" />
-                    </Field>
-                </div>
-            </div>
-            <Button appearance="primary" className={styles.$button}>
-                Submit
-            </Button>
         </div>
     );
 };
 const useStyles = makeStyles({
     $root: {
+        ...flex({
+            flexDirection: "column",
+            alignItems: "center",
+        }),
         width: "100%",
     },
-    $cols: {
+    $form: {
+        ...flex({
+            flexDirection: "column",
+            alignItems: "flex-start",
+        }),
+        gap: "8px",
+        width: "100%",
+    },
+    $fieldContainer: {
         ...flex({
             flexDirection: "row",
         }),
-        gap: "18px",
+        gap: "8px 16px",
         width: "100%",
     },
-    $colsSingle: {
+    $fieldContainerSingle: {
         ...flex({
             flexDirection: "column",
         }),
@@ -78,21 +91,32 @@ const useStyles = makeStyles({
     $field: {
         flex: "1",
     },
-    $codeContainer: {
+    $codeInputContainer: {
         ...flex({
             flexDirection: "row",
         }),
         gap: "8px",
+        minWidth: "0",
 
-        "&> .fui-Button": {
-            marginTop: "26px",
+        "> .fui-Button": {
+            minWidth: "0",
         },
-        "&> .fui-Field": {
+
+        "> .fui-Input": {
             flex: "1",
+            minWidth: "0",
         },
     },
-    $button: {
-        marginTop: "18px",
+    $submitButton: {
+        marginTop: "8px",
+    },
+    $signInLinks: {
+        ...flex({
+            flexDirection: "row",
+        }),
+        marginTop: "8px",
+        width: "100%",
+        gap: "8px",
     },
 });
 export const Route = createFileRoute("/sign-up")({
