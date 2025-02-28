@@ -1,4 +1,4 @@
-import type { TooltipProps } from "@fluentui/react-components";
+import type { BadgeProps, TooltipProps } from "@fluentui/react-components";
 import { Badge, makeStyles, Tooltip } from "@fluentui/react-components";
 
 import { useUserLevelColor, useUserLevelString } from "@/common/hooks/user-level";
@@ -8,11 +8,13 @@ import type { CE_UserLevel } from "@/server/common/permission";
 
 export interface IUserLevelLabelProps {
     userLevel: CE_UserLevel;
+    showTooltip?: boolean;
+    size?: BadgeProps["size"];
     tooltipPositioning?: TooltipProps["positioning"];
 }
 
 export const UserLevelLabel: React.FC<IUserLevelLabelProps> = (props) => {
-    const { userLevel, tooltipPositioning } = props;
+    const { userLevel, showTooltip = true, size = "large", tooltipPositioning } = props;
 
     const color = useUserLevelColor(userLevel);
     const text = useUserLevelString(userLevel);
@@ -21,12 +23,18 @@ export const UserLevelLabel: React.FC<IUserLevelLabelProps> = (props) => {
 
     const styles = useStyles();
 
-    return (
+    const inner = (
+        <Badge appearance="filled" size={size} color={color} className={styles.$badge}>
+            {text}
+        </Badge>
+    );
+
+    return showTooltip ? (
         <Tooltip content={label} relationship="description" withArrow positioning={tooltipPositioning}>
-            <Badge appearance="filled" size="large" color={color} className={styles.$badge}>
-                {text}
-            </Badge>
+            {inner}
         </Tooltip>
+    ) : (
+        inner
     );
 };
 

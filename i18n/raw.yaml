@@ -400,6 +400,18 @@
   value: Avatar
   description: A string for the label of user avatar.
 
+- name: USER_PROFILE_PAGE_TITLE_WITH_NAME
+  value: '{0}''s Profile'
+  description: A string for the title of user profile page.
+
+- name: USER_EDIT_PAGE_TITLE
+  value: Edit Profile
+  description: A string for the title of user edit page.
+
+- name: USER_EDIT_PAGE_TITLE_WITH_NAME
+  value: Edit {0}'s Profile
+  description: A string for the title of user settings page.
+
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: Keyword or ID
   description: A string for the placeholder of problem search input.

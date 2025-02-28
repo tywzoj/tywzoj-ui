@@ -3,13 +3,11 @@ import { createAction } from "@reduxjs/toolkit";
 import { matchMediaDarkTheme } from "@/common/utils/theme-media-query";
 import { createAppAction } from "@/store/utils";
 
-import { injectPrismTheme } from "./prism";
 import { CE_Theme } from "./types";
 
 let callback: ((e: MediaQueryListEvent) => void) | undefined;
 
 export const setThemeAction = createAction("Theme/Set", (theme: CE_Theme) => {
-    injectPrismTheme(theme);
     return { payload: theme };
 });
 

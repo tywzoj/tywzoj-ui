@@ -1,9 +1,10 @@
-import { Tab, TabList } from "@fluentui/react-components";
+import { makeStyles, Tab, TabList } from "@fluentui/react-components";
 import { createFileRoute, Outlet, useMatchRoute, useNavigate } from "@tanstack/react-router";
 import React from "react";
 
 import { PermissionDeniedError } from "@/common/exceptions/permission-denied";
 import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
+import { flex } from "@/common/styles/flex";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { canEditUserSettings } from "@/permission/checkers";
 
@@ -27,8 +28,10 @@ const SettingLayout: React.FC = () => {
         checkMatch(CE_SettingPages.Security);
     });
 
+    const styles = useStyles();
+
     return (
-        <div>
+        <div className={styles.root}>
             <div>
                 <TabList
                     selectedValue={selectedTab}
@@ -42,12 +45,26 @@ const SettingLayout: React.FC = () => {
                 </TabList>
             </div>
 
-            <div>
+            <div className={styles.content}>
                 <Outlet />
             </div>
         </div>
     );
 };
+
+const useStyles = makeStyles({
+    root: {
+        ...flex({
+            flexDirection: "column",
+        }),
+        width: "100%",
+        maxWidth: "800px",
+        gap: "16px",
+    },
+    content: {
+        padding: "0 16px",
+    },
+});
 
 export const Route = createFileRoute("/user/$id/_setting-layout")({
     component: SettingLayout,

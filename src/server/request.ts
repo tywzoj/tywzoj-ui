@@ -26,7 +26,7 @@ export type IResponseBody<T, E extends IError = IError> =
     | (E extends never ? never : IErrorResponseBody<E>)
     | (T extends never ? never : ISuccessResponseBody<T>);
 
-export async function requestAsync<T>(options: IRequestOptions): Promise<IResponseBody<T>> {
+export async function requestAsync<T = void>(options: IRequestOptions): Promise<IResponseBody<T>> {
     const {
         auth: { token },
         apiEndPoint,

@@ -1,4 +1,4 @@
-import type { ProblemModule } from "@/server/api";
+import type { ProblemModule, UserModule } from "@/server/api";
 
 import { CE_QueryId } from "./id";
 import { createQueryKeysFn } from "./utils";
@@ -7,3 +7,5 @@ export const problemListQueryKeys = createQueryKeysFn<typeof ProblemModule.getPr
 export const problemDetailQueryKeys = createQueryKeysFn<typeof ProblemModule.getProblemDetailAsync>(
     CE_QueryId.ProblemDetail,
 );
+
+export const userDetailQueryKeys = createQueryKeysFn<typeof UserModule.getUserDetailAsync>(CE_QueryId.UserDetail);

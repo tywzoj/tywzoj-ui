@@ -5,16 +5,16 @@ import type { CE_UserLevel } from "../common/permission";
 
 // BEGIN: shared types
 export interface IUserDetailEditable {
-    readonly username: string;
-    readonly bio: string | null;
-    readonly level: CE_UserLevel;
-    readonly nickname: string | null;
+    username: string;
+    bio: string | null;
+    email: string | null;
+    level: CE_UserLevel;
+    nickname: string | null;
 }
 
 export interface IUserDetail extends Readonly<IUserDetailEditable> {
     readonly id: number;
     readonly avatar: string | null;
-    readonly email: string | null;
     readonly acceptedProblemCount: number;
     readonly submissionCount: number;
     readonly rating: number;
@@ -34,5 +34,9 @@ export interface IUserPreferenceDetail {
 // BEGIN: user detail types
 
 export type IUserDetailGetResponse = IUserDetail;
+
+export interface IUserDetailPatchRequestBody extends Partial<IUserDetailEditable> {
+    emailVerificationCode?: string;
+}
 
 // END: user detail types

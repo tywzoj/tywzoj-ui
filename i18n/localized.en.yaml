@@ -503,6 +503,21 @@
   description: A string for the label of user avatar.
   raw: Avatar
 
+- name: USER_PROFILE_PAGE_TITLE_WITH_NAME
+  value: '{0}''s Profile'
+  description: A string for the title of user profile page.
+  raw: '{0}''s Profile'
+
+- name: USER_EDIT_PAGE_TITLE
+  value: Edit Profile
+  description: A string for the title of user edit page.
+  raw: Edit Profile
+
+- name: USER_EDIT_PAGE_TITLE_WITH_NAME
+  value: Edit {0}'s Profile
+  description: A string for the title of user settings page.
+  raw: Edit {0}'s Profile
+
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: Keyword or ID
   description: A string for the placeholder of problem search input.

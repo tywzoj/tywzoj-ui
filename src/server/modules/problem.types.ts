@@ -82,11 +82,7 @@ export interface IProblemDetailGetRequestQuery {
 
 export type IProblemDetailGetResponse = IProblemDetail;
 
-export interface IProblemDetailPostRequestBody {
-    displayId: number;
-    title: string;
-    type: CE_ProblemType;
-    visibility: CE_Visibility;
+export interface IProblemDetailPostRequestBody extends IProblemDetailEditable {
     content: IProblemContentDetailPostRequestBody;
     samples: IProblemSampleDetailPostRequestBody[];
     tagIds: number[];
@@ -94,11 +90,7 @@ export interface IProblemDetailPostRequestBody {
 
 export type IProblemDetailPostResponse = IProblemBasicDetail;
 
-export interface IProblemDetailPatchRequestBody {
-    displayId?: number;
-    title?: string;
-    type?: CE_ProblemType;
-    visibility?: CE_Visibility;
+export interface IProblemDetailPatchRequestBody extends Partial<IProblemDetailEditable> {
     samples?: IProblemSampleDetailPostRequestBody[];
     tagIds?: number[];
 }
@@ -107,28 +99,14 @@ export interface IProblemDetailPatchRequestBody {
 
 // BEGIN: problem content types
 
-export interface IProblemContentDetailPostRequestBody {
-    description: string;
-    inputFormat: string;
-    outputFormat: string;
-    limitAndHint: string;
-}
+export type IProblemContentDetailPostRequestBody = IProblemContentDetailEditable;
 
-export interface IProblemContentDetailPatchRequestBody {
-    description?: string;
-    inputFormat?: string;
-    outputFormat?: string;
-    limitAndHint?: string;
-}
+export type IProblemContentDetailPatchRequestBody = Partial<IProblemContentDetailEditable>;
 
 // END: problem content types
 
 // BEGIN: problem sample types
 
-export interface IProblemSampleDetailPostRequestBody {
-    input: string;
-    output: string;
-    explanation: string;
-}
+export type IProblemSampleDetailPostRequestBody = IProblemSampleDetailEditable;
 
 // END: problem sample types

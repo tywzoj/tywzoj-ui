@@ -15,7 +15,9 @@ import React from "react";
 import logoDark from "@/assets/icon.dark.png";
 import logoLight from "@/assets/icon.light.png";
 import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
+import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
+import { format } from "@/common/utils/format";
 import { ContentCard } from "@/components/ContentCard";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { UserLevelLabel } from "@/components/UserLevelLabel";
@@ -39,9 +41,12 @@ const UserDetailPage: React.FC = () => {
     const { renderMarkdownInUserBio } = useFeature();
 
     const ls = useLocalizedStrings({
+        $title: CE_Strings.USER_PROFILE_PAGE_TITLE_WITH_NAME,
         $email: CE_Strings.EMAIL_LABEL,
         $bio: CE_Strings.USER_BIO_LABEL,
     });
+
+    useSetPageTitle(format(ls.$title, userDetail.username));
 
     const styles = useStyles();
 

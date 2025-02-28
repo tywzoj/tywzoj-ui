@@ -52,3 +52,25 @@ export const useUserLevelString = (UserLevel: CE_UserLevel) => {
 
     return useLocalizedStrings(localeId)[0];
 };
+
+export const useUserLevelStringMap = (): Record<CE_UserLevel, string> => {
+    const strings = useLocalizedStrings(
+        CE_Strings.USER_LEVEL_LABEL_ADMIN,
+        CE_Strings.USER_LEVEL_LABEL_MANAGER,
+        CE_Strings.USER_LEVEL_LABEL_INTERNAL,
+        CE_Strings.USER_LEVEL_LABEL_PAID,
+        CE_Strings.USER_LEVEL_LABEL_GENERAL,
+        CE_Strings.USER_LEVEL_LABEL_SPECIFIC,
+        CE_Strings.USER_LEVEL_LABEL_DISABLED,
+    );
+
+    return {
+        [CE_UserLevel.Admin]: strings[0],
+        [CE_UserLevel.Manager]: strings[1],
+        [CE_UserLevel.Internal]: strings[2],
+        [CE_UserLevel.Paid]: strings[3],
+        [CE_UserLevel.General]: strings[4],
+        [CE_UserLevel.Specific]: strings[5],
+        [CE_UserLevel.Disabled]: strings[6],
+    };
+};

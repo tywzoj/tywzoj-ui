@@ -503,6 +503,21 @@
   description: A string for the label of user avatar.
   raw: Avatar
 
+- name: USER_PROFILE_PAGE_TITLE_WITH_NAME
+  value: '{0} 的个人资料'
+  description: A string for the title of user profile page.
+  raw: '{0}''s Profile'
+
+- name: USER_EDIT_PAGE_TITLE
+  value: 编辑个人资料
+  description: A string for the title of user edit page.
+  raw: Edit Profile
+
+- name: USER_EDIT_PAGE_TITLE_WITH_NAME
+  value: 编辑 {0} 的个人资料
+  description: A string for the title of user settings page.
+  raw: Edit {0}'s Profile
+
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: 输入题目 ID 或关键字以搜索题目
   description: A string for the placeholder of problem search input.
