@@ -1,7 +1,7 @@
 import React from "react";
 
 interface IDialogAwaiter {
-    readonly open: boolean;
+    readonly opened: boolean;
     /**
      * Opens the dialog and returns a promise that resolves to true if the dialog is confirmed, false if the dialog is aborted.
      * @returns {Promise<boolean>} A promise that resolves to true if onConfirm is called, false if onAbort is called.
@@ -13,7 +13,7 @@ interface IDialogAwaiter {
 
 export const useDialogAwaiter = (): IDialogAwaiter => {
     const resolveFn = React.useRef<(value: boolean) => void>();
-    const [open, setOpen] = React.useState(false);
+    const [opened, setOpened] = React.useState(false);
 
     React.useEffect(() => {
         return () => {
@@ -22,20 +22,20 @@ export const useDialogAwaiter = (): IDialogAwaiter => {
     }, []);
 
     return {
-        open,
+        opened,
         confirmAsync: () => {
             return new Promise<boolean>((resolve) => {
                 resolveFn.current = resolve;
-                setOpen(true);
+                setOpened(true);
             });
         },
         onConfirm: () => {
             resolveFn.current?.(true);
-            setOpen(false);
+            setOpened(false);
         },
         onAbort: () => {
             resolveFn.current?.(false);
-            setOpen(false);
+            setOpened(false);
         },
     };
 };

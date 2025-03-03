@@ -57,7 +57,6 @@ const UserEditPage: React.FC = () => {
     const fallBackAvatar = isLightTheme ? logoLight : logoDark;
     const currentUser = useCurrentUser()!; // I'm sure currentUser is not null.
     const dispatch = useAppDispatch();
-    const { open, confirmAsync, onConfirm, onAbort } = useDialogAwaiter();
 
     const ls = useLocalizedStrings({
         $title: CE_Strings.USER_EDIT_PAGE_TITLE_WITH_NAME,
@@ -79,6 +78,13 @@ const UserEditPage: React.FC = () => {
     const [pending, setPending] = React.useState(false);
     const [emailVerificationCode, setEmailVerificationCode] = React.useState("");
     const emailVerificationCodeRef = React.useRef(""); // To get value in async callback
+
+    const {
+        opened: emailVerificationDialogOpened,
+        confirmAsync: waitingForEmailVerificationCodeAsync,
+        onConfirm: onSubmitEmailVerification,
+        onAbort: onCancelEmailVerification,
+    } = useDialogAwaiter();
 
     React.useEffect(() => {
         setUsername(userDetail.username);
@@ -114,8 +120,8 @@ const UserEditPage: React.FC = () => {
 
                     setEmailVerificationCode("");
                     emailVerificationCodeRef.current = "";
-                    const confirmed = await confirmAsync();
-                    if (!confirmed) {
+                    const submitted = await waitingForEmailVerificationCodeAsync();
+                    if (!submitted) {
                         return;
                     }
                     patchBody.emailVerificationCode = emailVerificationCodeRef.current;
@@ -140,7 +146,7 @@ const UserEditPage: React.FC = () => {
             emailVerificationEnabled,
             queryClient,
             currentUser,
-            confirmAsync,
+            waitingForEmailVerificationCodeAsync,
             dispatch,
         ]),
     );
@@ -216,7 +222,11 @@ const UserEditPage: React.FC = () => {
                 </div>
             </form>
             {/* Email verification dialog */}
-            <Dialog open={open} onOpenChange={(_, { open }) => !open && onAbort()} modalType="alert">
+            <Dialog
+                open={emailVerificationDialogOpened}
+                onOpenChange={(_, { open }) => !open && onCancelEmailVerification()}
+                modalType="alert"
+            >
                 <DialogSurface>
                     <DialogBody>
                         {/* TODO: localization */}
@@ -241,7 +251,7 @@ const UserEditPage: React.FC = () => {
                             </form>
                         </DialogContent>
                         <DialogActions>
-                            <Button appearance="primary" onClick={onConfirm}>
+                            <Button appearance="primary" onClick={onSubmitEmailVerification}>
                                 {ls.$submitButton}
                             </Button>
                             <DialogTrigger disableButtonEnhancement>
