@@ -198,6 +198,7 @@ const UserEditPage: React.FC = () => {
                     </ButtonWithRouter>
                 </div>
             </form>
+            {/* Email verification dialog */}
             <Dialog open={open} onOpenChange={(_, { open }) => !open && onAbort()}>
                 <DialogSurface>
                     <DialogBody>
@@ -232,6 +233,8 @@ const UserEditPage: React.FC = () => {
                     </DialogBody>
                 </DialogSurface>
             </Dialog>
+            {/* TODO: avatar uploader dialog */}
+            {/* TODO: sensitive changes confirmation dialog */}
         </div>
     );
 };
