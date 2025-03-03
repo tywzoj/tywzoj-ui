@@ -1,5 +1,12 @@
 import {
     Button,
+    Dialog,
+    DialogActions,
+    DialogBody,
+    DialogContent,
+    DialogSurface,
+    DialogTitle,
+    DialogTrigger,
     Dropdown,
     Field,
     Image,
@@ -7,6 +14,7 @@ import {
     makeStyles,
     mergeClasses,
     Option,
+    Text,
     Textarea,
 } from "@fluentui/react-components";
 import { useQueryClient } from "@tanstack/react-query";
@@ -18,6 +26,7 @@ import logoLight from "@/assets/icon.light.png";
 import { refreshSessionInfoAsyncAction } from "@/common/actions/session-info";
 import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
 import { useWithCatchError } from "@/common/hooks/catch-error";
+import { useDialogAwaiter } from "@/common/hooks/dialog-awaiter";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { useUserLevelStringMap } from "@/common/hooks/user-level";
 import { flex } from "@/common/styles/flex";
@@ -47,6 +56,7 @@ const UserEditPage: React.FC = () => {
     const fallBackAvatar = isLightTheme ? logoLight : logoDark;
     const currentUser = useCurrentUser()!; // I'm sure currentUser is not null.
     const dispatch = useAppDispatch();
+    const { open, confirmAsync, onConfirm, onAbort } = useDialogAwaiter();
 
     const ls = useLocalizedStrings({
         $title: CE_Strings.USER_EDIT_PAGE_TITLE_WITH_NAME,
@@ -56,6 +66,8 @@ const UserEditPage: React.FC = () => {
         $bio: CE_Strings.USER_BIO_LABEL,
         $level: CE_Strings.USER_LEVEL_LABEL,
         $saveButton: CE_Strings.COMMON_SAVE_BUTTON,
+        $submitButton: CE_Strings.COMMON_SUBMIT_BUTTON,
+        $cancelButton: CE_Strings.COMMON_CANCEL_BUTTON,
     });
 
     const [username, setUsername] = React.useState("");
@@ -64,6 +76,7 @@ const UserEditPage: React.FC = () => {
     const [level, setLevel] = React.useState(CE_UserLevel.General);
     const [bio, setBio] = React.useState("");
     const [pending, setPending] = React.useState(false);
+    const [emailVerificationCode, setEmailVerificationCode] = React.useState("");
 
     React.useEffect(() => {
         setUsername(userDetail.username);
@@ -94,15 +107,14 @@ const UserEditPage: React.FC = () => {
         );
         if (shouldPatch) {
             if (patchBody.email) {
-                // TODO: hook up with email verification
-                /*
-                try {
-                    patchBody.emailVerificationCode = await getEmailVerificationCodeAsync();
-                } catch {
-                    // user cancelled
+                // TODO: send email verification code
+
+                setEmailVerificationCode("");
+                const confirmed = await confirmAsync();
+                if (!confirmed) {
                     return;
                 }
-                */
+                patchBody.emailVerificationCode = emailVerificationCode;
             }
 
             const strId = userDetail.id.toString();
@@ -117,6 +129,8 @@ const UserEditPage: React.FC = () => {
     });
 
     const onSaveChanges = () => {
+        // TODO: Validate fields
+
         setPending(true);
         handlePatchProblemAsync().finally(() => setPending(false));
     };
@@ -146,6 +160,7 @@ const UserEditPage: React.FC = () => {
                             />
                         </Field>
                     </div>
+                    {/* TODO: add tooltip */}
                     <Button
                         className={mergeClasses(styles.$avatar, isMiniScreen && styles.$avatarMiniScreen)}
                         disabled={pending}
@@ -155,6 +170,7 @@ const UserEditPage: React.FC = () => {
                 </div>
                 <Field
                     label={ls.$email}
+                    // TODO: localization
                     hint={"This email will be shown to others on profile page, and it will not be used for auth."}
                 >
                     <Input value={email} type="email" onChange={(_, { value }) => setEmail(value)} />
@@ -178,9 +194,44 @@ const UserEditPage: React.FC = () => {
                     </Button>
                     <ButtonWithRouter to="/user/$id" params={{ id: String(userDetail.id) }} disabledFocusable={pending}>
                         Go to profile
+                        {/* TODO: localization */}
                     </ButtonWithRouter>
                 </div>
             </form>
+            <Dialog open={open} onOpenChange={(_, { open }) => !open && onAbort()}>
+                <DialogSurface>
+                    <DialogBody>
+                        <DialogTitle>Verify your email</DialogTitle>
+                        <DialogContent>
+                            <Text>
+                                {/* TODO: localization */}
+                                We have sent a verification code to your email. Please enter the code below to verify
+                                your email.
+                            </Text>
+                            <form className={styles.$emailVerificationForm}>
+                                {/* TODO: localization */}
+                                <Field label="Verification Code">
+                                    <Input
+                                        disabled={pending}
+                                        value={emailVerificationCode}
+                                        onChange={(_, { value }) => setEmailVerificationCode(value)}
+                                    />
+                                </Field>
+                            </form>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button appearance="primary" disabled={pending} onClick={onConfirm}>
+                                {ls.$submitButton}
+                            </Button>
+                            <DialogTrigger disableButtonEnhancement>
+                                <Button appearance="secondary" disabled={pending}>
+                                    {ls.$cancelButton}
+                                </Button>
+                            </DialogTrigger>
+                        </DialogActions>
+                    </DialogBody>
+                </DialogSurface>
+            </Dialog>
         </div>
     );
 };
@@ -263,6 +314,9 @@ const useStyles = makeStyles({
     $buttons: {
         ...flex({ justifyContent: "space-between" }),
         marginTop: "8px",
+    },
+    $emailVerificationForm: {
+        marginTop: "16px",
     },
 });
 

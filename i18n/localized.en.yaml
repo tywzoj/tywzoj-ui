@@ -68,6 +68,11 @@
   description: A string for the label of move down button.
   raw: Move Down
 
+- name: COMMON_SUBMIT_BUTTON
+  value: Submit
+  description: A string for the label of submit button.
+  raw: Submit
+
 - name: COMMON_ERROR_TITLE
   value: Error
   description: A string for the title of error message.
