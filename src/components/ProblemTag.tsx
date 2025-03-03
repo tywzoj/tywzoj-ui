@@ -27,7 +27,7 @@ export const ProblemTag = (props: IProblemTagProps) => {
             }}
             {...rest}
         >
-            {name}
+            <span className={styles.$text}>{name}</span>
         </div>
     );
 };
@@ -42,8 +42,9 @@ const useStyles = makeStyles({
         position: "relative",
         boxSizing: "border-box",
         height: "20px",
-        width: "20px",
-        minWidth: "max-content",
+        width: "fit-content",
+        minWidth: "20px",
+        maxWidth: "100%",
         fontFamily: tokens.fontFamilyBase,
         fontSize: tokens.fontSizeBase200,
         fontWeight: tokens.fontWeightSemibold,
@@ -54,8 +55,14 @@ const useStyles = makeStyles({
     },
     $largeSize: {
         height: "24px",
-        width: "24px",
+        minWidth: "24px",
         fontSize: tokens.fontSizeBase300,
         lineHeight: tokens.lineHeightBase300,
+    },
+    $text: {
+        boxSizing: "border-box",
+        maxWidth: "100%",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
     },
 });
