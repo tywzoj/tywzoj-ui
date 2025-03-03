@@ -43,7 +43,7 @@ import { UserModule } from "@/server/api";
 import { CE_UserLevel } from "@/server/common/permission";
 import type { UserTypes } from "@/server/types";
 import { withThrowErrors } from "@/server/utils";
-import { useAppDispatch, useCurrentUser, useIsMiniScreen, usePermission } from "@/store/hooks";
+import { useAppDispatch, useCurrentUser, useFeature, useIsMiniScreen, usePermission } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
 const UserEditPage: React.FC = () => {
@@ -51,6 +51,7 @@ const UserEditPage: React.FC = () => {
     const { data: userDetail } = useSuspenseQueryData(queryOptions);
     const queryClient = useQueryClient();
     const permission = usePermission();
+    const { emailVerification: emailVerificationEnabled } = useFeature();
     const isLightTheme = useIsLightTheme();
     const isMiniScreen = useIsMiniScreen();
     const fallBackAvatar = isLightTheme ? logoLight : logoDark;
@@ -106,7 +107,7 @@ const UserEditPage: React.FC = () => {
             ["username", "nickname", "email", "bio", "level"],
         );
         if (shouldPatch) {
-            if (patchBody.email) {
+            if (patchBody.email && emailVerificationEnabled) {
                 // TODO: send email verification code
 
                 setEmailVerificationCode("");
