@@ -199,9 +199,10 @@ const UserEditPage: React.FC = () => {
                 </div>
             </form>
             {/* Email verification dialog */}
-            <Dialog open={open} onOpenChange={(_, { open }) => !open && onAbort()}>
+            <Dialog open={open} onOpenChange={(_, { open }) => !open && onAbort()} modalType="alert">
                 <DialogSurface>
                     <DialogBody>
+                        {/* TODO: localization */}
                         <DialogTitle>Verify your email</DialogTitle>
                         <DialogContent>
                             <Text>
@@ -213,7 +214,6 @@ const UserEditPage: React.FC = () => {
                                 {/* TODO: localization */}
                                 <Field label="Verification Code">
                                     <Input
-                                        disabled={pending}
                                         value={emailVerificationCode}
                                         onChange={(_, { value }) => setEmailVerificationCode(value)}
                                     />
@@ -221,13 +221,11 @@ const UserEditPage: React.FC = () => {
                             </form>
                         </DialogContent>
                         <DialogActions>
-                            <Button appearance="primary" disabled={pending} onClick={onConfirm}>
+                            <Button appearance="primary" onClick={onConfirm}>
                                 {ls.$submitButton}
                             </Button>
                             <DialogTrigger disableButtonEnhancement>
-                                <Button appearance="secondary" disabled={pending}>
-                                    {ls.$cancelButton}
-                                </Button>
+                                <Button appearance="secondary">{ls.$cancelButton}</Button>
                             </DialogTrigger>
                         </DialogActions>
                     </DialogBody>
