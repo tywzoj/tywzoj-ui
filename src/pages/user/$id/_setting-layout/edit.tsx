@@ -78,6 +78,7 @@ const UserEditPage: React.FC = () => {
     const [bio, setBio] = React.useState("");
     const [pending, setPending] = React.useState(false);
     const [emailVerificationCode, setEmailVerificationCode] = React.useState("");
+    const emailVerificationCodeRef = React.useRef(""); // To get value in async callback
 
     React.useEffect(() => {
         setUsername(userDetail.username);
@@ -91,43 +92,58 @@ const UserEditPage: React.FC = () => {
 
     const styles = useStyles();
 
-    const handlePatchProblemAsync = useWithCatchError(async () => {
-        const patchBody: UserTypes.IUserDetailPatchRequestBody = {};
+    const handlePatchProblemAsync = useWithCatchError(
+        React.useCallback(async () => {
+            const patchBody: UserTypes.IUserDetailPatchRequestBody = {};
 
-        const shouldPatch = diff<Omit<UserTypes.IUserDetailPatchRequestBody, "emailVerificationCode">>(
-            userDetail,
-            {
-                username,
-                nickname,
-                email,
-                bio,
-                level,
-            },
-            patchBody,
-            ["username", "nickname", "email", "bio", "level"],
-        );
-        if (shouldPatch) {
-            if (patchBody.email && emailVerificationEnabled) {
-                // TODO: send email verification code
+            const shouldPatch = diff<Omit<UserTypes.IUserDetailPatchRequestBody, "emailVerificationCode">>(
+                userDetail,
+                {
+                    username,
+                    nickname,
+                    email,
+                    bio,
+                    level,
+                },
+                patchBody,
+                ["username", "nickname", "email", "bio", "level"],
+            );
+            if (shouldPatch) {
+                if (patchBody.email && emailVerificationEnabled) {
+                    // TODO: send email verification code
 
-                setEmailVerificationCode("");
-                const confirmed = await confirmAsync();
-                if (!confirmed) {
-                    return;
+                    setEmailVerificationCode("");
+                    emailVerificationCodeRef.current = "";
+                    const confirmed = await confirmAsync();
+                    if (!confirmed) {
+                        return;
+                    }
+                    patchBody.emailVerificationCode = emailVerificationCodeRef.current;
                 }
-                patchBody.emailVerificationCode = emailVerificationCode;
+
+                const strId = userDetail.id.toString();
+
+                await patchUserDetailAsync(strId, patchBody);
+                await queryClient.invalidateQueries({ queryKey: userDetailQueryKeys(strId) });
+
+                if (currentUser.id === userDetail.id) {
+                    await dispatch(refreshSessionInfoAsyncAction());
+                }
             }
-
-            const strId = userDetail.id.toString();
-
-            await patchUserDetailAsync(strId, patchBody);
-            await queryClient.invalidateQueries({ queryKey: userDetailQueryKeys(strId) });
-
-            if (currentUser.id === userDetail.id) {
-                await dispatch(refreshSessionInfoAsyncAction());
-            }
-        }
-    });
+        }, [
+            userDetail,
+            username,
+            nickname,
+            email,
+            bio,
+            level,
+            emailVerificationEnabled,
+            queryClient,
+            currentUser,
+            confirmAsync,
+            dispatch,
+        ]),
+    );
 
     const onSaveChanges = () => {
         // TODO: Validate fields
@@ -216,7 +232,10 @@ const UserEditPage: React.FC = () => {
                                 <Field label="Verification Code">
                                     <Input
                                         value={emailVerificationCode}
-                                        onChange={(_, { value }) => setEmailVerificationCode(value)}
+                                        onChange={(_, { value }) => {
+                                            setEmailVerificationCode(value);
+                                            emailVerificationCodeRef.current = value;
+                                        }}
                                     />
                                 </Field>
                             </form>
