@@ -18,14 +18,14 @@ export const VisibilityLabel: React.FC<IVisibilityLabelProps> = (props) => {
     const styles = useStyles();
 
     return (
-        <Badge appearance="filled" color={color} size={size} className={styles.badge}>
+        <Badge appearance="filled" color={color} size={size} className={styles.$badge}>
             {text}
         </Badge>
     );
 };
 
 const useStyles = makeStyles({
-    badge: {
+    $badge: {
         // Fix bug on iOS and iPadOS mobile devices
         width: "fit-content",
         whiteSpace: "nowrap",

@@ -23,7 +23,7 @@ export const UserLevelLabel: React.FC<IUserLevelLabelProps> = (props) => {
 
     return (
         <Tooltip content={label} relationship="description" withArrow positioning={tooltipPositioning}>
-            <Badge appearance="filled" size="large" color={color} className={styles.badge}>
+            <Badge appearance="filled" size="large" color={color} className={styles.$badge}>
                 {text}
             </Badge>
         </Tooltip>
@@ -31,7 +31,7 @@ export const UserLevelLabel: React.FC<IUserLevelLabelProps> = (props) => {
 };
 
 const useStyles = makeStyles({
-    badge: {
+    $badge: {
         // Fix bug on iOS and iPadOS mobile devices
         width: "fit-content",
         whiteSpace: "nowrap",
