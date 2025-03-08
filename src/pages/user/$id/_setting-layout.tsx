@@ -1,12 +1,13 @@
 import { makeStyles, Tab, TabList } from "@fluentui/react-components";
 import { createFileRoute, Outlet, useMatchRoute, useNavigate } from "@tanstack/react-router";
 import React from "react";
+import { z } from "zod";
 
 import { PermissionDeniedError } from "@/common/exceptions/permission-denied";
 import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
 import { flex } from "@/common/styles/flex";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
-import { canEditUserSettings } from "@/permission/checkers";
+import { checkIsAllowedEditUserId } from "@/permission/user/checker";
 
 const enum CE_SettingPages {
     EditProfile = "edit",
@@ -74,7 +75,8 @@ export const Route = createFileRoute("/user/$id/_setting-layout")({
             throw new SignInRequiredError();
         }
 
-        if (!canEditUserSettings(Number.parseInt(id), currentUser, permission)) {
+        const userId = z.coerce.number().int().parse(id);
+        if (!checkIsAllowedEditUserId(userId, currentUser, permission)) {
             throw new PermissionDeniedError();
         }
     },

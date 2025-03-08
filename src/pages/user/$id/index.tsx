@@ -24,14 +24,14 @@ import { UserLevelLabel } from "@/components/UserLevelLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
 import { MarkdownContentLazy } from "@/markdown/MarkdownContent.lazy";
-import { canEditUserSettings } from "@/permission/checkers";
+import { useIsAllowedEditUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptionsFn } from "@/query/utils";
 import { UserModule } from "@/server/api";
 import type { UserTypes } from "@/server/types";
 import { withThrowErrors } from "@/server/utils";
-import { useCurrentUser, useFeature, useIsMiddleScreen, useIsMiniScreen, usePermission } from "@/store/hooks";
+import { useFeature, useIsMiddleScreen, useIsMiniScreen } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
 const UserDetailPage: React.FC = () => {
@@ -85,8 +85,8 @@ const AvatarAndUserName: React.FC<{
     const isMiniScreen = useIsMiniScreen();
     const isMiddleScreen = useIsMiddleScreen();
     const isLightTheme = useIsLightTheme();
-    const currentUser = useCurrentUser();
-    const permission = usePermission();
+    const isAllowedEdit = useIsAllowedEditUser(userDetail);
+
     const fallBackAvatar = isLightTheme ? logoLight : logoDark;
     const styles = useStyles();
 
@@ -137,7 +137,7 @@ const AvatarAndUserName: React.FC<{
                         tooltipPositioning={isMiddleScreen ? "before" : "after"}
                     />
 
-                    {canEditUserSettings(userDetail.id, currentUser, permission) &&
+                    {isAllowedEdit &&
                         (isMiniScreen ? (
                             <Tooltip content={ls.$edit} relationship="label">
                                 <ButtonWithRouter

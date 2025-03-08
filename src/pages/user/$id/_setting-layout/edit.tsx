@@ -35,6 +35,7 @@ import { format } from "@/common/utils/format";
 import { UserLevelLabel } from "@/components/UserLevelLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { userDetailQueryKeys } from "@/query/keys";
@@ -57,6 +58,7 @@ const UserEditPage: React.FC = () => {
     const fallBackAvatar = isLightTheme ? logoLight : logoDark;
     const currentUser = useCurrentUser()!; // I'm sure currentUser is not null.
     const dispatch = useAppDispatch();
+    const isAllowedManage = useIsAllowedManageUser(userDetail);
 
     const ls = useLocalizedStrings({
         $title: CE_Strings.USER_EDIT_PAGE_TITLE_WITH_NAME,
@@ -206,7 +208,7 @@ const UserEditPage: React.FC = () => {
                         onChange={(_, { value }) => setBio(value)}
                     />
                 </Field>
-                {permission.manageUser && (
+                {isAllowedManage && userDetail.id !== currentUser.id && (
                     <Field label={ls.$level}>
                         <UserLevelSelector disabled={pending} level={level} onChange={setLevel} />
                     </Field>
@@ -262,7 +264,6 @@ const UserEditPage: React.FC = () => {
                 </DialogSurface>
             </Dialog>
             {/* TODO: avatar uploader dialog */}
-            {/* TODO: sensitive changes confirmation dialog */}
         </div>
     );
 };
