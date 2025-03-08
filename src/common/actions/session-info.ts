@@ -1,13 +1,8 @@
 import { updateLocaleAsyncAction } from "@/locales/actions";
+import { setPermissionAction } from "@/permission/common/actions";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
-import {
-    setAuthAction,
-    setFeatureAction,
-    setPaginationAction,
-    setPermissionAction,
-    setPreferenceAction,
-} from "@/store/actions";
+import { setAuthAction, setFeatureAction, setPaginationAction, setPreferenceAction } from "@/store/actions";
 import type { IAppDispatch, IPreferenceState } from "@/store/types";
 import { createAppAction } from "@/store/utils";
 import { updateThemeAction } from "@/theme/actions";

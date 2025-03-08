@@ -1,5 +1,4 @@
-import { usePermission } from "@/store/hooks";
-
+import { usePermission } from "../common/hooks";
 import { checkIsAllowedCreateProblem, checkIsAllowedEditProblem, checkIsAllowedSubmitProblem } from "./checker";
 
 export const useIsAllowedSubmitProblem = (): boolean => {

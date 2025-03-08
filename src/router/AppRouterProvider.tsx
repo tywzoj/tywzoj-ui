@@ -1,7 +1,8 @@
 import { RouterProvider } from "@tanstack/react-router";
 
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
-import { useCurrentUser, usePermission } from "@/store/hooks";
+import { usePermission } from "@/permission/common/hooks";
+import { useCurrentUser } from "@/store/hooks";
 
 import { router } from "./router";
 

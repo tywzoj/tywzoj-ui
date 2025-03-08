@@ -19,7 +19,8 @@ import { format } from "@/common/utils/format";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Locale, CE_Strings } from "@/locales/locale";
 import { getLocale } from "@/locales/selectors";
-import { useAppSelector, useCurrentUser, useFeature, useIsSmallScreen, usePermission } from "@/store/hooks";
+import { usePermission } from "@/permission/common/hooks";
+import { useAppSelector, useCurrentUser, useFeature, useIsSmallScreen } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
 import AuthMenu from "./AuthMenu";

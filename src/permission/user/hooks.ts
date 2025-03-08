@@ -1,6 +1,7 @@
 import type { UserTypes } from "@/server/types";
-import { useCurrentUser, usePermission } from "@/store/hooks";
+import { useCurrentUser } from "@/store/hooks";
 
+import { usePermission } from "../common/hooks";
 import { checkIsAllowedEditUser, checkIsAllowedManageUser } from "./checker";
 
 type IUserDetail = UserTypes.IUserDetail;

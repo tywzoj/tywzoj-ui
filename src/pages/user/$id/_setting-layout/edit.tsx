@@ -44,14 +44,13 @@ import { UserModule } from "@/server/api";
 import { CE_UserLevel } from "@/server/common/permission";
 import type { UserTypes } from "@/server/types";
 import { withThrowErrors } from "@/server/utils";
-import { useAppDispatch, useCurrentUser, useFeature, useIsMiniScreen, usePermission } from "@/store/hooks";
+import { useAppDispatch, useCurrentUser, useFeature, useIsMiniScreen } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
 const UserEditPage: React.FC = () => {
     const { queryOptions } = Route.useLoaderData();
     const { data: userDetail } = useSuspenseQueryData(queryOptions);
     const queryClient = useQueryClient();
-    const permission = usePermission();
     const { emailVerification: emailVerificationEnabled } = useFeature();
     const isLightTheme = useIsLightTheme();
     const isMiniScreen = useIsMiniScreen();
@@ -168,10 +167,10 @@ const UserEditPage: React.FC = () => {
                         <Field label={ls.$username}>
                             <Input
                                 disabled={pending}
-                                readOnly={!permission.manageUser}
+                                readOnly={!isAllowedManage}
                                 value={username}
                                 onChange={(_, { value }) => {
-                                    if (permission.manageUser) {
+                                    if (isAllowedManage) {
                                         setUsername(value);
                                     }
                                 }}

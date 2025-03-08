@@ -2,6 +2,7 @@ import type { Reducer } from "@reduxjs/toolkit";
 import { createReducer } from "@reduxjs/toolkit";
 
 import { setLocaleAction } from "@/locales/actions";
+import { setPermissionAction } from "@/permission/common/actions";
 import { setThemeAction } from "@/theme/actions";
 
 import {
@@ -10,7 +11,6 @@ import {
     setFeatureAction,
     setPageTitleAction,
     setPaginationAction,
-    setPermissionAction,
     setPreferenceAction,
 } from "./actions";
 import { initialState } from "./initial-state";

@@ -33,6 +33,7 @@ import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { useIsAllowedCreateProblem } from "@/permission/problem/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptionsFn } from "@/query/utils";
@@ -40,7 +41,7 @@ import { ProblemModule } from "@/server/api";
 import { CE_Order } from "@/server/common/enums";
 import { CE_ProblemSortBy } from "@/server/modules/problem.enums";
 import { withThrowErrors } from "@/server/utils";
-import { useIsMiddleScreen, usePermission } from "@/store/hooks";
+import { useIsMiddleScreen } from "@/store/hooks";
 import { getPagination, getPreference } from "@/store/selectors";
 
 const ProblemListPage: React.FC = () => {
@@ -49,7 +50,7 @@ const ProblemListPage: React.FC = () => {
     const navigate = Route.useNavigate();
     const search = Route.useSearch();
     const [searchBoxValue, setSearchBoxValue] = React.useState("");
-    const permission = usePermission();
+    const isAllowedCreate = useIsAllowedCreateProblem();
 
     React.useEffect(() => {
         // Update search box value when search param keyword changes
@@ -75,7 +76,7 @@ const ProblemListPage: React.FC = () => {
                 <div className={styles.$title}>
                     <Title3 as="h1">{ls.$title}</Title3>
                 </div>
-                {permission.manageProblem && (
+                {isAllowedCreate && (
                     <div className={styles.$actions}>
                         <Button>Manage Tags</Button> {/* TODO: add a page */}
                         <ButtonWithRouter appearance="primary" to="/problem/new">
