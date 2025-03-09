@@ -162,14 +162,6 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
             success = false;
         }
 
-        if (title.length > PROBLEM_TITLE_MAX_LENGTH) {
-            setTitleErr(ls.$titleTooLong);
-            if (success) {
-                titleRef.current?.focus();
-            }
-            success = false;
-        }
-
         return success;
     };
 
@@ -281,6 +273,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     <Input
                         ref={titleRef}
                         value={title}
+                        maxLength={PROBLEM_TITLE_MAX_LENGTH}
                         onChange={(_, { value }) => {
                             setTitle(value);
                             setTitleErr("");
