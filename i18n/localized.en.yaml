@@ -566,6 +566,16 @@
   description: A string for the title of user profile page.
   raw: '{0}''s Profile'
 
+- name: USER_PREFERENCE_PAGE_TITLE
+  value: Preference Setting
+  description: A string for the title of user preferences page.
+  raw: Preference Setting
+
+- name: USER_SECURITY_PAGE_TITLE
+  value: Security Setting
+  description: A string for the title of user security page.
+  raw: Security Setting
+
 - name: USER_EDIT_PAGE_TITLE
   value: Edit Profile
   description: A string for the title of user edit page.
@@ -577,9 +587,9 @@
   raw: Edit {0}'s Profile
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
-  value: Verify Your Email
+  value: Verify your email
   description: A string for the title of email verification dialog.
-  raw: Verify Your Email
+  raw: Verify your email
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
   value: >-

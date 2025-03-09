@@ -74,7 +74,7 @@
   raw: Submit
 
 - name: COMMON_RESET_BUTTON
-  value: null
+  value: 重置
   description: A string for the label of reset button.
   raw: Reset
 
@@ -339,14 +339,14 @@
   raw: Email
 
 - name: DISPLAY_EMAIL_HINT
-  value: null
+  value: 此邮箱将在个人资料中显示，但不会用于认证。
   description: A string for the hint of display email input.
   raw: >-
     This email will be shown to other users in the profile, but it will not be
     used for authentication.
 
 - name: AUTH_EMAIL_HINT
-  value: null
+  value: 此邮箱将用于认证和通知。
   description: A string for the hint of authentication email input.
   raw: This email will be used for authentication and notifications.
 
@@ -356,7 +356,7 @@
   raw: Confirm Password
 
 - name: VERIFICATION_CODE_LABEL
-  value: null
+  value: 验证码
   description: A string for the label of verification code input.
   raw: Verification Code
 
@@ -451,7 +451,7 @@
   raw: Invalid email format.
 
 - name: VALIDATION_ERROR_NICKNAME_TOO_LONG
-  value: null
+  value: 昵称太长。请缩短。
   description: A string for the error message when the nickname is too long.
   raw: The nickname is too long. Please shorten it.
 
@@ -562,30 +562,40 @@
   description: A string for the title of user profile page.
   raw: '{0}''s Profile'
 
+- name: USER_PREFERENCE_PAGE_TITLE
+  value: 偏好设置
+  description: A string for the title of user preferences page.
+  raw: Preference Setting
+
+- name: USER_SECURITY_PAGE_TITLE
+  value: 安全设置
+  description: A string for the title of user security page.
+  raw: Security Setting
+
 - name: USER_EDIT_PAGE_TITLE
-  value: 编辑个人资料
+  value: 编辑资料
   description: A string for the title of user edit page.
   raw: Edit Profile
 
 - name: USER_EDIT_PAGE_TITLE_WITH_NAME
-  value: 编辑 {0} 的个人资料
+  value: 编辑 {0} 的资料
   description: A string for the title of user settings page.
   raw: Edit {0}'s Profile
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
-  value: null
+  value: 验证您的邮箱
   description: A string for the title of email verification dialog.
-  raw: Verify Your Email
+  raw: Verify your email
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
-  value: null
+  value: 我们已向您的邮箱发送了一个验证码。请在下方输入验证码以验证您的邮箱。
   description: A string for the description of email verification dialog.
   raw: >-
     We have sent a verification code to your email. Please enter the code below
     to verify your email.
 
 - name: USER_EDIT_PAGE_GO_TO_PROFILE_BUTTON
-  value: null
+  value: 前往个人资料
   description: A string for the label of go to profile button.
   raw: Go to Profile
 

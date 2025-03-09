@@ -29,6 +29,7 @@ import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
 import { EMAIL_MAX_LENGTH, NICKNAME_MAX_LENGTH, USERNAME_MAX_LENGTH } from "@/common/constants/data-length";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useDialogAwaiter } from "@/common/hooks/dialog-awaiter";
+import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { useUserLevelStringMap } from "@/common/hooks/user-level";
 import { flex } from "@/common/styles/flex";
@@ -67,6 +68,7 @@ const UserEditPage: React.FC = () => {
     const isAllowedManage = useIsAllowedManageUser(userDetail);
     const locale = useAppSelector(getLocale);
     const errorToString = useErrorCodeToString();
+    const recaptchaAsync = useRecaptchaAsync();
 
     const ls = useLocalizedStrings({
         $title: CE_Strings.USER_EDIT_PAGE_TITLE_WITH_NAME,
@@ -190,7 +192,7 @@ const UserEditPage: React.FC = () => {
             if (shouldPatch) {
                 if (patchBody.email && !isAllowedManage) {
                     if (!emailVerificationCodeErrorRef.current) {
-                        await sendChangeEmailCodeAsync(patchBody.email, locale);
+                        await sendChangeEmailCodeAsync(patchBody.email, locale, recaptchaAsync);
 
                         setEmailVerificationCode("");
                         setEmailVerificationCodeError("");
@@ -209,7 +211,7 @@ const UserEditPage: React.FC = () => {
 
                 const strId = userDetail.id.toString();
 
-                const resp = await patchUserDetailAsync(strId, patchBody);
+                const resp = await patchUserDetailAsync(strId, patchBody, recaptchaAsync);
 
                 if (resp.code !== CE_ErrorCode.OK) {
                     handlePatchProblemError(resp.code);
@@ -230,6 +232,7 @@ const UserEditPage: React.FC = () => {
             bio,
             level,
             isAllowedManage,
+            recaptchaAsync,
             queryClient,
             currentUser.id,
             locale,

@@ -448,6 +448,14 @@
   value: '{0}''s Profile'
   description: A string for the title of user profile page.
 
+- name: USER_PREFERENCE_PAGE_TITLE
+  value: Preference Setting
+  description: A string for the title of user preferences page.
+
+- name: USER_SECURITY_PAGE_TITLE
+  value: Security Setting
+  description: A string for the title of user security page.
+
 - name: USER_EDIT_PAGE_TITLE
   value: Edit Profile
   description: A string for the title of user edit page.
@@ -457,7 +465,7 @@
   description: A string for the title of user settings page.
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
-  value: Verify Your Email
+  value: Verify your email
   description: A string for the title of email verification dialog.
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
