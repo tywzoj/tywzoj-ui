@@ -58,6 +58,10 @@
   value: Submit
   description: A string for the label of submit button.
 
+- name: COMMON_RESET_BUTTON
+  value: Reset
+  description: A string for the label of reset button.
+
 - name: COMMON_ERROR_TITLE
   value: Error
   description: A string for the title of error message.
@@ -254,13 +258,33 @@
   value: Username
   description: A string for the label of username input.
 
+- name: USERNAME_HINT
+  value: >-
+    The username must be between 3 and 24 characters long and can only contain
+    uppercase and lowercase letters, numbers, and the characters -_.#$ .
+  description: A string for the hint of username input.
+
 - name: EMAIL_LABEL
   value: Email
   description: A string for the label of email input.
 
+- name: DISPLAY_EMAIL_HINT
+  value: >-
+    This email will be shown to other users in the profile, but it will not be
+    used for authentication.
+  description: A string for the hint of display email input.
+
+- name: AUTH_EMAIL_HINT
+  value: This email will be used for authentication and notifications.
+  description: A string for the hint of authentication email input.
+
 - name: PASSWORD_CONFIRM_LABEL
   value: Confirm Password
   description: A string for the label of password confirm input.
+
+- name: VERIFICATION_CODE_LABEL
+  value: Verification Code
+  description: A string for the label of verification code input.
 
 - name: TITLE_LABEL
   value: Title
@@ -322,9 +346,21 @@
   value: Username cannot be empty.
   description: A string for the error message when username is empty.
 
+- name: VALIDATION_ERROR_USERNAME_INVALID
+  value: Invalid username format.
+  description: A string for the error message when username format is invalid.
+
 - name: VALIDATION_ERROR_EMAIL_EMPTY
   value: Email cannot be empty.
   description: A string for the error message when email is empty.
+
+- name: VALIDATION_ERROR_EMAIL_INVALID
+  value: Invalid email format.
+  description: A string for the error message when email format is invalid.
+
+- name: VALIDATION_ERROR_NICKNAME_TOO_LONG
+  value: The nickname is too long. Please shorten it.
+  description: A string for the error message when the nickname is too long.
 
 - name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
   value: Password confirm cannot be empty.
@@ -409,7 +445,7 @@
   description: A string for the label of user avatar.
 
 - name: USER_PROFILE_PAGE_TITLE_WITH_NAME
-  value: "{0}'s Profile"
+  value: '{0}''s Profile'
   description: A string for the title of user profile page.
 
 - name: USER_EDIT_PAGE_TITLE
@@ -419,6 +455,20 @@
 - name: USER_EDIT_PAGE_TITLE_WITH_NAME
   value: Edit {0}'s Profile
   description: A string for the title of user settings page.
+
+- name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
+  value: Verify Your Email
+  description: A string for the title of email verification dialog.
+
+- name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
+  value: >-
+    We have sent a verification code to your email. Please enter the code below
+    to verify your email.
+  description: A string for the description of email verification dialog.
+
+- name: USER_EDIT_PAGE_GO_TO_PROFILE_BUTTON
+  value: Go to Profile
+  description: A string for the label of go to profile button.
 
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: Keyword or ID
@@ -489,13 +539,13 @@
   description: A string for the label of generate ID button.
 
 - name: PROBLEM_EDIT_TITLE_WITH_ID
-  value: "#{0}({1}). {2} - Edit"
+  value: '#{0}({1}). {2} - Edit'
   description: >-
     A string for the title of problem edit page. {0} is the problem display ID,
     {1} is the problem ID, and {2} is the problem title.
 
 - name: PROBLEM_EDIT_TITLE
-  value: "#{0}. {1} - Edit"
+  value: '#{0}. {1} - Edit'
   description: >-
     A string for the title of problem edit page. {0} is the problem display ID,
     and {1} is the problem title.
@@ -585,23 +635,23 @@
   description: A string for the label of GNU C++20 standard.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O0
-  value: "-O0 (disable optimization)"
+  value: '-O0 (disable optimization)'
   description: A string for the label of O0 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O1
-  value: "-O1"
+  value: '-O1'
   description: A string for the label of O1 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O2
-  value: "-O2"
+  value: '-O2'
   description: A string for the label of O2 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O3
-  value: "-O3"
+  value: '-O3'
   description: A string for the label of O3 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_OFAST
-  value: "-Ofast (fastest)"
+  value: '-Ofast (fastest)'
   description: A string for the label of Ofast optimization.
 
 - name: COMPILATION_CPP_ARCHITECTURE_64
@@ -661,11 +711,11 @@
   description: A string for the label of JVM platform.
 
 - name: COMPILATION_PAS_OPTIMIZATION_O
-  value: "-O"
+  value: '-O'
   description: A string for the label of O optimization.
 
 - name: COMPILATION_PAS_OPTIMIZATION_O4
-  value: "-O4 (fastest)"
+  value: '-O4 (fastest)'
   description: A string for the label of O4 optimization.
 
 - name: COMPILATION_RS_OPTIMIZATION_1

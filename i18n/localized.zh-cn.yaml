@@ -69,9 +69,14 @@
   raw: Move Down
 
 - name: COMMON_SUBMIT_BUTTON
-  value: null
+  value: 提交
   description: A string for the label of submit button.
   raw: Submit
+
+- name: COMMON_RESET_BUTTON
+  value: null
+  description: A string for the label of reset button.
+  raw: Reset
 
 - name: COMMON_ERROR_TITLE
   value: 错误
@@ -157,6 +162,11 @@
   value: 无此用户。
   description: A string for the error message when no such user.
   raw: No such user.
+
+- name: ERROR_2101_DUPLICATE_USERNAME
+  value: 用户名已被使用。
+  description: A string for the error message when the username is already used.
+  raw: The username is already used.
 
 - name: ERROR_2200_NO_SUCH_PROBLEM
   value: 无此题目。
@@ -316,15 +326,39 @@
   description: A string for the label of username input.
   raw: Username
 
+- name: USERNAME_HINT
+  value: 用户名必须在 3 到 24 个字符之间，只能包含大写和小写字母、数字和字符 -_.#$ 。
+  description: A string for the hint of username input.
+  raw: >-
+    The username must be between 3 and 24 characters long and can only contain
+    uppercase and lowercase letters, numbers, and the characters -_.#$ .
+
 - name: EMAIL_LABEL
   value: 邮箱
   description: A string for the label of email input.
   raw: Email
 
+- name: DISPLAY_EMAIL_HINT
+  value: null
+  description: A string for the hint of display email input.
+  raw: >-
+    This email will be shown to other users in the profile, but it will not be
+    used for authentication.
+
+- name: AUTH_EMAIL_HINT
+  value: null
+  description: A string for the hint of authentication email input.
+  raw: This email will be used for authentication and notifications.
+
 - name: PASSWORD_CONFIRM_LABEL
   value: 确认密码
   description: A string for the label of password confirm input.
   raw: Confirm Password
+
+- name: VERIFICATION_CODE_LABEL
+  value: null
+  description: A string for the label of verification code input.
+  raw: Verification Code
 
 - name: TITLE_LABEL
   value: 标题
@@ -401,10 +435,25 @@
   description: A string for the error message when username is empty.
   raw: Username cannot be empty.
 
+- name: VALIDATION_ERROR_USERNAME_INVALID
+  value: 用户名格式无效。
+  description: A string for the error message when username format is invalid.
+  raw: Invalid username format.
+
 - name: VALIDATION_ERROR_EMAIL_EMPTY
   value: 邮箱不能为空。
   description: A string for the error message when email is empty.
   raw: Email cannot be empty.
+
+- name: VALIDATION_ERROR_EMAIL_INVALID
+  value: 邮箱格式无效。
+  description: A string for the error message when email format is invalid.
+  raw: Invalid email format.
+
+- name: VALIDATION_ERROR_NICKNAME_TOO_LONG
+  value: null
+  description: A string for the error message when the nickname is too long.
+  raw: The nickname is too long. Please shorten it.
 
 - name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
   value: 确认密码不能为空。
@@ -509,9 +558,9 @@
   raw: Avatar
 
 - name: USER_PROFILE_PAGE_TITLE_WITH_NAME
-  value: "{0} 的个人资料"
+  value: '{0} 的个人资料'
   description: A string for the title of user profile page.
-  raw: "{0}'s Profile"
+  raw: '{0}''s Profile'
 
 - name: USER_EDIT_PAGE_TITLE
   value: 编辑个人资料
@@ -522,6 +571,23 @@
   value: 编辑 {0} 的个人资料
   description: A string for the title of user settings page.
   raw: Edit {0}'s Profile
+
+- name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
+  value: null
+  description: A string for the title of email verification dialog.
+  raw: Verify Your Email
+
+- name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
+  value: null
+  description: A string for the description of email verification dialog.
+  raw: >-
+    We have sent a verification code to your email. Please enter the code below
+    to verify your email.
+
+- name: USER_EDIT_PAGE_GO_TO_PROFILE_BUTTON
+  value: null
+  description: A string for the label of go to profile button.
+  raw: Go to Profile
 
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: 输入题目 ID 或关键字以搜索题目
@@ -609,18 +675,18 @@
   raw: Generate ID
 
 - name: PROBLEM_EDIT_TITLE_WITH_ID
-  value: "#{0}({1}). {2} - 编辑"
+  value: '#{0}({1}). {2} - 编辑'
   description: >-
     A string for the title of problem edit page. {0} is the problem display ID,
     {1} is the problem ID, and {2} is the problem title.
-  raw: "#{0}({1}). {2} - Edit"
+  raw: '#{0}({1}). {2} - Edit'
 
 - name: PROBLEM_EDIT_TITLE
-  value: "#{0}. {1} - 编辑"
+  value: '#{0}. {1} - 编辑'
   description: >-
     A string for the title of problem edit page. {0} is the problem display ID,
     and {1} is the problem title.
-  raw: "#{0}. {1} - Edit"
+  raw: '#{0}. {1} - Edit'
 
 - name: CODE_COPIED_MESSAGE
   value: 代码已复制到剪贴板。
@@ -728,29 +794,29 @@
   raw: GNU C++20
 
 - name: COMPILATION_CPP_OPTIMIZATION_O0
-  value: "-O0 (禁用优化)"
+  value: '-O0 (禁用优化)'
   description: A string for the label of O0 optimization.
-  raw: "-O0 (disable optimization)"
+  raw: '-O0 (disable optimization)'
 
 - name: COMPILATION_CPP_OPTIMIZATION_O1
-  value: "-O1"
+  value: '-O1'
   description: A string for the label of O1 optimization.
-  raw: "-O1"
+  raw: '-O1'
 
 - name: COMPILATION_CPP_OPTIMIZATION_O2
-  value: "-O2"
+  value: '-O2'
   description: A string for the label of O2 optimization.
-  raw: "-O2"
+  raw: '-O2'
 
 - name: COMPILATION_CPP_OPTIMIZATION_O3
-  value: "-O3"
+  value: '-O3'
   description: A string for the label of O3 optimization.
-  raw: "-O3"
+  raw: '-O3'
 
 - name: COMPILATION_CPP_OPTIMIZATION_OFAST
-  value: "-Ofast (最快)"
+  value: '-Ofast (最快)'
   description: A string for the label of Ofast optimization.
-  raw: "-Ofast (fastest)"
+  raw: '-Ofast (fastest)'
 
 - name: COMPILATION_CPP_ARCHITECTURE_64
   value: 64 位
@@ -823,14 +889,14 @@
   raw: JVM
 
 - name: COMPILATION_PAS_OPTIMIZATION_O
-  value: "-O"
+  value: '-O'
   description: A string for the label of O optimization.
-  raw: "-O"
+  raw: '-O'
 
 - name: COMPILATION_PAS_OPTIMIZATION_O4
-  value: "-O4 (最快)"
+  value: '-O4 (最快)'
   description: A string for the label of O4 optimization.
-  raw: "-O4 (fastest)"
+  raw: '-O4 (fastest)'
 
 - name: COMPILATION_RS_OPTIMIZATION_1
   value: 1 级

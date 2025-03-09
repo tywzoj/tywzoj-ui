@@ -73,6 +73,11 @@
   description: A string for the label of submit button.
   raw: Submit
 
+- name: COMMON_RESET_BUTTON
+  value: Reset
+  description: A string for the label of reset button.
+  raw: Reset
+
 - name: COMMON_ERROR_TITLE
   value: Error
   description: A string for the title of error message.
@@ -157,6 +162,11 @@
   value: No such user.
   description: A string for the error message when no such user.
   raw: No such user.
+
+- name: ERROR_2101_DUPLICATE_USERNAME
+  value: The username is already used.
+  description: A string for the error message when the username is already used.
+  raw: The username is already used.
 
 - name: ERROR_2200_NO_SUCH_PROBLEM
   value: No such problem.
@@ -316,15 +326,43 @@
   description: A string for the label of username input.
   raw: Username
 
+- name: USERNAME_HINT
+  value: >-
+    The username must be between 3 and 24 characters long and can only contain
+    uppercase and lowercase letters, numbers, and the characters -_.#$ .
+  description: A string for the hint of username input.
+  raw: >-
+    The username must be between 3 and 24 characters long and can only contain
+    uppercase and lowercase letters, numbers, and the characters -_.#$ .
+
 - name: EMAIL_LABEL
   value: Email
   description: A string for the label of email input.
   raw: Email
 
+- name: DISPLAY_EMAIL_HINT
+  value: >-
+    This email will be shown to other users in the profile, but it will not be
+    used for authentication.
+  description: A string for the hint of display email input.
+  raw: >-
+    This email will be shown to other users in the profile, but it will not be
+    used for authentication.
+
+- name: AUTH_EMAIL_HINT
+  value: This email will be used for authentication and notifications.
+  description: A string for the hint of authentication email input.
+  raw: This email will be used for authentication and notifications.
+
 - name: PASSWORD_CONFIRM_LABEL
   value: Confirm Password
   description: A string for the label of password confirm input.
   raw: Confirm Password
+
+- name: VERIFICATION_CODE_LABEL
+  value: Verification Code
+  description: A string for the label of verification code input.
+  raw: Verification Code
 
 - name: TITLE_LABEL
   value: Title
@@ -401,10 +439,25 @@
   description: A string for the error message when username is empty.
   raw: Username cannot be empty.
 
+- name: VALIDATION_ERROR_USERNAME_INVALID
+  value: Invalid username format.
+  description: A string for the error message when username format is invalid.
+  raw: Invalid username format.
+
 - name: VALIDATION_ERROR_EMAIL_EMPTY
   value: Email cannot be empty.
   description: A string for the error message when email is empty.
   raw: Email cannot be empty.
+
+- name: VALIDATION_ERROR_EMAIL_INVALID
+  value: Invalid email format.
+  description: A string for the error message when email format is invalid.
+  raw: Invalid email format.
+
+- name: VALIDATION_ERROR_NICKNAME_TOO_LONG
+  value: The nickname is too long. Please shorten it.
+  description: A string for the error message when the nickname is too long.
+  raw: The nickname is too long. Please shorten it.
 
 - name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
   value: Password confirm cannot be empty.
@@ -522,6 +575,25 @@
   value: Edit {0}'s Profile
   description: A string for the title of user settings page.
   raw: Edit {0}'s Profile
+
+- name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
+  value: Verify Your Email
+  description: A string for the title of email verification dialog.
+  raw: Verify Your Email
+
+- name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
+  value: >-
+    We have sent a verification code to your email. Please enter the code below
+    to verify your email.
+  description: A string for the description of email verification dialog.
+  raw: >-
+    We have sent a verification code to your email. Please enter the code below
+    to verify your email.
+
+- name: USER_EDIT_PAGE_GO_TO_PROFILE_BUTTON
+  value: Go to Profile
+  description: A string for the label of go to profile button.
+  raw: Go to Profile
 
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: Keyword or ID

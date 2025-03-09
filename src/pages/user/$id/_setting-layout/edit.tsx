@@ -26,6 +26,7 @@ import logoDark from "@/assets/icon.dark.png";
 import logoLight from "@/assets/icon.light.png";
 import { refreshSessionInfoAsyncAction } from "@/common/actions/session-info";
 import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
+import { EMAIL_MAX_LENGTH, NICKNAME_MAX_LENGTH, USERNAME_MAX_LENGTH } from "@/common/constants/data-length";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useDialogAwaiter } from "@/common/hooks/dialog-awaiter";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
@@ -35,7 +36,7 @@ import { diff } from "@/common/utils/diff";
 import { format } from "@/common/utils/format";
 import { neverGuard } from "@/common/utils/never-guard";
 import { Z_EMPTY_STRING } from "@/common/validators/common";
-import { Z_EMAIL, Z_NICKNAME, Z_USERNAME } from "@/common/validators/user";
+import { Z_EMAIL, Z_USERNAME } from "@/common/validators/user";
 import { UserLevelLabel } from "@/components/UserLevelLabel";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
@@ -70,13 +71,22 @@ const UserEditPage: React.FC = () => {
     const ls = useLocalizedStrings({
         $title: CE_Strings.USER_EDIT_PAGE_TITLE_WITH_NAME,
         $username: CE_Strings.USERNAME_LABEL,
+        $usernameHint: CE_Strings.USERNAME_HINT,
         $email: CE_Strings.EMAIL_LABEL,
+        $emailHint: CE_Strings.DISPLAY_EMAIL_HINT,
         $nickname: CE_Strings.USER_NICKNAME_LABEL,
         $bio: CE_Strings.USER_BIO_LABEL,
         $level: CE_Strings.USER_LEVEL_LABEL,
         $saveButton: CE_Strings.COMMON_SAVE_BUTTON,
+        $resetButton: CE_Strings.COMMON_RESET_BUTTON,
         $submitButton: CE_Strings.COMMON_SUBMIT_BUTTON,
         $cancelButton: CE_Strings.COMMON_CANCEL_BUTTON,
+        $goToProfileButton: CE_Strings.USER_EDIT_PAGE_GO_TO_PROFILE_BUTTON,
+        $invalidUsername: CE_Strings.VALIDATION_ERROR_USERNAME_INVALID,
+        $invalidEmail: CE_Strings.VALIDATION_ERROR_EMAIL_INVALID,
+        $emailVerificationCode: CE_Strings.VERIFICATION_CODE_LABEL,
+        $emailVerificationTitle: CE_Strings.USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE,
+        $emailVerificationDesc: CE_Strings.USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION,
     });
 
     const [username, setUsername] = React.useState("");
@@ -88,7 +98,6 @@ const UserEditPage: React.FC = () => {
 
     const [usernameError, setUsernameError] = React.useState<string>("");
     const [emailError, setEmailError] = React.useState<string>("");
-    const [nicknameError, setNicknameError] = React.useState<string>("");
     const [emailVerificationCodeError, setEmailVerificationCodeError] = React.useState<string>("");
 
     const [pending, setPending] = React.useState(false);
@@ -121,7 +130,6 @@ const UserEditPage: React.FC = () => {
 
         setUsernameError("");
         setEmailError("");
-        setNicknameError("");
 
         emailVerificationCodeErrorRef.current = false;
     };
@@ -130,7 +138,7 @@ const UserEditPage: React.FC = () => {
         let valid = true;
 
         if (!Z_USERNAME.safeParse(username).success) {
-            setUsernameError("Invalid username.");
+            setUsernameError(ls.$invalidUsername);
             valid = false;
         } else {
             setUsernameError("");
@@ -139,14 +147,7 @@ const UserEditPage: React.FC = () => {
         if (Z_EMAIL.or(Z_EMPTY_STRING).safeParse(email).success) {
             setEmailError("");
         } else {
-            setEmailError("Invalid email.");
-            valid = false;
-        }
-
-        if (Z_NICKNAME.safeParse(nickname).success) {
-            setNicknameError("");
-        } else {
-            setNicknameError("Invalid nickname.");
+            setEmailError(ls.$invalidEmail);
             valid = false;
         }
 
@@ -258,24 +259,18 @@ const UserEditPage: React.FC = () => {
             <form className={styles.$form}>
                 <div className={styles.$fieldsWithAvatarContainer}>
                     <div className={styles.$fieldsWithAvatar}>
-                        <Field label={ls.$username} validationMessage={usernameError}>
+                        <Field label={ls.$username} hint={ls.$usernameHint} validationMessage={usernameError}>
                             <Input
                                 disabled={pending}
                                 readOnly={!isAllowedManage}
                                 value={username}
+                                maxLength={USERNAME_MAX_LENGTH}
                                 onChange={(_, { value }) => {
                                     if (isAllowedManage) {
                                         setUsername(value);
                                         setUsernameError("");
                                     }
                                 }}
-                            />
-                        </Field>
-                        <Field label={ls.$nickname} validationMessage={nicknameError}>
-                            <Input
-                                disabled={pending}
-                                value={nickname}
-                                onChange={(_, { value }) => setNickname(value)}
                             />
                         </Field>
                     </div>
@@ -289,13 +284,21 @@ const UserEditPage: React.FC = () => {
                         </Button>
                     </Tooltip>
                 </div>
-                <Field
-                    label={ls.$email}
-                    // TODO: localization
-                    hint={"This email will be shown to others on profile page, and it will not be used for auth."}
-                    validationMessage={emailError}
-                >
-                    <Input value={email} type="email" onChange={(_, { value }) => setEmail(value)} />
+                <Field label={ls.$nickname}>
+                    <Input
+                        disabled={pending}
+                        value={nickname}
+                        maxLength={NICKNAME_MAX_LENGTH}
+                        onChange={(_, { value }) => setNickname(value)}
+                    />
+                </Field>
+                <Field label={ls.$email} hint={ls.$emailHint} validationMessage={emailError}>
+                    <Input
+                        value={email}
+                        type="email"
+                        maxLength={EMAIL_MAX_LENGTH}
+                        onChange={(_, { value }) => setEmail(value)}
+                    />
                 </Field>
                 <Field label={ls.$bio}>
                     <Textarea
@@ -316,12 +319,11 @@ const UserEditPage: React.FC = () => {
                             {ls.$saveButton}
                         </Button>
                         <Button appearance="secondary" disabledFocusable={pending} onClick={resetForm}>
-                            Reset
+                            {ls.$resetButton}
                         </Button>
                     </div>
                     <ButtonWithRouter to="/user/$id" params={{ id: String(userDetail.id) }} disabledFocusable={pending}>
-                        Go to profile
-                        {/* TODO: localization */}
+                        {ls.$goToProfileButton}
                     </ButtonWithRouter>
                 </div>
             </form>
@@ -333,17 +335,11 @@ const UserEditPage: React.FC = () => {
             >
                 <DialogSurface>
                     <DialogBody>
-                        {/* TODO: localization */}
-                        <DialogTitle>Verify your email</DialogTitle>
+                        <DialogTitle>{ls.$emailVerificationTitle}</DialogTitle>
                         <DialogContent>
-                            <Text>
-                                {/* TODO: localization */}
-                                We have sent a verification code to your email. Please enter the code below to verify
-                                your email.
-                            </Text>
+                            <Text>{ls.$emailVerificationDesc}</Text>
                             <form className={styles.$emailVerificationForm}>
-                                {/* TODO: localization */}
-                                <Field label="Verification Code" validationMessage={emailVerificationCodeError}>
+                                <Field label={ls.$emailVerificationCode} validationMessage={emailVerificationCodeError}>
                                     <Input
                                         value={emailVerificationCode}
                                         onChange={(_, { value }) => {
@@ -429,7 +425,7 @@ const useStyles = makeStyles({
     $fieldsWithAvatarContainer: {
         ...flex({
             justifyContent: "space-between",
-            alignItems: "flex-end",
+            alignItems: "flex-start",
         }),
         gap: "8px",
     },
@@ -442,6 +438,7 @@ const useStyles = makeStyles({
     },
     $avatar: {
         height: "120px",
+        minWidth: "120px",
         width: "120px",
         padding: "0",
         "> .fui-Image": {
@@ -449,11 +446,12 @@ const useStyles = makeStyles({
             height: "100%",
         },
         boxSizing: "border-box",
-        minWidth: "unset",
     },
     $avatarMiniScreen: {
+        marginTop: "26px",
         height: "100px",
         width: "100px",
+        minWidth: "100px",
     },
     $bioInput: {
         height: "200px",
