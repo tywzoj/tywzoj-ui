@@ -1,9 +1,8 @@
 import { z } from "zod";
 
-import { CE_Order } from "@/server/common/enums";
 import { CE_ProblemSortBy } from "@/server/modules/problem.enums";
 
-export const Z_ORDER = z.enum([CE_Order.ASC, CE_Order.DESC]);
+import { PROBLEM_TAG_NAME_MAX_LENGTH, PROBLEM_TITLE_MAX_LENGTH } from "../constants/data-length";
 
 export const Z_PROBLEM_SORT_BY = z.enum([
     CE_ProblemSortBy.DisplayId,
@@ -11,3 +10,6 @@ export const Z_PROBLEM_SORT_BY = z.enum([
     CE_ProblemSortBy.SubmissionCount,
     CE_ProblemSortBy.Title,
 ]);
+
+export const Z_PROBLEM_TITLE = z.string().max(PROBLEM_TITLE_MAX_LENGTH);
+export const Z_PROBLEM_TAG_NAME = z.string().max(PROBLEM_TAG_NAME_MAX_LENGTH);

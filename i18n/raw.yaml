@@ -94,6 +94,18 @@
   value: You have exceeded the rate limit. Please try again later.
   description: A string for the error message when the rate limit is exceeded.
 
+- name: ERROR_1008_HTTPS_REQUIRED
+  value: This request requires HTTPS.
+  description: A string for the error message when the request requires HTTPS.
+
+- name: ERROR_1009_EMAIL_VERIFICATION_CODE_RATE_LIMITED
+  value: You send email verification code too frequently. Please try again later.
+  description: A string for the error message when email verification code is rate limited.
+
+- name: ERROR_1010_INVALID_EMAIL_VERIFICATION_CODE
+  value: Invalid email verification code.
+  description: A string for the error message when the email verification code is invalid.
+
 - name: ERROR_2000_NO_SUCH_USER
   value: No such user.
   description: A string for the error message when no such user.
@@ -110,21 +122,13 @@
   value: The email is already used.
   description: A string for the error message when the email is already used.
 
-- name: ERROR_2004_INVALID_EMAIL_VERIFICATION_CODE
-  value: Invalid email verification code.
-  description: A string for the error message when the email verification code is invalid.
-
-- name: ERROR_2005_FAILED_TO_SEND_EMAIL_VERIFICATION_CODE
-  value: Failed to send email verification code.
-  description: A string for the error message when failed to send email verification code.
-
-- name: ERROR_2006_EMAIL_VERIFICATION_CODE_RATE_LIMITED
-  value: You send email verification code too frequently. Please try again later.
-  description: A string for the error message when email verification code is rate limited.
-
 - name: ERROR_2100_NO_SUCH_USER
   value: No such user.
   description: A string for the error message when no such user.
+
+- name: ERROR_2101_DUPLICATE_USERNAME
+  value: The username is already used.
+  description: A string for the error message when the username is already used.
 
 - name: ERROR_2200_NO_SUCH_PROBLEM
   value: No such problem.
@@ -405,7 +409,7 @@
   description: A string for the label of user avatar.
 
 - name: USER_PROFILE_PAGE_TITLE_WITH_NAME
-  value: '{0}''s Profile'
+  value: "{0}'s Profile"
   description: A string for the title of user profile page.
 
 - name: USER_EDIT_PAGE_TITLE
@@ -485,13 +489,13 @@
   description: A string for the label of generate ID button.
 
 - name: PROBLEM_EDIT_TITLE_WITH_ID
-  value: '#{0}({1}). {2} - Edit'
+  value: "#{0}({1}). {2} - Edit"
   description: >-
     A string for the title of problem edit page. {0} is the problem display ID,
     {1} is the problem ID, and {2} is the problem title.
 
 - name: PROBLEM_EDIT_TITLE
-  value: '#{0}. {1} - Edit'
+  value: "#{0}. {1} - Edit"
   description: >-
     A string for the title of problem edit page. {0} is the problem display ID,
     and {1} is the problem title.
@@ -581,23 +585,23 @@
   description: A string for the label of GNU C++20 standard.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O0
-  value: '-O0 (disable optimization)'
+  value: "-O0 (disable optimization)"
   description: A string for the label of O0 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O1
-  value: '-O1'
+  value: "-O1"
   description: A string for the label of O1 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O2
-  value: '-O2'
+  value: "-O2"
   description: A string for the label of O2 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_O3
-  value: '-O3'
+  value: "-O3"
   description: A string for the label of O3 optimization.
 
 - name: COMPILATION_CPP_OPTIMIZATION_OFAST
-  value: '-Ofast (fastest)'
+  value: "-Ofast (fastest)"
   description: A string for the label of Ofast optimization.
 
 - name: COMPILATION_CPP_ARCHITECTURE_64
@@ -657,11 +661,11 @@
   description: A string for the label of JVM platform.
 
 - name: COMPILATION_PAS_OPTIMIZATION_O
-  value: '-O'
+  value: "-O"
   description: A string for the label of O optimization.
 
 - name: COMPILATION_PAS_OPTIMIZATION_O4
-  value: '-O4 (fastest)'
+  value: "-O4 (fastest)"
   description: A string for the label of O4 optimization.
 
 - name: COMPILATION_RS_OPTIMIZATION_1

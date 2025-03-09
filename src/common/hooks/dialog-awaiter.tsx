@@ -7,8 +7,12 @@ interface IDialogAwaiter {
      * @returns {Promise<boolean>} A promise that resolves to true if onConfirm is called, false if onAbort is called.
      */
     readonly confirmAsync: () => Promise<boolean>;
-    readonly onConfirm: () => void;
+    /**
+     * @param closeDialog If false, the dialog will not be closed after calling this function. Default is true.
+     */
+    readonly onConfirm: (closeDialog?: boolean) => void;
     readonly onAbort: () => void;
+    readonly closeDialog: () => void;
 }
 
 export const useDialogAwaiter = (): IDialogAwaiter => {
@@ -29,12 +33,17 @@ export const useDialogAwaiter = (): IDialogAwaiter => {
                 setOpened(true);
             });
         },
-        onConfirm: () => {
+        onConfirm: (closeDialog = true) => {
             resolveFn.current?.(true);
-            setOpened(false);
+            if (closeDialog) {
+                setOpened(false);
+            }
         },
         onAbort: () => {
             resolveFn.current?.(false);
+            setOpened(false);
+        },
+        closeDialog: () => {
             setOpened(false);
         },
     };

@@ -16,6 +16,7 @@ import {
     Option,
     Text,
     Textarea,
+    Tooltip,
 } from "@fluentui/react-components";
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -32,19 +33,25 @@ import { useUserLevelStringMap } from "@/common/hooks/user-level";
 import { flex } from "@/common/styles/flex";
 import { diff } from "@/common/utils/diff";
 import { format } from "@/common/utils/format";
+import { neverGuard } from "@/common/utils/never-guard";
+import { Z_EMPTY_STRING } from "@/common/validators/common";
+import { Z_EMAIL, Z_NICKNAME, Z_USERNAME } from "@/common/validators/user";
 import { UserLevelLabel } from "@/components/UserLevelLabel";
-import { useLocalizedStrings } from "@/locales/hooks";
+import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { getLocale } from "@/locales/selectors";
 import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { userDetailQueryKeys } from "@/query/keys";
 import { createQueryOptionsFn } from "@/query/utils";
 import { UserModule } from "@/server/api";
+import { CE_ErrorCode } from "@/server/common/error-code";
 import { CE_UserLevel } from "@/server/common/permission";
 import type { UserTypes } from "@/server/types";
-import { withThrowErrors } from "@/server/utils";
-import { useAppDispatch, useCurrentUser, useIsMiniScreen } from "@/store/hooks";
+import type { IErrorCodeWillBeReturned } from "@/server/utils";
+import { withThrowErrors, withThrowErrorsExcept } from "@/server/utils";
+import { useAppDispatch, useAppSelector, useCurrentUser, useIsMiniScreen } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
 const UserEditPage: React.FC = () => {
@@ -57,6 +64,8 @@ const UserEditPage: React.FC = () => {
     const currentUser = useCurrentUser()!; // I'm sure currentUser is not null.
     const dispatch = useAppDispatch();
     const isAllowedManage = useIsAllowedManageUser(userDetail);
+    const locale = useAppSelector(getLocale);
+    const errorToString = useErrorCodeToString();
 
     const ls = useLocalizedStrings({
         $title: CE_Strings.USER_EDIT_PAGE_TITLE_WITH_NAME,
@@ -75,30 +84,93 @@ const UserEditPage: React.FC = () => {
     const [nickname, setNickname] = React.useState("");
     const [level, setLevel] = React.useState(CE_UserLevel.General);
     const [bio, setBio] = React.useState("");
-    const [pending, setPending] = React.useState(false);
     const [emailVerificationCode, setEmailVerificationCode] = React.useState("");
+
+    const [usernameError, setUsernameError] = React.useState<string>("");
+    const [emailError, setEmailError] = React.useState<string>("");
+    const [nicknameError, setNicknameError] = React.useState<string>("");
+    const [emailVerificationCodeError, setEmailVerificationCodeError] = React.useState<string>("");
+
+    const [pending, setPending] = React.useState(false);
+    const [emailVerificationDialogPending, setEmailVerificationDialogPending] = React.useState(false);
     const emailVerificationCodeRef = React.useRef(""); // To get value in async callback
+    const emailVerificationCodeErrorRef = React.useRef(false);
 
     const {
         opened: emailVerificationDialogOpened,
         confirmAsync: waitingForEmailVerificationCodeAsync,
         onConfirm: onSubmitEmailVerification,
         onAbort: onCancelEmailVerification,
+        closeDialog: closeEmailVerificationDialog,
     } = useDialogAwaiter();
 
     React.useEffect(() => {
-        setUsername(userDetail.username);
-        setNickname(userDetail.nickname ?? "");
-        setEmail(userDetail.email ?? "");
-        setBio(userDetail.bio ?? "");
-        setLevel(userDetail.level);
-    }, [userDetail]);
+        resetForm();
+    }, [userDetail]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useSetPageTitle(format(ls.$title, userDetail.username));
 
     const styles = useStyles();
 
-    const handlePatchProblemAsync = useWithCatchError(
+    const resetForm = () => {
+        setUsername(userDetail.username);
+        setNickname(userDetail.nickname ?? "");
+        setEmail(userDetail.email ?? "");
+        setBio(userDetail.bio ?? "");
+        setLevel(userDetail.level);
+
+        setUsernameError("");
+        setEmailError("");
+        setNicknameError("");
+
+        emailVerificationCodeErrorRef.current = false;
+    };
+
+    const validate = (): boolean => {
+        let valid = true;
+
+        if (!Z_USERNAME.safeParse(username).success) {
+            setUsernameError("Invalid username.");
+            valid = false;
+        } else {
+            setUsernameError("");
+        }
+
+        if (Z_EMAIL.or(Z_EMPTY_STRING).safeParse(email).success) {
+            setEmailError("");
+        } else {
+            setEmailError("Invalid email.");
+            valid = false;
+        }
+
+        if (Z_NICKNAME.safeParse(nickname).success) {
+            setNicknameError("");
+        } else {
+            setNicknameError("Invalid nickname.");
+            valid = false;
+        }
+
+        return valid;
+    };
+
+    const handlePatchProblemError = React.useCallback(
+        (code: IErrorCodeWillBeReturned<typeof patchUserDetailAsync>) => {
+            switch (code) {
+                case CE_ErrorCode.InvalidEmailVerificationCode:
+                    setEmailVerificationCodeError(errorToString(code));
+                    emailVerificationCodeErrorRef.current = true;
+                    break;
+                case CE_ErrorCode.User_DuplicateUsername:
+                    setUsernameError(errorToString(code));
+                    break;
+                default:
+                    neverGuard(code);
+            }
+        },
+        [errorToString],
+    );
+
+    const handlePatchUserAsync = useWithCatchError(
         React.useCallback(async () => {
             const patchBody: UserTypes.IUserDetailPatchRequestBody = {};
 
@@ -115,21 +187,34 @@ const UserEditPage: React.FC = () => {
                 ["username", "nickname", "email", "bio", "level"],
             );
             if (shouldPatch) {
-                if (patchBody.email) {
-                    // TODO: send email verification code
+                if (patchBody.email && !isAllowedManage) {
+                    if (!emailVerificationCodeErrorRef.current) {
+                        await sendChangeEmailCodeAsync(patchBody.email, locale);
 
-                    setEmailVerificationCode("");
-                    emailVerificationCodeRef.current = "";
-                    const submitted = await waitingForEmailVerificationCodeAsync();
-                    if (!submitted) {
-                        return;
+                        setEmailVerificationCode("");
+                        setEmailVerificationCodeError("");
+                        setEmailVerificationDialogPending(false);
+                        emailVerificationCodeRef.current = "";
+
+                        if (!(await waitingForEmailVerificationCodeAsync())) {
+                            return;
+                        }
                     }
+
+                    setEmailVerificationDialogPending(true);
+                    emailVerificationCodeErrorRef.current = false;
                     patchBody.emailVerificationCode = emailVerificationCodeRef.current;
                 }
 
                 const strId = userDetail.id.toString();
 
-                await patchUserDetailAsync(strId, patchBody);
+                const resp = await patchUserDetailAsync(strId, patchBody);
+
+                if (resp.code !== CE_ErrorCode.OK) {
+                    handlePatchProblemError(resp.code);
+                    return;
+                }
+
                 await queryClient.invalidateQueries({ queryKey: userDetailQueryKeys(strId) });
 
                 if (currentUser.id === userDetail.id) {
@@ -143,18 +228,29 @@ const UserEditPage: React.FC = () => {
             email,
             bio,
             level,
+            isAllowedManage,
             queryClient,
-            currentUser,
+            currentUser.id,
+            locale,
             waitingForEmailVerificationCodeAsync,
+            handlePatchProblemError,
             dispatch,
         ]),
     );
 
     const onSaveChanges = () => {
-        // TODO: Validate fields
+        if (!validate()) {
+            return;
+        }
 
         setPending(true);
-        handlePatchProblemAsync().finally(() => setPending(false));
+        handlePatchUserAsync().finally(() => {
+            if (!emailVerificationCodeErrorRef.current) {
+                closeEmailVerificationDialog();
+            }
+            setPending(false);
+            setEmailVerificationDialogPending(false);
+        });
     };
 
     return (
@@ -162,7 +258,7 @@ const UserEditPage: React.FC = () => {
             <form className={styles.$form}>
                 <div className={styles.$fieldsWithAvatarContainer}>
                     <div className={styles.$fieldsWithAvatar}>
-                        <Field label={ls.$username}>
+                        <Field label={ls.$username} validationMessage={usernameError}>
                             <Input
                                 disabled={pending}
                                 readOnly={!isAllowedManage}
@@ -170,11 +266,12 @@ const UserEditPage: React.FC = () => {
                                 onChange={(_, { value }) => {
                                     if (isAllowedManage) {
                                         setUsername(value);
+                                        setUsernameError("");
                                     }
                                 }}
                             />
                         </Field>
-                        <Field label={ls.$nickname}>
+                        <Field label={ls.$nickname} validationMessage={nicknameError}>
                             <Input
                                 disabled={pending}
                                 value={nickname}
@@ -183,17 +280,20 @@ const UserEditPage: React.FC = () => {
                         </Field>
                     </div>
                     {/* TODO: add tooltip */}
-                    <Button
-                        className={mergeClasses(styles.$avatar, isMiniScreen && styles.$avatarMiniScreen)}
-                        disabled={pending}
-                    >
-                        <Image src={userDetail.avatar || fallBackAvatar} />
-                    </Button>
+                    <Tooltip content={"Change avatar"} relationship="label" withArrow>
+                        <Button
+                            className={mergeClasses(styles.$avatar, isMiniScreen && styles.$avatarMiniScreen)}
+                            disabled={pending}
+                        >
+                            <Image src={userDetail.avatar || fallBackAvatar} />
+                        </Button>
+                    </Tooltip>
                 </div>
                 <Field
                     label={ls.$email}
                     // TODO: localization
                     hint={"This email will be shown to others on profile page, and it will not be used for auth."}
+                    validationMessage={emailError}
                 >
                     <Input value={email} type="email" onChange={(_, { value }) => setEmail(value)} />
                 </Field>
@@ -210,10 +310,15 @@ const UserEditPage: React.FC = () => {
                         <UserLevelSelector disabled={pending} level={level} onChange={setLevel} />
                     </Field>
                 )}
-                <div className={styles.$buttons}>
-                    <Button appearance="primary" disabledFocusable={pending} onClick={onSaveChanges}>
-                        {ls.$saveButton}
-                    </Button>
+                <div className={mergeClasses(styles.$buttons, isMiniScreen && styles.$buttonsMiniScreen)}>
+                    <div>
+                        <Button appearance="primary" disabledFocusable={pending} onClick={onSaveChanges}>
+                            {ls.$saveButton}
+                        </Button>
+                        <Button appearance="secondary" disabledFocusable={pending} onClick={resetForm}>
+                            Reset
+                        </Button>
+                    </div>
                     <ButtonWithRouter to="/user/$id" params={{ id: String(userDetail.id) }} disabledFocusable={pending}>
                         Go to profile
                         {/* TODO: localization */}
@@ -238,11 +343,12 @@ const UserEditPage: React.FC = () => {
                             </Text>
                             <form className={styles.$emailVerificationForm}>
                                 {/* TODO: localization */}
-                                <Field label="Verification Code">
+                                <Field label="Verification Code" validationMessage={emailVerificationCodeError}>
                                     <Input
                                         value={emailVerificationCode}
                                         onChange={(_, { value }) => {
                                             setEmailVerificationCode(value);
+                                            setEmailVerificationCodeError("");
                                             emailVerificationCodeRef.current = value;
                                         }}
                                     />
@@ -252,13 +358,21 @@ const UserEditPage: React.FC = () => {
                         <DialogActions>
                             <Button
                                 appearance="primary"
-                                disabled={!emailVerificationCode}
-                                onClick={onSubmitEmailVerification}
+                                disabled={!emailVerificationCode || emailVerificationDialogPending}
+                                onClick={() => {
+                                    if (emailVerificationCodeErrorRef.current) {
+                                        onSaveChanges();
+                                    } else {
+                                        onSubmitEmailVerification(false /* closeDialog */);
+                                    }
+                                }}
                             >
                                 {ls.$submitButton}
                             </Button>
                             <DialogTrigger disableButtonEnhancement>
-                                <Button appearance="secondary">{ls.$cancelButton}</Button>
+                                <Button appearance="secondary" disabledFocusable={emailVerificationDialogPending}>
+                                    {ls.$cancelButton}
+                                </Button>
                             </DialogTrigger>
                         </DialogActions>
                     </DialogBody>
@@ -347,13 +461,36 @@ const useStyles = makeStyles({
     $buttons: {
         ...flex({ justifyContent: "space-between" }),
         marginTop: "8px",
+        "> div": {
+            ...flex({ justifyContent: "flex-start" }),
+            gap: "8px",
+        },
+    },
+    $buttonsMiniScreen: {
+        ...flex({ flexDirection: "column" }),
+        gap: "8px",
+        "> div": {
+            ...flex(),
+            gap: "8px",
+            "> button": {
+                flex: "1",
+            },
+        },
     },
     $emailVerificationForm: {
         marginTop: "16px",
     },
 });
 
-const patchUserDetailAsync = withThrowErrors(UserModule.patchUserDetailAsync);
+const patchUserDetailAsync = withThrowErrorsExcept(
+    UserModule.patchUserDetailAsync,
+    CE_ErrorCode.InvalidEmailVerificationCode,
+    CE_ErrorCode.User_DuplicateUsername,
+);
+const sendChangeEmailCodeAsync = withThrowErrorsExcept(
+    UserModule.sendChangeEmailCodeAsync,
+    CE_ErrorCode.EmailVerificationCodeRateLimited,
+);
 
 const queryOptionsFn = createQueryOptionsFn(CE_QueryId.UserDetail, withThrowErrors(UserModule.getUserDetailAsync));
 

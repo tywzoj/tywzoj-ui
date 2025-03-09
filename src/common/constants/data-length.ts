@@ -5,3 +5,4 @@ export const PASSWORD_MIN_LENGTH = 8;
 export const PASSWORD_MAX_LENGTH = 32;
 
 export const PROBLEM_TITLE_MAX_LENGTH = 120;
+export const PROBLEM_TAG_NAME_MAX_LENGTH = 50;

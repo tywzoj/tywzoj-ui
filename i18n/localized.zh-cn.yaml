@@ -118,6 +118,21 @@
   description: A string for the error message when the rate limit is exceeded.
   raw: You have exceeded the rate limit. Please try again later.
 
+- name: ERROR_1008_HTTPS_REQUIRED
+  value: 此请求需要 HTTPS。
+  description: A string for the error message when the request requires HTTPS.
+  raw: This request requires HTTPS.
+
+- name: ERROR_1009_EMAIL_VERIFICATION_CODE_RATE_LIMITED
+  value: 您发送了太多的邮件验证码。请稍后再试。
+  description: A string for the error message when email verification code is rate limited.
+  raw: You send email verification code too frequently. Please try again later.
+
+- name: ERROR_1010_INVALID_EMAIL_VERIFICATION_CODE
+  value: 无效的验证码。
+  description: A string for the error message when the email verification code is invalid.
+  raw: Invalid email verification code.
+
 - name: ERROR_2000_NO_SUCH_USER
   value: 无此用户。
   description: A string for the error message when no such user.
@@ -137,21 +152,6 @@
   value: 电子邮件已被使用。
   description: A string for the error message when the email is already used.
   raw: The email is already used.
-
-- name: ERROR_2004_INVALID_EMAIL_VERIFICATION_CODE
-  value: 无效的电子邮件验证代码。
-  description: A string for the error message when the email verification code is invalid.
-  raw: Invalid email verification code.
-
-- name: ERROR_2005_FAILED_TO_SEND_EMAIL_VERIFICATION_CODE
-  value: 无法发送电子邮件验证代码。
-  description: A string for the error message when failed to send email verification code.
-  raw: Failed to send email verification code.
-
-- name: ERROR_2006_EMAIL_VERIFICATION_CODE_RATE_LIMITED
-  value: 您发送电子邮件验证代码的频率太快了。请稍后再试。
-  description: A string for the error message when email verification code is rate limited.
-  raw: You send email verification code too frequently. Please try again later.
 
 - name: ERROR_2100_NO_SUCH_USER
   value: 无此用户。
@@ -509,9 +509,9 @@
   raw: Avatar
 
 - name: USER_PROFILE_PAGE_TITLE_WITH_NAME
-  value: '{0} 的个人资料'
+  value: "{0} 的个人资料"
   description: A string for the title of user profile page.
-  raw: '{0}''s Profile'
+  raw: "{0}'s Profile"
 
 - name: USER_EDIT_PAGE_TITLE
   value: 编辑个人资料
@@ -609,18 +609,18 @@
   raw: Generate ID
 
 - name: PROBLEM_EDIT_TITLE_WITH_ID
-  value: '#{0}({1}). {2} - 编辑'
+  value: "#{0}({1}). {2} - 编辑"
   description: >-
     A string for the title of problem edit page. {0} is the problem display ID,
     {1} is the problem ID, and {2} is the problem title.
-  raw: '#{0}({1}). {2} - Edit'
+  raw: "#{0}({1}). {2} - Edit"
 
 - name: PROBLEM_EDIT_TITLE
-  value: '#{0}. {1} - 编辑'
+  value: "#{0}. {1} - 编辑"
   description: >-
     A string for the title of problem edit page. {0} is the problem display ID,
     and {1} is the problem title.
-  raw: '#{0}. {1} - Edit'
+  raw: "#{0}. {1} - Edit"
 
 - name: CODE_COPIED_MESSAGE
   value: 代码已复制到剪贴板。
@@ -728,29 +728,29 @@
   raw: GNU C++20
 
 - name: COMPILATION_CPP_OPTIMIZATION_O0
-  value: '-O0 (禁用优化)'
+  value: "-O0 (禁用优化)"
   description: A string for the label of O0 optimization.
-  raw: '-O0 (disable optimization)'
+  raw: "-O0 (disable optimization)"
 
 - name: COMPILATION_CPP_OPTIMIZATION_O1
-  value: '-O1'
+  value: "-O1"
   description: A string for the label of O1 optimization.
-  raw: '-O1'
+  raw: "-O1"
 
 - name: COMPILATION_CPP_OPTIMIZATION_O2
-  value: '-O2'
+  value: "-O2"
   description: A string for the label of O2 optimization.
-  raw: '-O2'
+  raw: "-O2"
 
 - name: COMPILATION_CPP_OPTIMIZATION_O3
-  value: '-O3'
+  value: "-O3"
   description: A string for the label of O3 optimization.
-  raw: '-O3'
+  raw: "-O3"
 
 - name: COMPILATION_CPP_OPTIMIZATION_OFAST
-  value: '-Ofast (最快)'
+  value: "-Ofast (最快)"
   description: A string for the label of Ofast optimization.
-  raw: '-Ofast (fastest)'
+  raw: "-Ofast (fastest)"
 
 - name: COMPILATION_CPP_ARCHITECTURE_64
   value: 64 位
@@ -823,14 +823,14 @@
   raw: JVM
 
 - name: COMPILATION_PAS_OPTIMIZATION_O
-  value: '-O'
+  value: "-O"
   description: A string for the label of O optimization.
-  raw: '-O'
+  raw: "-O"
 
 - name: COMPILATION_PAS_OPTIMIZATION_O4
-  value: '-O4 (最快)'
+  value: "-O4 (最快)"
   description: A string for the label of O4 optimization.
-  raw: '-O4 (fastest)'
+  raw: "-O4 (fastest)"
 
 - name: COMPILATION_RS_OPTIMIZATION_1
   value: 1 级

@@ -118,6 +118,21 @@
   description: A string for the error message when the rate limit is exceeded.
   raw: You have exceeded the rate limit. Please try again later.
 
+- name: ERROR_1008_HTTPS_REQUIRED
+  value: This request requires HTTPS.
+  description: A string for the error message when the request requires HTTPS.
+  raw: This request requires HTTPS.
+
+- name: ERROR_1009_EMAIL_VERIFICATION_CODE_RATE_LIMITED
+  value: You send email verification code too frequently. Please try again later.
+  description: A string for the error message when email verification code is rate limited.
+  raw: You send email verification code too frequently. Please try again later.
+
+- name: ERROR_1010_INVALID_EMAIL_VERIFICATION_CODE
+  value: Invalid email verification code.
+  description: A string for the error message when the email verification code is invalid.
+  raw: Invalid email verification code.
+
 - name: ERROR_2000_NO_SUCH_USER
   value: No such user.
   description: A string for the error message when no such user.
@@ -137,21 +152,6 @@
   value: The email is already used.
   description: A string for the error message when the email is already used.
   raw: The email is already used.
-
-- name: ERROR_2004_INVALID_EMAIL_VERIFICATION_CODE
-  value: Invalid email verification code.
-  description: A string for the error message when the email verification code is invalid.
-  raw: Invalid email verification code.
-
-- name: ERROR_2005_FAILED_TO_SEND_EMAIL_VERIFICATION_CODE
-  value: Failed to send email verification code.
-  description: A string for the error message when failed to send email verification code.
-  raw: Failed to send email verification code.
-
-- name: ERROR_2006_EMAIL_VERIFICATION_CODE_RATE_LIMITED
-  value: You send email verification code too frequently. Please try again later.
-  description: A string for the error message when email verification code is rate limited.
-  raw: You send email verification code too frequently. Please try again later.
 
 - name: ERROR_2100_NO_SUCH_USER
   value: No such user.

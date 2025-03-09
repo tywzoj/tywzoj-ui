@@ -1,11 +1,11 @@
 import { makeStyles, Tab, TabList } from "@fluentui/react-components";
 import { createFileRoute, Outlet, useMatchRoute, useNavigate } from "@tanstack/react-router";
 import React from "react";
-import { z } from "zod";
 
 import { PermissionDeniedError } from "@/common/exceptions/permission-denied";
 import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
 import { flex } from "@/common/styles/flex";
+import { Z_ID } from "@/common/validators/common";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { checkIsAllowedEditUserId } from "@/permission/user/checker";
 
@@ -75,7 +75,7 @@ export const Route = createFileRoute("/user/$id/_setting-layout")({
             throw new SignInRequiredError();
         }
 
-        const userId = z.coerce.number().int().parse(id);
+        const userId = Z_ID.parse(id);
         if (!checkIsAllowedEditUserId(userId, currentUser, permission)) {
             throw new PermissionDeniedError();
         }
