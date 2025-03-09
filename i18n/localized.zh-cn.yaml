@@ -68,6 +68,16 @@
   description: A string for the label of move down button.
   raw: Move Down
 
+- name: COMMON_SUBMIT_BUTTON
+  value: 提交
+  description: A string for the label of submit button.
+  raw: Submit
+
+- name: COMMON_RESET_BUTTON
+  value: 重置
+  description: A string for the label of reset button.
+  raw: Reset
+
 - name: COMMON_ERROR_TITLE
   value: 错误
   description: A string for the title of error message.
@@ -113,6 +123,21 @@
   description: A string for the error message when the rate limit is exceeded.
   raw: You have exceeded the rate limit. Please try again later.
 
+- name: ERROR_1008_HTTPS_REQUIRED
+  value: 此请求需要 HTTPS。
+  description: A string for the error message when the request requires HTTPS.
+  raw: This request requires HTTPS.
+
+- name: ERROR_1009_EMAIL_VERIFICATION_CODE_RATE_LIMITED
+  value: 您发送了太多的邮件验证码。请稍后再试。
+  description: A string for the error message when email verification code is rate limited.
+  raw: You send email verification code too frequently. Please try again later.
+
+- name: ERROR_1010_INVALID_EMAIL_VERIFICATION_CODE
+  value: 无效的验证码。
+  description: A string for the error message when the email verification code is invalid.
+  raw: Invalid email verification code.
+
 - name: ERROR_2000_NO_SUCH_USER
   value: 无此用户。
   description: A string for the error message when no such user.
@@ -133,25 +158,15 @@
   description: A string for the error message when the email is already used.
   raw: The email is already used.
 
-- name: ERROR_2004_INVALID_EMAIL_VERIFICATION_CODE
-  value: 无效的电子邮件验证代码。
-  description: A string for the error message when the email verification code is invalid.
-  raw: Invalid email verification code.
-
-- name: ERROR_2005_FAILED_TO_SEND_EMAIL_VERIFICATION_CODE
-  value: 无法发送电子邮件验证代码。
-  description: A string for the error message when failed to send email verification code.
-  raw: Failed to send email verification code.
-
-- name: ERROR_2006_EMAIL_VERIFICATION_CODE_RATE_LIMITED
-  value: 您发送电子邮件验证代码的频率太快了。请稍后再试。
-  description: A string for the error message when email verification code is rate limited.
-  raw: You send email verification code too frequently. Please try again later.
-
 - name: ERROR_2100_NO_SUCH_USER
   value: 无此用户。
   description: A string for the error message when no such user.
   raw: No such user.
+
+- name: ERROR_2101_DUPLICATE_USERNAME
+  value: 用户名已被使用。
+  description: A string for the error message when the username is already used.
+  raw: The username is already used.
 
 - name: ERROR_2200_NO_SUCH_PROBLEM
   value: 无此题目。
@@ -311,15 +326,39 @@
   description: A string for the label of username input.
   raw: Username
 
+- name: USERNAME_HINT
+  value: 用户名必须在 3 到 24 个字符之间，只能包含大写和小写字母、数字和字符 -_.#$ 。
+  description: A string for the hint of username input.
+  raw: >-
+    The username must be between 3 and 24 characters long and can only contain
+    uppercase and lowercase letters, numbers, and the characters -_.#$ .
+
 - name: EMAIL_LABEL
   value: 邮箱
   description: A string for the label of email input.
   raw: Email
 
+- name: DISPLAY_EMAIL_HINT
+  value: 此邮箱将在个人资料中显示，但不会用于认证。
+  description: A string for the hint of display email input.
+  raw: >-
+    This email will be shown to other users in the profile, but it will not be
+    used for authentication.
+
+- name: AUTH_EMAIL_HINT
+  value: 此邮箱将用于认证和通知。
+  description: A string for the hint of authentication email input.
+  raw: This email will be used for authentication and notifications.
+
 - name: PASSWORD_CONFIRM_LABEL
   value: 确认密码
   description: A string for the label of password confirm input.
   raw: Confirm Password
+
+- name: VERIFICATION_CODE_LABEL
+  value: 验证码
+  description: A string for the label of verification code input.
+  raw: Verification Code
 
 - name: TITLE_LABEL
   value: 标题
@@ -396,10 +435,25 @@
   description: A string for the error message when username is empty.
   raw: Username cannot be empty.
 
+- name: VALIDATION_ERROR_USERNAME_INVALID
+  value: 用户名格式无效。
+  description: A string for the error message when username format is invalid.
+  raw: Invalid username format.
+
 - name: VALIDATION_ERROR_EMAIL_EMPTY
   value: 邮箱不能为空。
   description: A string for the error message when email is empty.
   raw: Email cannot be empty.
+
+- name: VALIDATION_ERROR_EMAIL_INVALID
+  value: 邮箱格式无效。
+  description: A string for the error message when email format is invalid.
+  raw: Invalid email format.
+
+- name: VALIDATION_ERROR_NICKNAME_TOO_LONG
+  value: 昵称太长。请缩短。
+  description: A string for the error message when the nickname is too long.
+  raw: The nickname is too long. Please shorten it.
 
 - name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
   value: 确认密码不能为空。
@@ -502,6 +556,48 @@
   value: 头像
   description: A string for the label of user avatar.
   raw: Avatar
+
+- name: USER_PROFILE_PAGE_TITLE_WITH_NAME
+  value: '{0} 的个人资料'
+  description: A string for the title of user profile page.
+  raw: '{0}''s Profile'
+
+- name: USER_PREFERENCE_PAGE_TITLE
+  value: 偏好设置
+  description: A string for the title of user preferences page.
+  raw: Preference Setting
+
+- name: USER_SECURITY_PAGE_TITLE
+  value: 安全设置
+  description: A string for the title of user security page.
+  raw: Security Setting
+
+- name: USER_EDIT_PAGE_TITLE
+  value: 编辑资料
+  description: A string for the title of user edit page.
+  raw: Edit Profile
+
+- name: USER_EDIT_PAGE_TITLE_WITH_NAME
+  value: 编辑 {0} 的资料
+  description: A string for the title of user settings page.
+  raw: Edit {0}'s Profile
+
+- name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
+  value: 验证您的邮箱
+  description: A string for the title of email verification dialog.
+  raw: Verify your email
+
+- name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
+  value: 我们已向您的邮箱发送了一个验证码。请在下方输入验证码以验证您的邮箱。
+  description: A string for the description of email verification dialog.
+  raw: >-
+    We have sent a verification code to your email. Please enter the code below
+    to verify your email.
+
+- name: USER_EDIT_PAGE_GO_TO_PROFILE_BUTTON
+  value: 前往个人资料
+  description: A string for the label of go to profile button.
+  raw: Go to Profile
 
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: 输入题目 ID 或关键字以搜索题目

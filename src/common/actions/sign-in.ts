@@ -1,6 +1,7 @@
 import { updateLocaleAsyncAction } from "@/locales/actions";
+import { setPermissionAction } from "@/permission/common/actions";
 import type { AuthTypes } from "@/server/types";
-import { setAuthAction, setPermissionAction } from "@/store/actions";
+import { setAuthAction } from "@/store/actions";
 import { createAppAction } from "@/store/utils";
 import { updateThemeAction } from "@/theme/actions";
 

@@ -436,6 +436,13 @@ class InlineConstEnum {
     }
 
     private getImportedModuleName(importedModuleName: string, currentModuleName: IModuleName): IModuleName {
+        // Remove ts extensions
+        for (const ext of [".ts", ".cts", ".mts", ".tsx"]) {
+            if (importedModuleName.endsWith(ext)) {
+                importedModuleName = importedModuleName.slice(0, -ext.length);
+                break;
+            }
+        }
         if (importedModuleName.startsWith(".")) {
             // relative path
             return path.resolve(path.dirname(currentModuleName), importedModuleName);

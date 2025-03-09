@@ -17,7 +17,7 @@ import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
-import { canEditProblems } from "@/permission/checkers";
+import { checkIsAllowedEditProblem } from "@/permission/problem/checker";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { problemDetailQueryKeys, problemListQueryKeys } from "@/query/keys";
@@ -169,7 +169,7 @@ export const Route = createFileRoute("/problem/$displayId/edit")({
             throw new SignInRequiredError();
         }
 
-        if (!canEditProblems(permission)) {
+        if (!checkIsAllowedEditProblem(permission)) {
             throw new PermissionDeniedError();
         }
     },

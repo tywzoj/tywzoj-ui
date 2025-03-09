@@ -11,6 +11,7 @@ import { useTheme } from "@/theme/hooks";
 import { IconProvider } from "./common/providers/IconProvider";
 import { PageTitleProvider } from "./common/providers/PageTitleProvider";
 import { ToastProvider } from "./common/providers/ToastProvider";
+import { PrismThemeProvider } from "./theme/PrismThemeProvider";
 
 export const App: React.FC = () => {
     const theme = useTheme();
@@ -24,6 +25,7 @@ export const App: React.FC = () => {
                     dir={isRtl ? "rtl" : "ltr"}
                     style={{ height: "100%", width: "100%" }}
                 >
+                    <PrismThemeProvider theme={theme} />
                     <PageTitleProvider />
                     <IconProvider />
                     <ToastProvider>

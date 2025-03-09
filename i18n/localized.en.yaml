@@ -68,6 +68,16 @@
   description: A string for the label of move down button.
   raw: Move Down
 
+- name: COMMON_SUBMIT_BUTTON
+  value: Submit
+  description: A string for the label of submit button.
+  raw: Submit
+
+- name: COMMON_RESET_BUTTON
+  value: Reset
+  description: A string for the label of reset button.
+  raw: Reset
+
 - name: COMMON_ERROR_TITLE
   value: Error
   description: A string for the title of error message.
@@ -113,6 +123,21 @@
   description: A string for the error message when the rate limit is exceeded.
   raw: You have exceeded the rate limit. Please try again later.
 
+- name: ERROR_1008_HTTPS_REQUIRED
+  value: This request requires HTTPS.
+  description: A string for the error message when the request requires HTTPS.
+  raw: This request requires HTTPS.
+
+- name: ERROR_1009_EMAIL_VERIFICATION_CODE_RATE_LIMITED
+  value: You send email verification code too frequently. Please try again later.
+  description: A string for the error message when email verification code is rate limited.
+  raw: You send email verification code too frequently. Please try again later.
+
+- name: ERROR_1010_INVALID_EMAIL_VERIFICATION_CODE
+  value: Invalid email verification code.
+  description: A string for the error message when the email verification code is invalid.
+  raw: Invalid email verification code.
+
 - name: ERROR_2000_NO_SUCH_USER
   value: No such user.
   description: A string for the error message when no such user.
@@ -133,25 +158,15 @@
   description: A string for the error message when the email is already used.
   raw: The email is already used.
 
-- name: ERROR_2004_INVALID_EMAIL_VERIFICATION_CODE
-  value: Invalid email verification code.
-  description: A string for the error message when the email verification code is invalid.
-  raw: Invalid email verification code.
-
-- name: ERROR_2005_FAILED_TO_SEND_EMAIL_VERIFICATION_CODE
-  value: Failed to send email verification code.
-  description: A string for the error message when failed to send email verification code.
-  raw: Failed to send email verification code.
-
-- name: ERROR_2006_EMAIL_VERIFICATION_CODE_RATE_LIMITED
-  value: You send email verification code too frequently. Please try again later.
-  description: A string for the error message when email verification code is rate limited.
-  raw: You send email verification code too frequently. Please try again later.
-
 - name: ERROR_2100_NO_SUCH_USER
   value: No such user.
   description: A string for the error message when no such user.
   raw: No such user.
+
+- name: ERROR_2101_DUPLICATE_USERNAME
+  value: The username is already used.
+  description: A string for the error message when the username is already used.
+  raw: The username is already used.
 
 - name: ERROR_2200_NO_SUCH_PROBLEM
   value: No such problem.
@@ -311,15 +326,43 @@
   description: A string for the label of username input.
   raw: Username
 
+- name: USERNAME_HINT
+  value: >-
+    The username must be between 3 and 24 characters long and can only contain
+    uppercase and lowercase letters, numbers, and the characters -_.#$ .
+  description: A string for the hint of username input.
+  raw: >-
+    The username must be between 3 and 24 characters long and can only contain
+    uppercase and lowercase letters, numbers, and the characters -_.#$ .
+
 - name: EMAIL_LABEL
   value: Email
   description: A string for the label of email input.
   raw: Email
 
+- name: DISPLAY_EMAIL_HINT
+  value: >-
+    This email will be shown to other users in the profile, but it will not be
+    used for authentication.
+  description: A string for the hint of display email input.
+  raw: >-
+    This email will be shown to other users in the profile, but it will not be
+    used for authentication.
+
+- name: AUTH_EMAIL_HINT
+  value: This email will be used for authentication and notifications.
+  description: A string for the hint of authentication email input.
+  raw: This email will be used for authentication and notifications.
+
 - name: PASSWORD_CONFIRM_LABEL
   value: Confirm Password
   description: A string for the label of password confirm input.
   raw: Confirm Password
+
+- name: VERIFICATION_CODE_LABEL
+  value: Verification Code
+  description: A string for the label of verification code input.
+  raw: Verification Code
 
 - name: TITLE_LABEL
   value: Title
@@ -396,10 +439,25 @@
   description: A string for the error message when username is empty.
   raw: Username cannot be empty.
 
+- name: VALIDATION_ERROR_USERNAME_INVALID
+  value: Invalid username format.
+  description: A string for the error message when username format is invalid.
+  raw: Invalid username format.
+
 - name: VALIDATION_ERROR_EMAIL_EMPTY
   value: Email cannot be empty.
   description: A string for the error message when email is empty.
   raw: Email cannot be empty.
+
+- name: VALIDATION_ERROR_EMAIL_INVALID
+  value: Invalid email format.
+  description: A string for the error message when email format is invalid.
+  raw: Invalid email format.
+
+- name: VALIDATION_ERROR_NICKNAME_TOO_LONG
+  value: The nickname is too long. Please shorten it.
+  description: A string for the error message when the nickname is too long.
+  raw: The nickname is too long. Please shorten it.
 
 - name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
   value: Password confirm cannot be empty.
@@ -502,6 +560,50 @@
   value: Avatar
   description: A string for the label of user avatar.
   raw: Avatar
+
+- name: USER_PROFILE_PAGE_TITLE_WITH_NAME
+  value: '{0}''s Profile'
+  description: A string for the title of user profile page.
+  raw: '{0}''s Profile'
+
+- name: USER_PREFERENCE_PAGE_TITLE
+  value: Preference Setting
+  description: A string for the title of user preferences page.
+  raw: Preference Setting
+
+- name: USER_SECURITY_PAGE_TITLE
+  value: Security Setting
+  description: A string for the title of user security page.
+  raw: Security Setting
+
+- name: USER_EDIT_PAGE_TITLE
+  value: Edit Profile
+  description: A string for the title of user edit page.
+  raw: Edit Profile
+
+- name: USER_EDIT_PAGE_TITLE_WITH_NAME
+  value: Edit {0}'s Profile
+  description: A string for the title of user settings page.
+  raw: Edit {0}'s Profile
+
+- name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
+  value: Verify your email
+  description: A string for the title of email verification dialog.
+  raw: Verify your email
+
+- name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
+  value: >-
+    We have sent a verification code to your email. Please enter the code below
+    to verify your email.
+  description: A string for the description of email verification dialog.
+  raw: >-
+    We have sent a verification code to your email. Please enter the code below
+    to verify your email.
+
+- name: USER_EDIT_PAGE_GO_TO_PROFILE_BUTTON
+  value: Go to Profile
+  description: A string for the label of go to profile button.
+  raw: Go to Profile
 
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: Keyword or ID

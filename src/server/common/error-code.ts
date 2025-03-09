@@ -13,18 +13,19 @@ export const enum CE_ErrorCode {
     ValidationError = 1005,
     TakeTooMany = 1006,
     RateLimitExceeded = 1007,
+    HttpsRequired = 1008,
+    EmailVerificationCodeRateLimited = 1009,
+    InvalidEmailVerificationCode = 1010,
 
     // Auth (20xx)
     Auth_NoSuchUser = 2000,
     Auth_WrongPassword = 2001,
     Auth_DuplicateUsername = 2002,
     Auth_DuplicateEmail = 2003,
-    Auth_InvalidEmailVerificationCode = 2004,
-    Auth_FailedToSendEmailVerificationCode = 2005,
-    Auth_EmailVerificationCodeRateLimited = 2006,
 
     // User (21xx)
     User_NoSuchUser = 2100,
+    User_DuplicateUsername = 2101,
 
     // Problem (22xx)
     Problem_NoSuchProblem = 2200,

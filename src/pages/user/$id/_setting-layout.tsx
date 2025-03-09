@@ -1,11 +1,16 @@
-import { Tab, TabList } from "@fluentui/react-components";
+import { makeStyles, mergeClasses, Tab, TabList } from "@fluentui/react-components";
 import { createFileRoute, Outlet, useMatchRoute, useNavigate } from "@tanstack/react-router";
 import React from "react";
 
 import { PermissionDeniedError } from "@/common/exceptions/permission-denied";
 import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
+import { flex } from "@/common/styles/flex";
+import { Z_ID } from "@/common/validators/common";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
-import { canEditUserSettings } from "@/permission/checkers";
+import { useLocalizedStrings } from "@/locales/hooks";
+import { CE_Strings } from "@/locales/locale";
+import { checkIsAllowedEditUserId } from "@/permission/user/checker";
+import { useIsMiniScreen } from "@/store/hooks";
 
 const enum CE_SettingPages {
     EditProfile = "edit",
@@ -16,6 +21,7 @@ const enum CE_SettingPages {
 const SettingLayout: React.FC = () => {
     const navigate = useNavigate();
     const matchRoute = useMatchRoute();
+    const isMiniScreen = useIsMiniScreen();
 
     const [selectedTab, setSelectedTab] = React.useState<CE_SettingPages>(CE_SettingPages.Preference);
     const checkMatch = (page: CE_SettingPages) => matchRoute({ to: `/user/$id/${page}` }) && setSelectedTab(page);
@@ -27,27 +33,54 @@ const SettingLayout: React.FC = () => {
         checkMatch(CE_SettingPages.Security);
     });
 
+    const ls = useLocalizedStrings({
+        $edit: CE_Strings.USER_EDIT_PAGE_TITLE,
+        $preference: CE_Strings.USER_PREFERENCE_PAGE_TITLE,
+        $security: CE_Strings.USER_SECURITY_PAGE_TITLE,
+    });
+
+    const styles = useStyles();
+
     return (
-        <div>
+        <div className={styles.root}>
             <div>
                 <TabList
                     selectedValue={selectedTab}
                     onTabSelect={(_, { value }) => {
                         navigate({ to: `../${value}` });
                     }}
+                    vertical={isMiniScreen}
                 >
-                    <Tab value={CE_SettingPages.Preference}>Preference</Tab>
-                    <Tab value={CE_SettingPages.EditProfile}>Edit Profile</Tab>
-                    <Tab value={CE_SettingPages.Security}>Security</Tab>
+                    <Tab value={CE_SettingPages.Preference}>{ls.$preference}</Tab>
+                    <Tab value={CE_SettingPages.EditProfile}>{ls.$edit}</Tab>
+                    <Tab value={CE_SettingPages.Security}>{ls.$security}</Tab>
                 </TabList>
             </div>
 
-            <div>
+            <div className={mergeClasses(styles.content, isMiniScreen && styles.contentMiniScreen)}>
                 <Outlet />
             </div>
         </div>
     );
 };
+
+const useStyles = makeStyles({
+    root: {
+        ...flex({
+            flexDirection: "column",
+        }),
+        width: "100%",
+        maxWidth: "800px",
+        gap: "16px",
+    },
+    content: {
+        padding: "0 16px",
+    },
+    contentMiniScreen: {
+        marginTop: "8px",
+        padding: "0",
+    },
+});
 
 export const Route = createFileRoute("/user/$id/_setting-layout")({
     component: SettingLayout,
@@ -57,7 +90,8 @@ export const Route = createFileRoute("/user/$id/_setting-layout")({
             throw new SignInRequiredError();
         }
 
-        if (!canEditUserSettings(Number.parseInt(id), currentUser, permission)) {
+        const userId = Z_ID.parse(id);
+        if (!checkIsAllowedEditUserId(userId, currentUser, permission)) {
             throw new PermissionDeniedError();
         }
     },

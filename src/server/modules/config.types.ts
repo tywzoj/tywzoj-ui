@@ -3,7 +3,6 @@ export interface IFeature {
     readonly recaptchaSiteKey?: string | null;
     readonly useRecaptchaNet?: boolean | null;
     readonly domainIcpRecordInformation?: string | null;
-    readonly emailVerification: boolean;
     readonly renderMarkdownInUserListBio: boolean;
     readonly renderMarkdownInUserBio: boolean;
 }

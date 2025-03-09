@@ -27,12 +27,14 @@ import { flex } from "@/common/styles/flex";
 import { noUnderlineLinkStyles } from "@/common/styles/link";
 import { calcCount, calcPageCount } from "@/common/utils/pagination";
 import { percent } from "@/common/utils/percent";
-import { Z_ORDER, Z_PROBLEM_SORT_BY } from "@/common/validators/zod";
+import { Z_ORDER, Z_PAGE } from "@/common/validators/common";
+import { Z_PROBLEM_SORT_BY } from "@/common/validators/problem";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { useIsAllowedCreateProblem } from "@/permission/problem/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptionsFn } from "@/query/utils";
@@ -40,7 +42,7 @@ import { ProblemModule } from "@/server/api";
 import { CE_Order } from "@/server/common/enums";
 import { CE_ProblemSortBy } from "@/server/modules/problem.enums";
 import { withThrowErrors } from "@/server/utils";
-import { useIsMiddleScreen, usePermission } from "@/store/hooks";
+import { useIsMiddleScreen } from "@/store/hooks";
 import { getPagination, getPreference } from "@/store/selectors";
 
 const ProblemListPage: React.FC = () => {
@@ -49,7 +51,7 @@ const ProblemListPage: React.FC = () => {
     const navigate = Route.useNavigate();
     const search = Route.useSearch();
     const [searchBoxValue, setSearchBoxValue] = React.useState("");
-    const permission = usePermission();
+    const isAllowedCreate = useIsAllowedCreateProblem();
 
     React.useEffect(() => {
         // Update search box value when search param keyword changes
@@ -75,7 +77,7 @@ const ProblemListPage: React.FC = () => {
                 <div className={styles.$title}>
                     <Title3 as="h1">{ls.$title}</Title3>
                 </div>
-                {permission.manageProblem && (
+                {isAllowedCreate && (
                     <div className={styles.$actions}>
                         <Button>Manage Tags</Button> {/* TODO: add a page */}
                         <ButtonWithRouter appearance="primary" to="/problem/new">
@@ -346,7 +348,7 @@ const useStyles = makeStyles({
 });
 
 const searchParams = z.object({
-    p: fallback(z.number().positive(), 1).default(1), // page
+    p: fallback(Z_PAGE, 1).default(1), // page
     o: fallback(Z_ORDER, CE_Order.ASC).default(CE_Order.ASC), // order
     s: fallback(Z_PROBLEM_SORT_BY, CE_ProblemSortBy.DisplayId).default(CE_ProblemSortBy.DisplayId), // sortBy
     k: z.coerce.string().optional(), // keyword

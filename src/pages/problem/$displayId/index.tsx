@@ -40,6 +40,7 @@ import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
+import { useIsAllowedEditProblem, useIsAllowedSubmitProblem } from "@/permission/problem/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptionsFn } from "@/query/utils";
@@ -47,7 +48,7 @@ import { ProblemModule } from "@/server/api";
 import type { IProblemDetail, IProblemTagDetail } from "@/server/modules/problem.types";
 import { withThrowErrors } from "@/server/utils";
 import { setPreferenceAction } from "@/store/actions";
-import { useAppDispatch, useAppSelector, useIsMiddleScreen, useIsSmallScreen, usePermission } from "@/store/hooks";
+import { useAppDispatch, useAppSelector, useIsMiddleScreen, useIsSmallScreen } from "@/store/hooks";
 import { getPreference } from "@/store/selectors";
 
 const ProblemDetailPage: React.FC = () => {
@@ -56,7 +57,7 @@ const ProblemDetailPage: React.FC = () => {
     const { tags, content, samples } = problem;
 
     const isMiddleScreen = useIsMiddleScreen();
-    const permission = usePermission();
+    const isAllowedSubmit = useIsAllowedSubmitProblem();
     const [isSubmissionDialogOpen, setIsSubmissionDialogOpen] = React.useState(false);
 
     const styles = useStyles();
@@ -89,7 +90,7 @@ const ProblemDetailPage: React.FC = () => {
                     <ProblemTags tags={tags} />
                 </div>
             </div>
-            {permission.submitAnswer && (
+            {isAllowedSubmit && (
                 <ProblemSubmissionDialog
                     isOpen={isSubmissionDialogOpen}
                     onClose={() => setIsSubmissionDialogOpen(false)}
@@ -161,7 +162,8 @@ const ProblemActions: React.FC<{
     const isMiddleScreen = useIsMiddleScreen();
     const isSmallScreen = useIsSmallScreen();
     const isVertical = !isMiddleScreen;
-    const permission = usePermission();
+    const isAllowedEdit = useIsAllowedEditProblem();
+    const isAllowedSubmit = useIsAllowedSubmitProblem();
 
     const actionPropsList = React.useMemo<IProblemActionProps[]>(() => {
         const displayId = String(problem.displayId);
@@ -186,7 +188,7 @@ const ProblemActions: React.FC<{
             overflow: isSmallScreen,
         });
 
-        if (permission.manageProblem) {
+        if (isAllowedEdit) {
             items.push(
                 {
                     key: "edit",
@@ -208,7 +210,7 @@ const ProblemActions: React.FC<{
         }
 
         return items;
-    }, [problem, isSmallScreen, permission.manageProblem, isMiddleScreen]);
+    }, [problem.displayId, problem.id, isSmallScreen, isAllowedEdit, isMiddleScreen]);
 
     const buttonPropsList: IProblemActionButtonProps[] = React.useMemo(
         () => actionPropsList.filter(({ overflow }) => isVertical || !overflow) as IProblemActionButtonProps[],
@@ -225,7 +227,7 @@ const ProblemActions: React.FC<{
             vertical={isVertical}
             className={isVertical ? styles.$buttonGroupVertical : styles.$buttonGroupHorizontal}
         >
-            {permission.submitAnswer && (
+            {isAllowedSubmit && (
                 <Button
                     className={mergeClasses(firstButtonClassName, isVertical && styles.$submitButton)}
                     onClick={onSubmission}
