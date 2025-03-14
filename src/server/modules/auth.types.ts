@@ -24,3 +24,7 @@ export interface ISignInPostResponse {
 export interface ISignOutPostResponse {
     readonly permission: IPermission;
 }
+
+export interface IAuthDetail {
+    readonly email: string;
+}

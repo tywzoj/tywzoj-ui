@@ -47,7 +47,7 @@ import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { userDetailQueryKeys } from "@/query/keys";
 import { createQueryOptionsFn } from "@/query/utils";
-import { UserModule } from "@/server/api";
+import { AuthModule, UserModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import { CE_UserLevel } from "@/server/common/permission";
 import type { UserTypes } from "@/server/types";
@@ -57,8 +57,9 @@ import { useAppDispatch, useAppSelector, useCurrentUser, useIsMiniScreen } from 
 import { useIsLightTheme } from "@/theme/hooks";
 
 const UserEditPage: React.FC = () => {
-    const { queryOptions } = Route.useLoaderData();
-    const { data: userDetail } = useSuspenseQueryData(queryOptions);
+    const { userDetailQueryOptions, authDetailQueryOptions } = Route.useLoaderData();
+    const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
+    const { data: authDetail } = useSuspenseQueryData(authDetailQueryOptions);
     const queryClient = useQueryClient();
     const isLightTheme = useIsLightTheme();
     const isMiniScreen = useIsMiniScreen();
@@ -190,7 +191,7 @@ const UserEditPage: React.FC = () => {
                 ["username", "nickname", "email", "bio", "level"],
             );
             if (shouldPatch) {
-                if (patchBody.email && !isAllowedManage) {
+                if (patchBody.email && patchBody.email !== authDetail.email && !isAllowedManage) {
                     if (!emailVerificationCodeErrorRef.current) {
                         await sendChangeEmailCodeAsync(patchBody.email, locale, recaptchaAsync);
 
@@ -231,6 +232,7 @@ const UserEditPage: React.FC = () => {
             email,
             bio,
             level,
+            authDetail.email,
             isAllowedManage,
             recaptchaAsync,
             queryClient,
@@ -493,15 +495,26 @@ const sendChangeEmailCodeAsync = withThrowErrorsExcept(
     CE_ErrorCode.EmailVerificationCodeRateLimited,
 );
 
-const queryOptionsFn = createQueryOptionsFn(CE_QueryId.UserDetail, withThrowErrors(UserModule.getUserDetailAsync));
+const userDetailQueryOptionsFn = createQueryOptionsFn(
+    CE_QueryId.UserDetail,
+    withThrowErrors(UserModule.getUserDetailAsync),
+);
+const authDetailQueryOptionsFn = createQueryOptionsFn(
+    CE_QueryId.AuthDetail,
+    withThrowErrors(AuthModule.getAuthDetailAsync),
+);
 
 export const Route = createFileRoute("/user/$id/_setting-layout/edit")({
     component: UserEditPage,
     loader: async ({ context: { queryClient }, params: { id } }) => {
-        const queryOptions = queryOptionsFn(id);
+        const userDetailQueryOptions = userDetailQueryOptionsFn(id);
+        const authDetailQueryOptions = authDetailQueryOptionsFn(id);
 
-        await queryClient.ensureQueryData(queryOptions);
+        await Promise.all([
+            queryClient.ensureQueryData(userDetailQueryOptions),
+            queryClient.ensureQueryData(authDetailQueryOptions),
+        ]);
 
-        return { queryOptions };
+        return { userDetailQueryOptions, authDetailQueryOptions };
     },
 });
