@@ -52,8 +52,13 @@ const EmailEditor: React.FC = () => {
 
     return (
         <ContentCard title="Account Email">
-            <form className={styles.$emailEditor}>
-                <Field label="Current Email">
+            <form className={styles.$form}>
+                <Field
+                    label="Current Email"
+                    hint={
+                        "This email will be used for authentication, but it will not be shown to other users in the profile."
+                    }
+                >
                     <Input type="email" readOnly value={authDetail.email} />
                 </Field>
                 <Field label="New Email">
@@ -99,7 +104,27 @@ const EmailEditor: React.FC = () => {
     );
 };
 const PasswordEditor: React.FC = () => {
-    return <ContentCard title="Password"></ContentCard>;
+    const styles = useStyles();
+
+    return (
+        <ContentCard title="Password">
+            <form className={styles.$form}>
+                <Field label="Current Password">
+                    <Input type="password" autoComplete="current-password" />
+                </Field>
+                <Field label="New Password">
+                    <Input type="password" autoComplete="new-password" />
+                </Field>
+                <Field label="Confirm New Password">
+                    <Input type="password" autoComplete="new-password" />
+                </Field>
+
+                <div className={styles.$buttonField}>
+                    <Button appearance="primary">Update Password</Button>
+                </div>
+            </form>
+        </ContentCard>
+    );
 };
 
 const useStyles = makeStyles({
@@ -108,18 +133,19 @@ const useStyles = makeStyles({
             flexDirection: "column",
         }),
         width: "100%",
-        gap: "16px",
+        gap: "24px",
     },
-    $emailEditor: {
+    $form: {
         ...flex({
             flexDirection: "column",
         }),
         width: "100%",
-        gap: "16px",
+        gap: "8px",
     },
     $buttonField: {
         ...flex(),
         gap: "8px",
+        marginTop: "8px",
     },
 });
 
