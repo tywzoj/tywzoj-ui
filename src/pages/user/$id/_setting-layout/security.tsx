@@ -1,4 +1,4 @@
-import { Button, Field, Input, makeStyles } from "@fluentui/react-components";
+import { Button, Field, Input, makeStyles, mergeClasses } from "@fluentui/react-components";
 import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 
@@ -21,10 +21,10 @@ const UserSecurityPage: React.FC = () => {
     );
 };
 
-const enum CE_EmailEditSteps {
+const enum CE_EmailEditStep {
     NotStarted = 0,
-    SendCodeToCurrentEmail = 1,
-    SendCodeToNewEmail = 2,
+    CodeSentToCurrentEmail = 1,
+    CodeSentToNewEmail = 2,
 }
 
 const EmailEditor: React.FC = () => {
@@ -32,18 +32,22 @@ const EmailEditor: React.FC = () => {
     const { data: authDetail } = useSuspenseQueryData(authDetailQueryOptions);
     const styles = useStyles();
 
-    const [step, setStep] = React.useState(CE_EmailEditSteps.NotStarted);
+    const [step, setStep] = React.useState(CE_EmailEditStep.NotStarted);
 
     const handleSendCodeToCurrentEmail = () => {
-        setStep(CE_EmailEditSteps.SendCodeToCurrentEmail);
+        setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
     };
 
     const handleSendCodeToNewEmail = () => {
-        setStep(CE_EmailEditSteps.SendCodeToNewEmail);
+        setStep(CE_EmailEditStep.CodeSentToNewEmail);
     };
 
     const handleUpdateEmail = () => {
-        setStep(CE_EmailEditSteps.NotStarted);
+        setStep(CE_EmailEditStep.NotStarted);
+    };
+
+    const handleCancel = () => {
+        setStep(CE_EmailEditStep.NotStarted);
     };
 
     return (
@@ -53,40 +57,43 @@ const EmailEditor: React.FC = () => {
                     <Input type="email" readOnly value={authDetail.email} />
                 </Field>
                 <Field label="New Email">
-                    <Input type="email" readOnly={step != CE_EmailEditSteps.NotStarted} />
+                    <Input type="email" readOnly={step != CE_EmailEditStep.NotStarted} />
                 </Field>
-                {step === CE_EmailEditSteps.NotStarted && (
-                    <div>
+
+                {step >= CE_EmailEditStep.CodeSentToCurrentEmail && (
+                    <Field label="Verification Code From Current Email">
+                        <Input
+                            type="text"
+                            readOnly={step != CE_EmailEditStep.CodeSentToCurrentEmail}
+                            autoComplete="off"
+                        />
+                    </Field>
+                )}
+
+                {step >= CE_EmailEditStep.CodeSentToNewEmail && (
+                    <Field label="Verification Code From New Email">
+                        <Input type="text" autoComplete="off" />
+                    </Field>
+                )}
+
+                <div className={styles.$buttonField}>
+                    {step === CE_EmailEditStep.NotStarted && (
                         <Button appearance="primary" onClick={handleSendCodeToCurrentEmail}>
                             Send code To Current Email
                         </Button>
-                    </div>
-                )}
-                {step >= CE_EmailEditSteps.SendCodeToCurrentEmail && (
-                    <Field label="Verification Code From Current Email">
-                        <Input type="text" readOnly={step != CE_EmailEditSteps.SendCodeToCurrentEmail} />
-                    </Field>
-                )}
-                {step === CE_EmailEditSteps.SendCodeToCurrentEmail && (
-                    <div>
+                    )}
+                    {step === CE_EmailEditStep.CodeSentToCurrentEmail && (
                         <Button appearance="primary" onClick={handleSendCodeToNewEmail}>
                             Send code To New Email
                         </Button>
-                    </div>
-                )}
-                {step >= CE_EmailEditSteps.SendCodeToNewEmail && (
-                    <>
-                        <Field label="Verification Code From New Email">
-                            <Input type="text" />
-                        </Field>
-                        <div>
-                            <Button appearance="primary" onClick={handleUpdateEmail}>
-                                {" "}
-                                Update Email
-                            </Button>
-                        </div>
-                    </>
-                )}
+                    )}
+                    {step === CE_EmailEditStep.CodeSentToNewEmail && (
+                        <Button appearance="primary" onClick={handleUpdateEmail}>
+                            Update Email
+                        </Button>
+                    )}
+                    {step > CE_EmailEditStep.NotStarted && <Button onClick={handleCancel}>Cancel</Button>}
+                </div>
             </form>
         </ContentCard>
     );
@@ -110,7 +117,10 @@ const useStyles = makeStyles({
         width: "100%",
         gap: "16px",
     },
-    $buttonField: {},
+    $buttonField: {
+        ...flex(),
+        gap: "8px",
+    },
 });
 
 const authDetailQueryOptionsFn = createQueryOptionsFn(
