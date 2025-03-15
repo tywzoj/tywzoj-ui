@@ -1,8 +1,10 @@
-import { Button, Field, Input, makeStyles, mergeClasses } from "@fluentui/react-components";
+import { Button, Field, Input, makeStyles } from "@fluentui/react-components";
 import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 
+import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from "@/common/constants/data-length";
 import { flex } from "@/common/styles/flex";
+import { Z_EMAIL } from "@/common/validators/user";
 import { ContentCard } from "@/components/ContentCard";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
@@ -33,25 +35,68 @@ const EmailEditor: React.FC = () => {
     const styles = useStyles();
 
     const [step, setStep] = React.useState(CE_EmailEditStep.NotStarted);
+    const [newEmail, setNewEmail] = React.useState("");
+    const [currentEmailCode, setCurrentEmailCode] = React.useState("");
+    const [newEmailCode, setNewEmailCode] = React.useState("");
+    const [pending, setPending] = React.useState(false);
+    const [newEmailError, setNewEmailError] = React.useState("");
+    const [currentEmailCodeError, setCurrentEmailCodeError] = React.useState("");
+    const [newEmailCodeError, setNewEmailCodeError] = React.useState("");
 
-    const handleSendCodeToCurrentEmail = () => {
+    const handleSendCodeToCurrentEmailAsync = async () => {
         setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
     };
 
-    const handleSendCodeToNewEmail = () => {
+    const onSendCodeToCurrentEmail = () => {
+        if (Z_EMAIL.safeParse(newEmail).success) {
+            setNewEmailError("");
+        } else {
+            setNewEmailError("Invalid email format");
+            return;
+        }
+
+        if (newEmail === authDetail.email) {
+            setNewEmailError("New email cannot be the same as current email");
+            return;
+        }
+
+        setPending(true);
+        handleSendCodeToCurrentEmailAsync().finally(() => {
+            setPending(false);
+        });
+    };
+
+    const handleSendCodeToNewEmailAsync = async () => {
         setStep(CE_EmailEditStep.CodeSentToNewEmail);
     };
 
-    const handleUpdateEmail = () => {
+    const onSendCodeToNewEmail = () => {
+        setCurrentEmailCodeError("");
+
+        setPending(true);
+        handleSendCodeToNewEmailAsync().finally(() => {
+            setPending(false);
+        });
+    };
+
+    const handleUpdateEmailAsync = async () => {
         setStep(CE_EmailEditStep.NotStarted);
     };
 
-    const handleCancel = () => {
+    const onUpdateEmail = () => {
+        setNewEmailCodeError("");
+
+        handleUpdateEmailAsync().finally(() => {
+            setPending(false);
+        });
+    };
+
+    const onCancel = () => {
         setStep(CE_EmailEditStep.NotStarted);
     };
 
     return (
-        <ContentCard title="Account Email">
+        <ContentCard title="Update Account Email">
             <form className={styles.$form}>
                 <Field
                     label="Current Email"
@@ -61,43 +106,59 @@ const EmailEditor: React.FC = () => {
                 >
                     <Input type="email" readOnly value={authDetail.email} />
                 </Field>
-                <Field label="New Email">
-                    <Input type="email" readOnly={step != CE_EmailEditStep.NotStarted} />
+                <Field label="New Email" validationMessage={newEmailError}>
+                    <Input
+                        type="email"
+                        readOnly={step != CE_EmailEditStep.NotStarted}
+                        maxLength={EMAIL_MAX_LENGTH}
+                        disabled={pending}
+                        value={newEmail}
+                        onChange={(_, { value }) => setNewEmail(value)}
+                    />
                 </Field>
 
                 {step >= CE_EmailEditStep.CodeSentToCurrentEmail && (
-                    <Field label="Verification Code From Current Email">
+                    <Field label="Verification Code From Current Email" validationMessage={currentEmailCodeError}>
                         <Input
                             type="text"
                             readOnly={step != CE_EmailEditStep.CodeSentToCurrentEmail}
                             autoComplete="off"
+                            disabled={pending}
+                            value={currentEmailCode}
+                            onChange={(_, { value }) => setCurrentEmailCode(value)}
                         />
                     </Field>
                 )}
 
                 {step >= CE_EmailEditStep.CodeSentToNewEmail && (
-                    <Field label="Verification Code From New Email">
-                        <Input type="text" autoComplete="off" />
+                    <Field label="Verification Code From New Email" validationMessage={newEmailCodeError}>
+                        <Input
+                            type="text"
+                            autoComplete="off"
+                            disabled={pending}
+                            value={newEmailCode}
+                            onChange={(_, { value }) => setNewEmailCode(value)}
+                        />
                     </Field>
                 )}
 
                 <div className={styles.$buttonField}>
                     {step === CE_EmailEditStep.NotStarted && (
-                        <Button appearance="primary" onClick={handleSendCodeToCurrentEmail}>
+                        <Button appearance="primary" disabledFocusable={pending} onClick={onSendCodeToCurrentEmail}>
                             Send code To Current Email
                         </Button>
                     )}
                     {step === CE_EmailEditStep.CodeSentToCurrentEmail && (
-                        <Button appearance="primary" onClick={handleSendCodeToNewEmail}>
+                        <Button appearance="primary" disabledFocusable={pending} onClick={onSendCodeToNewEmail}>
                             Send code To New Email
                         </Button>
                     )}
                     {step === CE_EmailEditStep.CodeSentToNewEmail && (
-                        <Button appearance="primary" onClick={handleUpdateEmail}>
+                        <Button appearance="primary" disabledFocusable={pending} onClick={onUpdateEmail}>
                             Update Email
                         </Button>
                     )}
-                    {step > CE_EmailEditStep.NotStarted && <Button onClick={handleCancel}>Cancel</Button>}
+                    {step > CE_EmailEditStep.NotStarted && <Button onClick={onCancel}>Cancel</Button>}
                 </div>
             </form>
         </ContentCard>
@@ -107,13 +168,13 @@ const PasswordEditor: React.FC = () => {
     const styles = useStyles();
 
     return (
-        <ContentCard title="Password">
+        <ContentCard title="Update Password">
             <form className={styles.$form}>
                 <Field label="Current Password">
                     <Input type="password" autoComplete="current-password" />
                 </Field>
                 <Field label="New Password">
-                    <Input type="password" autoComplete="new-password" />
+                    <Input type="password" autoComplete="new-password" maxLength={PASSWORD_MAX_LENGTH} />
                 </Field>
                 <Field label="Confirm New Password">
                     <Input type="password" autoComplete="new-password" />

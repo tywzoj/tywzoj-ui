@@ -192,6 +192,8 @@ const UserEditPage: React.FC = () => {
             );
             if (shouldPatch) {
                 if (patchBody.email && patchBody.email !== authDetail.email && !isAllowedManage) {
+                    // If emailVerificationCodeError is true, it means the user has already submitted the code but invalid.
+                    // So we just need to let user input and try again. Don't need to send the code and pop up the dialog again.
                     if (!emailVerificationCodeErrorRef.current) {
                         await sendChangeEmailCodeAsync(patchBody.email, locale, recaptchaAsync);
 
