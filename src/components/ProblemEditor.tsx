@@ -236,8 +236,8 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                 </TabList>
             </div>
             <div className={mergeClasses(styles.$editor, preview && styles.$hidden)}>
-                <div className={styles.$displayIdFieldContainer}>
-                    <Field label={ls.$displayId} className={styles.$topField} validationMessage={displayIdErr}>
+                <Field label={ls.$displayId} className={styles.$topField} validationMessage={displayIdErr}>
+                    <div className={styles.$displayIdFieldContainer}>
                         <Input
                             ref={displayIdRef}
                             // 0 will be empty string
@@ -258,16 +258,16 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                             }}
                             disabled={disabled || generatingDisplayId}
                         />
-                    </Field>
-                    {!problem && (
-                        <Button
-                            onClick={onGenerateDisplayIdButtonClick}
-                            disabledFocusable={disabled || generatingDisplayId}
-                        >
-                            {ls.$idGenBtn}
-                        </Button>
-                    )}
-                </div>
+                        {!problem && (
+                            <Button
+                                onClick={onGenerateDisplayIdButtonClick}
+                                disabledFocusable={disabled || generatingDisplayId}
+                            >
+                                {ls.$idGenBtn}
+                            </Button>
+                        )}
+                    </div>
+                </Field>
 
                 <Field label={ls.$pTitle} className={styles.$topField} validationMessage={titleErr}>
                     <Input
@@ -648,19 +648,12 @@ const useStyles = makeStyles({
         },
     },
     $displayIdFieldContainer: {
-        ...flex({
-            flexDirection: "row",
-            alignItems: "flex-end",
-        }),
+        ...flex(),
         gap: "8px",
-        "> .fui-Field": {
+        "> .fui-Input": {
             flexGrow: 1,
         },
-        "> .fui-Button": {
-            marginBottom: "2px",
-        },
     },
-
     $sampleList: {
         ...flex({
             flexDirection: "column",
