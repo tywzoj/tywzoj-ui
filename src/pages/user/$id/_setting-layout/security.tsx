@@ -32,7 +32,7 @@ const EmailEditor: React.FC = () => {
     const { authDetailQueryOptions, userDetailQueryOptions } = LayoutRoute.useLoaderData();
     const { data: authDetail } = useSuspenseQueryData(authDetailQueryOptions);
     const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
-    const isAllowedManage = useIsAllowedManageUser(userDetail) || true;
+    const isAllowedManage = useIsAllowedManageUser(userDetail);
     const styles = useStyles();
 
     const [step, setStep] = React.useState(CE_EmailEditStep.NotStarted);
