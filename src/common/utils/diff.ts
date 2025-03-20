@@ -6,7 +6,12 @@
  * @param keys the keys of the object that you want to compare
  * @returns a boolean value, true if the rawObj and newObj are different, false otherwise
  */
-export function diff<T>(rawObj: Required<T>, newObj: Required<T>, dist: Partial<T>, keys: (keyof T)[]): boolean {
+export function diff<T, K extends (keyof T)[]>(
+    rawObj: T,
+    newObj: { [k in K[number]]-?: T[K[number]] },
+    dist: { [k in K[number]]?: T[K[number]] },
+    keys: K,
+): boolean {
     let isNotEqual = false;
 
     for (const key of keys) {

@@ -6,8 +6,10 @@ import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from "@/common/constants/data-l
 import { flex } from "@/common/styles/flex";
 import { Z_EMAIL } from "@/common/validators/user";
 import { ContentCard } from "@/components/ContentCard";
+import { UserLevelSelector } from "@/components/UserLevelSelector";
 import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
+import { CE_UserLevel } from "@/server/common/permission";
 
 const LayoutRoute = getRouteApi("/user/$id/_setting-layout");
 
@@ -18,6 +20,7 @@ const UserSecurityPage: React.FC = () => {
         <div className={styles.$root}>
             <EmailEditor />
             <PasswordEditor />
+            <UserLevelEditor />
         </div>
     );
 };
@@ -32,10 +35,11 @@ const EmailEditor: React.FC = () => {
     const { authDetailQueryOptions, userDetailQueryOptions } = LayoutRoute.useLoaderData();
     const { data: authDetail } = useSuspenseQueryData(authDetailQueryOptions);
     const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
-    const isAllowedManage = useIsAllowedManageUser(userDetail);
+    const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
     const styles = useStyles();
 
     const [step, setStep] = React.useState(CE_EmailEditStep.NotStarted);
+    const [dirty, setDirty] = React.useState(false);
     const [newEmail, setNewEmail] = React.useState("");
     const [currentEmailCode, setCurrentEmailCode] = React.useState("");
     const [newEmailCode, setNewEmailCode] = React.useState("");
@@ -43,6 +47,18 @@ const EmailEditor: React.FC = () => {
     const [newEmailError, setNewEmailError] = React.useState("");
     const [currentEmailCodeError, setCurrentEmailCodeError] = React.useState("");
     const [newEmailCodeError, setNewEmailCodeError] = React.useState("");
+
+    const resetForm = () => {
+        setStep(CE_EmailEditStep.NotStarted);
+        setDirty(false);
+        setNewEmail("");
+        setCurrentEmailCode("");
+        setNewEmailCode("");
+        setNewEmailError("");
+        setCurrentEmailCodeError("");
+        setNewEmailCodeError("");
+        setPending(false);
+    };
 
     const validateNewEmail = () => {
         if (!Z_EMAIL.safeParse(newEmail).success) {
@@ -88,7 +104,7 @@ const EmailEditor: React.FC = () => {
     };
 
     const handleUpdateEmailAsync = async () => {
-        setStep(CE_EmailEditStep.NotStarted);
+        resetForm();
     };
 
     const onUpdateEmail = () => {
@@ -111,12 +127,8 @@ const EmailEditor: React.FC = () => {
         });
     };
 
-    const onCancel = () => {
-        setStep(CE_EmailEditStep.NotStarted);
-    };
-
     return (
-        <ContentCard title="Update Account Email">
+        <ContentCard title="Account Email">
             <form className={styles.$form}>
                 <Field
                     label="Current Email"
@@ -133,7 +145,10 @@ const EmailEditor: React.FC = () => {
                         maxLength={EMAIL_MAX_LENGTH}
                         disabled={pending}
                         value={newEmail}
-                        onChange={(_, { value }) => setNewEmail(value)}
+                        onChange={(_, { value }) => {
+                            setNewEmail(value);
+                            setDirty(!!value);
+                        }}
                     />
                 </Field>
 
@@ -179,33 +194,113 @@ const EmailEditor: React.FC = () => {
                             disabledFocusable={pending}
                             onClick={isAllowedManage ? onAdminUpdateEmail : onUpdateEmail}
                         >
-                            Update Email
+                            Update
                         </Button>
                     )}
-                    {step > CE_EmailEditStep.NotStarted && <Button onClick={onCancel}>Cancel</Button>}
+                    {dirty && <Button onClick={resetForm}>Reset</Button>}
                 </div>
             </form>
         </ContentCard>
     );
 };
+
 const PasswordEditor: React.FC = () => {
     const styles = useStyles();
 
+    const [currentPassword, setCurrentPassword] = React.useState("");
+    const [newPassword, setNewPassword] = React.useState("");
+    const [confirmPassword, setConfirmPassword] = React.useState("");
+
+    const dirty = !!(currentPassword || newPassword || confirmPassword);
+
+    const resetForm = () => {
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+    };
+
     return (
-        <ContentCard title="Update Password">
+        <ContentCard title="Password">
             <form className={styles.$form}>
                 <Field label="Current Password">
-                    <Input type="password" autoComplete="current-password" />
+                    <Input
+                        type="password"
+                        autoComplete="current-password"
+                        value={currentPassword}
+                        onChange={(_, { value }) => setCurrentPassword(value)}
+                    />
                 </Field>
                 <Field label="New Password">
-                    <Input type="password" autoComplete="new-password" maxLength={PASSWORD_MAX_LENGTH} />
+                    <Input
+                        type="password"
+                        autoComplete="new-password"
+                        maxLength={PASSWORD_MAX_LENGTH}
+                        value={newPassword}
+                        onChange={(_, { value }) => setNewPassword(value)}
+                    />
                 </Field>
                 <Field label="Confirm New Password">
-                    <Input type="password" autoComplete="new-password" />
+                    <Input
+                        type="password"
+                        autoComplete="new-password"
+                        value={confirmPassword}
+                        onChange={(_, { value }) => setConfirmPassword(value)}
+                    />
                 </Field>
 
                 <div className={styles.$buttonField}>
-                    <Button appearance="primary">Update Password</Button>
+                    <Button appearance="primary">Update</Button>
+                    {dirty && <Button onClick={resetForm}>Reset</Button>}
+                </div>
+            </form>
+        </ContentCard>
+    );
+};
+
+const UserLevelEditor: React.FC = () => {
+    const { userDetailQueryOptions } = LayoutRoute.useLoaderData();
+    const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
+    const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
+
+    const [level, setLevel] = React.useState(CE_UserLevel.General);
+    const [dirty, setDirty] = React.useState(false);
+
+    const styles = useStyles();
+
+    const resetForm = () => {
+        setLevel(userDetail.level);
+        setDirty(false);
+    };
+
+    React.useEffect(() => {
+        resetForm();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userDetail.level]);
+
+    if (!isAllowedManage) {
+        return null;
+    }
+
+    return (
+        <ContentCard title="Admin Management">
+            <form className={styles.$form}>
+                <Field label="Level">
+                    <UserLevelSelector
+                        level={level}
+                        onChange={(level) => {
+                            setLevel(level);
+                            setDirty(level !== userDetail.level);
+                        }}
+                    />
+                </Field>
+
+                <div className={styles.$buttonField}>
+                    <Button appearance="primary">Update</Button>
+                    {dirty && (
+                        <Button appearance="secondary" onClick={resetForm}>
+                            Reset
+                        </Button>
+                    )}
                 </div>
             </form>
         </ContentCard>

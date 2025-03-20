@@ -7,13 +7,11 @@ import {
     DialogSurface,
     DialogTitle,
     DialogTrigger,
-    Dropdown,
     Field,
     Image,
     Input,
     makeStyles,
     mergeClasses,
-    Option,
     Text,
     Textarea,
     Tooltip,
@@ -31,14 +29,12 @@ import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useDialogAwaiter } from "@/common/hooks/dialog-awaiter";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
-import { useUserLevelStringMap } from "@/common/hooks/user-level";
 import { flex } from "@/common/styles/flex";
 import { diff } from "@/common/utils/diff";
 import { format } from "@/common/utils/format";
 import { neverGuard } from "@/common/utils/never-guard";
 import { Z_EMPTY_STRING } from "@/common/validators/common";
 import { Z_EMAIL, Z_USERNAME } from "@/common/validators/user";
-import { UserLevelLabel } from "@/components/UserLevelLabel";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
 import { getLocale } from "@/locales/selectors";
@@ -47,7 +43,6 @@ import { useSuspenseQueryData } from "@/query/hooks";
 import { userDetailQueryKeys } from "@/query/keys";
 import { UserModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
-import { CE_UserLevel } from "@/server/common/permission";
 import type { UserTypes } from "@/server/types";
 import type { IErrorCodeWillBeReturned } from "@/server/utils";
 import { withThrowErrorsExcept } from "@/server/utils";
@@ -79,7 +74,6 @@ const UserEditPage: React.FC = () => {
         $emailHint: CE_Strings.DISPLAY_EMAIL_HINT,
         $nickname: CE_Strings.USER_NICKNAME_LABEL,
         $bio: CE_Strings.USER_BIO_LABEL,
-        $level: CE_Strings.USER_LEVEL_LABEL,
         $saveButton: CE_Strings.COMMON_SAVE_BUTTON,
         $resetButton: CE_Strings.COMMON_RESET_BUTTON,
         $submitButton: CE_Strings.COMMON_SUBMIT_BUTTON,
@@ -95,7 +89,6 @@ const UserEditPage: React.FC = () => {
     const [username, setUsername] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [nickname, setNickname] = React.useState("");
-    const [level, setLevel] = React.useState(CE_UserLevel.General);
     const [bio, setBio] = React.useState("");
     const [emailVerificationCode, setEmailVerificationCode] = React.useState("");
 
@@ -129,7 +122,6 @@ const UserEditPage: React.FC = () => {
         setNickname(userDetail.nickname ?? "");
         setEmail(userDetail.email ?? "");
         setBio(userDetail.bio ?? "");
-        setLevel(userDetail.level);
 
         setUsernameError("");
         setEmailError("");
@@ -178,17 +170,16 @@ const UserEditPage: React.FC = () => {
         React.useCallback(async () => {
             const patchBody: UserTypes.IUserDetailPatchRequestBody = {};
 
-            const shouldPatch = diff<Omit<UserTypes.IUserDetailPatchRequestBody, "emailVerificationCode">>(
+            const shouldPatch = diff(
                 userDetail,
                 {
                     username,
                     nickname,
                     email,
                     bio,
-                    level,
                 },
                 patchBody,
-                ["username", "nickname", "email", "bio", "level"],
+                ["username", "nickname", "email", "bio"],
             );
             if (shouldPatch) {
                 if (patchBody.email && patchBody.email !== authDetail.email && !isAllowedManage) {
@@ -233,7 +224,6 @@ const UserEditPage: React.FC = () => {
             nickname,
             email,
             bio,
-            level,
             authDetail.email,
             isAllowedManage,
             recaptchaAsync,
@@ -315,11 +305,6 @@ const UserEditPage: React.FC = () => {
                         onChange={(_, { value }) => setBio(value)}
                     />
                 </Field>
-                {isAllowedManage && userDetail.id !== currentUser.id && (
-                    <Field label={ls.$level}>
-                        <UserLevelSelector disabled={pending} level={level} onChange={setLevel} />
-                    </Field>
-                )}
                 <div className={mergeClasses(styles.$buttons, isMiniScreen && styles.$buttonsMiniScreen)}>
                     <div>
                         <Button appearance="primary" disabledFocusable={pending} onClick={onSaveChanges}>
@@ -383,39 +368,6 @@ const UserEditPage: React.FC = () => {
             </Dialog>
             {/* TODO: avatar uploader dialog */}
         </div>
-    );
-};
-
-const UserLevelSelector: React.FC<{
-    level: CE_UserLevel;
-    disabled?: boolean;
-    onChange: (level: CE_UserLevel) => void;
-}> = ({ level, disabled, onChange }) => {
-    const userLevelStringMap = useUserLevelStringMap();
-
-    const levels = [
-        CE_UserLevel.Disabled,
-        CE_UserLevel.Specific,
-        CE_UserLevel.General,
-        CE_UserLevel.Paid,
-        CE_UserLevel.Internal,
-        CE_UserLevel.Manager,
-        CE_UserLevel.Admin,
-    ];
-
-    return (
-        <Dropdown
-            disabled={disabled}
-            selectedOptions={[String(level)]}
-            value={userLevelStringMap[level]}
-            onOptionSelect={(_, data) => onChange(Number(data.optionValue))}
-        >
-            {levels.map((level) => (
-                <Option key={`user-level-${level}`} value={String(level)} text={userLevelStringMap[level]}>
-                    <UserLevelLabel userLevel={level} showTooltip={false} size="medium" />
-                </Option>
-            ))}
-        </Dropdown>
     );
 };
 

@@ -35,8 +35,13 @@ export function checkIsAllowedManageUser(
     user: IUserDetail,
     currentUser: IUserDetailNullable,
     permission: IPermissionState,
+    allowedManageSelf = true,
 ): boolean {
     if (!currentUser) {
+        return false;
+    }
+
+    if (!allowedManageSelf && user.id === currentUser.id) {
         return false;
     }
 
