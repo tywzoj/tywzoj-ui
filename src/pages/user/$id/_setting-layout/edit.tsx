@@ -19,7 +19,7 @@ import {
     Tooltip,
 } from "@fluentui/react-components";
 import { useQueryClient } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import React from "react";
 
 import logoDark from "@/assets/icon.dark.png";
@@ -44,20 +44,20 @@ import { CE_Strings } from "@/locales/locale";
 import { getLocale } from "@/locales/selectors";
 import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
-import { CE_QueryId } from "@/query/id";
 import { userDetailQueryKeys } from "@/query/keys";
-import { createQueryOptionsFn } from "@/query/utils";
-import { AuthModule, UserModule } from "@/server/api";
+import { UserModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import { CE_UserLevel } from "@/server/common/permission";
 import type { UserTypes } from "@/server/types";
 import type { IErrorCodeWillBeReturned } from "@/server/utils";
-import { withThrowErrors, withThrowErrorsExcept } from "@/server/utils";
+import { withThrowErrorsExcept } from "@/server/utils";
 import { useAppDispatch, useAppSelector, useCurrentUser, useIsMiniScreen } from "@/store/hooks";
 import { useIsLightTheme } from "@/theme/hooks";
 
+const LayoutRoute = getRouteApi("/user/$id/_setting-layout");
+
 const UserEditPage: React.FC = () => {
-    const { userDetailQueryOptions, authDetailQueryOptions } = Route.useLoaderData();
+    const { userDetailQueryOptions, authDetailQueryOptions } = LayoutRoute.useLoaderData();
     const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
     const { data: authDetail } = useSuspenseQueryData(authDetailQueryOptions);
     const queryClient = useQueryClient();
@@ -497,26 +497,6 @@ const sendChangeEmailCodeAsync = withThrowErrorsExcept(
     CE_ErrorCode.EmailVerificationCodeRateLimited,
 );
 
-const userDetailQueryOptionsFn = createQueryOptionsFn(
-    CE_QueryId.UserDetail,
-    withThrowErrors(UserModule.getUserDetailAsync),
-);
-const authDetailQueryOptionsFn = createQueryOptionsFn(
-    CE_QueryId.AuthDetail,
-    withThrowErrors(AuthModule.getAuthDetailAsync),
-);
-
 export const Route = createFileRoute("/user/$id/_setting-layout/edit")({
     component: UserEditPage,
-    loader: async ({ context: { queryClient }, params: { id } }) => {
-        const userDetailQueryOptions = userDetailQueryOptionsFn(id);
-        const authDetailQueryOptions = authDetailQueryOptionsFn(id);
-
-        await Promise.all([
-            queryClient.ensureQueryData(userDetailQueryOptions),
-            queryClient.ensureQueryData(authDetailQueryOptions),
-        ]);
-
-        return { userDetailQueryOptions, authDetailQueryOptions };
-    },
 });

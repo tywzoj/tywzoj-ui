@@ -1,16 +1,15 @@
 import { Button, Field, Input, makeStyles } from "@fluentui/react-components";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import React from "react";
 
 import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from "@/common/constants/data-length";
 import { flex } from "@/common/styles/flex";
 import { Z_EMAIL } from "@/common/validators/user";
 import { ContentCard } from "@/components/ContentCard";
+import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
-import { CE_QueryId } from "@/query/id";
-import { createQueryOptionsFn } from "@/query/utils";
-import { AuthModule } from "@/server/api";
-import { withThrowErrors } from "@/server/utils";
+
+const LayoutRoute = getRouteApi("/user/$id/_setting-layout");
 
 const UserSecurityPage: React.FC = () => {
     const styles = useStyles();
@@ -30,8 +29,10 @@ const enum CE_EmailEditStep {
 }
 
 const EmailEditor: React.FC = () => {
-    const { authDetailQueryOptions } = Route.useLoaderData();
+    const { authDetailQueryOptions, userDetailQueryOptions } = LayoutRoute.useLoaderData();
     const { data: authDetail } = useSuspenseQueryData(authDetailQueryOptions);
+    const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
+    const isAllowedManage = useIsAllowedManageUser(userDetail) || true;
     const styles = useStyles();
 
     const [step, setStep] = React.useState(CE_EmailEditStep.NotStarted);
@@ -43,20 +44,27 @@ const EmailEditor: React.FC = () => {
     const [currentEmailCodeError, setCurrentEmailCodeError] = React.useState("");
     const [newEmailCodeError, setNewEmailCodeError] = React.useState("");
 
+    const validateNewEmail = () => {
+        if (!Z_EMAIL.safeParse(newEmail).success) {
+            setNewEmailError("Invalid email format");
+            return false;
+        }
+
+        if (newEmail === authDetail.email) {
+            setNewEmailError("New email cannot be the same as current email");
+            return false;
+        }
+
+        setNewEmailError("");
+        return true;
+    };
+
     const handleSendCodeToCurrentEmailAsync = async () => {
         setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
     };
 
     const onSendCodeToCurrentEmail = () => {
-        if (Z_EMAIL.safeParse(newEmail).success) {
-            setNewEmailError("");
-        } else {
-            setNewEmailError("Invalid email format");
-            return;
-        }
-
-        if (newEmail === authDetail.email) {
-            setNewEmailError("New email cannot be the same as current email");
+        if (!validateNewEmail()) {
             return;
         }
 
@@ -86,6 +94,18 @@ const EmailEditor: React.FC = () => {
     const onUpdateEmail = () => {
         setNewEmailCodeError("");
 
+        setPending(true);
+        handleUpdateEmailAsync().finally(() => {
+            setPending(false);
+        });
+    };
+
+    const onAdminUpdateEmail = async () => {
+        if (!validateNewEmail()) {
+            return;
+        }
+
+        setPending(true);
         handleUpdateEmailAsync().finally(() => {
             setPending(false);
         });
@@ -143,7 +163,7 @@ const EmailEditor: React.FC = () => {
                 )}
 
                 <div className={styles.$buttonField}>
-                    {step === CE_EmailEditStep.NotStarted && (
+                    {step === CE_EmailEditStep.NotStarted && !isAllowedManage && (
                         <Button appearance="primary" disabledFocusable={pending} onClick={onSendCodeToCurrentEmail}>
                             Send code To Current Email
                         </Button>
@@ -153,8 +173,12 @@ const EmailEditor: React.FC = () => {
                             Send code To New Email
                         </Button>
                     )}
-                    {step === CE_EmailEditStep.CodeSentToNewEmail && (
-                        <Button appearance="primary" disabledFocusable={pending} onClick={onUpdateEmail}>
+                    {(step === CE_EmailEditStep.CodeSentToNewEmail || isAllowedManage) && (
+                        <Button
+                            appearance="primary"
+                            disabledFocusable={pending}
+                            onClick={isAllowedManage ? onAdminUpdateEmail : onUpdateEmail}
+                        >
                             Update Email
                         </Button>
                     )}
@@ -210,18 +234,6 @@ const useStyles = makeStyles({
     },
 });
 
-const authDetailQueryOptionsFn = createQueryOptionsFn(
-    CE_QueryId.AuthDetail,
-    withThrowErrors(AuthModule.getAuthDetailAsync),
-);
-
 export const Route = createFileRoute("/user/$id/_setting-layout/security")({
     component: UserSecurityPage,
-    loader: async ({ context: { queryClient }, params: { id } }) => {
-        const authDetailQueryOptions = authDetailQueryOptionsFn(id);
-
-        await queryClient.ensureQueryData(authDetailQueryOptions);
-
-        return { authDetailQueryOptions };
-    },
 });

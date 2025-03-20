@@ -10,6 +10,10 @@ import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
 import { checkIsAllowedEditUserId } from "@/permission/user/checker";
+import { CE_QueryId } from "@/query/id";
+import { createQueryOptionsFn } from "@/query/utils";
+import { AuthModule, UserModule } from "@/server/api";
+import { withThrowErrors } from "@/server/utils";
 import { useIsMiniScreen } from "@/store/hooks";
 
 const enum CE_SettingPages {
@@ -82,6 +86,15 @@ const useStyles = makeStyles({
     },
 });
 
+const authDetailQueryOptionsFn = createQueryOptionsFn(
+    CE_QueryId.AuthDetail,
+    withThrowErrors(AuthModule.getAuthDetailAsync),
+);
+const userDetailQueryOptionsFn = createQueryOptionsFn(
+    CE_QueryId.UserDetail,
+    withThrowErrors(UserModule.getUserDetailAsync),
+);
+
 export const Route = createFileRoute("/user/$id/_setting-layout")({
     component: SettingLayout,
     errorComponent: ErrorPageLazy,
@@ -94,5 +107,16 @@ export const Route = createFileRoute("/user/$id/_setting-layout")({
         if (!checkIsAllowedEditUserId(userId, currentUser, permission)) {
             throw new PermissionDeniedError();
         }
+    },
+    loader: async ({ context: { queryClient }, params: { id } }) => {
+        const userDetailQueryOptions = userDetailQueryOptionsFn(id);
+        const authDetailQueryOptions = authDetailQueryOptionsFn(id);
+
+        await Promise.all([
+            queryClient.ensureQueryData(userDetailQueryOptions),
+            queryClient.ensureQueryData(authDetailQueryOptions),
+        ]);
+
+        return { userDetailQueryOptions, authDetailQueryOptions };
     },
 });
