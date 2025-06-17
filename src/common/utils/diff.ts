@@ -1,3 +1,5 @@
+type RemoveUndefined<T> = T extends undefined ? never : T;
+
 /**
  * This function is used to compare two objects and return the difference between them
  * @param rawObj the object that is used as the base object
@@ -7,15 +9,15 @@
  * @returns a boolean value, true if the rawObj and newObj are different, false otherwise
  */
 export function diff<T, K extends (keyof T)[]>(
-    rawObj: T,
-    newObj: { [k in K[number]]-?: T[K[number]] },
-    dist: { [k in K[number]]?: T[K[number]] },
+    rawObj: { [k in K[number]]: RemoveUndefined<T[k]> },
+    newObj: { [k in K[number]]?: T[k] },
+    dist: T,
     keys: K,
 ): boolean {
     let isNotEqual = false;
 
     for (const key of keys) {
-        if (!checkIsEqual(rawObj[key], newObj[key])) {
+        if (newObj[key] !== undefined && !checkIsEqual(rawObj[key], newObj[key])) {
             dist[key] = newObj[key];
             isNotEqual = true;
         }
