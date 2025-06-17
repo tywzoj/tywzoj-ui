@@ -186,7 +186,13 @@ const UserEditPage: React.FC = () => {
                     // If emailVerificationCodeError is true, it means the user has already submitted the code but invalid.
                     // So we just need to let user input and try again. Don't need to send the code and pop up the dialog again.
                     if (!emailVerificationCodeErrorRef.current) {
-                        await sendChangeEmailCodeAsync(patchBody.email, locale, recaptchaAsync);
+                        await sendChangeEmailCodeAsync(
+                            {
+                                email: patchBody.email,
+                                lang: locale,
+                            },
+                            recaptchaAsync,
+                        );
 
                         setEmailVerificationCode("");
                         setEmailVerificationCodeError("");
@@ -445,7 +451,7 @@ const patchUserDetailAsync = withThrowErrorsExcept(
     CE_ErrorCode.User_DuplicateUsername,
 );
 const sendChangeEmailCodeAsync = withThrowErrorsExcept(
-    UserModule.sendChangeEmailCodeAsync,
+    UserModule.postSendChangeEmailCodeAsync,
     CE_ErrorCode.EmailVerificationCodeRateLimited,
 );
 

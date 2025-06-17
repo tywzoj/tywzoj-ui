@@ -3,13 +3,23 @@ import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import React from "react";
 
 import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from "@/common/constants/data-length";
+import { useWithCatchError } from "@/common/hooks/catch-error";
+import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { flex } from "@/common/styles/flex";
+import { neverGuard } from "@/common/utils/never-guard";
 import { Z_EMAIL } from "@/common/validators/user";
 import { ContentCard } from "@/components/ContentCard";
 import { UserLevelSelector } from "@/components/UserLevelSelector";
+import { getLocale } from "@/locales/selectors";
 import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
+import { AuthModule } from "@/server/api";
+import { CE_ErrorCode } from "@/server/common/error-code";
 import { CE_UserLevel } from "@/server/common/permission";
+import type { AuthTypes } from "@/server/types";
+import type { IErrorCodeWillBeReturned } from "@/server/utils";
+import { withThrowErrorsExcept } from "@/server/utils";
+import { useAppSelector } from "@/store/hooks";
 
 const LayoutRoute = getRouteApi("/user/$id/_setting-layout");
 
@@ -36,6 +46,8 @@ const EmailEditor: React.FC = () => {
     const { data: authDetail } = useSuspenseQueryData(authDetailQueryOptions);
     const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
     const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
+    const recaptchaAsync = useRecaptchaAsync();
+    const locale = useAppSelector(getLocale);
     const styles = useStyles();
 
     const [step, setStep] = React.useState(CE_EmailEditStep.NotStarted);
@@ -75,9 +87,36 @@ const EmailEditor: React.FC = () => {
         return true;
     };
 
-    const handleSendCodeToCurrentEmailAsync = async () => {
-        setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
+    const handleSendCodeToCurrentEmailError = (code: IErrorCodeWillBeReturned<typeof postSendChangeEmailCodeAsync>) => {
+        switch (code) {
+            case CE_ErrorCode.EmailVerificationCodeRateLimited:
+                // TODO: update countdown
+                setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
+                break;
+
+            default:
+                neverGuard(code);
+        }
     };
+
+    const handleSendCodeToCurrentEmailAsync = useWithCatchError(
+        React.useCallback(async () => {
+            const { code } = await postSendChangeEmailCodeAsync(
+                {
+                    email: authDetail.email,
+                    lang: locale,
+                },
+                recaptchaAsync,
+            );
+
+            if (code !== CE_ErrorCode.OK) {
+                handleSendCodeToCurrentEmailError(code);
+                return;
+            }
+
+            setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
+        }, [authDetail.email, locale, recaptchaAsync]),
+    );
 
     const onSendCodeToCurrentEmail = () => {
         if (!validateNewEmail()) {
@@ -90,9 +129,47 @@ const EmailEditor: React.FC = () => {
         });
     };
 
-    const handleSendCodeToNewEmailAsync = async () => {
-        setStep(CE_EmailEditStep.CodeSentToNewEmail);
+    const handleSendCodeToNewEmailError = (
+        code: IErrorCodeWillBeReturned<typeof postSendNewEmailVerificationCodeAsync>,
+    ) => {
+        switch (code) {
+            case CE_ErrorCode.EmailVerificationCodeRateLimited:
+                // TODO: update countdown
+                setStep(CE_EmailEditStep.CodeSentToNewEmail);
+                break;
+
+            case CE_ErrorCode.InvalidEmailVerificationCode:
+                setCurrentEmailCodeError("Invalid verification code from current email");
+                break;
+
+            case CE_ErrorCode.Auth_DuplicateEmail:
+                setNewEmailError("This email is already in use by another account.");
+                break;
+
+            default:
+                neverGuard(code);
+        }
     };
+
+    const handleSendCodeToNewEmailAsync = useWithCatchError(
+        React.useCallback(async () => {
+            const { code } = await postSendNewEmailVerificationCodeAsync(
+                {
+                    email: newEmail,
+                    lang: locale,
+                    emailVerificationCode: currentEmailCode,
+                },
+                recaptchaAsync,
+            );
+
+            if (code !== CE_ErrorCode.OK) {
+                handleSendCodeToNewEmailError(code);
+                return;
+            }
+
+            setStep(CE_EmailEditStep.CodeSentToNewEmail);
+        }, [currentEmailCode, locale, newEmail, recaptchaAsync]),
+    );
 
     const onSendCodeToNewEmail = () => {
         setCurrentEmailCodeError("");
@@ -103,15 +180,48 @@ const EmailEditor: React.FC = () => {
         });
     };
 
-    const handleUpdateEmailAsync = async () => {
-        resetForm();
+    const handleUpdateEmailError = (code: IErrorCodeWillBeReturned<typeof postChangeEmailAsync>) => {
+        switch (code) {
+            case CE_ErrorCode.InvalidEmailVerificationCode:
+                setCurrentEmailCodeError("Invalid verification code from new email.");
+                break;
+
+            default:
+                neverGuard(code);
+        }
     };
+
+    const handleUpdateEmailAsync = useWithCatchError(
+        React.useCallback(
+            async (editByAdmin: boolean) => {
+                const body: AuthTypes.IChangeEmailPostRequestBody = {
+                    newEmail,
+                };
+
+                if (editByAdmin) {
+                    body.userId = userDetail.id;
+                } else {
+                    body.emailVerificationCode = newEmailCode;
+                }
+
+                const { code } = await postChangeEmailAsync(body, recaptchaAsync);
+
+                if (code !== CE_ErrorCode.OK) {
+                    handleUpdateEmailError(code);
+                    return;
+                }
+
+                resetForm();
+            },
+            [newEmail, newEmailCode, recaptchaAsync, userDetail],
+        ),
+    );
 
     const onUpdateEmail = () => {
         setNewEmailCodeError("");
 
         setPending(true);
-        handleUpdateEmailAsync().finally(() => {
+        handleUpdateEmailAsync(false /* editByAdmin */).finally(() => {
             setPending(false);
         });
     };
@@ -122,7 +232,7 @@ const EmailEditor: React.FC = () => {
         }
 
         setPending(true);
-        handleUpdateEmailAsync().finally(() => {
+        handleUpdateEmailAsync(true /* editByAdmin */).finally(() => {
             setPending(false);
         });
     };
@@ -332,3 +442,20 @@ const useStyles = makeStyles({
 export const Route = createFileRoute("/user/$id/_setting-layout/security")({
     component: UserSecurityPage,
 });
+
+const postSendChangeEmailCodeAsync = withThrowErrorsExcept(
+    AuthModule.postSendChangeEmailVerificationCodeAsync,
+    CE_ErrorCode.EmailVerificationCodeRateLimited,
+);
+
+const postSendNewEmailVerificationCodeAsync = withThrowErrorsExcept(
+    AuthModule.postSendNewEmailVerificationCodeAsync,
+    CE_ErrorCode.EmailVerificationCodeRateLimited,
+    CE_ErrorCode.InvalidEmailVerificationCode,
+    CE_ErrorCode.Auth_DuplicateEmail,
+);
+
+const postChangeEmailAsync = withThrowErrorsExcept(
+    AuthModule.postChangeEmailAsync,
+    CE_ErrorCode.InvalidEmailVerificationCode,
+);
