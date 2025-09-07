@@ -39,3 +39,9 @@ export interface IChangeEmailPostRequestBody {
 export interface ISendNewEmailVerificationCodePostRequestBody extends ISendEmailVerificationCodePostRequestBody {
     emailVerificationCode: string;
 }
+
+export interface IResetPasswordPostRequestBody {
+    userId?: number;
+    oldPassword?: string;
+    newPassword: string;
+}

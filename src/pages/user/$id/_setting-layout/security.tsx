@@ -1,4 +1,5 @@
 import { Button, Field, Input, makeStyles } from "@fluentui/react-components";
+import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import React from "react";
 
@@ -13,12 +14,13 @@ import { UserLevelSelector } from "@/components/UserLevelSelector";
 import { getLocale } from "@/locales/selectors";
 import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
-import { AuthModule } from "@/server/api";
+import { userDetailQueryKeys } from "@/query/keys";
+import { AuthModule, UserModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import { CE_UserLevel } from "@/server/common/permission";
 import type { AuthTypes } from "@/server/types";
 import type { IErrorCodeWillBeReturned } from "@/server/utils";
-import { withThrowErrorsExcept } from "@/server/utils";
+import { withThrowErrors, withThrowErrorsExcept } from "@/server/utils";
 import { useAppSelector } from "@/store/hooks";
 
 const LayoutRoute = getRouteApi("/user/$id/_setting-layout");
@@ -301,7 +303,7 @@ const EmailEditor: React.FC = () => {
                     {(step === CE_EmailEditStep.CodeSentToNewEmail || isAllowedManage) && (
                         <Button
                             appearance="primary"
-                            disabledFocusable={pending}
+                            disabledFocusable={!dirty || pending}
                             onClick={isAllowedManage ? onAdminUpdateEmail : onUpdateEmail}
                         >
                             Update
@@ -316,10 +318,18 @@ const EmailEditor: React.FC = () => {
 
 const PasswordEditor: React.FC = () => {
     const styles = useStyles();
+    const recaptchaAsync = useRecaptchaAsync();
+    const { userDetailQueryOptions } = LayoutRoute.useLoaderData();
+    const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
+    const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
 
     const [currentPassword, setCurrentPassword] = React.useState("");
     const [newPassword, setNewPassword] = React.useState("");
     const [confirmPassword, setConfirmPassword] = React.useState("");
+    const [pending, setPending] = React.useState(false);
+    const [currentEmailCodeError, setCurrentEmailCodeError] = React.useState("");
+    const [newEmailCodeError, setNewEmailCodeError] = React.useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = React.useState("");
 
     const dirty = !!(currentPassword || newPassword || confirmPassword);
 
@@ -327,40 +337,121 @@ const PasswordEditor: React.FC = () => {
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
+        setCurrentEmailCodeError("");
+        setNewEmailCodeError("");
+        setConfirmPasswordError("");
+    };
+
+    const handleResetPasswordError = (code: IErrorCodeWillBeReturned<typeof postResetPasswordAsync>) => {
+        switch (code) {
+            case CE_ErrorCode.Auth_WrongPassword:
+                setCurrentEmailCodeError("Current password is incorrect.");
+                break;
+
+            default:
+                neverGuard(code);
+        }
+    };
+
+    const handleResetPasswordAsync = useWithCatchError(
+        React.useCallback(async () => {
+            const body: AuthTypes.IResetPasswordPostRequestBody = {
+                newPassword,
+            };
+
+            if (isAllowedManage) {
+                body.userId = userDetail.id;
+            } else {
+                body.oldPassword = currentPassword;
+            }
+
+            const { code } = await postResetPasswordAsync(body, recaptchaAsync);
+
+            if (code !== CE_ErrorCode.OK) {
+                handleResetPasswordError(code);
+                return;
+            }
+
+            resetForm();
+        }, [currentPassword, isAllowedManage, newPassword, recaptchaAsync, userDetail.id]),
+    );
+
+    const validateNewPassword = () => {
+        if (!newPassword) {
+            setNewEmailCodeError("New password is required.");
+            return false;
+        }
+
+        // TODO: add more complex password validation if needed
+
+        if (newPassword !== confirmPassword) {
+            setConfirmPasswordError("Passwords do not match.");
+            return false;
+        }
+
+        return true;
+    };
+
+    const onResetPassword = () => {
+        if (!validateNewPassword()) {
+            return;
+        }
+
+        setPending(true);
+        handleResetPasswordAsync().finally(() => {
+            setPending(false);
+        });
     };
 
     return (
         <ContentCard title="Password">
             <form className={styles.$form}>
-                <Field label="Current Password">
-                    <Input
-                        type="password"
-                        autoComplete="current-password"
-                        value={currentPassword}
-                        onChange={(_, { value }) => setCurrentPassword(value)}
-                    />
-                </Field>
-                <Field label="New Password">
+                {!isAllowedManage && (
+                    <Field label="Current Password" validationMessage={currentEmailCodeError}>
+                        <Input
+                            type="password"
+                            autoComplete="current-password"
+                            value={currentPassword}
+                            onChange={(_, { value }) => {
+                                setCurrentPassword(value);
+                                setCurrentEmailCodeError("");
+                            }}
+                        />
+                    </Field>
+                )}
+                <Field label="New Password" validationMessage={newEmailCodeError}>
                     <Input
                         type="password"
                         autoComplete="new-password"
                         maxLength={PASSWORD_MAX_LENGTH}
                         value={newPassword}
-                        onChange={(_, { value }) => setNewPassword(value)}
+                        onChange={(_, { value }) => {
+                            setNewPassword(value);
+                            setNewEmailCodeError("");
+                        }}
                     />
                 </Field>
-                <Field label="Confirm New Password">
+                <Field label="Confirm New Password" validationMessage={confirmPasswordError}>
                     <Input
                         type="password"
                         autoComplete="new-password"
                         value={confirmPassword}
-                        onChange={(_, { value }) => setConfirmPassword(value)}
+                        onChange={(_, { value }) => {
+                            setConfirmPassword(value);
+                            setConfirmPasswordError("");
+                        }}
                     />
                 </Field>
 
                 <div className={styles.$buttonField}>
-                    <Button appearance="primary">Update</Button>
-                    {dirty && <Button onClick={resetForm}>Reset</Button>}
+                    <Button appearance="primary" disabledFocusable={!dirty || pending} onClick={onResetPassword}>
+                        Update
+                    </Button>
+                    {dirty && (
+                        <Button disabledFocusable={pending} onClick={resetForm}>
+                            Reset
+                        </Button>
+                    )}
                 </div>
             </form>
         </ContentCard>
@@ -370,22 +461,40 @@ const PasswordEditor: React.FC = () => {
 const UserLevelEditor: React.FC = () => {
     const { userDetailQueryOptions } = LayoutRoute.useLoaderData();
     const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
+    const queryClient = useQueryClient();
     const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
+    const recaptchaAsync = useRecaptchaAsync();
 
     const [level, setLevel] = React.useState(CE_UserLevel.General);
     const [dirty, setDirty] = React.useState(false);
+    const [pending, setPending] = React.useState(false);
 
     const styles = useStyles();
 
-    const resetForm = () => {
+    const resetForm = React.useCallback(() => {
         setLevel(userDetail.level);
         setDirty(false);
-    };
+    }, [userDetail.level]);
 
     React.useEffect(() => {
         resetForm();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userDetail.level]);
+
+    const handleUpdateUserLevelAsync = useWithCatchError(
+        React.useCallback(async () => {
+            const strId = userDetail.id.toString();
+            await patchUserDetailAsync(strId, { level }, recaptchaAsync);
+            await queryClient.invalidateQueries({ queryKey: userDetailQueryKeys(strId) });
+        }, [level, queryClient, recaptchaAsync, userDetail.id]),
+    );
+
+    const onUpdateUserLevel = () => {
+        setPending(true);
+        handleUpdateUserLevelAsync().then(() => {
+            setPending(false);
+        });
+    };
 
     if (!isAllowedManage) {
         return null;
@@ -405,9 +514,11 @@ const UserLevelEditor: React.FC = () => {
                 </Field>
 
                 <div className={styles.$buttonField}>
-                    <Button appearance="primary">Update</Button>
+                    <Button appearance="primary" disabledFocusable={!dirty || pending} onClick={onUpdateUserLevel}>
+                        Update
+                    </Button>
                     {dirty && (
-                        <Button appearance="secondary" onClick={resetForm}>
+                        <Button appearance="secondary" disabledFocusable={pending} onClick={resetForm}>
                             Reset
                         </Button>
                     )}
@@ -459,3 +570,10 @@ const postChangeEmailAsync = withThrowErrorsExcept(
     AuthModule.postChangeEmailAsync,
     CE_ErrorCode.InvalidEmailVerificationCode,
 );
+
+const postResetPasswordAsync = withThrowErrorsExcept(
+    AuthModule.postResetPasswordAsync,
+    CE_ErrorCode.Auth_WrongPassword,
+);
+
+const patchUserDetailAsync = withThrowErrors(UserModule.patchUserDetailAsync);

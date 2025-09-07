@@ -3,6 +3,7 @@ export const enum CE_RecaptchaAction {
     SignUp = "SignUp",
     EmailVerificationCode = "EmailVerificationCode",
     ChangeAuthEmail = "ChangeAuthEmail",
+    ResetAuthPassword = "ResetAuthPassword",
 
     ProblemDetailPost = "ProblemDetailPost",
     ProblemDetailPatch = "ProblemDetailPatch",

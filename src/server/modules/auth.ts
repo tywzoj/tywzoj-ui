@@ -6,6 +6,7 @@ import { requestAsync } from "../request";
 import type {
     IAuthDetail,
     IChangeEmailPostRequestBody,
+    IResetPasswordPostRequestBody,
     ISendNewEmailVerificationCodePostRequestBody,
     ISessionInfoGetResponse,
     ISignInPostRequestBody,
@@ -73,5 +74,14 @@ export async function postChangeEmailAsync(body: IChangeEmailPostRequestBody, re
         method: "POST",
         body,
         recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.ChangeAuthEmail),
+    });
+}
+
+export async function postResetPasswordAsync(body: IResetPasswordPostRequestBody, recaptchaAsync: IRecaptchaAsync) {
+    return await requestAsync({
+        path: "auth/reset-password",
+        method: "POST",
+        body,
+        recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.ResetAuthPassword),
     });
 }
