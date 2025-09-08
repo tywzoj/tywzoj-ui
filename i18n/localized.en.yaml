@@ -359,6 +359,16 @@
   description: A string for the label of password confirm input.
   raw: Confirm Password
 
+- name: CURRENT_PASSWORD_LABEL
+  value: Current Password
+  description: A string for the label of current password input.
+  raw: Current Password
+
+- name: NEW_PASSWORD_LABEL
+  value: New Password
+  description: A string for the label of new password input.
+  raw: New Password
+
 - name: VERIFICATION_CODE_LABEL
   value: Verification Code
   description: A string for the label of verification code input.

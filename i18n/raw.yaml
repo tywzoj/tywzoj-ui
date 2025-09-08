@@ -282,6 +282,14 @@
   value: Confirm Password
   description: A string for the label of password confirm input.
 
+- name: CURRENT_PASSWORD_LABEL
+  value: Current Password
+  description: A string for the label of current password input.
+
+- name: NEW_PASSWORD_LABEL
+  value: New Password
+  description: A string for the label of new password input.
+
 - name: VERIFICATION_CODE_LABEL
   value: Verification Code
   description: A string for the label of verification code input.

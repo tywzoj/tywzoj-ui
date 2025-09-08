@@ -11,6 +11,7 @@ import { format } from "@/common/utils/format";
 import { neverGuard } from "@/common/utils/never-guard";
 import { Z_EMAIL, Z_PASSWORD } from "@/common/validators/user";
 import { ContentCard } from "@/components/ContentCard";
+import { UserLevelLabel } from "@/components/UserLevelLabel";
 import { UserLevelSelector } from "@/components/UserLevelSelector";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
@@ -326,6 +327,10 @@ const PasswordEditor: React.FC = () => {
     const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
     const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
     const ls = useLocalizedStrings({
+        $title: CE_Strings.PASSWORD_LABEL,
+        $currentPasswordLabel: CE_Strings.CURRENT_PASSWORD_LABEL,
+        $newPasswordLabel: CE_Strings.NEW_PASSWORD_LABEL,
+        $confirmPasswordLabel: CE_Strings.PASSWORD_CONFIRM_LABEL,
         $passwordEmpty: CE_Strings.VALIDATION_ERROR_PASSWORD_EMPTY,
         $passwordConfirmMismatch: CE_Strings.VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH,
         $wrongPassword: CE_Strings.ERROR_2001_WRONG_PASSWORD,
@@ -424,10 +429,10 @@ const PasswordEditor: React.FC = () => {
     };
 
     return (
-        <ContentCard title="Password">
+        <ContentCard title={ls.$title}>
             <form className={styles.$form}>
                 {!isAllowedManage && (
-                    <Field label="Current Password" validationMessage={currentCurrentPasswordError}>
+                    <Field label={ls.$currentPasswordLabel} validationMessage={currentCurrentPasswordError}>
                         <Input
                             type="password"
                             autoComplete="current-password"
@@ -439,7 +444,7 @@ const PasswordEditor: React.FC = () => {
                         />
                     </Field>
                 )}
-                <Field label="New Password" validationMessage={newPasswordError}>
+                <Field label={ls.$newPasswordLabel} validationMessage={newPasswordError}>
                     <Input
                         type="password"
                         autoComplete="new-password"
@@ -451,7 +456,7 @@ const PasswordEditor: React.FC = () => {
                         }}
                     />
                 </Field>
-                <Field label="Confirm New Password" validationMessage={confirmPasswordError}>
+                <Field label={ls.$confirmPasswordLabel} validationMessage={confirmPasswordError}>
                     <Input
                         type="password"
                         autoComplete="new-password"
@@ -524,6 +529,7 @@ const UserLevelEditor: React.FC = () => {
         <ContentCard title="Admin Management">
             <form className={styles.$form}>
                 <Field label="Level">
+                    <UserLevelLabel userLevel={level} />
                     <UserLevelSelector
                         level={level}
                         onChange={(level) => {
