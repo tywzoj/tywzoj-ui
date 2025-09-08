@@ -3,14 +3,17 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 import React from "react";
 
-import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH } from "@/common/constants/data-length";
+import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "@/common/constants/data-length";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { flex } from "@/common/styles/flex";
+import { format } from "@/common/utils/format";
 import { neverGuard } from "@/common/utils/never-guard";
-import { Z_EMAIL } from "@/common/validators/user";
+import { Z_EMAIL, Z_PASSWORD } from "@/common/validators/user";
 import { ContentCard } from "@/components/ContentCard";
 import { UserLevelSelector } from "@/components/UserLevelSelector";
+import { useLocalizedStrings } from "@/locales/hooks";
+import { CE_Strings } from "@/locales/locale";
 import { getLocale } from "@/locales/selectors";
 import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
@@ -322,13 +325,19 @@ const PasswordEditor: React.FC = () => {
     const { userDetailQueryOptions } = LayoutRoute.useLoaderData();
     const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
     const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
+    const ls = useLocalizedStrings({
+        $passwordEmpty: CE_Strings.VALIDATION_ERROR_PASSWORD_EMPTY,
+        $passwordConfirmMismatch: CE_Strings.VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH,
+        $wrongPassword: CE_Strings.ERROR_2001_WRONG_PASSWORD,
+        $passwordLengthError: CE_Strings.VALIDATION_ERROR_PASSWORD_LENGTH_ERROR,
+    });
 
     const [currentPassword, setCurrentPassword] = React.useState("");
     const [newPassword, setNewPassword] = React.useState("");
     const [confirmPassword, setConfirmPassword] = React.useState("");
     const [pending, setPending] = React.useState(false);
-    const [currentEmailCodeError, setCurrentEmailCodeError] = React.useState("");
-    const [newEmailCodeError, setNewEmailCodeError] = React.useState("");
+    const [currentCurrentPasswordError, setCurrentPasswordError] = React.useState("");
+    const [newPasswordError, setNewPasswordError] = React.useState("");
     const [confirmPasswordError, setConfirmPasswordError] = React.useState("");
 
     const dirty = !!(currentPassword || newPassword || confirmPassword);
@@ -337,21 +346,24 @@ const PasswordEditor: React.FC = () => {
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
-        setCurrentEmailCodeError("");
-        setNewEmailCodeError("");
+        setCurrentPasswordError("");
+        setNewPasswordError("");
         setConfirmPasswordError("");
     };
 
-    const handleResetPasswordError = (code: IErrorCodeWillBeReturned<typeof postResetPasswordAsync>) => {
-        switch (code) {
-            case CE_ErrorCode.Auth_WrongPassword:
-                setCurrentEmailCodeError("Current password is incorrect.");
-                break;
+    const handleResetPasswordError = React.useCallback(
+        (code: IErrorCodeWillBeReturned<typeof postResetPasswordAsync>) => {
+            switch (code) {
+                case CE_ErrorCode.Auth_WrongPassword:
+                    setCurrentPasswordError(ls.$wrongPassword);
+                    break;
 
-            default:
-                neverGuard(code);
-        }
-    };
+                default:
+                    neverGuard(code);
+            }
+        },
+        [ls],
+    );
 
     const handleResetPasswordAsync = useWithCatchError(
         React.useCallback(async () => {
@@ -373,19 +385,27 @@ const PasswordEditor: React.FC = () => {
             }
 
             resetForm();
-        }, [currentPassword, isAllowedManage, newPassword, recaptchaAsync, userDetail.id]),
+        }, [currentPassword, handleResetPasswordError, isAllowedManage, newPassword, recaptchaAsync, userDetail.id]),
     );
 
     const validateNewPassword = () => {
-        if (!newPassword) {
-            setNewEmailCodeError("New password is required.");
+        if (!currentPassword) {
+            setCurrentPasswordError(ls.$passwordEmpty);
             return false;
         }
 
-        // TODO: add more complex password validation if needed
+        if (!newPassword) {
+            setNewPasswordError(ls.$passwordEmpty);
+            return false;
+        }
+
+        if (Z_PASSWORD.safeParse(newPassword).success === false) {
+            setNewPasswordError(format(ls.$passwordLengthError, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH));
+            return false;
+        }
 
         if (newPassword !== confirmPassword) {
-            setConfirmPasswordError("Passwords do not match.");
+            setConfirmPasswordError(ls.$passwordConfirmMismatch);
             return false;
         }
 
@@ -407,19 +427,19 @@ const PasswordEditor: React.FC = () => {
         <ContentCard title="Password">
             <form className={styles.$form}>
                 {!isAllowedManage && (
-                    <Field label="Current Password" validationMessage={currentEmailCodeError}>
+                    <Field label="Current Password" validationMessage={currentCurrentPasswordError}>
                         <Input
                             type="password"
                             autoComplete="current-password"
                             value={currentPassword}
                             onChange={(_, { value }) => {
                                 setCurrentPassword(value);
-                                setCurrentEmailCodeError("");
+                                setCurrentPasswordError("");
                             }}
                         />
                     </Field>
                 )}
-                <Field label="New Password" validationMessage={newEmailCodeError}>
+                <Field label="New Password" validationMessage={newPasswordError}>
                     <Input
                         type="password"
                         autoComplete="new-password"
@@ -427,7 +447,7 @@ const PasswordEditor: React.FC = () => {
                         value={newPassword}
                         onChange={(_, { value }) => {
                             setNewPassword(value);
-                            setNewEmailCodeError("");
+                            setNewPasswordError("");
                         }}
                     />
                 </Field>

@@ -459,17 +459,19 @@
   description: A string for the error message when the nickname is too long.
   raw: The nickname is too long. Please shorten it.
 
-- name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
-  value: Password confirm cannot be empty.
-  description: A string for the error message when password confirm is empty.
-  raw: Password confirm cannot be empty.
-
 - name: VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH
   value: Password confirm does not match the password.
   description: >-
     A string for the error message when password confirm does not match the
     password.
   raw: Password confirm does not match the password.
+
+- name: VALIDATION_ERROR_PASSWORD_LENGTH_ERROR
+  value: Password must be between {0} and {1} characters.
+  description: >-
+    A string for the error message when password length is invalid. {0} is the
+    minimum length, and {1} is the maximum length.
+  raw: Password must be between {0} and {1} characters.
 
 - name: VALIDATION_ERROR_TITLE_EMPTY
   value: Title cannot be empty.
