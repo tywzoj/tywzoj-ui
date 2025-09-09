@@ -6,23 +6,22 @@ import React from "react";
 import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "@/common/constants/data-length";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
+import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
 import { neverGuard } from "@/common/utils/never-guard";
 import { Z_EMAIL, Z_PASSWORD } from "@/common/validators/user";
 import { ContentCard } from "@/components/ContentCard";
-import { UserLevelLabel } from "@/components/UserLevelLabel";
 import { UserLevelSelector } from "@/components/UserLevelSelector";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
 import { getLocale } from "@/locales/selectors";
 import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
-import { userDetailQueryKeys } from "@/query/keys";
+import { authDetailQueryKeys, userDetailQueryKeys } from "@/query/keys";
 import { AuthModule, UserModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
-import { CE_UserLevel } from "@/server/common/permission";
-import type { AuthTypes } from "@/server/types";
+import type { AuthTypes, UserTypes } from "@/server/types";
 import type { IErrorCodeWillBeReturned } from "@/server/utils";
 import { withThrowErrors, withThrowErrorsExcept } from "@/server/utils";
 import { useAppSelector } from "@/store/hooks";
@@ -31,12 +30,20 @@ const LayoutRoute = getRouteApi("/user/$id/_setting-layout");
 
 const UserSecurityPage: React.FC = () => {
     const styles = useStyles();
+    const { userDetailQueryOptions } = LayoutRoute.useLoaderData();
+    const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
+    const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
+    const ls = useLocalizedStrings({
+        $title: CE_Strings.USER_SECURITY_PAGE_TITLE,
+    });
+
+    useSetPageTitle(ls.$title);
 
     return (
         <div className={styles.$root}>
-            <EmailEditor />
-            <PasswordEditor />
-            <UserLevelEditor />
+            <EmailEditor userDetail={userDetail} isAllowedManage={isAllowedManage} />
+            <PasswordEditor userDetail={userDetail} isAllowedManage={isAllowedManage} />
+            {isAllowedManage && <AdminManagementEditor userDetail={userDetail} />}
         </div>
     );
 };
@@ -47,14 +54,25 @@ const enum CE_EmailEditStep {
     CodeSentToNewEmail = 2,
 }
 
-const EmailEditor: React.FC = () => {
-    const { authDetailQueryOptions, userDetailQueryOptions } = LayoutRoute.useLoaderData();
+const EmailEditor: React.FC<{
+    userDetail: UserTypes.IUserDetail;
+    isAllowedManage: boolean;
+}> = ({ userDetail, isAllowedManage }) => {
+    const { authDetailQueryOptions } = LayoutRoute.useLoaderData();
     const { data: authDetail } = useSuspenseQueryData(authDetailQueryOptions);
-    const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
-    const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
+    const queryClient = useQueryClient();
     const recaptchaAsync = useRecaptchaAsync();
     const locale = useAppSelector(getLocale);
     const styles = useStyles();
+
+    const ls = useLocalizedStrings({
+        $title: CE_Strings.AUTH_EMAIL_LABEL,
+        $hint: CE_Strings.AUTH_EMAIL_HINT,
+        $currentEmailLabel: CE_Strings.CURRENT_EMAIL_LABEL,
+        $newEmailLabel: CE_Strings.NEW_EMAIL_LABEL,
+        $verificationCodeCurrentEmailLabel: CE_Strings.VERIFICATION_CODE_CURRENT_EMAIL_LABEL,
+        $verificationCodeNewEmailLabel: CE_Strings.VERIFICATION_CODE_NEW_EMAIL_LABEL,
+    });
 
     const [step, setStep] = React.useState(CE_EmailEditStep.NotStarted);
     const [dirty, setDirty] = React.useState(false);
@@ -109,7 +127,7 @@ const EmailEditor: React.FC = () => {
         React.useCallback(async () => {
             const { code } = await postSendChangeEmailCodeAsync(
                 {
-                    email: authDetail.email,
+                    email: newEmail,
                     lang: locale,
                 },
                 recaptchaAsync,
@@ -121,7 +139,7 @@ const EmailEditor: React.FC = () => {
             }
 
             setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
-        }, [authDetail.email, locale, recaptchaAsync]),
+        }, [locale, newEmail, recaptchaAsync]),
     );
 
     const onSendCodeToCurrentEmail = () => {
@@ -217,9 +235,11 @@ const EmailEditor: React.FC = () => {
                     return;
                 }
 
+                await queryClient.invalidateQueries({ queryKey: authDetailQueryKeys(userDetail.id.toString()) });
+
                 resetForm();
             },
-            [newEmail, newEmailCode, recaptchaAsync, userDetail],
+            [newEmail, newEmailCode, queryClient, recaptchaAsync, userDetail.id],
         ),
     );
 
@@ -244,17 +264,12 @@ const EmailEditor: React.FC = () => {
     };
 
     return (
-        <ContentCard title="Account Email">
+        <ContentCard title={ls.$title}>
             <form className={styles.$form}>
-                <Field
-                    label="Current Email"
-                    hint={
-                        "This email will be used for authentication, but it will not be shown to other users in the profile."
-                    }
-                >
+                <Field label={ls.$currentEmailLabel} hint={ls.$hint}>
                     <Input type="email" readOnly value={authDetail.email} />
                 </Field>
-                <Field label="New Email" validationMessage={newEmailError}>
+                <Field label={ls.$newEmailLabel} validationMessage={newEmailError}>
                     <Input
                         type="email"
                         readOnly={step != CE_EmailEditStep.NotStarted}
@@ -269,7 +284,7 @@ const EmailEditor: React.FC = () => {
                 </Field>
 
                 {step >= CE_EmailEditStep.CodeSentToCurrentEmail && (
-                    <Field label="Verification Code From Current Email" validationMessage={currentEmailCodeError}>
+                    <Field label={ls.$verificationCodeCurrentEmailLabel} validationMessage={currentEmailCodeError}>
                         <Input
                             type="text"
                             readOnly={step != CE_EmailEditStep.CodeSentToCurrentEmail}
@@ -282,7 +297,7 @@ const EmailEditor: React.FC = () => {
                 )}
 
                 {step >= CE_EmailEditStep.CodeSentToNewEmail && (
-                    <Field label="Verification Code From New Email" validationMessage={newEmailCodeError}>
+                    <Field label={ls.$verificationCodeNewEmailLabel} validationMessage={newEmailCodeError}>
                         <Input
                             type="text"
                             autoComplete="off"
@@ -320,12 +335,12 @@ const EmailEditor: React.FC = () => {
     );
 };
 
-const PasswordEditor: React.FC = () => {
+const PasswordEditor: React.FC<{
+    userDetail: UserTypes.IUserDetail;
+    isAllowedManage: boolean;
+}> = ({ userDetail, isAllowedManage }) => {
     const styles = useStyles();
     const recaptchaAsync = useRecaptchaAsync();
-    const { userDetailQueryOptions } = LayoutRoute.useLoaderData();
-    const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
-    const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
     const ls = useLocalizedStrings({
         $title: CE_Strings.PASSWORD_LABEL,
         $currentPasswordLabel: CE_Strings.CURRENT_PASSWORD_LABEL,
@@ -483,14 +498,17 @@ const PasswordEditor: React.FC = () => {
     );
 };
 
-const UserLevelEditor: React.FC = () => {
-    const { userDetailQueryOptions } = LayoutRoute.useLoaderData();
-    const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
+const AdminManagementEditor: React.FC<{
+    userDetail: UserTypes.IUserDetail;
+}> = ({ userDetail }) => {
     const queryClient = useQueryClient();
-    const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
     const recaptchaAsync = useRecaptchaAsync();
+    const ls = useLocalizedStrings({
+        $title: CE_Strings.USER_SECURITY_PAGE_ADMIN_MANAGEMENT_TITLE,
+        $levelLabel: CE_Strings.USER_LEVEL_LABEL,
+    });
 
-    const [level, setLevel] = React.useState(CE_UserLevel.General);
+    const [level, setLevel] = React.useState(userDetail.level);
     const [dirty, setDirty] = React.useState(false);
     const [pending, setPending] = React.useState(false);
 
@@ -521,15 +539,10 @@ const UserLevelEditor: React.FC = () => {
         });
     };
 
-    if (!isAllowedManage) {
-        return null;
-    }
-
     return (
-        <ContentCard title="Admin Management">
+        <ContentCard title={ls.$title}>
             <form className={styles.$form}>
-                <Field label="Level">
-                    <UserLevelLabel userLevel={level} />
+                <Field label={ls.$levelLabel}>
                     <UserLevelSelector
                         level={level}
                         onChange={(level) => {

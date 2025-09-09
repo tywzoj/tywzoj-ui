@@ -1,20 +1,22 @@
-import { makeStyles, mergeClasses, Tab, TabList } from "@fluentui/react-components";
+import { makeStyles, mergeClasses, MessageBar, MessageBarBody, Tab, TabList } from "@fluentui/react-components";
 import { createFileRoute, Outlet, useMatchRoute, useNavigate } from "@tanstack/react-router";
 import React from "react";
 
 import { PermissionDeniedError } from "@/common/exceptions/permission-denied";
 import { SignInRequiredError } from "@/common/exceptions/sign-in-required";
 import { flex } from "@/common/styles/flex";
+import { format } from "@/common/utils/format";
 import { Z_ID } from "@/common/validators/common";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Strings } from "@/locales/locale";
 import { checkIsAllowedEditUserId } from "@/permission/user/checker";
+import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptionsFn } from "@/query/utils";
 import { AuthModule, UserModule } from "@/server/api";
 import { withThrowErrors } from "@/server/utils";
-import { useIsMiniScreen } from "@/store/hooks";
+import { useCurrentUser, useIsMiniScreen } from "@/store/hooks";
 
 const enum CE_SettingPages {
     EditProfile = "edit",
@@ -26,6 +28,9 @@ const SettingLayout: React.FC = () => {
     const navigate = useNavigate();
     const matchRoute = useMatchRoute();
     const isMiniScreen = useIsMiniScreen();
+    const currentUser = useCurrentUser();
+    const { userDetailQueryOptions } = Route.useLoaderData();
+    const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
 
     const [selectedTab, setSelectedTab] = React.useState<CE_SettingPages>(CE_SettingPages.Preference);
     const checkMatch = (page: CE_SettingPages) => matchRoute({ to: `/user/$id/${page}` }) && setSelectedTab(page);
@@ -41,12 +46,20 @@ const SettingLayout: React.FC = () => {
         $edit: CE_Strings.USER_EDIT_PAGE_TITLE,
         $preference: CE_Strings.USER_PREFERENCE_PAGE_TITLE,
         $security: CE_Strings.USER_SECURITY_PAGE_TITLE,
+        $info: CE_Strings.USER_SETTING_PAGE_INFO,
     });
 
     const styles = useStyles();
 
     return (
         <div className={styles.root}>
+            {userDetail.id !== currentUser?.id && (
+                <div>
+                    <MessageBar intent="info">
+                        <MessageBarBody>{format(ls.$info, userDetail.username, userDetail.id)}</MessageBarBody>
+                    </MessageBar>
+                </div>
+            )}
             <div>
                 <TabList
                     selectedValue={selectedTab}

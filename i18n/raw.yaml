@@ -268,6 +268,10 @@
   value: Email
   description: A string for the label of email input.
 
+- name: AUTH_EMAIL_LABEL
+  value: Authentication Email
+  description: A string for the label of authentication email input.
+
 - name: DISPLAY_EMAIL_HINT
   value: >-
     This email will be shown to other users in the profile, but it will not be
@@ -277,6 +281,22 @@
 - name: AUTH_EMAIL_HINT
   value: This email will be used for authentication and notifications.
   description: A string for the hint of authentication email input.
+
+- name: CURRENT_EMAIL_LABEL
+  value: Current Email
+  description: A string for the label of current email input.
+
+- name: NEW_EMAIL_LABEL
+  value: New Email
+  description: A string for the label of new email input.
+
+- name: VERIFICATION_CODE_CURRENT_EMAIL_LABEL
+  value: Verification Code for Current Email
+  description: A string for the label of verification code for current email input.
+
+- name: VERIFICATION_CODE_NEW_EMAIL_LABEL
+  value: Verification Code for New Email
+  description: A string for the label of verification code for new email input.
 
 - name: PASSWORD_CONFIRM_LABEL
   value: Confirm Password
@@ -458,6 +478,12 @@
   value: '{0}''s Profile'
   description: A string for the title of user profile page.
 
+- name: USER_SETTING_PAGE_INFO
+  value: You are editing the settings for {0} (#{1}).
+  description: >-
+    A string for the info of user settings page. {0} is the username, {1} is the
+    user ID.
+
 - name: USER_PREFERENCE_PAGE_TITLE
   value: Preference Setting
   description: A string for the title of user preferences page.
@@ -465,6 +491,10 @@
 - name: USER_SECURITY_PAGE_TITLE
   value: Security Setting
   description: A string for the title of user security page.
+
+- name: USER_SECURITY_PAGE_ADMIN_MANAGEMENT_TITLE
+  value: Admin Management
+  description: A string for the title of admin management section.
 
 - name: USER_EDIT_PAGE_TITLE
   value: Edit Profile

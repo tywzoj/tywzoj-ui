@@ -338,6 +338,11 @@
   description: A string for the label of email input.
   raw: Email
 
+- name: AUTH_EMAIL_LABEL
+  value: null
+  description: A string for the label of authentication email input.
+  raw: Authentication Email
+
 - name: DISPLAY_EMAIL_HINT
   value: 此邮箱将在个人资料中显示，但不会用于认证。
   description: A string for the hint of display email input.
@@ -349,6 +354,26 @@
   value: 此邮箱将用于认证和通知。
   description: A string for the hint of authentication email input.
   raw: This email will be used for authentication and notifications.
+
+- name: CURRENT_EMAIL_LABEL
+  value: null
+  description: A string for the label of current email input.
+  raw: Current Email
+
+- name: NEW_EMAIL_LABEL
+  value: null
+  description: A string for the label of new email input.
+  raw: New Email
+
+- name: VERIFICATION_CODE_CURRENT_EMAIL_LABEL
+  value: null
+  description: A string for the label of verification code for current email input.
+  raw: Verification Code for Current Email
+
+- name: VERIFICATION_CODE_NEW_EMAIL_LABEL
+  value: null
+  description: A string for the label of verification code for new email input.
+  raw: Verification Code for New Email
 
 - name: PASSWORD_CONFIRM_LABEL
   value: 确认密码
@@ -574,6 +599,13 @@
   description: A string for the title of user profile page.
   raw: '{0}''s Profile'
 
+- name: USER_SETTING_PAGE_INFO
+  value: null
+  description: >-
+    A string for the info of user settings page. {0} is the username, {1} is the
+    user ID.
+  raw: You are editing the settings for {0} (#{1}).
+
 - name: USER_PREFERENCE_PAGE_TITLE
   value: 偏好设置
   description: A string for the title of user preferences page.
@@ -583,6 +615,11 @@
   value: 安全设置
   description: A string for the title of user security page.
   raw: Security Setting
+
+- name: USER_SECURITY_PAGE_ADMIN_MANAGEMENT_TITLE
+  value: null
+  description: A string for the title of admin management section.
+  raw: Admin Management
 
 - name: USER_EDIT_PAGE_TITLE
   value: 编辑资料
