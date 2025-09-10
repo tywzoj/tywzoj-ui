@@ -16,7 +16,6 @@ import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { checkIsAllowedEditProblem } from "@/permission/problem/checker";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
@@ -40,12 +39,9 @@ const ProblemEditPage: React.FC = () => {
     const queryClient = useQueryClient();
     const errorCodeToString = useErrorCodeToString();
 
-    const ls = useLocalizedStrings({
-        $title: CE_Strings.PROBLEM_EDIT_TITLE,
-        $titleWithId: CE_Strings.PROBLEM_EDIT_TITLE_WITH_ID,
-    });
+    const ls = useLocalizedStrings();
 
-    useSetPageTitle(format(ls.$title, problem.displayId, problem.title));
+    useSetPageTitle(format(ls.$PROBLEM_EDIT_TITLE_WITH_ID, problem.displayId, problem.title));
 
     const styles = useStyles();
 
@@ -119,7 +115,7 @@ const ProblemEditPage: React.FC = () => {
     return (
         <div className={styles.$root}>
             <div className={styles.$title}>
-                <Title3 as="h1">{format(ls.$titleWithId, problem.displayId, problem.id, problem.title)}</Title3>
+                <Title3 as="h1">{format(ls.$PROBLEM_EDIT_TITLE_WITH_ID, problem.displayId, problem.title)}</Title3>
             </div>
             <div className={styles.$editor}>
                 <ProblemEditor

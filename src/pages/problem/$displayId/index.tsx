@@ -39,7 +39,6 @@ import { ProblemSubmissionDialog } from "@/components/ProblemSubmissionDialog";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { useIsAllowedEditProblem, useIsAllowedSubmitProblem } from "@/permission/problem/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
@@ -108,19 +107,17 @@ const ProblemTags: React.FC<{
     const dispatch = useAppDispatch();
     const router = useRouter();
 
-    const ls = useLocalizedStrings({
-        $tags: CE_Strings.PROBLEM_TAGS_LABEL,
-        $showTags: CE_Strings.SHOW_TAGS_LABEL,
-        $hideTags: CE_Strings.HIDE_TAGS_LABEL,
-        $noTags: CE_Strings.NO_TAGS_TEXT,
-    });
+    const ls = useLocalizedStrings();
 
     const styles = useStyles();
     return (
         <ContentCard
-            title={ls.$tags}
+            title={ls.$PROBLEM_TAGS_LABEL}
             action={
-                <Tooltip content={showTagsOnProblemDetail ? ls.$hideTags : ls.$showTags} relationship="label">
+                <Tooltip
+                    content={showTagsOnProblemDetail ? ls.$HIDE_TAGS_LABEL : ls.$SHOW_TAGS_LABEL}
+                    relationship="label"
+                >
                     <ToggleButton
                         appearance="transparent"
                         icon={showTagsOnProblemDetail ? <TagFilled /> : <TagOffFilled />}

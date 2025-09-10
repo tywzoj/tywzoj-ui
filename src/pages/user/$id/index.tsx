@@ -22,7 +22,6 @@ import { ContentCard } from "@/components/ContentCard";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { UserLevelLabel } from "@/components/UserLevelLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { MarkdownContentLazy } from "@/markdown/MarkdownContent.lazy";
 import { useIsAllowedEditUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
@@ -40,13 +39,9 @@ const UserDetailPage: React.FC = () => {
     const isMiddleScreen = useIsMiddleScreen();
     const { renderMarkdownInUserBio } = useFeature();
 
-    const ls = useLocalizedStrings({
-        $title: CE_Strings.USER_PROFILE_PAGE_TITLE_WITH_NAME,
-        $email: CE_Strings.EMAIL_LABEL,
-        $bio: CE_Strings.USER_BIO_LABEL,
-    });
+    const ls = useLocalizedStrings();
 
-    useSetPageTitle(format(ls.$title, userDetail.username));
+    useSetPageTitle(format(ls.$USER_PROFILE_PAGE_TITLE_WITH_NAME, userDetail.username));
 
     const styles = useStyles();
 
@@ -56,7 +51,7 @@ const UserDetailPage: React.FC = () => {
                 <AvatarAndUserName userDetail={userDetail} />
 
                 {userDetail.email && (
-                    <ContentCard title={ls.$email} small={!isMiddleScreen}>
+                    <ContentCard title={ls.$EMAIL_LABEL} small={!isMiddleScreen}>
                         <Link href={`mailto:${userDetail.email}`}>{userDetail.email}</Link>
                     </ContentCard>
                 )}
@@ -64,7 +59,7 @@ const UserDetailPage: React.FC = () => {
 
             <div className={styles.$rightColumn}>
                 {userDetail.bio && (
-                    <ContentCard title={ls.$bio}>
+                    <ContentCard title={ls.$USER_BIO_LABEL}>
                         {renderMarkdownInUserBio ? (
                             <React.Suspense fallback={<Spinner />}>
                                 <MarkdownContentLazy content={userDetail.bio} />
@@ -90,25 +85,25 @@ const AvatarAndUserName: React.FC<{
     const fallBackAvatar = isLightTheme ? logoLight : logoDark;
     const styles = useStyles();
 
-    const ls = useLocalizedStrings({
-        $edit: CE_Strings.COMMON_EDIT_BUTTON,
-        $username: CE_Strings.USERNAME_LABEL,
-        $nickname: CE_Strings.USER_NICKNAME_LABEL,
-        $avatar: CE_Strings.USER_AVATAR_LABEL,
-    });
+    const ls = useLocalizedStrings();
 
     return (
         <ContentCard>
             <div className={mergeClasses(styles.$avatarCard, isMiddleScreen && styles.$avatarCardTopRow)}>
                 <div className={styles.$avatarContainer}>
                     <div className={styles.$avatar}>
-                        <Image bordered shape="rounded" src={userDetail.avatar || fallBackAvatar} alt={ls.$avatar} />
+                        <Image
+                            bordered
+                            shape="rounded"
+                            src={userDetail.avatar || fallBackAvatar}
+                            alt={ls.$USER_AVATAR_LABEL}
+                        />
                     </div>
                 </div>
                 <div className={mergeClasses(styles.$avatarCardLeft, !isMiddleScreen && styles.$avatarCardRow)}>
                     <div className={styles.$usernameContainer}>
                         <Tooltip
-                            content={userDetail.nickname ? ls.$nickname : ls.$username}
+                            content={userDetail.nickname ? ls.$USER_NICKNAME_LABEL : ls.$USERNAME_LABEL}
                             relationship="description"
                             withArrow
                             positioning={isMiddleScreen ? "before" : "after"}
@@ -119,7 +114,7 @@ const AvatarAndUserName: React.FC<{
                         </Tooltip>
                         {userDetail.nickname ? (
                             <Tooltip
-                                content={ls.$username}
+                                content={ls.$USERNAME_LABEL}
                                 relationship="description"
                                 withArrow
                                 positioning={isMiddleScreen ? "before" : "after"}
@@ -139,7 +134,7 @@ const AvatarAndUserName: React.FC<{
 
                     {isAllowedEdit &&
                         (isMiniScreen ? (
-                            <Tooltip content={ls.$edit} relationship="label">
+                            <Tooltip content={ls.$COMMON_EDIT_BUTTON} relationship="label">
                                 <ButtonWithRouter
                                     icon={<EditFilled />}
                                     to={"/user/$id/edit"}
@@ -156,7 +151,7 @@ const AvatarAndUserName: React.FC<{
                                     id: userDetail.id.toString(),
                                 }}
                             >
-                                {ls.$edit}
+                                {ls.$COMMON_EDIT_BUTTON}
                             </ButtonWithRouter>
                         ))}
                 </div>

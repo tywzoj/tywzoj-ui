@@ -9,7 +9,6 @@ import { format } from "@/common/utils/format";
 import { Z_ID } from "@/common/validators/common";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { checkIsAllowedEditUserId } from "@/permission/user/checker";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
@@ -42,12 +41,7 @@ const SettingLayout: React.FC = () => {
         checkMatch(CE_SettingPages.Security);
     });
 
-    const ls = useLocalizedStrings({
-        $edit: CE_Strings.USER_EDIT_PAGE_TITLE,
-        $preference: CE_Strings.USER_PREFERENCE_PAGE_TITLE,
-        $security: CE_Strings.USER_SECURITY_PAGE_TITLE,
-        $info: CE_Strings.USER_SETTING_PAGE_INFO,
-    });
+    const ls = useLocalizedStrings();
 
     const styles = useStyles();
 
@@ -56,7 +50,9 @@ const SettingLayout: React.FC = () => {
             {userDetail.id !== currentUser?.id && (
                 <div>
                     <MessageBar intent="info">
-                        <MessageBarBody>{format(ls.$info, userDetail.username, userDetail.id)}</MessageBarBody>
+                        <MessageBarBody>
+                            {format(ls.$USER_SETTING_PAGE_INFO, userDetail.username, userDetail.id)}
+                        </MessageBarBody>
                     </MessageBar>
                 </div>
             )}
@@ -68,9 +64,9 @@ const SettingLayout: React.FC = () => {
                     }}
                     vertical={isMiniScreen}
                 >
-                    <Tab value={CE_SettingPages.Preference}>{ls.$preference}</Tab>
-                    <Tab value={CE_SettingPages.EditProfile}>{ls.$edit}</Tab>
-                    <Tab value={CE_SettingPages.Security}>{ls.$security}</Tab>
+                    <Tab value={CE_SettingPages.Preference}>{ls.$USER_PREFERENCE_PAGE_TITLE}</Tab>
+                    <Tab value={CE_SettingPages.EditProfile}>{ls.$USER_EDIT_PAGE_TITLE}</Tab>
+                    <Tab value={CE_SettingPages.Security}>{ls.$USER_SECURITY_PAGE_TITLE}</Tab>
                 </TabList>
             </div>
 

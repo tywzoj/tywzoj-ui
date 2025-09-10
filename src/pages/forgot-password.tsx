@@ -2,14 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 
 const ForgotPasswordPage: React.FC = () => {
-    const ls = useLocalizedStrings({
-        $title: CE_Strings.NAVIGATION_FORGOT_PASSWORD,
-    });
+    const ls = useLocalizedStrings();
 
-    useSetPageTitle(ls.$title);
+    useSetPageTitle(ls.$NAVIGATION_FORGOT_PASSWORD);
 
     return <div></div>;
 };

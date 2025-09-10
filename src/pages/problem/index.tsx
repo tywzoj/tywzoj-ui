@@ -33,7 +33,6 @@ import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { ProblemTag } from "@/components/ProblemTag";
 import { VisibilityLabel } from "@/components/VisibilityLabel";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { useIsAllowedCreateProblem } from "@/permission/problem/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
@@ -58,14 +57,9 @@ const ProblemListPage: React.FC = () => {
         setSearchBoxValue(keyword ?? "");
     }, [keyword]);
 
-    const ls = useLocalizedStrings({
-        $title: CE_Strings.NAVIGATION_PROBLEMS,
-        $searchBtn: CE_Strings.COMMON_SEARCH_BUTTON,
-        $searchPlc: CE_Strings.PROBLEM_SEARCH_PLACEHOLDER,
-        $new: CE_Strings.NAVIGATION_PROBLEM_NEW,
-    });
+    const ls = useLocalizedStrings();
 
-    useSetPageTitle(ls.$title);
+    useSetPageTitle(ls.$NAVIGATION_PROBLEMS);
 
     const styles = useStyles();
 
@@ -75,19 +69,19 @@ const ProblemListPage: React.FC = () => {
         <div className={styles.$root}>
             <div className={styles.$header}>
                 <div className={styles.$title}>
-                    <Title3 as="h1">{ls.$title}</Title3>
+                    <Title3 as="h1">{ls.$NAVIGATION_PROBLEMS}</Title3>
                 </div>
                 {isAllowedCreate && (
                     <div className={styles.$actions}>
                         <Button>Manage Tags</Button> {/* TODO: add a page */}
                         <ButtonWithRouter appearance="primary" to="/problem/new">
-                            {ls.$new}
+                            {ls.$NAVIGATION_PROBLEM_NEW}
                         </ButtonWithRouter>
                     </div>
                 )}
                 <div className={styles.$search}>
                     <SearchBox
-                        placeholder={ls.$searchPlc}
+                        placeholder={ls.$PROBLEM_SEARCH_PLACEHOLDER}
                         value={searchBoxValue}
                         onChange={(_, { value }) => {
                             setSearchBoxValue(value);
@@ -101,7 +95,7 @@ const ProblemListPage: React.FC = () => {
                             }
                         }}
                     />
-                    <Button onClick={() => searchProblem(searchBoxValue)}>{ls.$searchBtn}</Button>
+                    <Button onClick={() => searchProblem(searchBoxValue)}>{ls.$COMMON_SEARCH_BUTTON}</Button>
                 </div>
                 {/* TODO: Show tag switch */}
                 {/* TODO: Tag filter */}
@@ -132,12 +126,7 @@ const ProblemList: React.FC = () => {
 
     const isMiddleScreen = useIsMiddleScreen();
 
-    const ls = useLocalizedStrings({
-        $colTitle: CE_Strings.TITLE_LABEL,
-        $colVisibility: CE_Strings.VISIBILITY_LABEL,
-        $colSubmission: CE_Strings.NAVIGATION_SUBMISSIONS,
-        $colId: CE_Strings.ID_LABEL,
-    });
+    const ls = useLocalizedStrings();
 
     const { tableTabsterAttribute, onTableKeyDown } = useTableCompositeNavigation();
 
@@ -167,16 +156,16 @@ const ProblemList: React.FC = () => {
                                 className={styles.$tableIdCol}
                                 {...tableSortAttributes(CE_ProblemSortBy.DisplayId)}
                             >
-                                {ls.$colId}
+                                {ls.$ID_LABEL}
                             </TableHeaderCell>
                             <TableHeaderCell
                                 className={styles.$tableTitleCol}
                                 {...tableSortAttributes(CE_ProblemSortBy.Title)}
                             >
-                                {ls.$colTitle}
+                                {ls.$TITLE_LABEL}
                             </TableHeaderCell>
                             <TableHeaderCell className={styles.$tableVisibilityCol}>
-                                {ls.$colVisibility}
+                                {ls.$VISIBILITY_LABEL}
                             </TableHeaderCell>
                             {!isMiddleScreen && (
                                 <>
@@ -184,7 +173,7 @@ const ProblemList: React.FC = () => {
                                         className={styles.$tableSubmissionCol}
                                         {...tableSortAttributes(CE_ProblemSortBy.SubmissionCount)}
                                     >
-                                        {ls.$colSubmission}
+                                        {ls.$NAVIGATION_SUBMISSIONS}
                                     </TableHeaderCell>
                                     <TableHeaderCell className={styles.$tableAcceptanceCol}>Acceptance</TableHeaderCell>
                                 </>
