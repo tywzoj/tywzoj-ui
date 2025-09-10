@@ -103,11 +103,13 @@ const EmailEditor: React.FC<{
 
     const validateNewEmail = () => {
         if (!Z_EMAIL.safeParse(newEmail).success) {
+            // TODO: localize
             setNewEmailError("Invalid email format");
             return false;
         }
 
         if (newEmail === authDetail.email) {
+            // TODO: localize
             setNewEmailError("New email cannot be the same as current email");
             return false;
         }
@@ -120,6 +122,7 @@ const EmailEditor: React.FC<{
         switch (code) {
             case CE_ErrorCode.EmailVerificationCodeRateLimited:
                 // TODO: update countdown
+                // TODO: show a toast message to inform user
                 setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
                 break;
 
@@ -144,6 +147,7 @@ const EmailEditor: React.FC<{
             }
 
             setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
+            // TODO: show a toast message to inform user
         }, [locale, newEmail, recaptchaAsync]),
     );
 
@@ -164,14 +168,17 @@ const EmailEditor: React.FC<{
         switch (code) {
             case CE_ErrorCode.EmailVerificationCodeRateLimited:
                 // TODO: update countdown
+                // TODO: show a toast message to inform user
                 setStep(CE_EmailEditStep.CodeSentToNewEmail);
                 break;
 
             case CE_ErrorCode.InvalidEmailVerificationCode:
+                // TODO: localize
                 setCurrentEmailCodeError("Invalid verification code from current email");
                 break;
 
             case CE_ErrorCode.Auth_DuplicateEmail:
+                // TODO: localize
                 setNewEmailError("This email is already in use by another account.");
                 break;
 
@@ -197,6 +204,7 @@ const EmailEditor: React.FC<{
             }
 
             setStep(CE_EmailEditStep.CodeSentToNewEmail);
+            // TODO: show a toast message to inform user
         }, [currentEmailCode, locale, newEmail, recaptchaAsync]),
     );
 
