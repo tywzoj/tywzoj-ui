@@ -19,7 +19,6 @@ import { MenuItemLinkWithRouter } from "@/common/components/MenuItemLinkWithRout
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useDispatchToastError } from "@/common/hooks/toast";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import { useAppDispatch, useCurrentUser, useIsMiniScreen } from "@/store/hooks";
@@ -32,12 +31,7 @@ export const UserMenu: React.FC = () => {
     const errorCodeToString = useErrorCodeToString();
     const navigate = useNavigate();
 
-    const ls = useLocalizedStrings({
-        $label: CE_Strings.USER_MENU_LABEL,
-        $profile: CE_Strings.USER_MENU_PROFILE,
-        $settings: CE_Strings.USER_MENU_SETTINGS,
-        $signOut: CE_Strings.NAVIGATION_SIGN_OUT,
-    });
+    const ls = useLocalizedStrings();
 
     const styles = useStyles();
 
@@ -70,7 +64,7 @@ export const UserMenu: React.FC = () => {
     return (
         <Menu positioning={{ autoSize: true, position: "below", align: "end" }}>
             <MenuTrigger>
-                <Tooltip content={ls.$label} relationship="label">
+                <Tooltip content={ls.$USER_MENU_LABEL} relationship="label">
                     <Button className={styles.$button} appearance="transparent">
                         {isMiniScreen ? (
                             <Avatar {...(currentUser.avatar && { image: { src: currentUser.avatar } })} />
@@ -87,13 +81,13 @@ export const UserMenu: React.FC = () => {
             <MenuPopover>
                 <MenuList>
                     <MenuItemLinkWithRouter to="/user/$id" params={{ id: currentUser.id.toString() }}>
-                        {ls.$profile}
+                        {ls.$USER_MENU_PROFILE}
                     </MenuItemLinkWithRouter>
                     <MenuItemLinkWithRouter to="/user/$id/preference" params={{ id: currentUser.id.toString() }}>
-                        {ls.$settings}
+                        {ls.$USER_MENU_SETTINGS}
                     </MenuItemLinkWithRouter>
                     <MenuDivider />
-                    <MenuItem onClick={signOut}>{ls.$signOut}</MenuItem>
+                    <MenuItem onClick={signOut}>{ls.$NAVIGATION_SIGN_OUT}</MenuItem>
                 </MenuList>
             </MenuPopover>
         </Menu>
