@@ -621,6 +621,16 @@
   description: A string for the title of admin management section.
   raw: Admin Management
 
+- name: USER_SECURITY_SEND_EMAIL_RESET_CODE_BUTTON
+  value: null
+  description: A string for the label of send email reset code button.
+  raw: Send Verification Code
+
+- name: USER_SECURITY_SEND_EMAIL_RESET_CODE_NEW_EMAIL_BUTTON
+  value: null
+  description: A string for the label of send email reset code to new email button.
+  raw: Send Verification Code to New Email
+
 - name: USER_EDIT_PAGE_TITLE
   value: 编辑资料
   description: A string for the title of user edit page.
@@ -632,9 +642,9 @@
   raw: Edit {0}'s Profile
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
-  value: 验证您的邮箱
+  value: null
   description: A string for the title of email verification dialog.
-  raw: Verify your email
+  raw: Verify Your Email
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
   value: 我们已向您的邮箱发送了一个验证码。请在下方输入验证码以验证您的邮箱。

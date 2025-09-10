@@ -72,6 +72,11 @@ const EmailEditor: React.FC<{
         $newEmailLabel: CE_Strings.NEW_EMAIL_LABEL,
         $verificationCodeCurrentEmailLabel: CE_Strings.VERIFICATION_CODE_CURRENT_EMAIL_LABEL,
         $verificationCodeNewEmailLabel: CE_Strings.VERIFICATION_CODE_NEW_EMAIL_LABEL,
+        $sendCodeButton: CE_Strings.USER_SECURITY_SEND_EMAIL_RESET_CODE_BUTTON,
+        $sendCodeNewEmailButton: CE_Strings.USER_SECURITY_SEND_EMAIL_RESET_CODE_NEW_EMAIL_BUTTON,
+        $submitButton: CE_Strings.COMMON_SUBMIT_BUTTON,
+        $saveButton: CE_Strings.COMMON_SAVE_BUTTON,
+        $resetButton: CE_Strings.COMMON_RESET_BUTTON,
     });
 
     const [step, setStep] = React.useState(CE_EmailEditStep.NotStarted);
@@ -311,12 +316,12 @@ const EmailEditor: React.FC<{
                 <div className={styles.$buttonField}>
                     {step === CE_EmailEditStep.NotStarted && !isAllowedManage && (
                         <Button appearance="primary" disabledFocusable={pending} onClick={onSendCodeToCurrentEmail}>
-                            Send code To Current Email
+                            {ls.$sendCodeButton}
                         </Button>
                     )}
                     {step === CE_EmailEditStep.CodeSentToCurrentEmail && (
                         <Button appearance="primary" disabledFocusable={pending} onClick={onSendCodeToNewEmail}>
-                            Send code To New Email
+                            {ls.$sendCodeNewEmailButton}
                         </Button>
                     )}
                     {(step === CE_EmailEditStep.CodeSentToNewEmail || isAllowedManage) && (
@@ -325,10 +330,14 @@ const EmailEditor: React.FC<{
                             disabledFocusable={!dirty || pending}
                             onClick={isAllowedManage ? onAdminUpdateEmail : onUpdateEmail}
                         >
-                            Update
+                            {isAllowedManage ? ls.$saveButton : ls.$submitButton}
                         </Button>
                     )}
-                    {dirty && <Button onClick={resetForm}>Reset</Button>}
+                    {dirty && (
+                        <Button disabledFocusable={pending} onClick={resetForm}>
+                            {ls.$resetButton}
+                        </Button>
+                    )}
                 </div>
             </form>
         </ContentCard>
@@ -350,6 +359,8 @@ const PasswordEditor: React.FC<{
         $passwordConfirmMismatch: CE_Strings.VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH,
         $wrongPassword: CE_Strings.ERROR_2001_WRONG_PASSWORD,
         $passwordLengthError: CE_Strings.VALIDATION_ERROR_PASSWORD_LENGTH_ERROR,
+        $saveButton: CE_Strings.COMMON_SAVE_BUTTON,
+        $resetButton: CE_Strings.COMMON_RESET_BUTTON,
     });
 
     const [currentPassword, setCurrentPassword] = React.useState("");
@@ -451,6 +462,7 @@ const PasswordEditor: React.FC<{
                         <Input
                             type="password"
                             autoComplete="current-password"
+                            disabled={pending}
                             value={currentPassword}
                             onChange={(_, { value }) => {
                                 setCurrentPassword(value);
@@ -463,6 +475,7 @@ const PasswordEditor: React.FC<{
                     <Input
                         type="password"
                         autoComplete="new-password"
+                        disabled={pending}
                         maxLength={PASSWORD_MAX_LENGTH}
                         value={newPassword}
                         onChange={(_, { value }) => {
@@ -475,6 +488,7 @@ const PasswordEditor: React.FC<{
                     <Input
                         type="password"
                         autoComplete="new-password"
+                        disabled={pending}
                         value={confirmPassword}
                         onChange={(_, { value }) => {
                             setConfirmPassword(value);
@@ -485,11 +499,11 @@ const PasswordEditor: React.FC<{
 
                 <div className={styles.$buttonField}>
                     <Button appearance="primary" disabledFocusable={!dirty || pending} onClick={onResetPassword}>
-                        Update
+                        {ls.$saveButton}
                     </Button>
                     {dirty && (
                         <Button disabledFocusable={pending} onClick={resetForm}>
-                            Reset
+                            {ls.$resetButton}
                         </Button>
                     )}
                 </div>
@@ -506,6 +520,8 @@ const AdminManagementEditor: React.FC<{
     const ls = useLocalizedStrings({
         $title: CE_Strings.USER_SECURITY_PAGE_ADMIN_MANAGEMENT_TITLE,
         $levelLabel: CE_Strings.USER_LEVEL_LABEL,
+        $saveButton: CE_Strings.COMMON_SAVE_BUTTON,
+        $resetButton: CE_Strings.COMMON_RESET_BUTTON,
     });
 
     const [level, setLevel] = React.useState(userDetail.level);
@@ -554,11 +570,11 @@ const AdminManagementEditor: React.FC<{
 
                 <div className={styles.$buttonField}>
                     <Button appearance="primary" disabledFocusable={!dirty || pending} onClick={onUpdateUserLevel}>
-                        Update
+                        {ls.$saveButton}
                     </Button>
                     {dirty && (
                         <Button appearance="secondary" disabledFocusable={pending} onClick={resetForm}>
-                            Reset
+                            {ls.$resetButton}
                         </Button>
                     )}
                 </div>

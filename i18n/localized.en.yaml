@@ -625,6 +625,16 @@
   description: A string for the title of admin management section.
   raw: Admin Management
 
+- name: USER_SECURITY_SEND_EMAIL_RESET_CODE_BUTTON
+  value: Send Verification Code
+  description: A string for the label of send email reset code button.
+  raw: Send Verification Code
+
+- name: USER_SECURITY_SEND_EMAIL_RESET_CODE_NEW_EMAIL_BUTTON
+  value: Send Verification Code to New Email
+  description: A string for the label of send email reset code to new email button.
+  raw: Send Verification Code to New Email
+
 - name: USER_EDIT_PAGE_TITLE
   value: Edit Profile
   description: A string for the title of user edit page.
@@ -636,9 +646,9 @@
   raw: Edit {0}'s Profile
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
-  value: Verify your email
+  value: Verify Your Email
   description: A string for the title of email verification dialog.
-  raw: Verify your email
+  raw: Verify Your Email
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
   value: >-
