@@ -74,19 +74,7 @@ export default defineConfig(({ command, mode }) => {
             port: 5056,
         },
         build: {
-            minify: "terser",
-            terserOptions: {
-                compress: {
-                    keep_infinity: true,
-                    drop_console: ["log", "info"],
-                    drop_debugger: true,
-                },
-                mangle: {
-                    properties: {
-                        regex: /^\$[a-zA-Z]/,
-                    },
-                },
-            },
+            minify: "esbuild",
             rollupOptions: {
                 output: {
                     entryFileNames: "assets/[name].[hash].js",
