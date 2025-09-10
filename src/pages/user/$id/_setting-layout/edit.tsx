@@ -36,7 +36,6 @@ import { neverGuard } from "@/common/utils/never-guard";
 import { Z_EMPTY_STRING } from "@/common/validators/common";
 import { Z_EMAIL, Z_USERNAME } from "@/common/validators/user";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { getLocale } from "@/locales/selectors";
 import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
@@ -66,25 +65,7 @@ const UserEditPage: React.FC = () => {
     const errorToString = useErrorCodeToString();
     const recaptchaAsync = useRecaptchaAsync();
 
-    const ls = useLocalizedStrings({
-        $title: CE_Strings.USER_EDIT_PAGE_TITLE_WITH_NAME,
-        $username: CE_Strings.USERNAME_LABEL,
-        $usernameHint: CE_Strings.USERNAME_HINT,
-        $email: CE_Strings.EMAIL_LABEL,
-        $emailHint: CE_Strings.DISPLAY_EMAIL_HINT,
-        $nickname: CE_Strings.USER_NICKNAME_LABEL,
-        $bio: CE_Strings.USER_BIO_LABEL,
-        $saveButton: CE_Strings.COMMON_SAVE_BUTTON,
-        $resetButton: CE_Strings.COMMON_RESET_BUTTON,
-        $submitButton: CE_Strings.COMMON_SUBMIT_BUTTON,
-        $cancelButton: CE_Strings.COMMON_CANCEL_BUTTON,
-        $goToProfileButton: CE_Strings.USER_EDIT_PAGE_GO_TO_PROFILE_BUTTON,
-        $invalidUsername: CE_Strings.VALIDATION_ERROR_USERNAME_INVALID,
-        $invalidEmail: CE_Strings.VALIDATION_ERROR_EMAIL_INVALID,
-        $emailVerificationCode: CE_Strings.VERIFICATION_CODE_LABEL,
-        $emailVerificationTitle: CE_Strings.USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE,
-        $emailVerificationDesc: CE_Strings.USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION,
-    });
+    const ls = useLocalizedStrings();
 
     const [username, setUsername] = React.useState("");
     const [email, setEmail] = React.useState("");
@@ -113,7 +94,7 @@ const UserEditPage: React.FC = () => {
         resetForm();
     }, [userDetail]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    useSetPageTitle(format(ls.$title, userDetail.username));
+    useSetPageTitle(format(ls.$USER_EDIT_PAGE_TITLE_WITH_NAME, userDetail.username));
 
     const styles = useStyles();
 
@@ -133,7 +114,7 @@ const UserEditPage: React.FC = () => {
         let valid = true;
 
         if (!Z_USERNAME.safeParse(username).success) {
-            setUsernameError(ls.$invalidUsername);
+            setUsernameError(ls.$VALIDATION_ERROR_USERNAME_INVALID);
             valid = false;
         } else {
             setUsernameError("");
@@ -142,7 +123,7 @@ const UserEditPage: React.FC = () => {
         if (Z_EMAIL.or(Z_EMPTY_STRING).safeParse(email).success) {
             setEmailError("");
         } else {
-            setEmailError(ls.$invalidEmail);
+            setEmailError(ls.$VALIDATION_ERROR_EMAIL_INVALID);
             valid = false;
         }
 
@@ -262,7 +243,7 @@ const UserEditPage: React.FC = () => {
             <form className={styles.$form}>
                 <div className={styles.$fieldsWithAvatarContainer}>
                     <div className={styles.$fieldsWithAvatar}>
-                        <Field label={ls.$username} hint={ls.$usernameHint} validationMessage={usernameError}>
+                        <Field label={ls.$USERNAME_LABEL} hint={ls.$USERNAME_HINT} validationMessage={usernameError}>
                             <Input
                                 disabled={pending}
                                 readOnly={!isAllowedManage}
@@ -287,7 +268,7 @@ const UserEditPage: React.FC = () => {
                         </Button>
                     </Tooltip>
                 </div>
-                <Field label={ls.$nickname}>
+                <Field label={ls.$USER_NICKNAME_LABEL}>
                     <Input
                         disabled={pending}
                         value={nickname}
@@ -295,7 +276,7 @@ const UserEditPage: React.FC = () => {
                         onChange={(_, { value }) => setNickname(value)}
                     />
                 </Field>
-                <Field label={ls.$email} hint={ls.$emailHint} validationMessage={emailError}>
+                <Field label={ls.$EMAIL_LABEL} hint={ls.$DISPLAY_EMAIL_HINT} validationMessage={emailError}>
                     <Input
                         value={email}
                         type="email"
@@ -303,7 +284,7 @@ const UserEditPage: React.FC = () => {
                         onChange={(_, { value }) => setEmail(value)}
                     />
                 </Field>
-                <Field label={ls.$bio}>
+                <Field label={ls.$USER_BIO_LABEL}>
                     <Textarea
                         className={styles.$bioInput}
                         disabled={pending}
@@ -314,14 +295,14 @@ const UserEditPage: React.FC = () => {
                 <div className={mergeClasses(styles.$buttons, isMiniScreen && styles.$buttonsMiniScreen)}>
                     <div>
                         <Button appearance="primary" disabledFocusable={pending} onClick={onSaveChanges}>
-                            {ls.$saveButton}
+                            {ls.$COMMON_SAVE_BUTTON}
                         </Button>
                         <Button appearance="secondary" disabledFocusable={pending} onClick={resetForm}>
-                            {ls.$resetButton}
+                            {ls.$COMMON_RESET_BUTTON}
                         </Button>
                     </div>
                     <ButtonWithRouter to="/user/$id" params={{ id: String(userDetail.id) }} disabledFocusable={pending}>
-                        {ls.$goToProfileButton}
+                        {ls.$USER_EDIT_PAGE_GO_TO_PROFILE_BUTTON}
                     </ButtonWithRouter>
                 </div>
             </form>
@@ -333,11 +314,14 @@ const UserEditPage: React.FC = () => {
             >
                 <DialogSurface>
                     <DialogBody>
-                        <DialogTitle>{ls.$emailVerificationTitle}</DialogTitle>
+                        <DialogTitle>{ls.$USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE}</DialogTitle>
                         <DialogContent>
-                            <Text>{ls.$emailVerificationDesc}</Text>
+                            <Text>{ls.$USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION}</Text>
                             <form className={styles.$emailVerificationForm}>
-                                <Field label={ls.$emailVerificationCode} validationMessage={emailVerificationCodeError}>
+                                <Field
+                                    label={ls.$VERIFICATION_CODE_LABEL}
+                                    validationMessage={emailVerificationCodeError}
+                                >
                                     <Input
                                         value={emailVerificationCode}
                                         onChange={(_, { value }) => {
@@ -361,11 +345,11 @@ const UserEditPage: React.FC = () => {
                                     }
                                 }}
                             >
-                                {ls.$submitButton}
+                                {ls.$COMMON_SUBMIT_BUTTON}
                             </Button>
                             <DialogTrigger disableButtonEnhancement>
                                 <Button appearance="secondary" disabledFocusable={emailVerificationDialogPending}>
-                                    {ls.$cancelButton}
+                                    {ls.$COMMON_CANCEL_BUTTON}
                                 </Button>
                             </DialogTrigger>
                         </DialogActions>

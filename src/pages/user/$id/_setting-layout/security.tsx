@@ -14,7 +14,6 @@ import { Z_EMAIL, Z_PASSWORD } from "@/common/validators/user";
 import { ContentCard } from "@/components/ContentCard";
 import { UserLevelSelector } from "@/components/UserLevelSelector";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { getLocale } from "@/locales/selectors";
 import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
@@ -33,11 +32,9 @@ const UserSecurityPage: React.FC = () => {
     const { userDetailQueryOptions } = LayoutRoute.useLoaderData();
     const { data: userDetail } = useSuspenseQueryData(userDetailQueryOptions);
     const isAllowedManage = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
-    const ls = useLocalizedStrings({
-        $title: CE_Strings.USER_SECURITY_PAGE_TITLE,
-    });
+    const ls = useLocalizedStrings();
 
-    useSetPageTitle(ls.$title);
+    useSetPageTitle(ls.$USER_SECURITY_PAGE_TITLE);
 
     return (
         <div className={styles.$root}>
@@ -65,19 +62,7 @@ const EmailEditor: React.FC<{
     const locale = useAppSelector(getLocale);
     const styles = useStyles();
 
-    const ls = useLocalizedStrings({
-        $title: CE_Strings.AUTH_EMAIL_LABEL,
-        $hint: CE_Strings.AUTH_EMAIL_HINT,
-        $currentEmailLabel: CE_Strings.CURRENT_EMAIL_LABEL,
-        $newEmailLabel: CE_Strings.NEW_EMAIL_LABEL,
-        $verificationCodeCurrentEmailLabel: CE_Strings.VERIFICATION_CODE_CURRENT_EMAIL_LABEL,
-        $verificationCodeNewEmailLabel: CE_Strings.VERIFICATION_CODE_NEW_EMAIL_LABEL,
-        $sendCodeButton: CE_Strings.USER_SECURITY_SEND_EMAIL_RESET_CODE_BUTTON,
-        $sendCodeNewEmailButton: CE_Strings.USER_SECURITY_SEND_EMAIL_RESET_CODE_NEW_EMAIL_BUTTON,
-        $submitButton: CE_Strings.COMMON_SUBMIT_BUTTON,
-        $saveButton: CE_Strings.COMMON_SAVE_BUTTON,
-        $resetButton: CE_Strings.COMMON_RESET_BUTTON,
-    });
+    const ls = useLocalizedStrings();
 
     const [step, setStep] = React.useState(CE_EmailEditStep.NotStarted);
     const [dirty, setDirty] = React.useState(false);
@@ -277,12 +262,12 @@ const EmailEditor: React.FC<{
     };
 
     return (
-        <ContentCard title={ls.$title}>
+        <ContentCard title={ls.$AUTH_EMAIL_LABEL}>
             <form className={styles.$form}>
-                <Field label={ls.$currentEmailLabel} hint={ls.$hint}>
+                <Field label={ls.$CURRENT_EMAIL_LABEL} hint={ls.$AUTH_EMAIL_HINT}>
                     <Input type="email" readOnly value={authDetail.email} />
                 </Field>
-                <Field label={ls.$newEmailLabel} validationMessage={newEmailError}>
+                <Field label={ls.$NEW_EMAIL_LABEL} validationMessage={newEmailError}>
                     <Input
                         type="email"
                         readOnly={step != CE_EmailEditStep.NotStarted}
@@ -297,7 +282,7 @@ const EmailEditor: React.FC<{
                 </Field>
 
                 {step >= CE_EmailEditStep.CodeSentToCurrentEmail && (
-                    <Field label={ls.$verificationCodeCurrentEmailLabel} validationMessage={currentEmailCodeError}>
+                    <Field label={ls.$VERIFICATION_CODE_CURRENT_EMAIL_LABEL} validationMessage={currentEmailCodeError}>
                         <Input
                             type="text"
                             readOnly={step != CE_EmailEditStep.CodeSentToCurrentEmail}
@@ -310,7 +295,7 @@ const EmailEditor: React.FC<{
                 )}
 
                 {step >= CE_EmailEditStep.CodeSentToNewEmail && (
-                    <Field label={ls.$verificationCodeNewEmailLabel} validationMessage={newEmailCodeError}>
+                    <Field label={ls.$VERIFICATION_CODE_NEW_EMAIL_LABEL} validationMessage={newEmailCodeError}>
                         <Input
                             type="text"
                             autoComplete="off"
@@ -324,12 +309,12 @@ const EmailEditor: React.FC<{
                 <div className={styles.$buttonField}>
                     {step === CE_EmailEditStep.NotStarted && !isAllowedManage && (
                         <Button appearance="primary" disabledFocusable={pending} onClick={onSendCodeToCurrentEmail}>
-                            {ls.$sendCodeButton}
+                            {ls.$USER_SECURITY_SEND_EMAIL_RESET_CODE_BUTTON}
                         </Button>
                     )}
                     {step === CE_EmailEditStep.CodeSentToCurrentEmail && (
                         <Button appearance="primary" disabledFocusable={pending} onClick={onSendCodeToNewEmail}>
-                            {ls.$sendCodeNewEmailButton}
+                            {ls.$USER_SECURITY_SEND_EMAIL_RESET_CODE_NEW_EMAIL_BUTTON}
                         </Button>
                     )}
                     {(step === CE_EmailEditStep.CodeSentToNewEmail || isAllowedManage) && (
@@ -338,12 +323,12 @@ const EmailEditor: React.FC<{
                             disabledFocusable={!dirty || pending}
                             onClick={isAllowedManage ? onAdminUpdateEmail : onUpdateEmail}
                         >
-                            {isAllowedManage ? ls.$saveButton : ls.$submitButton}
+                            {isAllowedManage ? ls.$COMMON_SAVE_BUTTON : ls.$COMMON_SUBMIT_BUTTON}
                         </Button>
                     )}
                     {dirty && (
                         <Button disabledFocusable={pending} onClick={resetForm}>
-                            {ls.$resetButton}
+                            {ls.$COMMON_RESET_BUTTON}
                         </Button>
                     )}
                 </div>
@@ -358,18 +343,7 @@ const PasswordEditor: React.FC<{
 }> = ({ userDetail, isAllowedManage }) => {
     const styles = useStyles();
     const recaptchaAsync = useRecaptchaAsync();
-    const ls = useLocalizedStrings({
-        $title: CE_Strings.PASSWORD_LABEL,
-        $currentPasswordLabel: CE_Strings.CURRENT_PASSWORD_LABEL,
-        $newPasswordLabel: CE_Strings.NEW_PASSWORD_LABEL,
-        $confirmPasswordLabel: CE_Strings.PASSWORD_CONFIRM_LABEL,
-        $passwordEmpty: CE_Strings.VALIDATION_ERROR_PASSWORD_EMPTY,
-        $passwordConfirmMismatch: CE_Strings.VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH,
-        $wrongPassword: CE_Strings.ERROR_2001_WRONG_PASSWORD,
-        $passwordLengthError: CE_Strings.VALIDATION_ERROR_PASSWORD_LENGTH_ERROR,
-        $saveButton: CE_Strings.COMMON_SAVE_BUTTON,
-        $resetButton: CE_Strings.COMMON_RESET_BUTTON,
-    });
+    const ls = useLocalizedStrings();
 
     const [currentPassword, setCurrentPassword] = React.useState("");
     const [newPassword, setNewPassword] = React.useState("");
@@ -394,7 +368,7 @@ const PasswordEditor: React.FC<{
         (code: IErrorCodeWillBeReturned<typeof postResetPasswordAsync>) => {
             switch (code) {
                 case CE_ErrorCode.Auth_WrongPassword:
-                    setCurrentPasswordError(ls.$wrongPassword);
+                    setCurrentPasswordError(ls.E_2001);
                     break;
 
                 default:
@@ -429,22 +403,24 @@ const PasswordEditor: React.FC<{
 
     const validateNewPassword = () => {
         if (!currentPassword) {
-            setCurrentPasswordError(ls.$passwordEmpty);
+            setCurrentPasswordError(ls.$VALIDATION_ERROR_PASSWORD_EMPTY);
             return false;
         }
 
         if (!newPassword) {
-            setNewPasswordError(ls.$passwordEmpty);
+            setNewPasswordError(ls.$VALIDATION_ERROR_PASSWORD_EMPTY);
             return false;
         }
 
         if (Z_PASSWORD.safeParse(newPassword).success === false) {
-            setNewPasswordError(format(ls.$passwordLengthError, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH));
+            setNewPasswordError(
+                format(ls.$VALIDATION_ERROR_PASSWORD_LENGTH_ERROR, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH),
+            );
             return false;
         }
 
         if (newPassword !== confirmPassword) {
-            setConfirmPasswordError(ls.$passwordConfirmMismatch);
+            setConfirmPasswordError(ls.$VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH);
             return false;
         }
 
@@ -463,10 +439,10 @@ const PasswordEditor: React.FC<{
     };
 
     return (
-        <ContentCard title={ls.$title}>
+        <ContentCard title={ls.$PASSWORD_LABEL}>
             <form className={styles.$form}>
                 {!isAllowedManage && (
-                    <Field label={ls.$currentPasswordLabel} validationMessage={currentCurrentPasswordError}>
+                    <Field label={ls.$CURRENT_PASSWORD_LABEL} validationMessage={currentCurrentPasswordError}>
                         <Input
                             type="password"
                             autoComplete="current-password"
@@ -479,7 +455,7 @@ const PasswordEditor: React.FC<{
                         />
                     </Field>
                 )}
-                <Field label={ls.$newPasswordLabel} validationMessage={newPasswordError}>
+                <Field label={ls.$NEW_PASSWORD_LABEL} validationMessage={newPasswordError}>
                     <Input
                         type="password"
                         autoComplete="new-password"
@@ -492,7 +468,7 @@ const PasswordEditor: React.FC<{
                         }}
                     />
                 </Field>
-                <Field label={ls.$confirmPasswordLabel} validationMessage={confirmPasswordError}>
+                <Field label={ls.$PASSWORD_CONFIRM_LABEL} validationMessage={confirmPasswordError}>
                     <Input
                         type="password"
                         autoComplete="new-password"
@@ -507,11 +483,11 @@ const PasswordEditor: React.FC<{
 
                 <div className={styles.$buttonField}>
                     <Button appearance="primary" disabledFocusable={!dirty || pending} onClick={onResetPassword}>
-                        {ls.$saveButton}
+                        {ls.$COMMON_SAVE_BUTTON}
                     </Button>
                     {dirty && (
                         <Button disabledFocusable={pending} onClick={resetForm}>
-                            {ls.$resetButton}
+                            {ls.$COMMON_RESET_BUTTON}
                         </Button>
                     )}
                 </div>
@@ -525,12 +501,7 @@ const AdminManagementEditor: React.FC<{
 }> = ({ userDetail }) => {
     const queryClient = useQueryClient();
     const recaptchaAsync = useRecaptchaAsync();
-    const ls = useLocalizedStrings({
-        $title: CE_Strings.USER_SECURITY_PAGE_ADMIN_MANAGEMENT_TITLE,
-        $levelLabel: CE_Strings.USER_LEVEL_LABEL,
-        $saveButton: CE_Strings.COMMON_SAVE_BUTTON,
-        $resetButton: CE_Strings.COMMON_RESET_BUTTON,
-    });
+    const ls = useLocalizedStrings();
 
     const [level, setLevel] = React.useState(userDetail.level);
     const [dirty, setDirty] = React.useState(false);
@@ -564,9 +535,9 @@ const AdminManagementEditor: React.FC<{
     };
 
     return (
-        <ContentCard title={ls.$title}>
+        <ContentCard title={ls.$USER_SECURITY_PAGE_ADMIN_MANAGEMENT_TITLE}>
             <form className={styles.$form}>
-                <Field label={ls.$levelLabel}>
+                <Field label={ls.$USER_LEVEL_LABEL}>
                     <UserLevelSelector
                         level={level}
                         onChange={(level) => {
@@ -578,11 +549,11 @@ const AdminManagementEditor: React.FC<{
 
                 <div className={styles.$buttonField}>
                     <Button appearance="primary" disabledFocusable={!dirty || pending} onClick={onUpdateUserLevel}>
-                        {ls.$saveButton}
+                        {ls.$COMMON_SAVE_BUTTON}
                     </Button>
                     {dirty && (
                         <Button appearance="secondary" disabledFocusable={pending} onClick={resetForm}>
-                            {ls.$resetButton}
+                            {ls.$COMMON_RESET_BUTTON}
                         </Button>
                     )}
                 </div>
