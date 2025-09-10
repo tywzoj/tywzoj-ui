@@ -3,7 +3,6 @@ import { Body1Strong, Button, makeStyles, Popover, PopoverSurface, PopoverTrigge
 import type React from "react";
 
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 
 import { flex } from "../styles/flex";
 
@@ -22,10 +21,7 @@ export const ConfirmationPopover: React.FC<IConfirmationPopoverProps> = (props) 
 
     const styles = useStyles();
 
-    const ls = useLocalizedStrings({
-        $confirm: CE_Strings.COMMON_CONFIRM_BUTTON,
-        $cancel: CE_Strings.COMMON_CANCEL_BUTTON,
-    });
+    const ls = useLocalizedStrings();
 
     return (
         <Popover
@@ -52,10 +48,10 @@ export const ConfirmationPopover: React.FC<IConfirmationPopoverProps> = (props) 
                             onConfirmed?.();
                         }}
                     >
-                        {confirmText ?? ls.$confirm}
+                        {confirmText ?? ls.$COMMON_CONFIRM_BUTTON}
                     </Button>
                     <PopoverTrigger>
-                        <Button>{cancelText ?? ls.$cancel}</Button>
+                        <Button>{cancelText ?? ls.$COMMON_CANCEL_BUTTON}</Button>
                     </PopoverTrigger>
                 </div>
             </PopoverSurface>

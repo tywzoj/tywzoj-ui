@@ -1,5 +1,3 @@
-import type { CE_Strings } from "@/locales/locale";
-
 export const enum CE_CodeLanguage {
     Cpp = "cpp",
     C = "c",
@@ -16,12 +14,12 @@ export const enum CE_CodeLanguage {
 }
 
 export interface ICodeLanguageOptionValue {
-    string?: CE_Strings;
+    lsFn?: (ls: ILocalizedStrings) => string;
     option: string;
 }
 
 export interface ICodeLanguageOption {
-    string?: CE_Strings;
+    lsFn?: (ls: ILocalizedStrings) => string;
     name: "compiler" | "std" | "O" | "m" | "version" | "optimize" | "platform";
     options: ICodeLanguageOptionValue[];
     default: string;

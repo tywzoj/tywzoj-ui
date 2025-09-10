@@ -2,8 +2,8 @@ import React from "react";
 
 import { ErrorBox } from "@/common/components/ErrorBox";
 import { AppError } from "@/common/exceptions/app-error";
-import type { IErrorLink, IStringCodeErrorLink } from "@/common/types/error-link";
-import { useLocalizedStrings } from "@/locales/hooks";
+import type { IErrorLink, ILocalizedStringFunctionErrorLink } from "@/common/types/error-link";
+import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 
 export interface IErrorPageProps {
     error: unknown;
@@ -20,11 +20,13 @@ export const ErrorPage: React.FC<IErrorPageProps> = ({ error }) => {
 };
 
 const AppErrorBox: React.FC<{ error: AppError }> = ({ error }) => {
-    const [msg] = useLocalizedStrings(error.getStringId());
+    const errorCodeToString = useErrorCodeToString();
 
     return (
-        <WithLinks links={error.getLinks()}>
-            {(links) => <ErrorBox message={msg} links={links} showGoBack={error.showGoBack} />}
+        <WithLinks links={error.links}>
+            {(links) => (
+                <ErrorBox message={errorCodeToString(error.code)} links={links} showGoBack={error.showGoBack} />
+            )}
         </WithLinks>
     );
 };
@@ -32,14 +34,19 @@ const AppErrorBox: React.FC<{ error: AppError }> = ({ error }) => {
 // Memoize the component because of useLocalizedStrings(...props.links.map((link) => link.string))
 // which may cause re-rendering of the component
 const WithLinks: React.FC<{
-    links: IStringCodeErrorLink[];
+    links: ILocalizedStringFunctionErrorLink[];
     children: (links: IErrorLink[]) => React.ReactNode;
 }> = React.memo((props) => {
-    const linksString = useLocalizedStrings(...props.links.map((link) => link.string));
-    const links = props.links.map((link, i) => ({
-        ...link,
-        title: linksString[i],
-    }));
+    const ls = useLocalizedStrings();
+
+    const links = React.useMemo(
+        () =>
+            props.links.map((link) => ({
+                ...link,
+                title: link.lsFn(ls),
+            })),
+        [ls, props.links],
+    );
 
     return props.children(links);
 });
