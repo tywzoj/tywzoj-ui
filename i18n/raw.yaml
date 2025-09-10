@@ -268,6 +268,10 @@
   value: Email
   description: A string for the label of email input.
 
+- name: AUTH_EMAIL_LABEL
+  value: Authentication Email
+  description: A string for the label of authentication email input.
+
 - name: DISPLAY_EMAIL_HINT
   value: >-
     This email will be shown to other users in the profile, but it will not be
@@ -278,9 +282,33 @@
   value: This email will be used for authentication and notifications.
   description: A string for the hint of authentication email input.
 
+- name: CURRENT_EMAIL_LABEL
+  value: Current Email
+  description: A string for the label of current email input.
+
+- name: NEW_EMAIL_LABEL
+  value: New Email
+  description: A string for the label of new email input.
+
+- name: VERIFICATION_CODE_CURRENT_EMAIL_LABEL
+  value: Verification Code for Current Email
+  description: A string for the label of verification code for current email input.
+
+- name: VERIFICATION_CODE_NEW_EMAIL_LABEL
+  value: Verification Code for New Email
+  description: A string for the label of verification code for new email input.
+
 - name: PASSWORD_CONFIRM_LABEL
   value: Confirm Password
   description: A string for the label of password confirm input.
+
+- name: CURRENT_PASSWORD_LABEL
+  value: Current Password
+  description: A string for the label of current password input.
+
+- name: NEW_PASSWORD_LABEL
+  value: New Password
+  description: A string for the label of new password input.
 
 - name: VERIFICATION_CODE_LABEL
   value: Verification Code
@@ -362,15 +390,17 @@
   value: The nickname is too long. Please shorten it.
   description: A string for the error message when the nickname is too long.
 
-- name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
-  value: Password confirm cannot be empty.
-  description: A string for the error message when password confirm is empty.
-
 - name: VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH
   value: Password confirm does not match the password.
   description: >-
     A string for the error message when password confirm does not match the
     password.
+
+- name: VALIDATION_ERROR_PASSWORD_LENGTH_ERROR
+  value: Password must be between {0} and {1} characters.
+  description: >-
+    A string for the error message when password length is invalid. {0} is the
+    minimum length, and {1} is the maximum length.
 
 - name: VALIDATION_ERROR_TITLE_EMPTY
   value: Title cannot be empty.
@@ -448,6 +478,12 @@
   value: '{0}''s Profile'
   description: A string for the title of user profile page.
 
+- name: USER_SETTING_PAGE_INFO
+  value: You are editing the settings for {0} (#{1}).
+  description: >-
+    A string for the info of user settings page. {0} is the username, {1} is the
+    user ID.
+
 - name: USER_PREFERENCE_PAGE_TITLE
   value: Preference Setting
   description: A string for the title of user preferences page.
@@ -455,6 +491,18 @@
 - name: USER_SECURITY_PAGE_TITLE
   value: Security Setting
   description: A string for the title of user security page.
+
+- name: USER_SECURITY_PAGE_ADMIN_MANAGEMENT_TITLE
+  value: Admin Management
+  description: A string for the title of admin management section.
+
+- name: USER_SECURITY_SEND_EMAIL_RESET_CODE_BUTTON
+  value: Send Verification Code
+  description: A string for the label of send email reset code button.
+
+- name: USER_SECURITY_SEND_EMAIL_RESET_CODE_NEW_EMAIL_BUTTON
+  value: Send Verification Code to New Email
+  description: A string for the label of send email reset code to new email button.
 
 - name: USER_EDIT_PAGE_TITLE
   value: Edit Profile
@@ -465,7 +513,7 @@
   description: A string for the title of user settings page.
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
-  value: Verify your email
+  value: Verify Your Email
   description: A string for the title of email verification dialog.
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION

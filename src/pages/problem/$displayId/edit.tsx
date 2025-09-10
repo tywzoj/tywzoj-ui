@@ -64,7 +64,7 @@ const ProblemEditPage: React.FC = () => {
 
     const handlePatchProblemAsync = useWithCatchError(async (data: IProblemEditorChangedData) => {
         const problemPatchBody: IProblemDetailPatchRequestBody = {};
-        const shouldPatchProblem = diff<IProblemDetailPatchRequestBody>(
+        const shouldPatchProblem = diff(
             {
                 ...problem,
                 tagIds: problem.tags.map((tag) => tag.id),

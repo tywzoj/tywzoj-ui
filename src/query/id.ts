@@ -3,4 +3,6 @@ export const enum CE_QueryId {
     ProblemDetail = "problem-detail",
 
     UserDetail = "user-detail",
+
+    AuthDetail = "auth-detail",
 }

@@ -13,9 +13,9 @@ export const useIsAllowedEditUser = (user: IUserDetail): boolean => {
     return checkIsAllowedEditUser(user, currentUser, permission);
 };
 
-export const useIsAllowedManageUser = (user: IUserDetail): boolean => {
+export const useIsAllowedManageUser = (user: IUserDetail, allowedManageSelf = true): boolean => {
     const currentUser = useCurrentUser();
     const permission = usePermission();
 
-    return checkIsAllowedManageUser(user, currentUser, permission);
+    return checkIsAllowedManageUser(user, currentUser, permission, allowedManageSelf);
 };

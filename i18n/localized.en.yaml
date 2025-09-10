@@ -340,6 +340,11 @@
   description: A string for the label of email input.
   raw: Email
 
+- name: AUTH_EMAIL_LABEL
+  value: Authentication Email
+  description: A string for the label of authentication email input.
+  raw: Authentication Email
+
 - name: DISPLAY_EMAIL_HINT
   value: >-
     This email will be shown to other users in the profile, but it will not be
@@ -354,10 +359,40 @@
   description: A string for the hint of authentication email input.
   raw: This email will be used for authentication and notifications.
 
+- name: CURRENT_EMAIL_LABEL
+  value: Current Email
+  description: A string for the label of current email input.
+  raw: Current Email
+
+- name: NEW_EMAIL_LABEL
+  value: New Email
+  description: A string for the label of new email input.
+  raw: New Email
+
+- name: VERIFICATION_CODE_CURRENT_EMAIL_LABEL
+  value: Verification Code for Current Email
+  description: A string for the label of verification code for current email input.
+  raw: Verification Code for Current Email
+
+- name: VERIFICATION_CODE_NEW_EMAIL_LABEL
+  value: Verification Code for New Email
+  description: A string for the label of verification code for new email input.
+  raw: Verification Code for New Email
+
 - name: PASSWORD_CONFIRM_LABEL
   value: Confirm Password
   description: A string for the label of password confirm input.
   raw: Confirm Password
+
+- name: CURRENT_PASSWORD_LABEL
+  value: Current Password
+  description: A string for the label of current password input.
+  raw: Current Password
+
+- name: NEW_PASSWORD_LABEL
+  value: New Password
+  description: A string for the label of new password input.
+  raw: New Password
 
 - name: VERIFICATION_CODE_LABEL
   value: Verification Code
@@ -459,17 +494,19 @@
   description: A string for the error message when the nickname is too long.
   raw: The nickname is too long. Please shorten it.
 
-- name: VALIDATION_ERROR_PASSWORD_CONFIRM_EMPTY
-  value: Password confirm cannot be empty.
-  description: A string for the error message when password confirm is empty.
-  raw: Password confirm cannot be empty.
-
 - name: VALIDATION_ERROR_PASSWORD_CONFIRM_MISMATCH
   value: Password confirm does not match the password.
   description: >-
     A string for the error message when password confirm does not match the
     password.
   raw: Password confirm does not match the password.
+
+- name: VALIDATION_ERROR_PASSWORD_LENGTH_ERROR
+  value: Password must be between {0} and {1} characters.
+  description: >-
+    A string for the error message when password length is invalid. {0} is the
+    minimum length, and {1} is the maximum length.
+  raw: Password must be between {0} and {1} characters.
 
 - name: VALIDATION_ERROR_TITLE_EMPTY
   value: Title cannot be empty.
@@ -566,6 +603,13 @@
   description: A string for the title of user profile page.
   raw: '{0}''s Profile'
 
+- name: USER_SETTING_PAGE_INFO
+  value: You are editing the settings for {0} (#{1}).
+  description: >-
+    A string for the info of user settings page. {0} is the username, {1} is the
+    user ID.
+  raw: You are editing the settings for {0} (#{1}).
+
 - name: USER_PREFERENCE_PAGE_TITLE
   value: Preference Setting
   description: A string for the title of user preferences page.
@@ -575,6 +619,21 @@
   value: Security Setting
   description: A string for the title of user security page.
   raw: Security Setting
+
+- name: USER_SECURITY_PAGE_ADMIN_MANAGEMENT_TITLE
+  value: Admin Management
+  description: A string for the title of admin management section.
+  raw: Admin Management
+
+- name: USER_SECURITY_SEND_EMAIL_RESET_CODE_BUTTON
+  value: Send Verification Code
+  description: A string for the label of send email reset code button.
+  raw: Send Verification Code
+
+- name: USER_SECURITY_SEND_EMAIL_RESET_CODE_NEW_EMAIL_BUTTON
+  value: Send Verification Code to New Email
+  description: A string for the label of send email reset code to new email button.
+  raw: Send Verification Code to New Email
 
 - name: USER_EDIT_PAGE_TITLE
   value: Edit Profile
@@ -587,9 +646,9 @@
   raw: Edit {0}'s Profile
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_TITLE
-  value: Verify your email
+  value: Verify Your Email
   description: A string for the title of email verification dialog.
-  raw: Verify your email
+  raw: Verify Your Email
 
 - name: USER_EDIT_PAGE_EMAIL_VERIFICATION_DIALOG_DESCRIPTION
   value: >-
