@@ -5,7 +5,6 @@ import React from "react";
 import { CODE_FONT_FAMILY } from "@/common/constants/font";
 import { useDispatchToastError, useDispatchToastSuccess } from "@/common/hooks/toast";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 
 import { highlight } from "./highlighter";
 import type { ICodeLanguage } from "./types";
@@ -23,11 +22,7 @@ export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
     const dispatchToastSuccess = useDispatchToastSuccess();
     const dispatchToastError = useDispatchToastError();
 
-    const ls = useLocalizedStrings({
-        $copyBtn: CE_Strings.COMMON_COPY_BUTTON,
-        $successMsg: CE_Strings.CODE_COPIED_MESSAGE,
-        $errorMsg: CE_Strings.CODE_COPY_FAILED_MESSAGE,
-    });
+    const ls = useLocalizedStrings();
 
     const allowedToCopy = showCopy && !!window?.navigator?.clipboard?.writeText;
 
@@ -35,10 +30,10 @@ export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
         window.navigator.clipboard
             .writeText(code)
             .then(() => {
-                dispatchToastSuccess(ls.$successMsg, "", { timeout: 800 });
+                dispatchToastSuccess(ls.$CODE_COPIED_MESSAGE, "", { timeout: 800 });
             })
             .catch((e) => {
-                dispatchToastError(ls.$errorMsg, { timeout: 800 });
+                dispatchToastError(ls.$CODE_COPY_FAILED_MESSAGE, { timeout: 800 });
                 console.error(e);
             });
     };
@@ -49,7 +44,7 @@ export const CodeBox: React.FC<ICodeBoxProps> = React.memo((props) => {
                 <code className={`language-${lang}`}>{highlight(code, lang)}</code>
             </pre>
             {allowedToCopy && (
-                <Tooltip content={ls.$copyBtn} relationship="label">
+                <Tooltip content={ls.$COMMON_COPY_BUTTON} relationship="label">
                     <Button
                         className={styles.$copy}
                         size="small"
