@@ -13,7 +13,7 @@ import { neverGuard } from "@/common/utils/never-guard";
 import { Z_EMAIL, Z_PASSWORD } from "@/common/validators/user";
 import { ContentCard } from "@/components/ContentCard";
 import { UserLevelSelector } from "@/components/UserLevelSelector";
-import { useLocalizedStrings } from "@/locales/hooks";
+import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { getLocale } from "@/locales/selectors";
 import { useIsAllowedManageUser } from "@/permission/user/hooks";
 import { useSuspenseQueryData } from "@/query/hooks";
@@ -344,6 +344,7 @@ const PasswordEditor: React.FC<{
     const styles = useStyles();
     const recaptchaAsync = useRecaptchaAsync();
     const ls = useLocalizedStrings();
+    const errorCodeToString = useErrorCodeToString();
 
     const [currentPassword, setCurrentPassword] = React.useState("");
     const [newPassword, setNewPassword] = React.useState("");
@@ -368,14 +369,14 @@ const PasswordEditor: React.FC<{
         (code: IErrorCodeWillBeReturned<typeof postResetPasswordAsync>) => {
             switch (code) {
                 case CE_ErrorCode.Auth_WrongPassword:
-                    setCurrentPasswordError(ls.E_2001);
+                    setCurrentPasswordError(errorCodeToString(code));
                     break;
 
                 default:
                     neverGuard(code);
             }
         },
-        [ls],
+        [errorCodeToString],
     );
 
     const handleResetPasswordAsync = useWithCatchError(

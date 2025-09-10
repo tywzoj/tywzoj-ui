@@ -1,5 +1,4 @@
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
-import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
@@ -9,8 +8,6 @@ import { createHtmlPlugin } from "vite-plugin-html";
 import { prismjsPlugin } from "vite-plugin-prismjs";
 import { viteVConsole } from "vite-plugin-vconsole";
 import tsconfigPaths from "vite-tsconfig-paths";
-
-import { inlineConstEnum } from "./vite-plugins/inline-const-enum";
 
 const ENV_PREFIX = "TYWZOJ_";
 
@@ -25,10 +22,6 @@ export default defineConfig(({ command, mode }) => {
     return {
         envPrefix: ENV_PREFIX,
         plugins: [
-            legacy({
-                targets: ["defaults", "chrome 50", "firefox 45", "edge 14", "safari 10"],
-                additionalLegacyPolyfills: ["core-js/stable"],
-            }),
             createHtmlPlugin({
                 minify: {
                     collapseWhitespace: true,
@@ -64,10 +57,6 @@ export default defineConfig(({ command, mode }) => {
             prismjsPlugin({
                 languages: fs.readFileSync(path.resolve(".prism-languages"), "utf-8").trim().split("\n"),
                 css: false,
-            }),
-            inlineConstEnum({
-                tsConfigPath: path.resolve("tsconfig.app.json"),
-                sourceDir: path.resolve("src"),
             }),
         ],
         server: {

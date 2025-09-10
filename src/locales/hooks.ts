@@ -13,7 +13,7 @@ export const useErrorCodeToString = () => {
     const strings = useAppSelector(getStrings);
 
     return React.useCallback(
-        (code: CE_ErrorCode) => strings[`E_${code}` as keyof typeof strings] || "Unknown error",
+        (code: CE_ErrorCode) => strings[`ERR_${code}` as keyof typeof strings] || "Unknown error",
         [strings],
     );
 };

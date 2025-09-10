@@ -55,7 +55,7 @@ function getStringName({ name }: ILocalizedString): string {
     if (name.startsWith("ERROR_")) {
         const errorString = name.split("_")[1];
         const idError = Number.parseInt(errorString, 10);
-        return `E_${idError}`;
+        return `ERR_${idError}`;
     } else {
         return `$${name}`;
     }
