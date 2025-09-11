@@ -22,9 +22,9 @@
     "scripts/**/*.ts",
     "scripts/**/*.mts",
     "scripts/**/*.cts",
-    "vite-plugins/**/*.ts",
-    "vite-plugins/**/*.cts",
-    "vite-plugins/**/*.mts",
+    "vite/**/*.ts",
+    "vite/**/*.cts",
+    "vite/**/*.mts",
     "vite.config.mts"
   ]
 }

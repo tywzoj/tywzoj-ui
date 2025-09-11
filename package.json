@@ -42,7 +42,6 @@
     "react-helmet-async": "^2.0.5",
     "react-redux": "^9.2.0",
     "scheduler": "^0.25.0",
-    "terser": "^5.44.0",
     "uuid": "^11.0.5",
     "whatwg-fetch": "^3.6.20",
     "zod": "^3.24.1"

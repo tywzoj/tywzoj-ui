@@ -9,7 +9,7 @@ import { prismjsPlugin } from "vite-plugin-prismjs";
 import { viteVConsole } from "vite-plugin-vconsole";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-import { terserPlugin } from "./vite-plugins/terser";
+import { terserPlugin } from "./vite/terser-plugin";
 
 const ENV_PREFIX = "TYWZOJ_";
 
@@ -94,6 +94,17 @@ export default defineConfig(({ command, mode }) => {
                     entryFileNames: "assets/[name].[hash].js",
                     chunkFileNames: "assets/[name].[hash].js",
                     assetFileNames: "assets/[name].[hash].[ext]",
+                    manualChunks: {
+                        react: ["react", "react-dom"],
+                        redux: ["react-redux", "@reduxjs/toolkit"],
+                        fluentui: [
+                            "@fluentui/react-components",
+                            "@fluentui/react-icons",
+                            "@fluentui/react-nav-preview",
+                        ],
+                        tanstack: ["@tanstack/react-query", "@tanstack/react-router"],
+                        dompurify: ["dompurify"],
+                    },
                 },
             },
         },

@@ -25,5 +25,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "vite-plugins"]
+  "include": ["src", "vite"]
 }
