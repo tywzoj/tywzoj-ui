@@ -72,6 +72,7 @@
     "fast-glob": "^3.3.3",
     "globals": "^15.14.0",
     "prettier": "^3.4.2",
+    "terser": "^5.44.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "type-fest": "^4.33.0",
