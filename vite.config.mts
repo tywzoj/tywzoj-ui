@@ -9,6 +9,8 @@ import { prismjsPlugin } from "vite-plugin-prismjs";
 import { viteVConsole } from "vite-plugin-vconsole";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+import { terserPlugin } from "./vite-plugins/terser";
+
 const ENV_PREFIX = "TYWZOJ_";
 
 interface IEnv {
@@ -58,6 +60,18 @@ export default defineConfig(({ command, mode }) => {
                 languages: fs.readFileSync(path.resolve(".prism-languages"), "utf-8").trim().split("\n"),
                 css: false,
             }),
+            terserPlugin({
+                compress: {
+                    keep_infinity: true,
+                    drop_console: ["log", "info"],
+                    drop_debugger: true,
+                },
+                mangle: {
+                    properties: {
+                        regex: /^\$[a-zA-Z]/,
+                    },
+                },
+            }),
         ],
         server: {
             host: "0.0.0.0",
@@ -74,7 +88,7 @@ export default defineConfig(({ command, mode }) => {
             port: 5056,
         },
         build: {
-            minify: "esbuild",
+            minify: false, // use terser plugin instead
             rollupOptions: {
                 output: {
                     entryFileNames: "assets/[name].[hash].js",
