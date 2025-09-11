@@ -34,13 +34,6 @@ Use the distribution package manager:
 sudo apt update && sudo apt install git
 ```
 
-## Clone the repository
-
-```bash
-git clone git@github.com:tywzoj/tywzoj-ui.git
-cd tywzoj-ui
-```
-
 ## Install NVM
 
 This section shows a common approach to install and manage Node.js versions. Use nvm (or nvm-windows on Windows) so you can install and switch Node versions per project.
@@ -91,12 +84,21 @@ curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 source ~/.bashrc   # or source ~/.zshrc
 ```
 
+## Clone the repository
+
+```bash
+# <your_project_directory> is the directory where you want to clone the repo
+cd <your_project_directory>
+git clone git@github.com:tywzoj/tywzoj-ui.git
+cd tywzoj-ui
+```
+
 ## Install Node.js
 
 In the project folder (a folder that has a `.nvmrc`), install the recorded version:
 
 ```sh
-cd tywzoj-ui # you have already cloned the repo on the previous step
+# you should be in the tywzoj-ui directory
 nvm install
 nvm use
 corepack enable
@@ -107,5 +109,6 @@ corepack enable
 Use yarn to install the project dependencies:
 
 ```sh
+# you should be in the tywzoj-ui directory
 yarn
 ```
