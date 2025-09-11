@@ -25,6 +25,3 @@ export const stringIdToRecaptchaLanguageMap: { [k in CE_Locale]: string } = {
     [CE_Locale.en]: "en",
     [CE_Locale.zh_cn]: "zh-CN",
 };
-
-export { errorIdMap as errorToStringIdMap } from "./error-map.gen";
-export { default as CE_Strings } from "./locale.strings.gen";

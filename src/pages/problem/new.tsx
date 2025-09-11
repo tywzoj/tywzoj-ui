@@ -14,7 +14,6 @@ import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import type { IProblemEditorChangedData } from "@/components/ProblemEditor";
 import { ProblemEditor } from "@/components/ProblemEditor";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { checkIsAllowedCreateProblem } from "@/permission/problem/checker";
 import { problemListQueryKeys } from "@/query/keys";
 import { ProblemModule } from "@/server/api";
@@ -28,16 +27,14 @@ const NewProblemPage: React.FC = () => {
     const navigate = Route.useNavigate();
     const queryClient = useQueryClient();
 
-    const ls = useLocalizedStrings({
-        $title: CE_Strings.NAVIGATION_PROBLEM_NEW,
-    });
+    const ls = useLocalizedStrings();
 
     const styles = useStyles();
 
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<string>("");
 
-    useSetPageTitle(ls.$title);
+    useSetPageTitle(ls.$NAVIGATION_PROBLEM_NEW);
 
     // TODO: Implement API request
     // TODO: Update styles
@@ -88,7 +85,7 @@ const NewProblemPage: React.FC = () => {
     return (
         <div className={styles.$root}>
             <div className={styles.$title}>
-                <Title3 as="h1">{ls.$title}</Title3>
+                <Title3 as="h1">{ls.$NAVIGATION_PROBLEM_NEW}</Title3>
             </div>
             <div className={styles.$editor}>
                 <ProblemEditor disabled={loading} submitting={loading} error={error} onSaveChanges={onSaveChanges} />

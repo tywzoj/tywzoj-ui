@@ -2,7 +2,6 @@ import { Toast, ToastBody, ToastTitle, useToastController } from "@fluentui/reac
 import * as React from "react";
 
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 
 import { ToastContext } from "../providers/ToastProvider.ctx";
 
@@ -10,13 +9,13 @@ export const useToast = () => useToastController(React.useContext(ToastContext))
 
 export const useDispatchToastError = () => {
     const { dispatchToast } = useToast();
-    const [title] = useLocalizedStrings(CE_Strings.COMMON_ERROR_TITLE);
+    const ls = useLocalizedStrings();
 
     return React.useCallback(
         (message: string, options?: Parameters<typeof dispatchToast>[1]) => {
             dispatchToast(
                 <Toast>
-                    <ToastTitle>{title}</ToastTitle>
+                    <ToastTitle>{ls.$COMMON_ERROR_TITLE}</ToastTitle>
                     <ToastBody>{message}</ToastBody>
                 </Toast>,
                 {
@@ -26,7 +25,7 @@ export const useDispatchToastError = () => {
                 },
             );
         },
-        [dispatchToast, title],
+        [dispatchToast, ls],
     );
 };
 

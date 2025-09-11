@@ -31,7 +31,6 @@ import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { ProblemModule } from "@/server/api";
 import { CE_Visibility } from "@/server/common/permission";
 import { CE_ProblemType } from "@/server/modules/problem.enums";
@@ -81,24 +80,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
     const router = useRouter();
     const recaptchaAsync = useRecaptchaAsync();
 
-    const ls = useLocalizedStrings({
-        $editTab: CE_Strings.COMMON_EDIT_BUTTON,
-        $previewTab: CE_Strings.COMMON_PREVIEW_BUTTON,
-        $displayId: CE_Strings.ID_LABEL,
-        $pTitle: CE_Strings.TITLE_LABEL,
-        $visibility: CE_Strings.VISIBILITY_LABEL,
-        $description: CE_Strings.DESCRIPTION_LABEL,
-        $inputFormat: CE_Strings.PROBLEM_INPUT_FORMAT_LABEL,
-        $outputFormat: CE_Strings.PROBLEM_OUTPUT_FORMAT_LABEL,
-        $limitAndHint: CE_Strings.PROBLEM_LIMIT_AND_HINT_LABEL,
-        $saveBtn: CE_Strings.COMMON_SAVE_BUTTON,
-        $goBackBtn: CE_Strings.COMMON_BACK_BUTTON,
-        $errorTitle: CE_Strings.COMMON_ERROR_TITLE,
-        $idEmpty: CE_Strings.VALIDATION_ERROR_ID_EMPTY,
-        $titleEmpty: CE_Strings.VALIDATION_ERROR_TITLE_EMPTY,
-        $titleTooLong: CE_Strings.VALIDATION_ERROR_PROBLEM_TITLE_TOO_LONG,
-        $idGenBtn: CE_Strings.PROBLEM_EDIT_GEN_ID,
-    });
+    const ls = useLocalizedStrings();
 
     const [preview, setPreview] = React.useState(false);
     const [previewData, setPreviewData] = React.useState<{
@@ -149,13 +131,13 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
         let success = true;
 
         if (!displayId) {
-            setDisplayIdErr(ls.$idEmpty);
+            setDisplayIdErr(ls.$VALIDATION_ERROR_ID_EMPTY);
             displayIdRef.current?.focus();
             success = false;
         }
 
         if (!title) {
-            setTitleErr(ls.$titleEmpty);
+            setTitleErr(ls.$VALIDATION_ERROR_TITLE_EMPTY);
             if (success) {
                 titleRef.current?.focus();
             }
@@ -231,12 +213,12 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                         setPreview(isPreview);
                     }}
                 >
-                    <Tab value="edit">{ls.$editTab}</Tab>
-                    <Tab value="preview">{ls.$previewTab}</Tab>
+                    <Tab value="edit">{ls.$COMMON_EDIT_BUTTON}</Tab>
+                    <Tab value="preview">{ls.$COMMON_PREVIEW_BUTTON}</Tab>
                 </TabList>
             </div>
             <div className={mergeClasses(styles.$editor, preview && styles.$hidden)}>
-                <Field label={ls.$displayId} className={styles.$topField} validationMessage={displayIdErr}>
+                <Field label={ls.$ID_LABEL} className={styles.$topField} validationMessage={displayIdErr}>
                     <div className={styles.$displayIdFieldContainer}>
                         <Input
                             ref={displayIdRef}
@@ -263,13 +245,13 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                                 onClick={onGenerateDisplayIdButtonClick}
                                 disabledFocusable={disabled || generatingDisplayId}
                             >
-                                {ls.$idGenBtn}
+                                {ls.$PROBLEM_EDIT_GEN_ID}
                             </Button>
                         )}
                     </div>
                 </Field>
 
-                <Field label={ls.$pTitle} className={styles.$topField} validationMessage={titleErr}>
+                <Field label={ls.$TITLE_LABEL} className={styles.$topField} validationMessage={titleErr}>
                     <Input
                         ref={titleRef}
                         value={title}
@@ -282,7 +264,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     />
                 </Field>
 
-                <Field label={ls.$visibility} className={styles.$topField}>
+                <Field label={ls.$VISIBILITY_LABEL} className={styles.$topField}>
                     <VisibilitySelector
                         layout={isMiniScreen ? "horizontal-stacked" : "horizontal"}
                         visibility={visibility}
@@ -291,7 +273,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     />
                 </Field>
 
-                <Field label={ls.$description} className={styles.$topField}>
+                <Field label={ls.$DESCRIPTION_LABEL} className={styles.$topField}>
                     <Textarea
                         className={styles.$inputLarge}
                         value={description}
@@ -300,7 +282,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     />
                 </Field>
 
-                <Field label={ls.$inputFormat} className={styles.$topField}>
+                <Field label={ls.$PROBLEM_INPUT_FORMAT_LABEL} className={styles.$topField}>
                     <Textarea
                         className={styles.$inputMiddle}
                         value={inputFormat}
@@ -309,7 +291,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     />
                 </Field>
 
-                <Field label={ls.$outputFormat} className={styles.$topField}>
+                <Field label={ls.$PROBLEM_OUTPUT_FORMAT_LABEL} className={styles.$topField}>
                     <Textarea
                         className={styles.$inputMiddle}
                         value={outputFormat}
@@ -324,7 +306,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                     disabled={disabled}
                 />
 
-                <Field label={ls.$limitAndHint} className={styles.$topField}>
+                <Field label={ls.$PROBLEM_LIMIT_AND_HINT_LABEL} className={styles.$topField}>
                     <Textarea
                         className={styles.$inputMiddle}
                         value={limitAndHint}
@@ -335,7 +317,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                 {error && (
                     <MessageBar intent="error">
                         <MessageBarBody>
-                            <MessageBarTitle>{ls.$errorTitle}</MessageBarTitle>
+                            <MessageBarTitle>{ls.$COMMON_ERROR_TITLE}</MessageBarTitle>
                             {error}
                         </MessageBarBody>
                     </MessageBar>
@@ -347,7 +329,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                         disabledFocusable={disabled}
                         icon={submitting ? <Spinner size="tiny" /> : null}
                     >
-                        {ls.$saveBtn}
+                        {ls.$COMMON_SAVE_BUTTON}
                     </Button>
                     <Button
                         disabledFocusable={disabled}
@@ -366,7 +348,7 @@ export const ProblemEditor: React.FC<IProblemEditorProps> = (props) => {
                             }
                         }}
                     >
-                        {ls.$goBackBtn}
+                        {ls.$COMMON_BACK_BUTTON}
                     </Button>
                 </div>
             </div>
@@ -393,11 +375,7 @@ const ProblemSampleListEditor: React.FC<{
     const styles = useStyles();
 
     const titleId = useId("sample-list-title");
-    const ls = useLocalizedStrings({
-        $samples: CE_Strings.PROBLEM_SAMPLES_LABEL,
-        $addSample: CE_Strings.PROBLEM_SAMPLE_ADD_BUTTON,
-        $delConfirm: CE_Strings.PROBLEM_SAMPLE_DELETE_CONFIRM,
-    });
+    const ls = useLocalizedStrings();
 
     const positioningRef = React.useRef<PositioningImperativeRef>(null);
     const indexWillBeDeleted = React.useRef<number>(-1);
@@ -429,7 +407,7 @@ const ProblemSampleListEditor: React.FC<{
             size="small"
             icon={<Add16Filled />}
         >
-            {ls.$addSample}
+            {ls.$PROBLEM_SAMPLE_ADD_BUTTON}
         </Button>
     );
 
@@ -437,7 +415,7 @@ const ProblemSampleListEditor: React.FC<{
         <div className={styles.$sampleList}>
             <div className={styles.$sampleListHeader}>
                 <Subtitle2 as="span" id={titleId}>
-                    {ls.$samples}
+                    {ls.$PROBLEM_SAMPLES_LABEL}
                 </Subtitle2>
                 {!hasSample && addButton}
             </div>
@@ -480,7 +458,7 @@ const ProblemSampleListEditor: React.FC<{
             )}
             <div className={styles.$sampleListFooter}>{hasSample && addButton}</div>
             <ConfirmationPopover
-                message={ls.$delConfirm}
+                message={ls.$PROBLEM_SAMPLE_DELETE_CONFIRM}
                 open={showDeleteConfirmation}
                 onConfirmed={onDeleteItemConfirmed}
                 onCanceled={() => {
@@ -505,24 +483,16 @@ const ProblemSampleItemEditor: React.FC<{
 }> = ({ index, total, sample, disabled, onChange, onDelete, onMoveUp, onMoveDown }) => {
     const isSmallScreen = useIsSmallScreen();
 
-    const ls = useLocalizedStrings({
-        $moveUp: CE_Strings.COMMON_MOVE_UP_BUTTON,
-        $moveDown: CE_Strings.COMMON_MOVE_DOWN_BUTTON,
-        $delete: CE_Strings.COMMON_DELETE_BUTTON,
-        $sample: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
-        $input: CE_Strings.PROBLEM_SAMPLE_INPUT_LABEL,
-        $output: CE_Strings.PROBLEM_SAMPLE_OUTPUT_LABEL,
-        $explanation: CE_Strings.PROBLEM_SAMPLE_EXPLANATION_LABEL,
-    });
+    const ls = useLocalizedStrings();
 
     const styles = useStyles();
 
     return (
         <div role="listitem" className={styles.$sampleItem}>
             <div className={styles.$sampleItemHeader}>
-                <Body1Strong as="span">{format(ls.$sample, index + 1)}</Body1Strong>
+                <Body1Strong as="span">{format(ls.$PROBLEM_SAMPLE_ITEM_LABEL, index + 1)}</Body1Strong>
                 <div>
-                    <Tooltip content={ls.$delete} relationship="label">
+                    <Tooltip content={ls.$COMMON_DELETE_BUTTON} relationship="label">
                         <Button
                             appearance="subtle"
                             disabled={disabled}
@@ -534,7 +504,7 @@ const ProblemSampleItemEditor: React.FC<{
                         />
                     </Tooltip>
 
-                    <Tooltip content={ls.$moveUp} relationship="label">
+                    <Tooltip content={ls.$COMMON_MOVE_UP_BUTTON} relationship="label">
                         <Button
                             appearance="subtle"
                             onClick={onMoveUp}
@@ -544,7 +514,7 @@ const ProblemSampleItemEditor: React.FC<{
                         />
                     </Tooltip>
 
-                    <Tooltip content={ls.$moveDown} relationship="label">
+                    <Tooltip content={ls.$COMMON_MOVE_DOWN_BUTTON} relationship="label">
                         <Button
                             appearance="subtle"
                             onClick={onMoveDown}
@@ -556,7 +526,7 @@ const ProblemSampleItemEditor: React.FC<{
                 </div>
             </div>
             <div className={mergeClasses(styles.$sampleItemIO, isSmallScreen && styles.$sampleItemIOSingleLine)}>
-                <Field label={ls.$input} className={styles.$sampleItemIOField}>
+                <Field label={ls.$PROBLEM_SAMPLE_INPUT_LABEL} className={styles.$sampleItemIOField}>
                     <Textarea
                         className={styles.$inputSmall}
                         value={sample.input}
@@ -569,7 +539,7 @@ const ProblemSampleItemEditor: React.FC<{
                         disabled={disabled}
                     />
                 </Field>
-                <Field label={ls.$output} className={styles.$sampleItemIOField}>
+                <Field label={ls.$PROBLEM_SAMPLE_OUTPUT_LABEL} className={styles.$sampleItemIOField}>
                     <Textarea
                         className={styles.$inputSmall}
                         value={sample.output}
@@ -583,7 +553,7 @@ const ProblemSampleItemEditor: React.FC<{
                     />
                 </Field>
             </div>
-            <Field label={ls.$explanation}>
+            <Field label={ls.$PROBLEM_SAMPLE_EXPLANATION_LABEL}>
                 <Textarea
                     className={styles.$inputSmall}
                     value={sample.explanation}

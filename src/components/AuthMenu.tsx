@@ -4,16 +4,12 @@ import type React from "react";
 import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
 import { flex } from "@/common/styles/flex";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { useIsMiniScreen } from "@/store/hooks";
 
 export const AuthMenu: React.FC = () => {
     const isMiniScreen = useIsMiniScreen();
 
-    const ls = useLocalizedStrings({
-        $signIn: CE_Strings.NAVIGATION_SIGN_IN,
-        $signUp: CE_Strings.NAVIGATION_SIGN_UP,
-    });
+    const ls = useLocalizedStrings();
 
     const url = new URL(window.location.href);
     const redirect =
@@ -32,11 +28,11 @@ export const AuthMenu: React.FC = () => {
                 appearance="primary"
                 preload="viewport"
             >
-                {ls.$signIn}
+                {ls.$NAVIGATION_SIGN_IN}
             </ButtonWithRouter>
             {!isMiniScreen && (
                 <ButtonWithRouter className={styles.$button} search={{ redirect }} to="/sign-up">
-                    {ls.$signUp}
+                    {ls.$NAVIGATION_SIGN_UP}
                 </ButtonWithRouter>
             )}
         </div>

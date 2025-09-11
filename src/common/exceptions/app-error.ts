@@ -1,27 +1,15 @@
-import type { CE_Strings } from "@/locales/locale";
-import { getStringIdFromErrorCode } from "@/locales/utils";
 import type { CE_ErrorCode } from "@/server/common/error-code";
 
-import type { IStringCodeErrorLink } from "../types/error-link";
+import type { ILocalizedStringFunctionErrorLink } from "../types/error-link";
 
 export class AppError extends Error {
-    public readonly code: CE_ErrorCode;
-    private readonly links: IStringCodeErrorLink[];
-    public readonly showGoBack: boolean;
-
-    constructor(code: CE_ErrorCode, links?: IStringCodeErrorLink[], showGoBack?: boolean, message?: string) {
+    constructor(
+        public readonly code: CE_ErrorCode,
+        public readonly links: ILocalizedStringFunctionErrorLink[] = [],
+        public readonly showGoBack: boolean = false,
+        message?: string,
+    ) {
         super(message);
         this.name = "AppError";
-        this.code = code;
-        this.links = links ?? [];
-        this.showGoBack = showGoBack ?? false;
-    }
-
-    public getStringId(): CE_Strings {
-        return getStringIdFromErrorCode(this.code);
-    }
-
-    public getLinks(): IStringCodeErrorLink[] {
-        return this.links;
     }
 }

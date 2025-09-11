@@ -1,5 +1,4 @@
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
-import legacy from "@vitejs/plugin-legacy";
 import react from "@vitejs/plugin-react";
 import fs from "fs";
 import path from "path";
@@ -10,7 +9,7 @@ import { prismjsPlugin } from "vite-plugin-prismjs";
 import { viteVConsole } from "vite-plugin-vconsole";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-import { inlineConstEnum } from "./vite-plugins/inline-const-enum";
+import { terserPlugin } from "./vite/terser-plugin";
 
 const ENV_PREFIX = "TYWZOJ_";
 
@@ -25,10 +24,6 @@ export default defineConfig(({ command, mode }) => {
     return {
         envPrefix: ENV_PREFIX,
         plugins: [
-            legacy({
-                targets: ["defaults", "chrome 50", "firefox 45", "edge 14", "safari 10"],
-                additionalLegacyPolyfills: ["core-js/stable"],
-            }),
             createHtmlPlugin({
                 minify: {
                     collapseWhitespace: true,
@@ -65,9 +60,17 @@ export default defineConfig(({ command, mode }) => {
                 languages: fs.readFileSync(path.resolve(".prism-languages"), "utf-8").trim().split("\n"),
                 css: false,
             }),
-            inlineConstEnum({
-                tsConfigPath: path.resolve("tsconfig.app.json"),
-                sourceDir: path.resolve("src"),
+            terserPlugin({
+                compress: {
+                    keep_infinity: true,
+                    drop_console: ["log", "info"],
+                    drop_debugger: true,
+                },
+                mangle: {
+                    properties: {
+                        regex: /^\$[a-zA-Z]/,
+                    },
+                },
             }),
         ],
         server: {
@@ -85,24 +88,23 @@ export default defineConfig(({ command, mode }) => {
             port: 5056,
         },
         build: {
-            minify: "terser",
-            terserOptions: {
-                compress: {
-                    keep_infinity: true,
-                    drop_console: ["log", "info"],
-                    drop_debugger: true,
-                },
-                mangle: {
-                    properties: {
-                        regex: /^\$[a-zA-Z]/,
-                    },
-                },
-            },
+            minify: false, // use terser plugin instead
             rollupOptions: {
                 output: {
                     entryFileNames: "assets/[name].[hash].js",
                     chunkFileNames: "assets/[name].[hash].js",
                     assetFileNames: "assets/[name].[hash].[ext]",
+                    manualChunks: {
+                        react: ["react", "react-dom"],
+                        redux: ["react-redux", "@reduxjs/toolkit"],
+                        fluentui: [
+                            "@fluentui/react-components",
+                            "@fluentui/react-icons",
+                            "@fluentui/react-nav-preview",
+                        ],
+                        tanstack: ["@tanstack/react-query", "@tanstack/react-router"],
+                        dompurify: ["dompurify"],
+                    },
                 },
             },
         },

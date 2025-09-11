@@ -3,7 +3,6 @@ import { Badge, makeStyles, Tooltip } from "@fluentui/react-components";
 
 import { useUserLevelColor, useUserLevelString } from "@/common/hooks/user-level";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import type { CE_UserLevel } from "@/server/common/permission";
 
 export interface IUserLevelLabelProps {
@@ -19,7 +18,7 @@ export const UserLevelLabel: React.FC<IUserLevelLabelProps> = (props) => {
     const color = useUserLevelColor(userLevel);
     const text = useUserLevelString(userLevel);
 
-    const [label] = useLocalizedStrings(CE_Strings.USER_LEVEL_LABEL);
+    const ls = useLocalizedStrings();
 
     const styles = useStyles();
 
@@ -30,7 +29,7 @@ export const UserLevelLabel: React.FC<IUserLevelLabelProps> = (props) => {
     );
 
     return showTooltip ? (
-        <Tooltip content={label} relationship="description" withArrow positioning={tooltipPositioning}>
+        <Tooltip content={ls.$USER_LEVEL_LABEL} relationship="description" withArrow positioning={tooltipPositioning}>
             {inner}
         </Tooltip>
     ) : (

@@ -17,7 +17,7 @@ import { commonLinkStyles } from "@/common/styles/link";
 import type { NavTo } from "@/common/types/nav-to";
 import { format } from "@/common/utils/format";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Locale, CE_Strings } from "@/locales/locale";
+import { CE_Locale } from "@/locales/locale";
 import { getLocale } from "@/locales/selectors";
 import { usePermission } from "@/permission/common/hooks";
 import { useAppSelector, useCurrentUser, useFeature, useIsSmallScreen } from "@/store/hooks";
@@ -37,16 +37,7 @@ export const Layout: React.FC = () => {
     const locale = useAppSelector(getLocale);
     const { accessProblem } = usePermission();
 
-    const ls = useLocalizedStrings({
-        $navigationTitle: CE_Strings.NAVIGATION_LABEL,
-        $homePage: CE_Strings.NAVIGATION_HOME,
-        $problemsPage: CE_Strings.NAVIGATION_PROBLEMS,
-        $problemSetsPage: CE_Strings.NAVIGATION_PROBLEM_SETS,
-        $siteTitleAlt: CE_Strings.SITE_TITLE_IMAGE_ALT,
-        $siteIconAlt: CE_Strings.SITE_ICON_IMAGE_ALT,
-        $copyright: CE_Strings.COPYRIGHT_NOTICE,
-        $recaptcha: CE_Strings.GOOGLE_RECAPTCHA_NOTICE,
-    });
+    const ls = useLocalizedStrings();
 
     const styles = useStyles();
 
@@ -69,7 +60,7 @@ export const Layout: React.FC = () => {
 
     const hamburger = React.useMemo(
         () => (
-            <Tooltip content={ls.$navigationTitle} relationship="label">
+            <Tooltip content={ls.$NAVIGATION_LABEL} relationship="label">
                 <Hamburger
                     onClick={() => {
                         setIsNavDrawerOpen((prev) => {
@@ -82,7 +73,7 @@ export const Layout: React.FC = () => {
                 />
             </Tooltip>
         ),
-        [isOverlay, ls.$navigationTitle],
+        [isOverlay, ls],
     );
 
     const createNavItem = (
@@ -123,9 +114,10 @@ export const Layout: React.FC = () => {
             >
                 <NavDrawerHeader>{hamburger}</NavDrawerHeader>
                 <NavDrawerBody>
-                    {createNavItem("/", ls.$homePage, <Home20Filled />)}
-                    {accessProblem && createNavItem("/problem", ls.$problemsPage, <Book20Filled />)}
-                    {accessProblem && createNavItem("/set", ls.$problemSetsPage, <GroupList20Filled />)}
+                    {createNavItem("/", ls.$NAVIGATION_HOME, <Home20Filled />)}
+                    {accessProblem && createNavItem("/problem", ls.$NAVIGATION_PROBLEMS, <Book20Filled />)}
+                    {accessProblem && createNavItem("/set", ls.$NAVIGATION_PROBLEM_SETS, <GroupList20Filled />)}
+                    {/* TODO: Localize User */}
                     {currentUser && createNavItem("/user", "Users", <PeopleList20Filled />, { matchExact: true })}
                 </NavDrawerBody>
             </NavDrawer>
@@ -136,12 +128,12 @@ export const Layout: React.FC = () => {
                         <img
                             className={styles.$headerInfoIcon}
                             src={isLightTheme ? iconLight : iconDark}
-                            alt={ls.$siteIconAlt}
+                            alt={ls.$SITE_ICON_IMAGE_ALT}
                         />
                         <img
                             className={styles.$headerInfoTitle}
                             src={isLightTheme ? titleLight : titleDark}
-                            alt={ls.$siteTitleAlt}
+                            alt={ls.$SITE_TITLE_IMAGE_ALT}
                         />
                     </div>
                     <div className={styles.$headerRightMenu}>{currentUser ? <UserMenu /> : <AuthMenu />}</div>
@@ -151,8 +143,8 @@ export const Layout: React.FC = () => {
                         <Outlet />
                     </div>
                     <div className={styles.$footer}>
-                        <div>{format(ls.$copyright, new Date().getFullYear())}</div>
-                        {recaptchaEnabled && <div dangerouslySetInnerHTML={{ __html: ls.$recaptcha }} />}
+                        <div>{format(ls.$COPYRIGHT_NOTICE, new Date().getFullYear())}</div>
+                        {recaptchaEnabled && <div dangerouslySetInnerHTML={{ __html: ls.$GOOGLE_RECAPTCHA_NOTICE }} />}
                         {domainIcpRecordInformation && locale === CE_Locale.zh_cn && (
                             // for Chinese users, display the ICP record information
                             <div>

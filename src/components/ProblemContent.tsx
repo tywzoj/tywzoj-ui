@@ -5,7 +5,6 @@ import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
 import { CodeBoxLazy } from "@/highlight/CodeBox.lazy";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 import { MarkdownContentLazy } from "@/markdown/MarkdownContent.lazy";
 import type { IProblemContentDetail, IProblemSampleDetail } from "@/server/modules/problem.types";
 import { useIsSmallScreen } from "@/store/hooks";
@@ -22,37 +21,30 @@ export const ProblemContent: React.FC<IProblemContentProps> = (props) => {
     const { className, content, samples } = props;
 
     const styles = useStyles();
-
-    const ls = useLocalizedStrings({
-        $description: CE_Strings.PROBLEM_DESCRIPTION_LABEL,
-        $inputFormat: CE_Strings.PROBLEM_INPUT_FORMAT_LABEL,
-        $outputFormat: CE_Strings.PROBLEM_OUTPUT_FORMAT_LABEL,
-        $limitAndHint: CE_Strings.PROBLEM_LIMIT_AND_HINT_LABEL,
-        $samples: CE_Strings.PROBLEM_SAMPLES_LABEL,
-    });
+    const ls = useLocalizedStrings();
 
     return (
         <div className={mergeClasses(styles.$root, className)}>
             {content?.description && (
-                <ContentCard title={ls.$description}>
+                <ContentCard title={ls.$PROBLEM_DESCRIPTION_LABEL}>
                     <ProblemMarkdownContent content={content.description} />
                 </ContentCard>
             )}
 
             {content?.inputFormat && (
-                <ContentCard title={ls.$inputFormat}>
+                <ContentCard title={ls.$PROBLEM_INPUT_FORMAT_LABEL}>
                     <ProblemMarkdownContent content={content.inputFormat} />
                 </ContentCard>
             )}
 
             {content?.outputFormat && (
-                <ContentCard title={ls.$outputFormat}>
+                <ContentCard title={ls.$PROBLEM_OUTPUT_FORMAT_LABEL}>
                     <ProblemMarkdownContent content={content.outputFormat} />
                 </ContentCard>
             )}
 
             {samples.length > 0 && (
-                <ContentCard title={ls.$samples}>
+                <ContentCard title={ls.$PROBLEM_SAMPLES_LABEL}>
                     <div className={styles.$sampleBoxContainer}>
                         {samples.map((sample, index) => (
                             <ProblemSampleBox
@@ -68,7 +60,7 @@ export const ProblemContent: React.FC<IProblemContentProps> = (props) => {
             )}
 
             {content?.limitAndHint && (
-                <ContentCard title={ls.$limitAndHint}>
+                <ContentCard title={ls.$PROBLEM_LIMIT_AND_HINT_LABEL}>
                     <ProblemMarkdownContent content={content.limitAndHint} />
                 </ContentCard>
             )}
@@ -97,23 +89,18 @@ const ProblemSampleBox: React.FC<{
 
     const isSmallScreen = useIsSmallScreen();
 
-    const ls = useLocalizedStrings({
-        $sampleItem: CE_Strings.PROBLEM_SAMPLE_ITEM_LABEL,
-        $sampleI: CE_Strings.PROBLEM_SAMPLE_INPUT_LABEL,
-        $sampleO: CE_Strings.PROBLEM_SAMPLE_OUTPUT_LABEL,
-        $sampleE: CE_Strings.PROBLEM_SAMPLE_EXPLANATION_LABEL,
-    });
+    const ls = useLocalizedStrings();
 
     return (
         <div className={styles.$sampleBox}>
             <Subtitle2 as="h3" className={styles.$title}>
-                {format(ls.$sampleItem, index)}
+                {format(ls.$PROBLEM_SAMPLE_ITEM_LABEL, index)}
             </Subtitle2>
             <div className={mergeClasses(styles.$sampleIO, isSmallScreen && styles.$sampleIOSingleLine)}>
                 {input && (
                     <div className={styles.$sampleItem}>
                         <Body1Strong as="h4" className={styles.$title}>
-                            {ls.$sampleI}
+                            {ls.$PROBLEM_SAMPLE_INPUT_LABEL}
                         </Body1Strong>
                         <React.Suspense fallback={<Spinner size="small" />}>
                             <CodeBoxLazy code={input} />
@@ -123,7 +110,7 @@ const ProblemSampleBox: React.FC<{
                 {output && (
                     <div className={styles.$sampleItem}>
                         <Body1Strong as="h4" className={styles.$title}>
-                            {ls.$sampleO}
+                            {ls.$PROBLEM_SAMPLE_OUTPUT_LABEL}
                         </Body1Strong>
                         <React.Suspense fallback={<Spinner size="small" />}>
                             <CodeBoxLazy code={"test"} />
@@ -134,9 +121,9 @@ const ProblemSampleBox: React.FC<{
             {explanation && (
                 <div className={styles.$sampleItem}>
                     <Body1Strong as="h4" className={styles.$title}>
-                        {ls.$sampleE}
+                        {ls.$PROBLEM_SAMPLE_EXPLANATION_LABEL}
                     </Body1Strong>
-                    <ProblemMarkdownContent content={explanation} placeHolderLines={2} />
+                    <ProblemMarkdownContent content={explanation} placeHolderLines={1} />
                 </div>
             )}
         </div>

@@ -6,7 +6,6 @@ import type * as React from "react";
 import { flex } from "@/common/styles/flex";
 import type { IErrorLink } from "@/common/types/error-link";
 import { useLocalizedStrings } from "@/locales/hooks";
-import { CE_Strings } from "@/locales/locale";
 
 import { LinkWithRouter } from "./LinkWithRouter";
 
@@ -30,10 +29,7 @@ export const ErrorBox: React.FC<IErrorBoxProps> = (props) => {
     const router = useRouter();
     const canGoBack = useCanGoBack();
     const styles = useStyles();
-    const [titleString, backButtonString] = useLocalizedStrings(
-        CE_Strings.COMMON_ERROR_TITLE,
-        CE_Strings.COMMON_BACK_BUTTON,
-    );
+    const ls = useLocalizedStrings();
 
     return (
         <div className={styles.$root}>
@@ -45,7 +41,7 @@ export const ErrorBox: React.FC<IErrorBoxProps> = (props) => {
                 icon={<ErrorCircle48Filled />}
             >
                 <MessageBarBody>
-                    <MessageBarTitle className={styles.$title}>{titleString}</MessageBarTitle>
+                    <MessageBarTitle className={styles.$title}>{ls.$COMMON_ERROR_TITLE}</MessageBarTitle>
                     {<div className={styles.$message}>{message}</div>}
                     <div className={styles.$linkContainer}>
                         {links.map((link, index) => (
@@ -58,7 +54,7 @@ export const ErrorBox: React.FC<IErrorBoxProps> = (props) => {
                             <>
                                 {links.length > 0 && <div className={styles.$linkDivider} />}
                                 <Link as="button" onClick={() => router.history.back()}>
-                                    {backButtonString}
+                                    {ls.$COMMON_BACK_BUTTON}
                                 </Link>
                             </>
                         )}
