@@ -128,6 +128,7 @@ const SignInPage: React.FC = () => {
                     <Input
                         ref={passwordRef}
                         type={showPassword ? "text" : "password"}
+                        autoComplete="current-password"
                         placeholder={ls.$PASSWORD_LABEL}
                         value={password}
                         onChange={(_, { value }) => {

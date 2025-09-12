@@ -12,6 +12,7 @@ import type {
     ISignInPostRequestBody,
     ISignInPostResponse,
     ISignOutPostResponse,
+    ISignUpPostRequestBody,
 } from "./auth.types";
 
 export async function getSessionInfoAsync() {
@@ -27,6 +28,15 @@ export async function postSignInAsync(body: ISignInPostRequestBody, recaptchaAsy
         method: "POST",
         body,
         recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.SignIn),
+    });
+}
+
+export async function postSignUpAsync(body: ISignUpPostRequestBody, recaptchaAsync: IRecaptchaAsync) {
+    return await requestAsync({
+        path: "auth/sign-up",
+        method: "POST",
+        body,
+        recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.SignUp),
     });
 }
 
