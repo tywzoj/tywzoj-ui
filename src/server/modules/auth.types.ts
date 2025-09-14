@@ -29,6 +29,8 @@ export interface ISignUpPostRequestBody {
     password: string;
 }
 
+export type ISignUpPostResponse = ISignInPostResponse;
+
 export interface ISignOutPostResponse {
     readonly permission: IPermission;
 }

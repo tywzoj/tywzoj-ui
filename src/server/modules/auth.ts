@@ -13,6 +13,7 @@ import type {
     ISignInPostResponse,
     ISignOutPostResponse,
     ISignUpPostRequestBody,
+    ISignUpPostResponse,
 } from "./auth.types";
 
 export async function getSessionInfoAsync() {
@@ -32,7 +33,7 @@ export async function postSignInAsync(body: ISignInPostRequestBody, recaptchaAsy
 }
 
 export async function postSignUpAsync(body: ISignUpPostRequestBody, recaptchaAsync: IRecaptchaAsync) {
-    return await requestAsync({
+    return await requestAsync<ISignUpPostResponse>({
         path: "auth/sign-up",
         method: "POST",
         body,

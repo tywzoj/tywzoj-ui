@@ -1,7 +1,10 @@
 import { Button, Field, Input, makeStyles, mergeClasses, tokens } from "@fluentui/react-components";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import * as React from "react";
+import { z } from "zod";
 
+import { signInAsyncAction } from "@/common/actions/sign-in";
 import { LinkWithRouter } from "@/common/components/LinkWithRouter";
 import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "@/common/constants/data-length";
 import { useWithCatchError } from "@/common/hooks/catch-error";
@@ -9,19 +12,25 @@ import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
+import { neverGuard } from "@/common/utils/never-guard";
 import { Z_EMAIL, Z_PASSWORD, Z_USERNAME } from "@/common/validators/user";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
-import { useLocalizedStrings } from "@/locales/hooks";
+import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
+import type { IErrorCodeWillBeReturned } from "@/server/utils";
 import { withThrowErrorsExcept } from "@/server/utils";
-import { useIsSmallScreen } from "@/store/hooks";
+import { useAppDispatch, useCurrentUser, useIsSmallScreen } from "@/store/hooks";
 
 const SignUpPage: React.FC = () => {
     const ls = useLocalizedStrings();
     const styles = useStyles();
     const isSmallScreen = useIsSmallScreen();
     const recaptchaAsync = useRecaptchaAsync();
+    const errorCodeToString = useErrorCodeToString();
+    const dispatch = useAppDispatch();
+    const currentUser = useCurrentUser();
+    const { redirect } = Route.useSearch();
 
     useSetPageTitle(ls.$NAVIGATION_SIGN_UP);
 
@@ -29,6 +38,8 @@ const SignUpPage: React.FC = () => {
         () => mergeClasses(styles.$fieldContainer, isSmallScreen && styles.$fieldContainerSingle),
         [isSmallScreen, styles],
     );
+
+    const [isSignedIn, setIsSignedIn] = React.useState(!!currentUser);
 
     const [username, setUsername] = React.useState("");
     const [email, setEmail] = React.useState("");
@@ -85,9 +96,28 @@ const SignUpPage: React.FC = () => {
         return isValid;
     };
 
+    const handleSignUpError = React.useCallback(
+        (code: IErrorCodeWillBeReturned<typeof postSignUpAsync>) => {
+            switch (code) {
+                case CE_ErrorCode.InvalidEmailVerificationCode:
+                    setVerificationCodeError(errorCodeToString(code));
+                    break;
+                case CE_ErrorCode.Auth_DuplicateUsername:
+                    setUsernameError(errorCodeToString(code));
+                    break;
+                case CE_ErrorCode.Auth_DuplicateEmail:
+                    setEmailError(errorCodeToString(code));
+                    break;
+                default:
+                    neverGuard(code);
+            }
+        },
+        [errorCodeToString],
+    );
+
     const handleSignUpAsync = useWithCatchError(
         React.useCallback(async () => {
-            await postSignUpAsync(
+            const resp = await postSignUpAsync(
                 {
                     username,
                     email,
@@ -96,7 +126,15 @@ const SignUpPage: React.FC = () => {
                 },
                 recaptchaAsync,
             );
-        }, [email, password, recaptchaAsync, username, verificationCode]),
+
+            if (resp.code !== CE_ErrorCode.OK) {
+                handleSignUpError(resp.code);
+                return;
+            }
+
+            await dispatch(signInAsyncAction(resp.data));
+            setIsSignedIn(true);
+        }, [dispatch, email, handleSignUpError, password, recaptchaAsync, username, verificationCode]),
     );
 
     const onSubmit = () => {
@@ -107,6 +145,11 @@ const SignUpPage: React.FC = () => {
         setPending(true);
         handleSignUpAsync().finally(() => setPending(false));
     };
+
+    if (isSignedIn) {
+        const redirectUrl = new URL(redirect, window.location.href);
+        return <Navigate to={redirectUrl.pathname} search={Object.fromEntries(redirectUrl.searchParams.entries())} />;
+    }
 
     return (
         <div className={styles.$root}>
@@ -270,6 +313,10 @@ const useStyles = makeStyles({
     },
 });
 
+const searchParams = z.object({
+    redirect: fallback(z.coerce.string(), "/").default("/"),
+});
+
 const postSignUpAsync = withThrowErrorsExcept(
     AuthModule.postSignUpAsync,
     CE_ErrorCode.InvalidEmailVerificationCode,
@@ -280,4 +327,5 @@ const postSignUpAsync = withThrowErrorsExcept(
 export const Route = createFileRoute("/sign-up")({
     component: SignUpPage,
     errorComponent: ErrorPageLazy,
+    validateSearch: zodValidator(searchParams),
 });

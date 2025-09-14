@@ -26,15 +26,14 @@ const SignInPage: React.FC = () => {
     const { redirect } = Route.useSearch();
     const errorCodeToString = useErrorCodeToString();
     const currentUser = useCurrentUser();
-    const [loginSucceed, setLoginSucceed] = React.useState(!!currentUser);
-
-    const passwordRef = React.useRef<HTMLInputElement>(null);
-
     const ls = useLocalizedStrings();
+    const styles = useStyles();
 
     useSetPageTitle(ls.$NAVIGATION_SIGN_IN);
 
-    const styles = useStyles();
+    const passwordRef = React.useRef<HTMLInputElement>(null);
+
+    const [isSignedIn, setIsSignedIn] = React.useState(!!currentUser);
 
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
@@ -84,7 +83,7 @@ const SignInPage: React.FC = () => {
         }
 
         await dispatch(signInAsyncAction(resp.data));
-        setLoginSucceed(true);
+        setIsSignedIn(true);
     });
 
     const handleSubmit = () => {
@@ -98,7 +97,7 @@ const SignInPage: React.FC = () => {
         });
     };
 
-    if (loginSucceed) {
+    if (isSignedIn) {
         const redirectUrl = new URL(redirect, window.location.href);
         return <Navigate to={redirectUrl.pathname} search={Object.fromEntries(redirectUrl.searchParams.entries())} />;
     }
