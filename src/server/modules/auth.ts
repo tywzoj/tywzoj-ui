@@ -32,6 +32,18 @@ export async function postSignInAsync(body: ISignInPostRequestBody, recaptchaAsy
     });
 }
 
+export async function postSendSignUpEmailVerificationCodeAsync(
+    body: ISendEmailVerificationCodePostRequestBody,
+    recaptchaAsync: IRecaptchaAsync,
+) {
+    return await requestAsync({
+        path: "auth/send-sign-up-email-verification-code",
+        method: "POST",
+        body,
+        recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.EmailVerificationCode),
+    });
+}
+
 export async function postSignUpAsync(body: ISignUpPostRequestBody, recaptchaAsync: IRecaptchaAsync) {
     return await requestAsync<ISignUpPostResponse>({
         path: "auth/sign-up",

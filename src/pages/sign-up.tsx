@@ -16,11 +16,12 @@ import { neverGuard } from "@/common/utils/never-guard";
 import { Z_EMAIL, Z_PASSWORD, Z_USERNAME } from "@/common/validators/user";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
+import { getLocale } from "@/locales/selectors";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import type { IErrorCodeWillBeReturned } from "@/server/utils";
 import { withThrowErrorsExcept } from "@/server/utils";
-import { useAppDispatch, useCurrentUser, useIsSmallScreen } from "@/store/hooks";
+import { useAppDispatch, useAppSelector, useCurrentUser, useIsSmallScreen } from "@/store/hooks";
 
 const SignUpPage: React.FC = () => {
     const ls = useLocalizedStrings();
@@ -31,6 +32,7 @@ const SignUpPage: React.FC = () => {
     const dispatch = useAppDispatch();
     const currentUser = useCurrentUser();
     const { redirect } = Route.useSearch();
+    const locale = useAppSelector(getLocale);
 
     useSetPageTitle(ls.$NAVIGATION_SIGN_UP);
 
@@ -46,14 +48,30 @@ const SignUpPage: React.FC = () => {
     const [verificationCode, setVerificationCode] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [confirmPassword, setConfirmPassword] = React.useState("");
-    const [pending, setPending] = React.useState(false);
     const [usernameError, setUsernameError] = React.useState("");
     const [emailError, setEmailError] = React.useState("");
     const [verificationCodeError, setVerificationCodeError] = React.useState("");
     const [passwordError, setPasswordError] = React.useState("");
     const [confirmPasswordError, setConfirmPasswordError] = React.useState("");
 
-    const validate = (): boolean => {
+    const [pending, setPending] = React.useState(false);
+    const [sendingCode, setSendingCode] = React.useState(false);
+
+    const validateEmail = () => {
+        if (!email) {
+            setEmailError(ls.$VALIDATION_ERROR_EMAIL_EMPTY);
+            return false;
+        }
+
+        if (!Z_EMAIL.safeParse(email).success) {
+            setEmailError(ls.$VALIDATION_ERROR_EMAIL_INVALID);
+            return false;
+        }
+
+        return true;
+    };
+
+    const validate = () => {
         let isValid = true;
 
         if (!username) {
@@ -66,15 +84,7 @@ const SignUpPage: React.FC = () => {
             isValid = false;
         }
 
-        if (!email) {
-            setEmailError(ls.$VALIDATION_ERROR_EMAIL_EMPTY);
-            isValid = false;
-        }
-
-        if (!Z_EMAIL.safeParse(email).success) {
-            setEmailError(ls.$VALIDATION_ERROR_EMAIL_INVALID);
-            isValid = false;
-        }
+        isValid = validateEmail() && isValid;
 
         if (!password) {
             setPasswordError(ls.$VALIDATION_ERROR_PASSWORD_EMPTY);
@@ -96,8 +106,12 @@ const SignUpPage: React.FC = () => {
         return isValid;
     };
 
-    const handleSignUpError = React.useCallback(
-        (code: IErrorCodeWillBeReturned<typeof postSignUpAsync>) => {
+    const handleError = React.useCallback(
+        (
+            code:
+                | IErrorCodeWillBeReturned<typeof postSignUpAsync>
+                | IErrorCodeWillBeReturned<typeof postSendSignUpEmailVerificationCodeAsync>,
+        ) => {
             switch (code) {
                 case CE_ErrorCode.InvalidEmailVerificationCode:
                     setVerificationCodeError(errorCodeToString(code));
@@ -108,11 +122,24 @@ const SignUpPage: React.FC = () => {
                 case CE_ErrorCode.Auth_DuplicateEmail:
                     setEmailError(errorCodeToString(code));
                     break;
+                case CE_ErrorCode.EmailVerificationCodeRateLimited:
+                    // TODO: add countdown
+                    break;
                 default:
                     neverGuard(code);
             }
         },
         [errorCodeToString],
+    );
+
+    const handleSendVerificationCode = useWithCatchError(
+        React.useCallback(async () => {
+            const { code } = await postSendSignUpEmailVerificationCodeAsync({ email, lang: locale }, recaptchaAsync);
+
+            if (code !== CE_ErrorCode.OK) {
+                handleError(code);
+            }
+        }, [email, handleError, recaptchaAsync, locale]),
     );
 
     const handleSignUpAsync = useWithCatchError(
@@ -128,14 +155,25 @@ const SignUpPage: React.FC = () => {
             );
 
             if (resp.code !== CE_ErrorCode.OK) {
-                handleSignUpError(resp.code);
+                handleError(resp.code);
                 return;
             }
 
             await dispatch(signInAsyncAction(resp.data));
             setIsSignedIn(true);
-        }, [dispatch, email, handleSignUpError, password, recaptchaAsync, username, verificationCode]),
+        }, [dispatch, email, handleError, password, recaptchaAsync, username, verificationCode]),
     );
+
+    const onSendCode = () => {
+        if (!validateEmail()) {
+            return;
+        }
+
+        setSendingCode(true);
+        handleSendVerificationCode().finally(() => {
+            setSendingCode(false);
+        });
+    };
 
     const onSubmit = () => {
         if (!validate()) {
@@ -177,7 +215,7 @@ const SignUpPage: React.FC = () => {
                     <Field label={ls.$EMAIL_LABEL} validationMessage={emailError} className={styles.$field}>
                         <Input
                             type="email"
-                            disabled={pending}
+                            disabled={pending || sendingCode}
                             value={email}
                             onChange={(_, { value }) => {
                                 setEmail(value);
@@ -201,7 +239,9 @@ const SignUpPage: React.FC = () => {
                                     setVerificationCodeError("");
                                 }}
                             />
-                            <Button disabled={pending || !email}>Send Code</Button>
+                            <Button disabled={pending || sendingCode} onClick={onSendCode}>
+                                Send Code
+                            </Button>
                         </div>
                     </Field>
                 </div>
@@ -316,6 +356,12 @@ const useStyles = makeStyles({
 const searchParams = z.object({
     redirect: fallback(z.coerce.string(), "/").default("/"),
 });
+
+const postSendSignUpEmailVerificationCodeAsync = withThrowErrorsExcept(
+    AuthModule.postSendSignUpEmailVerificationCodeAsync,
+    CE_ErrorCode.Auth_DuplicateEmail,
+    CE_ErrorCode.EmailVerificationCodeRateLimited,
+);
 
 const postSignUpAsync = withThrowErrorsExcept(
     AuthModule.postSignUpAsync,
