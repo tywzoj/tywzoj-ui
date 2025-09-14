@@ -1,12 +1,14 @@
 import { Button, Field, Input, makeStyles } from "@fluentui/react-components";
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, getRouteApi } from "@tanstack/react-router";
-import React from "react";
+import * as React from "react";
 
 import { EMAIL_MAX_LENGTH, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "@/common/constants/data-length";
 import { useWithCatchError } from "@/common/hooks/catch-error";
+import { useCountdown } from "@/common/hooks/countdown";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
+import { useDispatchToastError } from "@/common/hooks/toast";
 import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
 import { neverGuard } from "@/common/utils/never-guard";
@@ -61,8 +63,19 @@ const EmailEditor: React.FC<{
     const recaptchaAsync = useRecaptchaAsync();
     const locale = useAppSelector(getLocale);
     const styles = useStyles();
-
+    const {
+        countdown: curEmailCountdown,
+        startCountdown: startCurEmailCountdown,
+        stopCountdown: stopCurEmailCountdown,
+    } = useCountdown();
+    const {
+        countdown: newEmailCountdown,
+        startCountdown: startNewEmailCountdown,
+        stopCountdown: stopNewEmailCountdown,
+    } = useCountdown();
+    const dispatchError = useDispatchToastError();
     const ls = useLocalizedStrings();
+    const errorCodeToString = useErrorCodeToString();
 
     const [step, setStep] = React.useState(CE_EmailEditStep.NotStarted);
     const [dirty, setDirty] = React.useState(false);
@@ -74,7 +87,7 @@ const EmailEditor: React.FC<{
     const [currentEmailCodeError, setCurrentEmailCodeError] = React.useState("");
     const [newEmailCodeError, setNewEmailCodeError] = React.useState("");
 
-    const resetForm = () => {
+    const resetForm = React.useCallback(() => {
         setStep(CE_EmailEditStep.NotStarted);
         setDirty(false);
         setNewEmail("");
@@ -84,7 +97,9 @@ const EmailEditor: React.FC<{
         setCurrentEmailCodeError("");
         setNewEmailCodeError("");
         setPending(false);
-    };
+        stopCurEmailCountdown();
+        stopNewEmailCountdown();
+    }, [stopCurEmailCountdown, stopNewEmailCountdown]);
 
     const validateNewEmail = () => {
         if (!Z_EMAIL.safeParse(newEmail).success) {
@@ -103,18 +118,20 @@ const EmailEditor: React.FC<{
         return true;
     };
 
-    const handleSendCodeToCurrentEmailError = (code: IErrorCodeWillBeReturned<typeof postSendChangeEmailCodeAsync>) => {
-        switch (code) {
-            case CE_ErrorCode.EmailVerificationCodeRateLimited:
-                // TODO: update countdown
-                // TODO: show a toast message to inform user
-                setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
-                break;
+    const handleSendCodeToCurrentEmailError = React.useCallback(
+        (code: IErrorCodeWillBeReturned<typeof postSendChangeEmailCodeAsync>) => {
+            switch (code) {
+                case CE_ErrorCode.EmailVerificationCodeRateLimited:
+                    startCurEmailCountdown(60 /* seconds */);
+                    dispatchError(errorCodeToString(code));
+                    break;
 
-            default:
-                neverGuard(code);
-        }
-    };
+                default:
+                    neverGuard(code);
+            }
+        },
+        [dispatchError, errorCodeToString, startCurEmailCountdown],
+    );
 
     const handleSendCodeToCurrentEmailAsync = useWithCatchError(
         React.useCallback(async () => {
@@ -133,7 +150,7 @@ const EmailEditor: React.FC<{
 
             setStep(CE_EmailEditStep.CodeSentToCurrentEmail);
             // TODO: show a toast message to inform user
-        }, [locale, newEmail, recaptchaAsync]),
+        }, [handleSendCodeToCurrentEmailError, locale, newEmail, recaptchaAsync]),
     );
 
     const onSendCodeToCurrentEmail = () => {
@@ -147,30 +164,30 @@ const EmailEditor: React.FC<{
         });
     };
 
-    const handleSendCodeToNewEmailError = (
-        code: IErrorCodeWillBeReturned<typeof postSendNewEmailVerificationCodeAsync>,
-    ) => {
-        switch (code) {
-            case CE_ErrorCode.EmailVerificationCodeRateLimited:
-                // TODO: update countdown
-                // TODO: show a toast message to inform user
-                setStep(CE_EmailEditStep.CodeSentToNewEmail);
-                break;
+    const handleSendCodeToNewEmailError = React.useCallback(
+        (code: IErrorCodeWillBeReturned<typeof postSendNewEmailVerificationCodeAsync>) => {
+            switch (code) {
+                case CE_ErrorCode.EmailVerificationCodeRateLimited:
+                    startNewEmailCountdown(60 /* seconds */);
+                    dispatchError(errorCodeToString(code));
+                    break;
 
-            case CE_ErrorCode.InvalidEmailVerificationCode:
-                // TODO: localize
-                setCurrentEmailCodeError("Invalid verification code from current email");
-                break;
+                case CE_ErrorCode.InvalidEmailVerificationCode:
+                    // TODO: localize
+                    setCurrentEmailCodeError("Invalid verification code from current email");
+                    break;
 
-            case CE_ErrorCode.Auth_DuplicateEmail:
-                // TODO: localize
-                setNewEmailError("This email is already in use by another account.");
-                break;
+                case CE_ErrorCode.Auth_DuplicateEmail:
+                    // TODO: localize
+                    setNewEmailError("This email is already in use by another account.");
+                    break;
 
-            default:
-                neverGuard(code);
-        }
-    };
+                default:
+                    neverGuard(code);
+            }
+        },
+        [dispatchError, errorCodeToString, startNewEmailCountdown],
+    );
 
     const handleSendCodeToNewEmailAsync = useWithCatchError(
         React.useCallback(async () => {
@@ -190,7 +207,7 @@ const EmailEditor: React.FC<{
 
             setStep(CE_EmailEditStep.CodeSentToNewEmail);
             // TODO: show a toast message to inform user
-        }, [currentEmailCode, locale, newEmail, recaptchaAsync]),
+        }, [currentEmailCode, handleSendCodeToNewEmailError, locale, newEmail, recaptchaAsync]),
     );
 
     const onSendCodeToNewEmail = () => {
@@ -237,7 +254,7 @@ const EmailEditor: React.FC<{
 
                 resetForm();
             },
-            [newEmail, newEmailCode, queryClient, recaptchaAsync, userDetail.id],
+            [newEmail, newEmailCode, queryClient, recaptchaAsync, resetForm, userDetail.id],
         ),
     );
 
@@ -308,13 +325,23 @@ const EmailEditor: React.FC<{
 
                 <div className={styles.$buttonField}>
                     {step === CE_EmailEditStep.NotStarted && !isAllowedManage && (
-                        <Button appearance="primary" disabledFocusable={pending} onClick={onSendCodeToCurrentEmail}>
-                            {ls.$USER_SECURITY_SEND_EMAIL_RESET_CODE_BUTTON}
+                        <Button
+                            appearance="primary"
+                            disabledFocusable={pending || curEmailCountdown > 0}
+                            onClick={onSendCodeToCurrentEmail}
+                        >
+                            {curEmailCountdown > 0 ? curEmailCountdown : ls.$USER_SECURITY_SEND_EMAIL_RESET_CODE_BUTTON}
                         </Button>
                     )}
                     {step === CE_EmailEditStep.CodeSentToCurrentEmail && (
-                        <Button appearance="primary" disabledFocusable={pending} onClick={onSendCodeToNewEmail}>
-                            {ls.$USER_SECURITY_SEND_EMAIL_RESET_CODE_NEW_EMAIL_BUTTON}
+                        <Button
+                            appearance="primary"
+                            disabledFocusable={pending || newEmailCountdown > 0}
+                            onClick={onSendCodeToNewEmail}
+                        >
+                            {newEmailCountdown > 0
+                                ? newEmailCountdown
+                                : ls.$USER_SECURITY_SEND_EMAIL_RESET_CODE_NEW_EMAIL_BUTTON}
                         </Button>
                     )}
                     {(step === CE_EmailEditStep.CodeSentToNewEmail || isAllowedManage) && (

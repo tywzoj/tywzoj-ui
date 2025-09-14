@@ -8,8 +8,10 @@ import { signInAsyncAction } from "@/common/actions/sign-in";
 import { LinkWithRouter } from "@/common/components/LinkWithRouter";
 import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "@/common/constants/data-length";
 import { useWithCatchError } from "@/common/hooks/catch-error";
+import { useCountdown } from "@/common/hooks/countdown";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
+import { useDispatchToastError } from "@/common/hooks/toast";
 import { flex } from "@/common/styles/flex";
 import { format } from "@/common/utils/format";
 import { neverGuard } from "@/common/utils/never-guard";
@@ -33,6 +35,8 @@ const SignUpPage: React.FC = () => {
     const currentUser = useCurrentUser();
     const { redirect } = Route.useSearch();
     const locale = useAppSelector(getLocale);
+    const { countdown, startCountdown } = useCountdown();
+    const dispatchError = useDispatchToastError();
 
     useSetPageTitle(ls.$NAVIGATION_SIGN_UP);
 
@@ -123,13 +127,14 @@ const SignUpPage: React.FC = () => {
                     setEmailError(errorCodeToString(code));
                     break;
                 case CE_ErrorCode.EmailVerificationCodeRateLimited:
-                    // TODO: add countdown
+                    startCountdown(60 /* seconds */);
+                    dispatchError(errorCodeToString(code));
                     break;
                 default:
                     neverGuard(code);
             }
         },
-        [errorCodeToString],
+        [dispatchError, errorCodeToString, startCountdown],
     );
 
     const handleSendVerificationCode = useWithCatchError(
@@ -139,7 +144,10 @@ const SignUpPage: React.FC = () => {
             if (code !== CE_ErrorCode.OK) {
                 handleError(code);
             }
-        }, [email, handleError, recaptchaAsync, locale]),
+
+            startCountdown(60 /* seconds */);
+            // TODO: show a toast message
+        }, [email, locale, recaptchaAsync, startCountdown, handleError]),
     );
 
     const handleSignUpAsync = useWithCatchError(
@@ -239,8 +247,8 @@ const SignUpPage: React.FC = () => {
                                     setVerificationCodeError("");
                                 }}
                             />
-                            <Button disabled={pending || sendingCode} onClick={onSendCode}>
-                                {ls.$SEND_CODE_LABEL}
+                            <Button disabledFocusable={pending || sendingCode || countdown > 0} onClick={onSendCode}>
+                                {countdown > 0 ? countdown : ls.$SEND_CODE_LABEL}
                             </Button>
                         </div>
                     </Field>
@@ -275,7 +283,12 @@ const SignUpPage: React.FC = () => {
                         />
                     </Field>
                 </div>
-                <Button appearance="primary" className={styles.$submitButton} disabled={pending} onClick={onSubmit}>
+                <Button
+                    appearance="primary"
+                    className={styles.$submitButton}
+                    disabledFocusable={pending}
+                    onClick={onSubmit}
+                >
                     {ls.$NAVIGATION_SIGN_UP}
                 </Button>
             </form>
