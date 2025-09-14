@@ -22,6 +22,15 @@ export interface ISignInPostResponse {
     readonly permission: IPermission;
 }
 
+export interface ISignUpPostRequestBody {
+    username: string;
+    email: string;
+    emailVerificationCode?: string;
+    password: string;
+}
+
+export type ISignUpPostResponse = ISignInPostResponse;
+
 export interface ISignOutPostResponse {
     readonly permission: IPermission;
 }
