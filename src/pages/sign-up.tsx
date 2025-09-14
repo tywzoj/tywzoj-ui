@@ -240,7 +240,7 @@ const SignUpPage: React.FC = () => {
                                 }}
                             />
                             <Button disabled={pending || sendingCode} onClick={onSendCode}>
-                                Send Code
+                                {ls.$SEND_CODE_LABEL}
                             </Button>
                         </div>
                     </Field>
@@ -276,11 +276,11 @@ const SignUpPage: React.FC = () => {
                     </Field>
                 </div>
                 <Button appearance="primary" className={styles.$submitButton} disabled={pending} onClick={onSubmit}>
-                    {ls.$COMMON_SUBMIT_BUTTON}
+                    {ls.$NAVIGATION_SIGN_UP}
                 </Button>
             </form>
             <div className={styles.$signInLinks}>
-                <span>Already have an account?</span>
+                <span>{ls.$ALREADY_HAVE_ACCOUNT}</span>
                 <LinkWithRouter to="/sign-in">{ls.$NAVIGATION_SIGN_IN}</LinkWithRouter>
             </div>
         </div>

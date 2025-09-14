@@ -301,6 +301,11 @@
     noopener">Privacy Policy</a> and <a href="https://policies.google.com/terms"
     target="_blank" rel="noreferrer noopener">Terms of Service</a> apply.
 
+- name: ALREADY_HAVE_ACCOUNT
+  value: null
+  description: A string for the link to sign in page.
+  raw: Already have an account?
+
 - name: SHOW_PASSWORD_LABEL
   value: 显示密码
   description: A string for the label of show password button.
@@ -454,6 +459,11 @@
   value: 前往最后一页。最后一页是 {0}。
   description: A string for the label of last page button.
   raw: Go to the last page. The last page is {0}.
+
+- name: SEND_CODE_LABEL
+  value: null
+  description: A string for the label of send code button.
+  raw: Send Code
 
 - name: VALIDATION_ERROR_USERNAME_EMAIL_EMPTY
   value: 用户名或邮箱不能为空。
