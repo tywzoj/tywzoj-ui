@@ -9,11 +9,7 @@ sudo chsh "$(id -un)" --shell "/usr/bin/zsh"
 
 # 1. Enable Corepack to ensure Yarn is available
 echo "🔧 Enabling Corepack..."
-sudo corepack enable
-
-# Verify Yarn is available
-echo "📦 Verifying Yarn version..."
-yarn --version
+yes | sudo corepack enable
 
 # 2. Install dependencies
 echo "📥 Installing project dependencies..."
