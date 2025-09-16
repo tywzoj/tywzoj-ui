@@ -9,7 +9,7 @@ sudo chsh "$(id -un)" --shell "/usr/bin/zsh"
 
 # 1. Enable Corepack to ensure Yarn is available
 echo "🔧 Enabling Corepack..."
-corepack enable
+sudo corepack enable
 
 # Verify Yarn is available
 echo "📦 Verifying Yarn version..."

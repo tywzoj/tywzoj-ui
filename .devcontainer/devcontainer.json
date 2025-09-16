@@ -27,5 +27,6 @@
         "terminal.integrated.defaultProfile.linux": "zsh"
       }
     }
-  }
+  },
+  "runArgs": ["--init"]
 }
