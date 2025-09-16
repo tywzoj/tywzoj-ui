@@ -1,0 +1,27 @@
+{
+  "name": "TYWZOJ-UI",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22-bullseye",
+  "init": true,
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "forwardPorts": [5055, 5056],
+  "portsAttributes": {
+    "5055": {
+      "label": "Vite Development Server",
+      "onAutoForward": "notify"
+    },
+    "5056": {
+      "label": "Vite Preview Server",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": ".devcontainer/init.sh",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      }
+    }
+  }
+}
