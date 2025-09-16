@@ -1,0 +1,23 @@
+{
+  "name": "TYWZOJ UI",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "forwardPorts": [5055, 5056],
+  "portsAttributes": {
+    "5055": {
+      "label": "Vite Development Server",
+      "onAutoForward": "notify"
+    },
+    "5056": {
+      "label": "Vite Preview Server",
+      "onAutoForward": "notify"
+    }
+  },
+  "mounts": [
+    "source=tywzoj-ui-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
+    "source=tywzoj-ui-yarn-cache,target=${containerWorkspaceFolder}/.yarn/cache,type=volume",
+    "source=tywzoj-ui-yarn-global,target=/usr/local/share/.cache/yarn,type=volume"
+  ]
+}
