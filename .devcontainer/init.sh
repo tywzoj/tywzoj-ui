@@ -7,19 +7,15 @@ echo "🚀 Initializing TYWZOJ UI development environment..."
 echo "🐚 Setting default shell to zsh..."
 sudo chsh "$(id -un)" --shell "/usr/bin/zsh"
 
-# 1. Enable Corepack to ensure Yarn is available
-echo "🔧 Installing Yarn..."
-sudo corepack prepare yarn@4.6.0 --activate
-
-# 2. Install dependencies
+# 1. Install dependencies
 echo "📥 Installing project dependencies..."
-yarn install
+COREPACK_ENABLE_DOWNLOAD_PROMPT=0 yarn install
 
-# 3. Run i18n script
+# 2. Run i18n script
 echo "🌐 Processing localization files..."
 yarn i18n
 
-# 4. Build project
+# 3. Build project
 echo "🏗️ Building project..."
 yarn build
 
@@ -28,7 +24,9 @@ echo ""
 echo "🎉 Available commands:"
 echo "   yarn start          - Start development server (port 5055)"
 echo "   yarn start:preview  - Start preview server (port 5056)"
-echo "   yarn lint           - Run code linting"
+echo "   yarn lint:fix       - Run code linting and fix issues"
 echo "   yarn format         - Format code"
+echo "   yarn i18n           - Generate localization files"
+echo "   yarn build          - Build the project"
 echo ""
 echo "Happy coding! 🎯"
