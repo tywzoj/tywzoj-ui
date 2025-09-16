@@ -8,8 +8,9 @@ echo "🐚 Setting default shell to zsh..."
 sudo chsh "$(id -un)" --shell "/usr/bin/zsh"
 
 # 1. Enable Corepack to ensure Yarn is available
-echo "🔧 Enabling Corepack..."
-sudo COREPACK_ENABLE_DOWNLOAD_PROMPT=0 corepack enable
+echo "🔧 Installing Yarn..."
+corepack prepare yarn@4.6.0 --activate
+corepack enable yarn
 
 # 2. Install dependencies
 echo "📥 Installing project dependencies..."
