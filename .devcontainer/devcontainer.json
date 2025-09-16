@@ -19,5 +19,13 @@
     "source=tywzoj-ui-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
     "source=tywzoj-ui-yarn-cache,target=${containerWorkspaceFolder}/.yarn/cache,type=volume",
     "source=tywzoj-ui-yarn-global,target=/usr/local/share/.cache/yarn,type=volume"
-  ]
+  ],
+  "postCreateCommand": ".devcontainer/init.sh",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      }
+    }
+  }
 }
