@@ -1,6 +1,7 @@
 {
-  "name": "TYWZOJ UI",
+  "name": "TYWZOJ-UI",
   "image": "mcr.microsoft.com/devcontainers/typescript-node:22-bullseye",
+  "init": true,
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
@@ -22,6 +23,5 @@
         "terminal.integrated.defaultProfile.linux": "zsh"
       }
     }
-  },
-  "runArgs": ["--init"]
+  }
 }
