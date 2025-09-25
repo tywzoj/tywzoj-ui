@@ -1,0 +1,46 @@
+.error-box {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background-color: #f0f0f0;
+    overflow: auto;
+}
+.error-box-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+    height: 100%;
+    min-height: fit-content;
+    overflow-y: auto;
+}
+.error-box h2 {
+    margin: 0;
+}
+.error-box-title {
+    color: red;
+}
+.error-box-stack {
+    color: #666;
+    max-width: 100%;
+    overflow-y: auto;
+}
+.error-box-title,
+.error-box-description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.error-box-title {
+    gap: 2px;
+}
+.error-box-description {
+    gap: 8px;
+}

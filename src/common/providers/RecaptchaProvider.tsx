@@ -1,3 +1,5 @@
+import "@/assets/styles/recaptcha.css";
+
 import type * as React from "react";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3-safe";
 

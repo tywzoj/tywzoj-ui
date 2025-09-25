@@ -1,4 +1,4 @@
-export function showErrorPage(error?: Error) {
+export function showNativeErrorView(error?: Error) {
     document.getElementById("error-box-stack")!.innerText = error?.stack || error?.message || "";
     if (error) {
         console.error(error);
@@ -6,6 +6,10 @@ export function showErrorPage(error?: Error) {
     document.getElementById("error-box")!.style.display = "";
 }
 
-export function hideErrorPage() {
+export function hideNativeErrorView() {
     document.getElementById("error-box")!.style.display = "none";
+}
+
+export function removeLoadingView() {
+    document.getElementById("loading-view-overlay")?.remove();
 }
