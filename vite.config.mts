@@ -98,13 +98,6 @@ export default defineConfig(({ command, mode }) => {
                     entryFileNames: "assets/[name].[hash].js",
                     chunkFileNames: "assets/[name].[hash].js",
                     assetFileNames: "assets/[name].[hash].[ext]",
-                    manualChunks: {
-                        react: ["react", "react-dom"],
-                        redux: ["react-redux", "@reduxjs/toolkit"],
-                        fluentui: ["@fluentui/react-components", "@fluentui/react-icons"],
-                        tanstack: ["@tanstack/react-query", "@tanstack/react-router"],
-                        dompurify: ["dompurify"],
-                    },
                 },
             },
             chunkSizeWarningLimit: CHUNK_SIZE_LIMIT,

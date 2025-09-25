@@ -16,6 +16,7 @@ import { flex } from "@/common/styles/flex";
 import { commonLinkStyles } from "@/common/styles/link";
 import type { NavTo } from "@/common/types/nav-to";
 import { format } from "@/common/utils/format";
+import { removeLoadingView } from "@/common/utils/native-html-page";
 import { useLocalizedStrings } from "@/locales/hooks";
 import { CE_Locale } from "@/locales/locale";
 import { getLocale } from "@/locales/selectors";
@@ -57,6 +58,11 @@ export const Layout: React.FC = () => {
         // So we need close the drawer first, and then we can set the isOverlay state.
         setIsOverlay(isSmallScreen);
     }, [isSmallScreen]);
+
+    // Hide the loading view after the first render.
+    React.useEffect(() => {
+        removeLoadingView();
+    }, []);
 
     const hamburger = React.useMemo(
         () => (

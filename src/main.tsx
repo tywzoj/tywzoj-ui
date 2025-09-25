@@ -1,5 +1,7 @@
 import "core-js/stable";
 import "whatwg-fetch";
+import "./assets/styles/error-view.css";
+import "./assets/styles/loading-view.css";
 
 import React from "react";
 import { createRoot } from "react-dom/client";
@@ -7,7 +9,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Provider } from "react-redux";
 
 import { ErrorBoundary } from "@/common/components/ErrorBoundary";
-import { showErrorPage } from "@/common/utils/error";
+import { showNativeErrorView } from "@/common/utils/native-html-page";
 import { store } from "@/store/store";
 
 import { AppLazy } from "./App.lazy";
@@ -33,7 +35,7 @@ function launch() {
     store
         .dispatch(initAsyncAction())
         .then(() => render())
-        .catch((e) => showErrorPage(e));
+        .catch((e) => showNativeErrorView(e));
 }
 
 launch();
