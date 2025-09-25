@@ -1,8 +1,8 @@
 import "@/assets/styles/scrollbar.css";
 
 import { makeStyles, tokens, Tooltip } from "@fluentui/react-components";
+import { Hamburger, NavDrawer, NavDrawerBody, NavDrawerHeader } from "@fluentui/react-components";
 import { Book20Filled, GroupList20Filled, Home20Filled, PeopleList20Filled } from "@fluentui/react-icons";
-import { Hamburger, NavDrawer, NavDrawerBody, NavDrawerHeader } from "@fluentui/react-nav-preview";
 import { Outlet } from "@tanstack/react-router";
 import type { JSX } from "react";
 import React from "react";

@@ -9,13 +9,16 @@ import { prismjsPlugin } from "vite-plugin-prismjs";
 import { viteVConsole } from "vite-plugin-vconsole";
 import tsconfigPaths from "vite-tsconfig-paths";
 
-import { terserPlugin } from "./vite/terser-plugin";
-
 const ENV_PREFIX = "TYWZOJ_";
+const DEV_PORT = 5055;
+const PREVIEW_PORT = 5056;
+const CHUNK_SIZE_LIMIT = 1024; // in KB
 
 interface IEnv {
     readonly TYWZOJ_API_END_POINT_PROXY: string;
 }
+
+const terserNameCache = {};
 
 // https://vite.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -60,7 +63,24 @@ export default defineConfig(({ command, mode }) => {
                 languages: fs.readFileSync(path.resolve(".prism-languages"), "utf-8").trim().split("\n"),
                 css: false,
             }),
-            terserPlugin({
+        ],
+        server: {
+            host: "0.0.0.0",
+            port: DEV_PORT,
+            strictPort: true,
+            proxy: {
+                "/api": {
+                    target: env.TYWZOJ_API_END_POINT_PROXY,
+                    changeOrigin: true,
+                },
+            },
+        },
+        preview: {
+            port: PREVIEW_PORT,
+        },
+        build: {
+            minify: "terser",
+            terserOptions: {
                 compress: {
                     keep_infinity: true,
                     drop_console: ["log", "info"],
@@ -71,24 +91,8 @@ export default defineConfig(({ command, mode }) => {
                         regex: /^\$[a-zA-Z]/,
                     },
                 },
-            }),
-        ],
-        server: {
-            host: "0.0.0.0",
-            port: 5055,
-            strictPort: true,
-            proxy: {
-                "/api": {
-                    target: env.TYWZOJ_API_END_POINT_PROXY,
-                    changeOrigin: true,
-                },
+                nameCache: terserNameCache,
             },
-        },
-        preview: {
-            port: 5056,
-        },
-        build: {
-            minify: false, // use terser plugin instead
             rollupOptions: {
                 output: {
                     entryFileNames: "assets/[name].[hash].js",
@@ -97,16 +101,13 @@ export default defineConfig(({ command, mode }) => {
                     manualChunks: {
                         react: ["react", "react-dom"],
                         redux: ["react-redux", "@reduxjs/toolkit"],
-                        fluentui: [
-                            "@fluentui/react-components",
-                            "@fluentui/react-icons",
-                            "@fluentui/react-nav-preview",
-                        ],
+                        fluentui: ["@fluentui/react-components", "@fluentui/react-icons"],
                         tanstack: ["@tanstack/react-query", "@tanstack/react-router"],
                         dompurify: ["dompurify"],
                     },
                 },
             },
+            chunkSizeWarningLimit: CHUNK_SIZE_LIMIT,
         },
         worker: {
             rollupOptions: {
