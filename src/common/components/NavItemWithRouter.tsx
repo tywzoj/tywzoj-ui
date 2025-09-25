@@ -1,4 +1,4 @@
-import { NavItem, type NavItemProps } from "@fluentui/react-nav-preview";
+import { NavItem, type NavItemProps } from "@fluentui/react-components";
 import type { LinkComponent } from "@tanstack/react-router";
 import { createLink } from "@tanstack/react-router";
 import React from "react";
