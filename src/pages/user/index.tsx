@@ -20,6 +20,7 @@ import { PaginationButtons } from "@/common/components/PaginationButtons";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
 import { useTableSortAttributes } from "@/common/hooks/table-sort";
 import { flex } from "@/common/styles/flex";
+import { noUnderlineLinkStyles } from "@/common/styles/link";
 import { calcCount, calcPageCount } from "@/common/utils/pagination";
 import { Z_LIST_SEARCH_PARAM } from "@/common/validators/common";
 import { Z_USER_SORTBY } from "@/common/validators/user";
@@ -124,6 +125,7 @@ const UserList: React.FC = () => {
                                         tabIndex={0}
                                         params={{ id: `${user.id}` }}
                                         preload={false}
+                                        className={styles.$link}
                                     >
                                         {user.username}
                                     </LinkWithRouter>
@@ -201,6 +203,9 @@ const useStyles = makeStyles({
     },
     $tableRatingColumn: {
         width: "80px",
+    },
+    $link: {
+        ...noUnderlineLinkStyles,
     },
 });
 
