@@ -3,7 +3,22 @@ import type { IRecaptchaAsync } from "@/common/hooks/recaptcha";
 
 import type { ISendEmailVerificationCodePostRequestBody } from "../common/types";
 import { requestAsync } from "../request";
-import type { IUserDetailGetResponse, IUserDetailPatchRequestBody } from "./user.types";
+import type {
+    IProblemListGetRequestQuery,
+    IUserDetailGetResponse,
+    IUserDetailPatchRequestBody,
+    IUserListGetResponse,
+} from "./user.types";
+
+export async function getUserListAsync(query: IProblemListGetRequestQuery) {
+    return await requestAsync<IUserListGetResponse>({
+        path: "user/list",
+        method: "GET",
+        query: {
+            ...query,
+        },
+    });
+}
 
 export async function getUserDetailAsync(id: string) {
     return await requestAsync<IUserDetailGetResponse>({
