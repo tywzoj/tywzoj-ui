@@ -178,6 +178,10 @@
   value: Problems
   description: A string for the label of problems navigation.
 
+- name: NAVIGATION_USERS
+  value: Users
+  description: A string for the label of users navigation.
+
 - name: NAVIGATION_PROBLEM_NEW
   value: New Problem
   description: A string for the label of new problem navigation.

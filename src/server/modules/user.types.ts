@@ -2,6 +2,8 @@ import type { CE_Locale } from "@/locales/locale";
 import type { CE_Theme } from "@/theme/types";
 
 import type { CE_UserLevel } from "../common/permission";
+import type { IListRequest } from "../common/types";
+import type { CE_UserSortBy } from "./user.enums";
 
 // BEGIN: shared types
 export interface IUserDetailEditable {
@@ -30,6 +32,17 @@ export interface IUserPreferenceDetail {
 }
 
 // END: shared types
+
+// BEGIN: user list types
+
+export type IUserListGetRequestQuery = IListRequest<CE_UserSortBy>;
+
+export interface IUserListGetResponse {
+    readonly userDetails: IUserDetail[];
+    readonly count: number;
+}
+
+// END: user list types
 
 // BEGIN: user detail types
 

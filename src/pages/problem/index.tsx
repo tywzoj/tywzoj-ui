@@ -27,7 +27,7 @@ import { flex } from "@/common/styles/flex";
 import { noUnderlineLinkStyles } from "@/common/styles/link";
 import { calcCount, calcPageCount } from "@/common/utils/pagination";
 import { percent } from "@/common/utils/percent";
-import { Z_ORDER, Z_PAGE } from "@/common/validators/common";
+import { Z_LIST_SEARCH_PARAM } from "@/common/validators/common";
 import { Z_PROBLEM_SORT_BY } from "@/common/validators/problem";
 import { ErrorPageLazy } from "@/components/ErrorPage.lazy";
 import { ProblemTag } from "@/components/ProblemTag";
@@ -38,7 +38,6 @@ import { useSuspenseQueryData } from "@/query/hooks";
 import { CE_QueryId } from "@/query/id";
 import { createQueryOptionsFn } from "@/query/utils";
 import { ProblemModule } from "@/server/api";
-import { CE_Order } from "@/server/common/enums";
 import { CE_ProblemSortBy } from "@/server/modules/problem.enums";
 import { withThrowErrors } from "@/server/utils";
 import { useIsMiddleScreen } from "@/store/hooks";
@@ -336,9 +335,7 @@ const useStyles = makeStyles({
     },
 });
 
-const searchParams = z.object({
-    p: fallback(Z_PAGE, 1).default(1), // page
-    o: fallback(Z_ORDER, CE_Order.ASC).default(CE_Order.ASC), // order
+const searchParams = Z_LIST_SEARCH_PARAM.extend({
     s: fallback(Z_PROBLEM_SORT_BY, CE_ProblemSortBy.DisplayId).default(CE_ProblemSortBy.DisplayId), // sortBy
     k: z.coerce.string().optional(), // keyword
 });
