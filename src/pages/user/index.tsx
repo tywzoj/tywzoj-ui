@@ -99,6 +99,7 @@ const UserList: React.FC = () => {
                                     {...tableSortAttributes(CE_UserSortBy.AcceptedProblemCount)}
                                     className={styles.$tableAcCountColumn}
                                 >
+                                    {/* TODO: localization */}
                                     AC Count
                                 </TableHeaderCell>
                             )}
@@ -107,6 +108,7 @@ const UserList: React.FC = () => {
                                     {...tableSortAttributes(CE_UserSortBy.Rating)}
                                     className={styles.$tableRatingColumn}
                                 >
+                                    {/* TODO: localization */}
                                     Rating
                                 </TableHeaderCell>
                             )}
