@@ -31,6 +31,7 @@ import { createQueryOptionsFn } from "@/query/utils";
 import { UserModule } from "@/server/api";
 import { CE_UserSortBy } from "@/server/modules/user.enums";
 import { withThrowErrors } from "@/server/utils";
+import { useIsMiddleScreen, useIsMiniScreen } from "@/store/hooks";
 import { getPagination } from "@/store/selectors";
 
 const UserListPage: React.FC = () => {
@@ -60,19 +61,22 @@ const UserListPage: React.FC = () => {
 };
 
 const UserList: React.FC = () => {
-    const ls = useLocalizedStrings();
     const { queryOptions, takeCount } = Route.useLoaderData();
     const { sortBy, order, page } = Route.useLoaderDeps();
     const search = Route.useSearch();
     const navigate = Route.useNavigate();
+
+    const ls = useLocalizedStrings();
+    const isMiddleScreen = useIsMiddleScreen();
+    const isMiniScreen = useIsMiniScreen();
+    const styles = useStyles();
+
     const {
         data: { userDetails: userList, count: totalCount },
     } = useSuspenseQueryData(queryOptions);
     const pageCount = calcPageCount(totalCount, takeCount);
-    const styles = useStyles();
 
     const { tableTabsterAttribute, onTableKeyDown } = useTableCompositeNavigation();
-
     const tableSortAttributes = useTableSortAttributes(
         order,
         sortBy,
@@ -85,13 +89,27 @@ const UserList: React.FC = () => {
                 <Table onKeyDown={onTableKeyDown} {...tableTabsterAttribute}>
                     <TableHeader>
                         <TableRow>
-                            <TableHeaderCell {...tableSortAttributes(CE_UserSortBy.Id)}>{ls.$ID_LABEL}</TableHeaderCell>
+                            <TableHeaderCell {...tableSortAttributes(CE_UserSortBy.Id)} className={styles.$tableIdCol}>
+                                {ls.$ID_LABEL}
+                            </TableHeaderCell>
                             <TableHeaderCell>{ls.$USERNAME_LABEL}</TableHeaderCell>
                             <TableHeaderCell>{ls.$USER_NICKNAME_LABEL}</TableHeaderCell>
-                            <TableHeaderCell {...tableSortAttributes(CE_UserSortBy.AcceptedProblemCount)}>
-                                AC Count
-                            </TableHeaderCell>
-                            <TableHeaderCell {...tableSortAttributes(CE_UserSortBy.Rating)}>Rating</TableHeaderCell>
+                            {!isMiddleScreen && (
+                                <TableHeaderCell
+                                    {...tableSortAttributes(CE_UserSortBy.AcceptedProblemCount)}
+                                    className={styles.$tableAcCountColumn}
+                                >
+                                    AC Count
+                                </TableHeaderCell>
+                            )}
+                            {!isMiniScreen && (
+                                <TableHeaderCell
+                                    {...tableSortAttributes(CE_UserSortBy.Rating)}
+                                    className={styles.$tableRatingColumn}
+                                >
+                                    Rating
+                                </TableHeaderCell>
+                            )}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -109,8 +127,8 @@ const UserList: React.FC = () => {
                                     </LinkWithRouter>
                                 </TableCell>
                                 <TableCell>{user.nickname}</TableCell>
-                                <TableCell>{user.acceptedProblemCount}</TableCell>
-                                <TableCell>{user.rating}</TableCell>
+                                {!isMiddleScreen && <TableCell>{user.acceptedProblemCount}</TableCell>}
+                                {!isMiniScreen && <TableCell>{user.rating}</TableCell>}
                             </TableRow>
                         ))}
                     </TableBody>
@@ -172,6 +190,15 @@ const useStyles = makeStyles({
         padding: "20px",
         boxShadow: tokens.shadow2Brand,
         borderRadius: tokens.borderRadiusSmall,
+    },
+    $tableIdCol: {
+        width: "50px",
+    },
+    $tableAcCountColumn: {
+        width: "80px",
+    },
+    $tableRatingColumn: {
+        width: "80px",
     },
 });
 
