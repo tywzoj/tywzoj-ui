@@ -4,13 +4,13 @@ import type { IRecaptchaAsync } from "@/common/hooks/recaptcha";
 import type { ISendEmailVerificationCodePostRequestBody } from "../common/types";
 import { requestAsync } from "../request";
 import type {
-    IProblemListGetRequestQuery,
     IUserDetailGetResponse,
     IUserDetailPatchRequestBody,
+    IUserListGetRequestQuery,
     IUserListGetResponse,
 } from "./user.types";
 
-export async function getUserListAsync(query: IProblemListGetRequestQuery) {
+export async function getUserListAsync(query: IUserListGetRequestQuery) {
     return await requestAsync<IUserListGetResponse>({
         path: "user/list",
         method: "GET",

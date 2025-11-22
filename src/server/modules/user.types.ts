@@ -3,7 +3,7 @@ import type { CE_Theme } from "@/theme/types";
 
 import type { CE_UserLevel } from "../common/permission";
 import type { IListRequest } from "../common/types";
-import type { CE_ProblemSortBy } from "./problem.enums";
+import type { CE_UserSortBy } from "./user.enums";
 
 // BEGIN: shared types
 export interface IUserDetailEditable {
@@ -35,7 +35,7 @@ export interface IUserPreferenceDetail {
 
 // BEGIN: user list types
 
-export type IProblemListGetRequestQuery = IListRequest<CE_ProblemSortBy>;
+export type IUserListGetRequestQuery = IListRequest<CE_UserSortBy>;
 
 export interface IUserListGetResponse {
     readonly userDetails: IUserDetail[];
