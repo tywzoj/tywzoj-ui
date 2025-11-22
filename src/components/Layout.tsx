@@ -124,7 +124,8 @@ export const Layout: React.FC = () => {
                     {accessProblem && createNavItem("/problem", ls.$NAVIGATION_PROBLEMS, <Book20Filled />)}
                     {accessProblem && createNavItem("/set", ls.$NAVIGATION_PROBLEM_SETS, <GroupList20Filled />)}
                     {/* TODO: Localize User */}
-                    {currentUser && createNavItem("/user", "Users", <PeopleList20Filled />, { matchExact: true })}
+                    {currentUser &&
+                        createNavItem("/user", ls.$NAVIGATION_USERS, <PeopleList20Filled />, { matchExact: true })}
                 </NavDrawerBody>
             </NavDrawer>
             <div className={styles.$container}>
