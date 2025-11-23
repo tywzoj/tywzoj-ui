@@ -4,11 +4,11 @@ import React from "react";
 
 import type { router } from "@/router/router";
 
-export interface IGlobalProgressBarProps {
+export interface INavigatingProgressBarProps {
     router: typeof router;
 }
 
-export const GlobalProgressBar: React.FC<IGlobalProgressBarProps> = ({ router }) => {
+export const NavigatingProgressBar: React.FC<INavigatingProgressBarProps> = ({ router }) => {
     const [isAnimating, setIsAnimating] = React.useState(false);
 
     React.useEffect(() => {

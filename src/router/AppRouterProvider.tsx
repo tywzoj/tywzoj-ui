@@ -1,7 +1,7 @@
 import { RouterProvider } from "@tanstack/react-router";
 
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
-import { GlobalProgressBar } from "@/components/GlobalProcessBar";
+import { NavigatingProgressBar } from "@/components/GlobalProcessBar";
 import { usePermission } from "@/permission/common/hooks";
 import { useCurrentUser } from "@/store/hooks";
 
@@ -14,7 +14,7 @@ export const AppRouterProvider: React.FC = () => {
 
     return (
         <>
-            <GlobalProgressBar router={router} />
+            <NavigatingProgressBar router={router} />
             <RouterProvider
                 router={router}
                 context={{
