@@ -1,7 +1,7 @@
 import { RouterProvider } from "@tanstack/react-router";
 
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
-import { NavigatingProgressBar } from "@/components/GlobalProcessBar";
+import { NavigatingProgressBar } from "@/components/NavigatingProgressBar";
 import { usePermission } from "@/permission/common/hooks";
 import { useCurrentUser } from "@/store/hooks";
 
