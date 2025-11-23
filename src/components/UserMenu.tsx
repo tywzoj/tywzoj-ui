@@ -87,6 +87,8 @@ export const UserMenu: React.FC = () => {
                         {ls.$USER_MENU_SETTINGS}
                     </MenuItemLinkWithRouter>
                     <MenuDivider />
+                    <MenuItemLinkWithRouter to="/admin">Manage Site</MenuItemLinkWithRouter>
+                    <MenuDivider />
                     <MenuItem onClick={signOut}>{ls.$NAVIGATION_SIGN_OUT}</MenuItem>
                 </MenuList>
             </MenuPopover>

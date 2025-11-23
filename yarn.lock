@@ -353,7 +353,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
+"@babel/runtime@npm:^7.28.4, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.28.4
   resolution: "@babel/runtime@npm:7.28.4"
   checksum: 10c0/792ce7af9750fb9b93879cc9d1db175701c4689da890e6ced242ea0207c9da411ccf16dc04e689cc01158b28d7898c40d75598f4559109f761c12ce01e959bf7
@@ -3225,6 +3225,19 @@ __metadata:
   dependencies:
     tslib: "npm:^2.8.0"
   checksum: 10c0/33002f74f6f885f04c132960835fdfc474186983ea567606db62e86acd0680ca82f34647e8e610f4e1e422d1c16fce729dde22cd3b797ab1fd9061a825dabca4
+  languageName: node
+  linkType: hard
+
+"@tanem/react-nprogress@npm:^5.0.56":
+  version: 5.0.56
+  resolution: "@tanem/react-nprogress@npm:5.0.56"
+  dependencies:
+    "@babel/runtime": "npm:^7.28.4"
+    hoist-non-react-statics: "npm:^3.3.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/461be2556b4a55a1b2cc7e612731375b639e8cd5b3e859f9450eafa9cd6afe0c544a76408b911c8f73731f389aa88c94e527d31d50c72516cfac47eea0b34068
   languageName: node
   linkType: hard
 
@@ -7955,6 +7968,7 @@ __metadata:
     "@fluentui/react-icons": "npm:^2.0.310"
     "@monaco-editor/react": "npm:^4.6.0"
     "@reduxjs/toolkit": "npm:^2.5.0"
+    "@tanem/react-nprogress": "npm:^5.0.56"
     "@tanstack/eslint-plugin-router": "npm:^1.92.7"
     "@tanstack/react-query": "npm:^5.62.16"
     "@tanstack/react-query-devtools": "npm:^5.66.0"
