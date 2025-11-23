@@ -21,6 +21,7 @@
     "@fluentui/react-icons": "^2.0.310",
     "@monaco-editor/react": "^4.6.0",
     "@reduxjs/toolkit": "^2.5.0",
+    "@tanem/react-nprogress": "^5.0.56",
     "@tanstack/react-query": "^5.62.16",
     "@tanstack/react-router": "patch:@tanstack/react-router@npm%3A1.99.0#~/.yarn/patches/@tanstack-react-router-npm-1.99.0-5293e4c82d.patch",
     "@tanstack/zod-adapter": "^1.97.23",

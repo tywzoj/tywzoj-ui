@@ -1,6 +1,7 @@
 import { RouterProvider } from "@tanstack/react-router";
 
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
+import { NavigatingProgressBar } from "@/components/NavigatingProgressBar";
 import { usePermission } from "@/permission/common/hooks";
 import { useCurrentUser } from "@/store/hooks";
 
@@ -12,13 +13,16 @@ export const AppRouterProvider: React.FC = () => {
     const permission = usePermission();
 
     return (
-        <RouterProvider
-            router={router}
-            context={{
-                recaptchaAsync,
-                currentUser,
-                permission,
-            }}
-        />
+        <>
+            <NavigatingProgressBar router={router} />
+            <RouterProvider
+                router={router}
+                context={{
+                    recaptchaAsync,
+                    currentUser,
+                    permission,
+                }}
+            />
+        </>
     );
 };

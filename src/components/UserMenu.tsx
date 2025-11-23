@@ -19,6 +19,7 @@ import { MenuItemLinkWithRouter } from "@/common/components/MenuItemLinkWithRout
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useDispatchToastError } from "@/common/hooks/toast";
 import { useErrorCodeToString, useLocalizedStrings } from "@/locales/hooks";
+import { isAdminUser } from "@/permission/common/checker";
 import { AuthModule } from "@/server/api";
 import { CE_ErrorCode } from "@/server/common/error-code";
 import { useAppDispatch, useCurrentUser, useIsMiniScreen } from "@/store/hooks";
@@ -86,6 +87,10 @@ export const UserMenu: React.FC = () => {
                     <MenuItemLinkWithRouter to="/user/$id/preference" params={{ id: currentUser.id.toString() }}>
                         {ls.$USER_MENU_SETTINGS}
                     </MenuItemLinkWithRouter>
+                    <MenuDivider />
+                    {currentUser && isAdminUser(currentUser.level) && (
+                        <MenuItemLinkWithRouter to="/admin">Manage Site</MenuItemLinkWithRouter>
+                    )}
                     <MenuDivider />
                     <MenuItem onClick={signOut}>{ls.$NAVIGATION_SIGN_OUT}</MenuItem>
                 </MenuList>
