@@ -37,6 +37,10 @@ function checkIsEqual(a: unknown, b: unknown): boolean {
     }
 
     if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length !== b.length) {
+            return false;
+        }
+
         for (let i = 0; i < a.length; i++) {
             if (!checkIsEqual(a[i], b[i])) {
                 return false;
