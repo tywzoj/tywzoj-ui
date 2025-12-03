@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "The string name, unique identifier for the string"
+      },
+      "value": {
+        "type": ["string", "null"],
+        "description": "The translated value. It can include placeholders like {0}, {1}, etc."
+      },
+      "description": {
+        "type": "string",
+        "description": "The string description. It explains the context and usage of the string. Helpful for translators."
+      },
+      "raw": {
+        "type": "string",
+        "description": "The raw untranslated value from the default locale."
+      }
+    },
+    "required": ["name", "value", "description", "raw"],
+    "additionalProperties": false
+  }
+}
