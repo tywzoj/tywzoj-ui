@@ -117,4 +117,4 @@ Once your pull request is approved and passes all checks, it can be merged into 
 
 If any CI checks fail, you PR merge will be blocked. Please fix the issues and push the changes to your branch. You should try to lint and build the project locally before pushing changes to avoid CI failures.
 
-You branch will be squashed when merged, so after your PR is merged, you can safely delete your branch. And do NOT reuse the same branch name for future work.
+Your branch will be squashed when merged, so after your PR is merged, you can safely delete your branch. And do NOT reuse the same branch name for future work.
