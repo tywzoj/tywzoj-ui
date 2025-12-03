@@ -3,8 +3,22 @@ name: PR Validation
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - .schema/**
+      - .vscode/**
+      - docs/**
+      - "*.md"
+      - LICENSE
+      - .git*
   pull_request:
     branches: [main]
+    paths-ignore:
+      - .schema/**
+      - .vscode/**
+      - docs/**
+      - "*.md"
+      - LICENSE
+      - .git*
 
 concurrency:
   group: ${{ (github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number)) || 'push-main' }}

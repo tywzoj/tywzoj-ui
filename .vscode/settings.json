@@ -37,5 +37,9 @@
   },
   "files.watcherExclude": {
     "**/routeTree.gen.ts": true
+  },
+  "yaml.schemas": {
+    ".schema/string-file.json": ["i18n/raw.yaml"],
+    ".schema/localized-file.json": ["i18n/localized.*.yaml"]
   }
 }
