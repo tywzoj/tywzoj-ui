@@ -9,7 +9,7 @@ Make sure you have Git and Node.js installed on your machine before proceeding.
 
 ## Clone the Repository
 
-If you are already cloned the repository in the setup step, you can directly navigate to the project directory.
+If you have already cloned the repository in the setup step, you can directly navigate to the project directory.
 
 ```sh
 cd tywzoj-ui
