@@ -52,4 +52,15 @@ export interface IUserDetailPatchRequestBody extends Partial<IUserDetailEditable
     emailVerificationCode?: string;
 }
 
+export interface IUserAvatarUploadRequestPostRequestBody {
+    size: number;
+    contentType: string;
+}
+
+export interface IUserAvatarUploadFinishPostRequestBody {
+    token: string;
+}
+
+export type IUserAvatarUploadFinishPostResponse = IUserDetail;
+
 // END: user detail types

@@ -12,4 +12,5 @@ export const enum CE_RecaptchaAction {
 
     UserDetailPatch = "UserDetailPatch",
     UserSendChangeEmailCode = "UserSendChangeEmailCode",
+    UserAvatarUpload = "UserAvatarUpload",
 }
