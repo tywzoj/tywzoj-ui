@@ -25,7 +25,7 @@ export interface IUseFileUploaderProps {
     onSelect?: (files: File[]) => void;
     onProgress?: (file: File, progress: number) => void;
     onFinish?: (file: File, success: boolean, error: Error | null) => void;
-    onAllFinish?: (succeedFiles: File[], failedFiles: File[]) => void;
+    onAllFinish?: (succeededFiles: File[], failedFiles: File[]) => void;
 }
 
 export interface IUseFileUploaderResult {
