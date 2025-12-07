@@ -72,6 +72,7 @@ const UserEditPage: React.FC = () => {
     const currentUser = useCurrentUser()!; // I'm sure currentUser is not null.
     const dispatch = useAppDispatch();
     const isAllowedManage = useIsAllowedManageUser(userDetail);
+    const isAllowedManageWithoutSelf = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
     const locale = useAppSelector(getLocale);
     const errorToString = useErrorCodeToString();
     const recaptchaAsync = useRecaptchaAsync();
@@ -224,7 +225,7 @@ const UserEditPage: React.FC = () => {
                 ["username", "nickname", "email", "bio"],
             );
             if (shouldPatch) {
-                if (patchBody.email && patchBody.email !== authDetail.email && !isAllowedManage) {
+                if (patchBody.email && patchBody.email !== authDetail.email && !isAllowedManageWithoutSelf) {
                     // If emailVerificationCodeError is true, it means the user has already submitted the code but invalid.
                     // So we just need to let user input and try again. Don't need to send the code and pop up the dialog again.
                     if (!emailVerificationCodeErrorRef.current) {
@@ -273,7 +274,7 @@ const UserEditPage: React.FC = () => {
             email,
             bio,
             authDetail.email,
-            isAllowedManage,
+            isAllowedManageWithoutSelf,
             recaptchaAsync,
             queryClient,
             currentUser.id,
