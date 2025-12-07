@@ -5,7 +5,7 @@
   "author": "Antares",
   "private": true,
   "license": "MIT",
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.12.0",
   "scripts": {
     "build": "vite build && tsc -b",
     "check": "tsc -b --noEmit",
