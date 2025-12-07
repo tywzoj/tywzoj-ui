@@ -62,7 +62,7 @@ export async function postUploadUserAvatarRequestAsync(
     recaptchaAsync: IRecaptchaAsync,
 ) {
     return await requestAsync<ISignedUploadRequest>({
-        path: `/api/user/detail/${id}/avatar-upload-request`,
+        path: `user/detail/${id}/avatar-upload-request`,
         method: "POST",
         body,
         recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.UserAvatarUpload),
@@ -75,7 +75,7 @@ export async function postUploadUserAvatarFinishAsync(
     recaptchaAsync: IRecaptchaAsync,
 ) {
     return await requestAsync<IUserAvatarUploadFinishPostResponse>({
-        path: `/api/user/detail/${id}/avatar-upload-finish`,
+        path: `user/detail/${id}/avatar-upload-finish`,
         method: "POST",
         body,
         recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.UserAvatarUpload),

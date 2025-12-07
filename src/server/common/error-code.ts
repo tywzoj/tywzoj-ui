@@ -40,4 +40,8 @@ export const enum CE_ErrorCode {
     File_DuplicateUUID = 2300,
     File_NotUploaded = 2301,
     File_InvalidToken = 2302,
+
+    // Client Only (9xxx)
+    Client_FileUploadFailed = 9000,
+    Client_InvalidUploadMethod = 9001,
 }

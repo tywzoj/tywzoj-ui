@@ -1,10 +1,14 @@
 import * as React from "react";
 
+import { CE_ErrorCode } from "@/server/common/error-code";
 import type { FileTypes } from "@/server/types";
+
+import { AppError } from "../exceptions/app-error";
+import { useWithCatchError } from "./catch-error";
 
 export interface IUseFileUploaderProps {
     onUploadRequest: (file: File) => Promise<FileTypes.ISignedUploadRequest>;
-    onUploadComplete: (token: string) => Promise<void>;
+    onUploadComplete: (uploadRequest: FileTypes.ISignedUploadRequest, file: File) => Promise<void>;
 
     /**
      * Allow multiple file selection.
@@ -20,7 +24,8 @@ export interface IUseFileUploaderProps {
 
     onSelect?: (files: File[]) => void;
     onProgress?: (file: File, progress: number) => void;
-    onFinish?: (file: File, success: boolean, err?: Error) => void;
+    onFinish?: (file: File, success: boolean, error: Error | null) => void;
+    onAllFinish?: (succeedFiles: File[], failedFiles: File[]) => void;
 }
 
 export interface IUseFileUploaderResult {
@@ -40,59 +45,69 @@ export function useFileUploader(props: IUseFileUploaderProps): IUseFileUploaderR
         onSelect,
         onProgress,
         onFinish,
+        onAllFinish,
     } = props;
 
     const inputRef = React.useRef<HTMLInputElement>();
     const selectedFilesRef = React.useRef<File[]>([]);
+    const succeedFilesRef = React.useRef<File[]>([]);
+    const failedFilesRef = React.useRef<File[]>([]);
 
-    const uploadSingleFileAsync = React.useCallback(
-        async (file: File) => {
-            try {
-                const { token, url, method, extraFormData, fileFieldName } = await onUploadRequest(file);
+    const uploadSingleFileAsync = useWithCatchError(
+        React.useCallback(
+            async (file: File) => {
+                try {
+                    const uploadRequest = await onUploadRequest(file);
 
-                await new Promise<void>((resolve, reject) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.upload.onprogress = (ev) => {
-                        if (ev.lengthComputable) {
-                            onProgress?.(file, ev.loaded / ev.total);
+                    await new Promise<void>((resolve, reject) => {
+                        const { url, method, extraFormData, fileFieldName } = uploadRequest;
+                        const xhr = new XMLHttpRequest();
+
+                        xhr.upload.onprogress = (ev) => {
+                            if (ev.lengthComputable) {
+                                onProgress?.(file, ev.loaded / ev.total);
+                            }
+                        };
+
+                        xhr.onload = () => {
+                            if (xhr.status >= 200 && xhr.status < 300) resolve();
+                            else reject(new Error(`Upload failed: ${xhr.status}`));
+                        };
+
+                        xhr.onerror = () => reject(new AppError(CE_ErrorCode.Client_FileUploadFailed));
+
+                        xhr.open(method, url);
+
+                        if (method === "POST") {
+                            const formData = new FormData();
+
+                            if (extraFormData) {
+                                Object.entries(extraFormData).forEach(([key, value]) => {
+                                    formData.append(key, value);
+                                });
+                            }
+
+                            formData.append(fileFieldName || "file", file);
+
+                            xhr.send(formData);
+                        } else if (method === "PUT") {
+                            xhr.send(file);
+                        } else {
+                            reject(new AppError(CE_ErrorCode.Client_InvalidUploadMethod));
                         }
-                    };
+                    });
 
-                    xhr.onload = () => {
-                        if (xhr.status >= 200 && xhr.status < 300) resolve();
-                        else reject(new Error(`Upload failed: ${xhr.status}`));
-                    };
-
-                    xhr.onerror = (ev) => reject(new Error(`Upload error: ${ev}`));
-
-                    xhr.open(method, url);
-
-                    if (method === "POST") {
-                        const formData = new FormData();
-
-                        if (extraFormData) {
-                            Object.entries(extraFormData).forEach(([key, value]) => {
-                                formData.append(key, value);
-                            });
-                        }
-
-                        formData.append(fileFieldName || "file", file);
-
-                        xhr.send(formData);
-                    } else if (method === "PUT") {
-                        xhr.send(file);
-                    } else {
-                        reject(new Error(`Unsupported upload method: ${method}`));
-                    }
-                });
-
-                await onUploadComplete(token);
-                onFinish?.(file, true);
-            } catch (err) {
-                onFinish?.(file, false, err instanceof Error ? err : new Error(String(err)));
-            }
-        },
-        [onFinish, onProgress, onUploadComplete, onUploadRequest],
+                    await onUploadComplete(uploadRequest, file);
+                    onFinish?.(file, true /* success */, null /* error */);
+                    succeedFilesRef.current.push(file);
+                } catch (err) {
+                    onFinish?.(file, false /* success */, err instanceof Error ? err : new Error(String(err)));
+                    failedFilesRef.current.push(file);
+                    throw err;
+                }
+            },
+            [onFinish, onProgress, onUploadComplete, onUploadRequest],
+        ),
     );
 
     const uploadWithConcurrencyAsync = React.useCallback(async () => {
@@ -105,7 +120,6 @@ export function useFileUploader(props: IUseFileUploaderProps): IUseFileUploaderR
                 // All files processed
                 if (currentTaskIndex >= taskQueue.length && activeTaskCount === 0) {
                     resolve();
-                    selectedFilesRef.current = [];
                     return;
                 }
 
@@ -129,18 +143,27 @@ export function useFileUploader(props: IUseFileUploaderProps): IUseFileUploaderR
         });
     }, [maxConcurrency, uploadSingleFileAsync]);
 
-    const triggerSelect = React.useCallback(() => {
-        if (!inputRef.current) return;
-        inputRef.current.value = "";
-        inputRef.current.click();
-    }, []);
+    const triggerSelect = useWithCatchError(
+        React.useCallback(() => {
+            if (!inputRef.current) return;
+            selectedFilesRef.current = [];
+            inputRef.current.value = "";
+            inputRef.current.click();
+        }, []),
+    );
 
-    const triggerUpload = React.useCallback(() => {
-        if (selectedFilesRef.current.length === 0) return;
+    const triggerUpload = useWithCatchError(
+        React.useCallback(() => {
+            if (selectedFilesRef.current.length === 0) return;
 
-        selectedFilesRef.current = [];
-        uploadWithConcurrencyAsync();
-    }, [uploadWithConcurrencyAsync]);
+            succeedFilesRef.current = [];
+            failedFilesRef.current = [];
+            uploadWithConcurrencyAsync().finally(() => {
+                selectedFilesRef.current = [];
+                onAllFinish?.(succeedFilesRef.current, failedFilesRef.current);
+            });
+        }, [onAllFinish, uploadWithConcurrencyAsync]),
+    );
 
     React.useEffect(() => {
         if (!inputRef.current) {
