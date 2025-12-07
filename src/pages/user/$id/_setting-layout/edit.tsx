@@ -96,6 +96,8 @@ const UserEditPage: React.FC = () => {
     } = useDialogAwaiter();
 
     const { triggerSelect, triggerUpload } = useFileUploader({
+        contentTypes: ALLOWED_AVATAR_IMAGE_CONTENT_TYPES,
+        multiple: false,
         onUploadRequest: async (file) => {
             const res = await postUploadUserAvatarRequestAsync(
                 userDetail.id.toString(),
@@ -116,7 +118,6 @@ const UserEditPage: React.FC = () => {
                 recaptchaAsync,
             );
         },
-        contentTypes: ALLOWED_AVATAR_IMAGE_CONTENT_TYPES,
         onSelect: () => {
             // TODO: show avatar preview dialog
             setAvatarUploading(true);

@@ -38,7 +38,7 @@ export function useFileUploader(props: IUseFileUploaderProps): IUseFileUploaderR
         onUploadRequest,
         onUploadComplete,
 
-        multiple = true,
+        multiple = false,
         maxConcurrency = 3,
         contentTypes,
 
@@ -184,7 +184,7 @@ export function useFileUploader(props: IUseFileUploaderProps): IUseFileUploaderR
             onSelect?.(files);
             input.value = "";
         };
-    }, [contentTypes, multiple, onSelect, uploadWithConcurrencyAsync]);
+    }, [contentTypes, multiple, onSelect]);
 
     React.useEffect(() => {
         return () => {
