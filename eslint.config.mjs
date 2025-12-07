@@ -1,5 +1,6 @@
 import js from "@eslint/js";
 import router from "@tanstack/eslint-plugin-router";
+import { defineConfig } from "eslint/config";
 import prettierRecommended from "eslint-plugin-prettier/recommended";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -32,15 +33,37 @@ const NODE_JS_FILES = [
 const NODE_TS_FILES = [...createExtFiles("scripts/**/*", TS_FILE_EXTS), ...createExtFiles("vite.config", TS_FILE_EXTS)];
 const NODE_FILES = [...NODE_JS_FILES, ...NODE_TS_FILES];
 
-export default tseslint.config(
+// Fuck VS Code ESLint extension
+const isVsCodeEslint = process.env.NODE_ENV === "vscode-eslint";
+
+export default defineConfig(
     { files: [...SRC_FILES, ...NODE_FILES] },
     js.configs.recommended,
     tseslint.configs.recommended,
-    prettierRecommended,
+    {
+        ...(!isVsCodeEslint && {
+            extends: [prettierRecommended],
+            rules: {
+                "prettier/prettier": [
+                    "error",
+                    {},
+                    {
+                        usePrettierrc: true,
+                    },
+                ],
+            },
+        }),
+    },
     {
         plugins: {
             "simple-import-sort": simpleImportSort,
         },
+        rules: {
+            "simple-import-sort/exports": "error",
+            "simple-import-sort/imports": "error",
+        },
+    },
+    {
         rules: {
             "arrow-parens": ["error", "always"],
             curly: ["error", "multi-line"],
@@ -48,17 +71,6 @@ export default tseslint.config(
             "no-empty": "off",
             "no-extend-native": "error",
             "no-unused-vars": "off",
-
-            "simple-import-sort/exports": "error",
-            "simple-import-sort/imports": "error",
-
-            "prettier/prettier": [
-                "error",
-                {},
-                {
-                    usePrettierrc: true,
-                },
-            ],
 
             "@typescript-eslint/consistent-type-imports": "error",
             "@typescript-eslint/explicit-member-accessibility": [
@@ -130,9 +142,10 @@ export default tseslint.config(
             },
             ecmaVersion: 2020,
             parserOptions: {
-                project: "tsconfig.app.json",
-                projectService: true,
-                tsconfigRootDir: import.meta.dirname,
+                projectService: {
+                    defaultProject: "tsconfig.app.json",
+                    tsconfigRootDir: import.meta.dirname,
+                },
                 ecmaFeatures: {
                     jsx: true,
                 },
@@ -160,9 +173,10 @@ export default tseslint.config(
         languageOptions: {
             globals: globals.node,
             parserOptions: {
-                project: "tsconfig.node.json",
-                projectService: true,
-                tsconfigRootDir: import.meta.dirname,
+                projectService: {
+                    defaultProject: "tsconfig.node.json",
+                    tsconfigRootDir: import.meta.dirname,
+                },
             },
         },
     },
