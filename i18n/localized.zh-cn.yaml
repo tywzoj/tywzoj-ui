@@ -203,6 +203,16 @@
   description: A string for the error message when the problem ID is already used.
   raw: The problem ID is already used.
 
+- name: ERROR_9000_FILE_UPLOAD_FAILED
+  value: null
+  description: A string for the error message when file upload failed.
+  raw: File upload failed.
+
+- name: ERROR_9001_INVALID_FILE_UPLOAD_METHOD
+  value: null
+  description: A string for the error message when the file upload method is invalid.
+  raw: Invalid file upload method.
+
 - name: CUSTOM_ERROR_PAGE_NOT_FOUND
   value: 页面未找到。
   description: A string for the error message when the page is not found.
@@ -519,6 +529,13 @@
     minimum length, and {1} is the maximum length.
   raw: Password must be between {0} and {1} characters.
 
+- name: VALIDATION_ERROR_AVATAR_IMAGE_TOO_LARGE
+  value: null
+  description: >-
+    A string for the error message when the avatar image is too large. {0} is
+    the maximum size in MB.
+  raw: The avatar image size exceeds the maximum limit of {0} MB.
+
 - name: VALIDATION_ERROR_TITLE_EMPTY
   value: 标题不能为空。
   description: A string for the error message when title is empty.
@@ -609,11 +626,6 @@
   description: A string for the label of user avatar.
   raw: Avatar
 
-- name: USER_AVATAR_BUTTON_TOOLTIP
-  value: null
-  description: A string for the label of change avatar button.
-  raw: Change Avatar
-
 - name: USER_PROFILE_PAGE_TITLE_WITH_NAME
   value: '{0} 的个人资料'
   description: A string for the title of user profile page.
@@ -677,6 +689,11 @@
   value: 前往个人资料
   description: A string for the label of go to profile button.
   raw: Go to Profile
+
+- name: USER_EDIT_PAGE_AVATAR_BUTTON_TOOLTIP
+  value: null
+  description: A string for the label of change avatar button.
+  raw: Change Avatar
 
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: 输入题目 ID 或关键字以搜索题目

@@ -22,7 +22,13 @@ export interface IUseFileUploaderProps {
     maxConcurrency?: number;
     contentTypes?: string[];
 
-    onSelect?: (files: File[]) => void;
+    /**
+     * Callback when files are selected.
+     * @param files Selected files
+     * @param triggeredByUser Whether the selection is triggered by user action, not by setSelectedFiles
+     * @returns return true to auto call the triggerUpload after selection
+     */
+    onSelect?: (files: File[], triggeredByUser: boolean) => void | boolean;
     onProgress?: (file: File, progress: number) => void;
     onFinish?: (file: File, success: boolean, error: Error | null) => void;
     onAllFinish?: (succeededFiles: File[], failedFiles: File[]) => void;
@@ -31,6 +37,7 @@ export interface IUseFileUploaderProps {
 export interface IUseFileUploaderResult {
     triggerSelect: () => void;
     triggerUpload: () => void;
+    setSelectedFiles: (files: File[], skipOnSelect?: boolean) => void;
 }
 
 export function useFileUploader(props: IUseFileUploaderProps): IUseFileUploaderResult {
@@ -165,6 +172,17 @@ export function useFileUploader(props: IUseFileUploaderProps): IUseFileUploaderR
         }, [onAllFinish, uploadWithConcurrencyAsync]),
     );
 
+    const setSelectedFiles = React.useCallback(
+        (files: File[], skipOnSelect?: boolean) => {
+            selectedFilesRef.current = files;
+            // Trigger onSelect callback at least one file set
+            if (!skipOnSelect && files.length > 0 && onSelect?.(files, false /* triggeredByUser */)) {
+                triggerUpload();
+            }
+        },
+        [onSelect, triggerUpload],
+    );
+
     React.useEffect(() => {
         if (!inputRef.current) {
             inputRef.current = document.createElement("input");
@@ -181,10 +199,13 @@ export function useFileUploader(props: IUseFileUploaderProps): IUseFileUploaderR
 
             const files = Array.from(input.files);
             selectedFilesRef.current = files;
-            onSelect?.(files);
+            // Trigger onSelect callback at least one file selected
+            if (files.length > 0 && onSelect?.(files, true /* triggeredByUser */)) {
+                triggerUpload();
+            }
             input.value = "";
         };
-    }, [contentTypes, multiple, onSelect]);
+    }, [contentTypes, multiple, onSelect, triggerUpload]);
 
     React.useEffect(() => {
         return () => {
@@ -195,5 +216,5 @@ export function useFileUploader(props: IUseFileUploaderProps): IUseFileUploaderR
         };
     }, []);
 
-    return { triggerSelect, triggerUpload };
+    return { triggerSelect, triggerUpload, setSelectedFiles };
 }

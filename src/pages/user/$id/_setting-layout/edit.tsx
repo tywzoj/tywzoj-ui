@@ -27,12 +27,19 @@ import logoLight from "@/assets/icon.light.png";
 import { refreshSessionInfoAsyncAction } from "@/common/actions/session-info";
 import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
 import { ALLOWED_AVATAR_IMAGE_CONTENT_TYPES } from "@/common/constants/content-type";
-import { EMAIL_MAX_LENGTH, NICKNAME_MAX_LENGTH, USERNAME_MAX_LENGTH } from "@/common/constants/data-length";
+import {
+    AVATAR_IMAGE_MAX_SIZE,
+    AVATAR_IMAGE_MAX_SIZE_MB,
+    EMAIL_MAX_LENGTH,
+    NICKNAME_MAX_LENGTH,
+    USERNAME_MAX_LENGTH,
+} from "@/common/constants/data-length";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useDialogAwaiter } from "@/common/hooks/dialog-awaiter";
 import { useFileUploader } from "@/common/hooks/file-upload";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
+import { useDispatchToastError } from "@/common/hooks/toast";
 import { flex } from "@/common/styles/flex";
 import { diff } from "@/common/utils/diff";
 import { format } from "@/common/utils/format";
@@ -68,6 +75,7 @@ const UserEditPage: React.FC = () => {
     const locale = useAppSelector(getLocale);
     const errorToString = useErrorCodeToString();
     const recaptchaAsync = useRecaptchaAsync();
+    const dispatchError = useDispatchToastError();
 
     const ls = useLocalizedStrings();
 
@@ -95,7 +103,7 @@ const UserEditPage: React.FC = () => {
         closeDialog: closeEmailVerificationDialog,
     } = useDialogAwaiter();
 
-    const { triggerSelect, triggerUpload } = useFileUploader({
+    const { triggerSelect } = useFileUploader({
         contentTypes: ALLOWED_AVATAR_IMAGE_CONTENT_TYPES,
         multiple: false,
         onUploadRequest: async (file) => {
@@ -118,11 +126,18 @@ const UserEditPage: React.FC = () => {
                 recaptchaAsync,
             );
         },
-        onSelect: () => {
+        onSelect: ([file]) => {
+            if (file.size > AVATAR_IMAGE_MAX_SIZE) {
+                dispatchError(format(ls.$VALIDATION_ERROR_AVATAR_IMAGE_TOO_LARGE, AVATAR_IMAGE_MAX_SIZE_MB), {
+                    customTitle: errorToString(CE_ErrorCode.Client_FileUploadFailed),
+                    timeout: 3000,
+                });
+                return false;
+            }
             // TODO: show avatar preview dialog
             setAvatarUploading(true);
             setPending(true);
-            triggerUpload();
+            return true;
         },
         onFinish: (_, success) => {
             if (success) {
@@ -304,7 +319,7 @@ const UserEditPage: React.FC = () => {
                             />
                         </Field>
                     </div>
-                    <Tooltip content={ls.$USER_AVATAR_BUTTON_TOOLTIP} relationship="label" withArrow>
+                    <Tooltip content={ls.$USER_EDIT_PAGE_AVATAR_BUTTON_TOOLTIP} relationship="label" withArrow>
                         <Button
                             className={mergeClasses(styles.$avatar, isMiniScreen && styles.$avatarMiniScreen)}
                             disabled={pending || avatarUploading}
