@@ -162,6 +162,14 @@
   value: The problem ID is already used.
   description: A string for the error message when the problem ID is already used.
 
+- name: ERROR_9000_FILE_UPLOAD_FAILED
+  value: File upload failed.
+  description: A string for the error message when file upload failed.
+
+- name: ERROR_9001_INVALID_FILE_UPLOAD_METHOD
+  value: Invalid file upload method.
+  description: A string for the error message when the file upload method is invalid.
+
 - name: CUSTOM_ERROR_PAGE_NOT_FOUND
   value: Page not found.
   description: A string for the error message when the page is not found.
@@ -414,6 +422,12 @@
     A string for the error message when password length is invalid. {0} is the
     minimum length, and {1} is the maximum length.
 
+- name: VALIDATION_ERROR_AVATAR_IMAGE_TOO_LARGE
+  value: The avatar image size exceeds the maximum limit of {0} MB.
+  description: >-
+    A string for the error message when the avatar image is too large. {0} is
+    the maximum size in MB.
+
 - name: VALIDATION_ERROR_TITLE_EMPTY
   value: Title cannot be empty.
   description: A string for the error message when title is empty.
@@ -537,6 +551,10 @@
 - name: USER_EDIT_PAGE_GO_TO_PROFILE_BUTTON
   value: Go to Profile
   description: A string for the label of go to profile button.
+
+- name: USER_EDIT_PAGE_AVATAR_BUTTON_TOOLTIP
+  value: Change Avatar
+  description: A string for the label of change avatar button.
 
 - name: PROBLEM_SEARCH_PLACEHOLDER
   value: Keyword or ID

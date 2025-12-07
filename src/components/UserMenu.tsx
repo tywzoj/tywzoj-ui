@@ -73,7 +73,7 @@ export const UserMenu: React.FC = () => {
                             <Persona
                                 primaryText={currentUser.nickname || currentUser.username}
                                 {...(currentUser.nickname && { secondaryText: currentUser.username })}
-                                {...(currentUser.avatar && { avatar: currentUser.avatar })}
+                                {...(currentUser.avatar && { avatar: { image: { src: currentUser.avatar } } })}
                             />
                         )}
                     </Button>

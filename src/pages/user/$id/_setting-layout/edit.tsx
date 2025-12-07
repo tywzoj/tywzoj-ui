@@ -12,8 +12,10 @@ import {
     Input,
     makeStyles,
     mergeClasses,
+    Spinner,
     Text,
     Textarea,
+    tokens,
     Tooltip,
 } from "@fluentui/react-components";
 import { useQueryClient } from "@tanstack/react-query";
@@ -24,11 +26,20 @@ import logoDark from "@/assets/icon.dark.png";
 import logoLight from "@/assets/icon.light.png";
 import { refreshSessionInfoAsyncAction } from "@/common/actions/session-info";
 import { ButtonWithRouter } from "@/common/components/ButtonWithRouter";
-import { EMAIL_MAX_LENGTH, NICKNAME_MAX_LENGTH, USERNAME_MAX_LENGTH } from "@/common/constants/data-length";
+import { ALLOWED_AVATAR_IMAGE_CONTENT_TYPES } from "@/common/constants/content-type";
+import {
+    AVATAR_IMAGE_MAX_SIZE,
+    AVATAR_IMAGE_MAX_SIZE_MB,
+    EMAIL_MAX_LENGTH,
+    NICKNAME_MAX_LENGTH,
+    USERNAME_MAX_LENGTH,
+} from "@/common/constants/data-length";
 import { useWithCatchError } from "@/common/hooks/catch-error";
 import { useDialogAwaiter } from "@/common/hooks/dialog-awaiter";
+import { useFileUploader } from "@/common/hooks/file-upload";
 import { useRecaptchaAsync } from "@/common/hooks/recaptcha";
 import { useSetPageTitle } from "@/common/hooks/set-page-title";
+import { useDispatchToastError } from "@/common/hooks/toast";
 import { flex } from "@/common/styles/flex";
 import { diff } from "@/common/utils/diff";
 import { format } from "@/common/utils/format";
@@ -61,9 +72,11 @@ const UserEditPage: React.FC = () => {
     const currentUser = useCurrentUser()!; // I'm sure currentUser is not null.
     const dispatch = useAppDispatch();
     const isAllowedManage = useIsAllowedManageUser(userDetail);
+    const isAllowedManageWithoutSelf = useIsAllowedManageUser(userDetail, false /* allowedManageSelf */);
     const locale = useAppSelector(getLocale);
     const errorToString = useErrorCodeToString();
     const recaptchaAsync = useRecaptchaAsync();
+    const dispatchError = useDispatchToastError();
 
     const ls = useLocalizedStrings();
 
@@ -78,6 +91,7 @@ const UserEditPage: React.FC = () => {
     const [emailVerificationCodeError, setEmailVerificationCodeError] = React.useState<string>("");
 
     const [pending, setPending] = React.useState(false);
+    const [avatarUploading, setAvatarUploading] = React.useState(false);
     const [emailVerificationDialogPending, setEmailVerificationDialogPending] = React.useState(false);
     const emailVerificationCodeRef = React.useRef(""); // To get value in async callback
     const emailVerificationCodeErrorRef = React.useRef(false);
@@ -89,6 +103,55 @@ const UserEditPage: React.FC = () => {
         onAbort: onCancelEmailVerification,
         closeDialog: closeEmailVerificationDialog,
     } = useDialogAwaiter();
+
+    const { triggerSelect } = useFileUploader({
+        contentTypes: ALLOWED_AVATAR_IMAGE_CONTENT_TYPES,
+        multiple: false,
+        onUploadRequest: async (file) => {
+            const res = await postUploadUserAvatarRequestAsync(
+                userDetail.id.toString(),
+                {
+                    size: file.size,
+                    contentType: file.type,
+                },
+                recaptchaAsync,
+            );
+            return res.data;
+        },
+        onUploadComplete: async ({ token }) => {
+            await postUploadUserAvatarFinishAsync(
+                userDetail.id.toString(),
+                {
+                    token,
+                },
+                recaptchaAsync,
+            );
+        },
+        onSelect: ([file]) => {
+            if (file.size > AVATAR_IMAGE_MAX_SIZE) {
+                dispatchError(format(ls.$VALIDATION_ERROR_AVATAR_IMAGE_TOO_LARGE, AVATAR_IMAGE_MAX_SIZE_MB), {
+                    customTitle: errorToString(CE_ErrorCode.Client_FileUploadFailed),
+                    timeout: 3000,
+                });
+                return false;
+            }
+            // TODO: show avatar preview dialog
+            setAvatarUploading(true);
+            setPending(true);
+
+            return true; // proceed to upload
+        },
+        onFinish: (_, success) => {
+            if (success) {
+                queryClient.invalidateQueries({ queryKey: userDetailQueryKeys(userDetail.id.toString()) });
+                if (currentUser.id === userDetail.id) {
+                    dispatch(refreshSessionInfoAsyncAction());
+                }
+            }
+            setAvatarUploading(false);
+            setPending(false);
+        },
+    });
 
     React.useEffect(() => {
         resetForm();
@@ -163,11 +226,11 @@ const UserEditPage: React.FC = () => {
                 ["username", "nickname", "email", "bio"],
             );
             if (shouldPatch) {
-                if (patchBody.email && patchBody.email !== authDetail.email && !isAllowedManage) {
+                if (patchBody.email && patchBody.email !== authDetail.email && !isAllowedManageWithoutSelf) {
                     // If emailVerificationCodeError is true, it means the user has already submitted the code but invalid.
                     // So we just need to let user input and try again. Don't need to send the code and pop up the dialog again.
                     if (!emailVerificationCodeErrorRef.current) {
-                        await sendChangeEmailCodeAsync(
+                        await postSendChangeEmailCodeAsync(
                             {
                                 email: patchBody.email,
                                 lang: locale,
@@ -212,7 +275,7 @@ const UserEditPage: React.FC = () => {
             email,
             bio,
             authDetail.email,
-            isAllowedManage,
+            isAllowedManageWithoutSelf,
             recaptchaAsync,
             queryClient,
             currentUser.id,
@@ -258,12 +321,17 @@ const UserEditPage: React.FC = () => {
                             />
                         </Field>
                     </div>
-                    {/* TODO: add tooltip */}
-                    <Tooltip content={"Change avatar"} relationship="label" withArrow>
+                    <Tooltip content={ls.$USER_EDIT_PAGE_AVATAR_BUTTON_TOOLTIP} relationship="label" withArrow>
                         <Button
                             className={mergeClasses(styles.$avatar, isMiniScreen && styles.$avatarMiniScreen)}
-                            disabled={pending}
+                            disabled={pending || avatarUploading}
+                            onClick={() => triggerSelect()}
                         >
+                            {avatarUploading && (
+                                <div className={styles.$avatarSpinner}>
+                                    <Spinner />
+                                </div>
+                            )}
                             <Image src={userDetail.avatar || fallBackAvatar} />
                         </Button>
                     </Tooltip>
@@ -390,17 +458,34 @@ const useStyles = makeStyles({
         minWidth: "120px",
         width: "120px",
         padding: "0",
+        boxSizing: "border-box",
+        position: "relative",
         "> .fui-Image": {
             width: "100%",
             height: "100%",
         },
-        boxSizing: "border-box",
     },
     $avatarMiniScreen: {
         marginTop: "26px",
         height: "100px",
         width: "100px",
         minWidth: "100px",
+    },
+    $avatarSpinner: {
+        position: "absolute",
+        backgroundColor: tokens.colorBackgroundOverlay,
+        zIndex: 9998,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        "> .fui-Spinner": {
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 9999,
+        },
     },
     $bioInput: {
         height: "200px",
@@ -434,10 +519,12 @@ const patchUserDetailAsync = withThrowErrorsExcept(
     CE_ErrorCode.InvalidEmailVerificationCode,
     CE_ErrorCode.User_DuplicateUsername,
 );
-const sendChangeEmailCodeAsync = withThrowErrorsExcept(
+const postSendChangeEmailCodeAsync = withThrowErrorsExcept(
     UserModule.postSendChangeEmailCodeAsync,
     CE_ErrorCode.EmailVerificationCodeRateLimited,
 );
+const postUploadUserAvatarRequestAsync = withThrowErrorsExcept(UserModule.postUploadUserAvatarRequestAsync);
+const postUploadUserAvatarFinishAsync = withThrowErrorsExcept(UserModule.postUploadUserAvatarFinishAsync);
 
 export const Route = createFileRoute("/user/$id/_setting-layout/edit")({
     component: UserEditPage,

@@ -5,7 +5,7 @@
   "author": "Antares",
   "private": true,
   "license": "MIT",
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.12.0",
   "scripts": {
     "build": "vite build && tsc -b",
     "check": "tsc -b --noEmit",
@@ -23,7 +23,7 @@
     "@reduxjs/toolkit": "^2.5.0",
     "@tanem/react-nprogress": "^5.0.56",
     "@tanstack/react-query": "^5.62.16",
-    "@tanstack/react-router": "patch:@tanstack/react-router@npm%3A1.99.0#~/.yarn/patches/@tanstack-react-router-npm-1.99.0-5293e4c82d.patch",
+    "@tanstack/react-router": "^1.140.0",
     "@tanstack/zod-adapter": "^1.97.23",
     "core-js": "^3.40.0",
     "css-element-queries": "^1.2.3",

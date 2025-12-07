@@ -16,9 +16,7 @@ const FluentLinkComponentWithRouter = createLink(FluentLinkComponent);
 
 export type ILinkWithRouterProps = LinkComponentProps<typeof FluentLinkComponentWithRouter>;
 
-export const LinkWithRouter = React.forwardRef<React.ForwardedRef<HTMLAnchorElement>, ILinkWithRouterProps>(
-    (props, ref) => {
-        return <FluentLinkComponentWithRouter ref={ref} {...props} />;
-    },
-);
+export const LinkWithRouter = React.forwardRef<HTMLAnchorElement, ILinkWithRouterProps>((props, ref) => {
+    return <FluentLinkComponentWithRouter ref={ref} {...props} />;
+});
 LinkWithRouter.displayName = "LinkWithRouter";

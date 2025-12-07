@@ -16,9 +16,7 @@ const FluentButtonComponentWithRouter = createLink(FluentButtonComponent);
 
 export type IButtonWithRouterProps = LinkComponentProps<typeof FluentButtonComponentWithRouter>;
 
-export const ButtonWithRouter = React.forwardRef<React.ForwardedRef<HTMLAnchorElement>, IButtonWithRouterProps>(
-    (props, ref) => {
-        return <FluentButtonComponentWithRouter ref={ref} {...props} />;
-    },
-);
+export const ButtonWithRouter = React.forwardRef<HTMLAnchorElement, IButtonWithRouterProps>((props, ref) => {
+    return <FluentButtonComponentWithRouter ref={ref} {...props} />;
+});
 ButtonWithRouter.displayName = "ButtonWithRouter";

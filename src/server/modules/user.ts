@@ -3,7 +3,11 @@ import type { IRecaptchaAsync } from "@/common/hooks/recaptcha";
 
 import type { ISendEmailVerificationCodePostRequestBody } from "../common/types";
 import { requestAsync } from "../request";
+import type { ISignedUploadRequest } from "./file.types";
 import type {
+    IUserAvatarUploadFinishPostRequestBody,
+    IUserAvatarUploadFinishPostResponse,
+    IUserAvatarUploadRequestPostRequestBody,
     IUserDetailGetResponse,
     IUserDetailPatchRequestBody,
     IUserListGetRequestQuery,
@@ -49,5 +53,31 @@ export async function postSendChangeEmailCodeAsync(
         method: "POST",
         body,
         recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.UserSendChangeEmailCode),
+    });
+}
+
+export async function postUploadUserAvatarRequestAsync(
+    id: string,
+    body: IUserAvatarUploadRequestPostRequestBody,
+    recaptchaAsync: IRecaptchaAsync,
+) {
+    return await requestAsync<ISignedUploadRequest>({
+        path: `user/detail/${id}/avatar-upload-request`,
+        method: "POST",
+        body,
+        recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.UserAvatarUpload),
+    });
+}
+
+export async function postUploadUserAvatarFinishAsync(
+    id: string,
+    body: IUserAvatarUploadFinishPostRequestBody,
+    recaptchaAsync: IRecaptchaAsync,
+) {
+    return await requestAsync<IUserAvatarUploadFinishPostResponse>({
+        path: `user/detail/${id}/avatar-upload-finish`,
+        method: "POST",
+        body,
+        recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.UserAvatarUpload),
     });
 }

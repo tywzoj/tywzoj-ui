@@ -12,12 +12,10 @@ export const NavigatingProgressBar: React.FC<INavigatingProgressBarProps> = ({ r
     const [isAnimating, setIsAnimating] = React.useState(false);
 
     React.useEffect(() => {
-        const unsubscribeOnBeforeNavigate = router.subscribe("onBeforeNavigate", () => setIsAnimating(false));
         const unsubscribeOnBeforeLoad = router.subscribe("onBeforeLoad", () => setIsAnimating(true));
         const unsubscribeOnLoad = router.subscribe("onLoad", () => setIsAnimating(false));
 
         return () => {
-            unsubscribeOnBeforeNavigate();
             unsubscribeOnBeforeLoad();
             unsubscribeOnLoad();
         };

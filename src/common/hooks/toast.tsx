@@ -12,10 +12,13 @@ export const useDispatchToastError = () => {
     const ls = useLocalizedStrings();
 
     return React.useCallback(
-        (message: string, options?: Parameters<typeof dispatchToast>[1]) => {
+        (
+            message: string,
+            { customTitle, ...options }: Parameters<typeof dispatchToast>[1] & { customTitle?: string } = {},
+        ) => {
             dispatchToast(
                 <Toast>
-                    <ToastTitle>{ls.$COMMON_ERROR_TITLE}</ToastTitle>
+                    <ToastTitle>{customTitle ?? ls.$COMMON_ERROR_TITLE}</ToastTitle>
                     <ToastBody>{message}</ToastBody>
                 </Toast>,
                 {
