@@ -138,7 +138,8 @@ const UserEditPage: React.FC = () => {
             // TODO: show avatar preview dialog
             setAvatarUploading(true);
             setPending(true);
-            return true;
+
+            return true; // proceed to upload
         },
         onFinish: (_, success) => {
             if (success) {
