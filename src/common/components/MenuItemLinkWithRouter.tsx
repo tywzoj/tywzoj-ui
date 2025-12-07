@@ -16,10 +16,9 @@ const FluentMenuItemLinkComponentWithRouter = createLink(FluentMenuItemLinkCompo
 
 export type IMenuItemLinkWithRouterProps = LinkComponentProps<typeof FluentMenuItemLinkComponentWithRouter>;
 
-export const MenuItemLinkWithRouter = React.forwardRef<
-    React.ForwardedRef<HTMLAnchorElement>,
-    IMenuItemLinkWithRouterProps
->((props, ref) => {
-    return <FluentMenuItemLinkComponentWithRouter ref={ref} {...props} />;
-});
+export const MenuItemLinkWithRouter = React.forwardRef<HTMLAnchorElement, IMenuItemLinkWithRouterProps>(
+    (props, ref) => {
+        return <FluentMenuItemLinkComponentWithRouter ref={ref} {...props} />;
+    },
+);
 MenuItemLinkWithRouter.displayName = "MenuItemLinkWithRouter";
