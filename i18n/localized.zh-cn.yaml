@@ -609,6 +609,11 @@
   description: A string for the label of user avatar.
   raw: Avatar
 
+- name: USER_AVATAR_BUTTON_TOOLTIP
+  value: null
+  description: A string for the label of change avatar button.
+  raw: Change Avatar
+
 - name: USER_PROFILE_PAGE_TITLE_WITH_NAME
   value: '{0} 的个人资料'
   description: A string for the title of user profile page.

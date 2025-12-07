@@ -304,8 +304,7 @@ const UserEditPage: React.FC = () => {
                             />
                         </Field>
                     </div>
-                    {/* TODO: add tooltip */}
-                    <Tooltip content={"Change avatar"} relationship="label" withArrow>
+                    <Tooltip content={ls.$USER_AVATAR_BUTTON_TOOLTIP} relationship="label" withArrow>
                         <Button
                             className={mergeClasses(styles.$avatar, isMiniScreen && styles.$avatarMiniScreen)}
                             disabled={pending || avatarUploading}

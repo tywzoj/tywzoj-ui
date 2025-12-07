@@ -613,6 +613,11 @@
   description: A string for the label of user avatar.
   raw: Avatar
 
+- name: USER_AVATAR_BUTTON_TOOLTIP
+  value: Change Avatar
+  description: A string for the label of change avatar button.
+  raw: Change Avatar
+
 - name: USER_PROFILE_PAGE_TITLE_WITH_NAME
   value: '{0}''s Profile'
   description: A string for the title of user profile page.
