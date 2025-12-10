@@ -37,33 +37,13 @@ const NODE_FILES = [...NODE_JS_FILES, ...NODE_TS_FILES];
 const isVsCodeEslint = process.env.NODE_ENV === "vscode-eslint";
 
 export default defineConfig(
-    { files: [...SRC_FILES, ...NODE_FILES] },
     js.configs.recommended,
     tseslint.configs.recommended,
     {
-        ...(!isVsCodeEslint && {
-            extends: [prettierRecommended],
-            rules: {
-                "prettier/prettier": [
-                    "error",
-                    {},
-                    {
-                        usePrettierrc: true,
-                    },
-                ],
-            },
-        }),
-    },
-    {
+        files: [...SRC_FILES, ...NODE_FILES],
         plugins: {
             "simple-import-sort": simpleImportSort,
         },
-        rules: {
-            "simple-import-sort/exports": "error",
-            "simple-import-sort/imports": "error",
-        },
-    },
-    {
         rules: {
             "arrow-parens": ["error", "always"],
             curly: ["error", "multi-line"],
@@ -71,6 +51,9 @@ export default defineConfig(
             "no-empty": "off",
             "no-extend-native": "error",
             "no-unused-vars": "off",
+
+            "simple-import-sort/exports": "error",
+            "simple-import-sort/imports": "error",
 
             "@typescript-eslint/consistent-type-imports": "error",
             "@typescript-eslint/explicit-member-accessibility": [
@@ -188,6 +171,21 @@ export default defineConfig(
                 ecmaVersion: 2020,
             },
         },
+    },
+    {
+        ...(!isVsCodeEslint && {
+            files: [...SRC_FILES, ...NODE_FILES],
+            extends: [prettierRecommended],
+            rules: {
+                "prettier/prettier": [
+                    "error",
+                    {},
+                    {
+                        usePrettierrc: true,
+                    },
+                ],
+            },
+        }),
     },
     { ignores: IGNORED_FILES },
 );
