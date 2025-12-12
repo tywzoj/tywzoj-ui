@@ -5,10 +5,7 @@
     "editorconfig.editorconfig",
     "esbenp.prettier-vscode",
     "kuscamara.remove-unused-imports",
-    "mike-co.import-sorter",
-    "rvest.vs-code-prettier-eslint",
     "streetsidesoftware.code-spell-checker",
-    "arcanis.vscode-zipfs",
     "redhat.vscode-yaml"
   ]
 }

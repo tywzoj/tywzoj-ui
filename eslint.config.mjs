@@ -33,9 +33,6 @@ const NODE_JS_FILES = [
 const NODE_TS_FILES = [...createExtFiles("scripts/**/*", TS_FILE_EXTS), ...createExtFiles("vite.config", TS_FILE_EXTS)];
 const NODE_FILES = [...NODE_JS_FILES, ...NODE_TS_FILES];
 
-// Fuck VS Code ESLint extension
-const isVsCodeEslint = process.env.NODE_ENV === "vscode-eslint";
-
 export default defineConfig(
     js.configs.recommended,
     tseslint.configs.recommended,
@@ -173,19 +170,17 @@ export default defineConfig(
         },
     },
     {
-        ...(!isVsCodeEslint && {
-            files: [...SRC_FILES, ...NODE_FILES],
-            extends: [prettierRecommended],
-            rules: {
-                "prettier/prettier": [
-                    "error",
-                    {},
-                    {
-                        usePrettierrc: true,
-                    },
-                ],
-            },
-        }),
+        files: [...SRC_FILES, ...NODE_FILES],
+        extends: [prettierRecommended],
+        rules: {
+            "prettier/prettier": [
+                "error",
+                {},
+                {
+                    usePrettierrc: true,
+                },
+            ],
+        },
     },
     { ignores: IGNORED_FILES },
 );
