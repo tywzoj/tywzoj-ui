@@ -2,6 +2,8 @@ import { CE_RecaptchaAction } from "@/common/enums/recaptcha-action";
 import type { IRecaptchaAsync } from "@/common/hooks/recaptcha";
 
 import { requestAsync } from "../request";
+import type { ISignedUploadRequest } from "./file.types";
+import type { CE_ProblemFileType } from "./problem.enums";
 import type {
     IProblemContentDetailPatchRequestBody,
     IProblemDetailGetRequestQuery,
@@ -9,6 +11,9 @@ import type {
     IProblemDetailPatchRequestBody,
     IProblemDetailPostRequestBody,
     IProblemDetailPostResponse,
+    IProblemFileListGetResponse,
+    IProblemFileUploadFinishPostRequestBody,
+    IProblemFileUploadRequestPostRequestBody,
     IProblemListGetRequestQuery,
     IProblemListGetResponse,
 } from "./problem.types";
@@ -66,6 +71,40 @@ export async function patchProblemContentDetailAsync(
         method: "PATCH",
         body,
         recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.ProblemContentDetailPatch),
+    });
+}
+
+export async function getProblemFileListAsync(displayId: string, type?: CE_ProblemFileType) {
+    return await requestAsync<IProblemFileListGetResponse>({
+        path: `problem/detail/${displayId}/files`,
+        method: "GET",
+        query: { type },
+    });
+}
+
+export async function postProblemFileUploadRequestAsync(
+    id: string,
+    body: IProblemFileUploadRequestPostRequestBody,
+    recaptchaAsync: IRecaptchaAsync,
+) {
+    return await requestAsync<ISignedUploadRequest>({
+        path: `problem/detail/${id}/file-upload-request`,
+        method: "POST",
+        body,
+        recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.ProblemFileUpload),
+    });
+}
+
+export async function postProblemFileUploadFinishAsync(
+    id: string,
+    body: IProblemFileUploadFinishPostRequestBody,
+    recaptchaAsync: IRecaptchaAsync,
+) {
+    return await requestAsync<void>({
+        path: `problem/detail/${id}/file-upload-finish`,
+        method: "POST",
+        body,
+        recaptchaToken: await recaptchaAsync(CE_RecaptchaAction.ProblemFileUpload),
     });
 }
 

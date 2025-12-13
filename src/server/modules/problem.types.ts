@@ -1,6 +1,6 @@
 import type { CE_Visibility } from "../common/permission";
 import type { IListRequest } from "../common/types";
-import type { CE_ProblemSortBy, CE_ProblemType } from "./problem.enums";
+import type { CE_ProblemFileType, CE_ProblemSortBy, CE_ProblemType } from "./problem.enums";
 
 // BEGIN: shared types
 
@@ -54,6 +54,16 @@ export interface IProblemTagDetailEditable {
 
 export interface IProblemTagDetail extends Readonly<IProblemTagDetailEditable> {
     readonly id: number;
+}
+
+export interface IProblemFileDetailEditable {
+    filename: string;
+}
+
+export interface IProblemFileDetail extends Readonly<IProblemFileDetailEditable> {
+    problemId: number;
+    uuid: string;
+    type: CE_ProblemFileType;
 }
 
 // END: shared types
@@ -110,3 +120,22 @@ export type IProblemContentDetailPatchRequestBody = Partial<IProblemContentDetai
 export type IProblemSampleDetailPostRequestBody = IProblemSampleDetailEditable;
 
 // END: problem sample types
+
+// BEGIN: problem file types
+
+export interface IProblemFileListGetResponse {
+    readonly fileDetails: IProblemFileDetail[];
+    readonly count: number;
+}
+
+export interface IProblemFileUploadRequestPostRequestBody {
+    filename: string;
+    type: CE_ProblemFileType;
+    size: number;
+}
+
+export interface IProblemFileUploadFinishPostRequestBody {
+    token: string;
+}
+
+// END: problem file types

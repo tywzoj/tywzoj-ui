@@ -83,6 +83,7 @@ export function useFileUploader(props: IUseFileUploaderProps): IUseFileUploaderR
 
                         xhr.onerror = () => reject(new AppError(CE_ErrorCode.Client_FileUploadFailed));
 
+                        onProgress?.(file, 0);
                         xhr.open(method, url);
 
                         if (method === "POST") {
